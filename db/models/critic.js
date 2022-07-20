@@ -8,6 +8,13 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Critic.associate = function(models) {
     // associations can be defined here
+    const criticFavMapping = {
+      through: 'CriticFavorite',
+      otherKey: 'movieId',
+      foreignKey: 'criticId'
+    };
+
+    Critic.belongsToMany(models.Movie, criticFavMapping);
   };
   return Critic;
 };

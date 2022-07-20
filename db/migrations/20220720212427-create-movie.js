@@ -12,6 +12,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(100)
       },
+      directorId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: { model: 'Directors'}
+      },
       releaseDate: {
         type: Sequelize.DATE
       },

@@ -10,11 +10,13 @@ module.exports = {
       },
       directorId: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: { model: 'Directors' }
       },
       movieId: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: { model: 'Movies' }
       },
       createdAt: {
         allowNull: false,
