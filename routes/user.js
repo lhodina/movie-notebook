@@ -16,7 +16,6 @@ const validateUser = [
         .withMessage("Please enter a username"),
     check("email")
         .exists({ checkFalsy: true })
-        .withMessage("Please enter your email address")
         .isEmail()
         .withMessage("Please enter a valid email."),
     check("password")
@@ -50,16 +49,17 @@ router.post("/register", csrfProtection, validateUser, asyncHandler(async (req, 
     console.log("req.body:", req.body);
 
     const validatorErrors = validationResult(req);
+    const user = User.build({
+        username,
+        email
+    });
+
     if (validatorErrors.isEmpty()) {
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const user = await User.create({
-            username,
-            email,
-            hashedPassword
-        });
-
-        loginUser(req, res, next);
+        user.hashedPassword = hashedPassword;
+        await user.save();
+        loginUser(req, res, user);
         res.redirect("/");
     } else {
         const errors = validatorErrors.array().map((error) => error.msg);
@@ -73,8 +73,12 @@ router.post("/register", csrfProtection, validateUser, asyncHandler(async (req, 
 }));
 
 
-// YOU NAMED THE PAGE "user/login" IN THE AUTH
-// router.get("/login")
+router.get("/login", csrfProtection, (req, res) => {
+    res.render("login", {
+        title: "Login",
+        csrfToken: req.csrfToken()
+    });
+});
 
 
 module.exports = router;
