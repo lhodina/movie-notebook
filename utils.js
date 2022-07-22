@@ -1,13 +1,15 @@
 const { validationResult } = require("express-validator");
+const csrf= require("csurf");
 
+const csrfProtection = csrf({ cookie: true });
 const asyncHandler = (handler) => (req, res, next) => handler(req, res, next).catch(next);
+
 
 const handleValidationErrors = (req, res, next) => {
     const validationErrors = validationResult(req);
-
+    let errors = [];
     if (!validationErrors.isEmpty()) {
-        const errors = validationErrors.array().map((error) => error.msg);
-
+        errors = validationErrors.array().map((error) => error.msg);
         const err = Error("Bad request.");
         err.status = 400;
         err.title = "Bad request.";
@@ -17,4 +19,9 @@ const handleValidationErrors = (req, res, next) => {
     next();
 };
 
-module.exports = { asyncHandler, handleValidationErrors };
+
+module.exports = {
+    csrfProtection,
+    asyncHandler,
+    handleValidationErrors
+};

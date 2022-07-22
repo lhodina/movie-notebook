@@ -1,20 +1,21 @@
 const express = require("express");
-const { check } = require("express-validator");
+const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 
-const { asyncHandler, handleValidationErrors } = require("../utils");
+const { csrfProtection, asyncHandler, handleValidationErrors } = require("../utils");
 const db = require("../db/models");
+const { loginUser } = require("../auth");
 const { User } = db;
-const { getToken } = require("../auth");
 
 const router = express.Router();
+
 
 const validateUser = [
     check("username")
         .exists({ checkFalsy: true })
         .withMessage("Please enter a username"),
     check("email")
-        .exists({ checkFalsy: true})
+        .exists({ checkFalsy: true })
         .withMessage("Please enter your email address")
         .isEmail()
         .withMessage("Please enter a valid email."),
@@ -25,33 +26,55 @@ const validateUser = [
 
 
 router.get("/", (req, res) => {
-    res.send("Howdy from users router");
+    res.send("Howdy from user router");
 });
 
 
-router.post("/", validateUser, handleValidationErrors, asyncHandler(async (req, res) => {
+router.get("/register", csrfProtection, asyncHandler(async (req, res) => {
+    const user = User.build();
+    res.render("register", {
+        title: "Register",
+        user,
+        csrfToken: req.csrfToken()
+    });
+}));
+
+
+router.post("/register", csrfProtection, validateUser, asyncHandler(async (req, res) => {
     const {
         username,
         email,
         password
     } = req.body;
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log("req.body:", req.body);
 
-    const user = await User.create({
-        username,
-        email,
-        hashedPassword
-    });
+    const validatorErrors = validationResult(req);
+    if (validatorErrors.isEmpty()) {
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-    const token = getToken(user);
-    
-    res.status(201).json({
-        user: { id: user.id},
-        token
-    });
+        const user = await User.create({
+            username,
+            email,
+            hashedPassword
+        });
+
+        loginUser(req, res, next);
+        res.redirect("/");
+    } else {
+        const errors = validatorErrors.array().map((error) => error.msg);
+        res.render("register", {
+            title: "Register",
+            user,
+            errors,
+            csrfToken: req.csrfToken()
+        });
+    }
 }));
 
+
+// YOU NAMED THE PAGE "user/login" IN THE AUTH
+// router.get("/login")
 
 
 module.exports = router;
