@@ -2,18 +2,29 @@ const express = require("express");
 const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 
-const { csrfProtection, asyncHandler, handleValidationErrors } = require("../utils");
+const { csrfProtection, asyncHandler } = require("../utils");
 const db = require("../db/models");
-const { loginUser } = require("../auth");
+const { loginUser, logoutUser } = require("../auth");
 const { User } = db;
 
 const router = express.Router();
 
 
-const validateUser = [
+const validateRegistration = [
     check("username")
         .exists({ checkFalsy: true })
         .withMessage("Please enter a username"),
+    check("email")
+        .exists({ checkFalsy: true })
+        .isEmail()
+        .withMessage("Please enter a valid email."),
+    check("password")
+        .exists({ checkFalsy: true })
+        .withMessage("Please enter a password")
+];
+
+
+const validateLogin = [
     check("email")
         .exists({ checkFalsy: true })
         .isEmail()
@@ -39,7 +50,7 @@ router.get("/register", csrfProtection, asyncHandler(async (req, res) => {
 }));
 
 
-router.post("/register", csrfProtection, validateUser, asyncHandler(async (req, res) => {
+router.post("/register", csrfProtection, validateRegistration, asyncHandler(async (req, res) => {
     const {
         username,
         email,
@@ -48,11 +59,12 @@ router.post("/register", csrfProtection, validateUser, asyncHandler(async (req, 
 
     console.log("req.body:", req.body);
 
-    const validatorErrors = validationResult(req);
     const user = User.build({
         username,
         email
     });
+
+    const validatorErrors = validationResult(req);
 
     if (validatorErrors.isEmpty()) {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -60,6 +72,7 @@ router.post("/register", csrfProtection, validateUser, asyncHandler(async (req, 
         user.hashedPassword = hashedPassword;
         await user.save();
         loginUser(req, res, user);
+        console.log("LOGGING IN");
         res.redirect("/");
     } else {
         const errors = validatorErrors.array().map((error) => error.msg);
@@ -78,6 +91,46 @@ router.get("/login", csrfProtection, (req, res) => {
         title: "Login",
         csrfToken: req.csrfToken()
     });
+});
+
+
+router.post("/login", csrfProtection, validateLogin, asyncHandler(async (req, res) => {
+    const {
+        email,
+        password
+    } = req.body;
+
+    let errors = [];
+
+    const validatorErrors = validationResult(req);
+    if (validatorErrors.isEmpty()) {
+        const user = await User.findOne({ where: { email }});
+
+        if (user !== null) {
+            const passwordMatch = await bcrypt.compare(password, user.hashedPassword.toString());
+            if (passwordMatch) {
+                loginUser(req, res, user);
+                return res.redirect("/");
+            }
+        }
+
+        errors.push("Invalid email or password");
+    } else {
+        errors = validatorErrors.array().map((error) => error.msg);
+    }
+
+    res.render("login", {
+        title: "Login",
+        email,
+        errors,
+        csrfToken: req.csrfToken()
+    });
+}));
+
+
+router.post("/logout", (req, res) => {
+    logoutUser(req, res);
+    res.redirect("/login");
 });
 
 

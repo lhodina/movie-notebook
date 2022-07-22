@@ -3,9 +3,8 @@ const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 
+const { restoreUser } = require("./auth");
 const { environment, sessionSecret } = require("./config");
-
-// RESTORE USER ONCE AUTH IS ADDED
 
 const indexRoutes = require("./routes/index");
 const userRoutes = require("./routes/user");
@@ -25,8 +24,7 @@ app.use(session({
 }));
 
 app.use(express.urlencoded({ extended: false }));
-
-// USE RESTORE USER ONCE AUTH ADDED
+app.use(restoreUser);
 
 app.use("/", indexRoutes)
 app.use("/user", userRoutes);

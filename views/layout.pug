@@ -4,7 +4,13 @@ html
         title Movie Notebook
     body
         p Navbar coming soon
-        //- if locals.authenticated
-        //-     p Welcome #{user.username}!
+        if locals.authenticated
+            span Welcome #{user.username}!
+            form(action="/user/logout" method="post")
+                button(type="submit") Logout
+        else
+            span
+                a(href="/user/login") Login
+                a(href="/user/register") Register
 
         block content
