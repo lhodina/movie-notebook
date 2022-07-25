@@ -3,13 +3,19 @@ html
     head
         title Movie Notebook
     body
-        p Navbar coming soon
+        span
+            a(href="/movies/add")
+                button Add Movie
+            a(href="/directors/add")
+                button Add Director
         if locals.authenticated
             span Welcome #{user.username}!
             form(action="/users/logout" method="post")
                 button(type="submit") Logout
         else
             span
-                a(href="/users/login") Login
-                a(href="/users/register") Register
+                a(href="/users/login")
+                    button Login
+                a(href="/users/register")
+                    button Register
         block content

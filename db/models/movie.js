@@ -9,14 +9,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.INTEGER
     },
-    releaseDate: DataTypes.DATE,
+    yearReleased: DataTypes.INTEGER,
     imageLink: DataTypes.STRING
   }, {});
   Movie.associate = function(models) {
     // associations can be defined here
     Movie.belongsTo(models.Director, { foreignKey: 'directorId' });
 
-    
+
     const collectionMapping = {
       through: 'MovieCollection',
       otherKey: 'collectionId',

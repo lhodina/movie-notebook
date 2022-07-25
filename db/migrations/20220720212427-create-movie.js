@@ -17,8 +17,8 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: { model: 'Directors'}
       },
-      releaseDate: {
-        type: Sequelize.DATE
+      yearReleased: {
+        type: Sequelize.INTEGER
       },
       imageLink: {
         type: Sequelize.STRING

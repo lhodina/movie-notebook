@@ -9,6 +9,9 @@ block content
         datalist(id="directors" name="directors")
             each director in directors
                 option(value=director.name)
-        +field("Release Date", "releaseDate", "date")
+        label(for="yearReleased") Year Released
+        select(name="yearReleased")
+            each year in years
+                option(value=year)= year
         +field("Image Link", "imageLink")
         button(type="submit") Add

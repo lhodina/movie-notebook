@@ -21,16 +21,37 @@ const validateMovie = [
 
 router.get("/", async (req, res) => {
     const movies = await Movie.findAll();
-    res.send(movies);
+    const directors = await Director.findAll();
+    for (let director of directors) {
+        for (let movie of movies) {
+            if (movie.directorId === director.id) {
+                movie.directorName = director.name;
+            }
+        }
+    }
+
+    res.render("movies", {
+        movies,
+        directors
+    });
 });
 
 
-router.get("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) => {
+router.get("/add", csrfProtection, asyncHandler(async (req, res) => {
     const movies = await Movie.findAll();
     const directors = await Director.findAll();
+    let years = [];
+    let today = new Date().getFullYear();
+    for (let i = 1888; i < today + 1; i++) {
+        years.push(i);
+    }
+
+    console.log("years:", years);
+
     res.render("movie-add", {
         movies,
         directors,
+        years,
         csrfToken: req.csrfToken()
     });
 }));
@@ -56,14 +77,14 @@ router.post("/", csrfProtection, asyncHandler(async (req, res) => {
 
     const {
         title,
-        releaseDate,
+        yearReleased,
         imageLink
     } = req.body;
 
     const movie = await Movie.create({
         title,
         directorId,
-        releaseDate,
+        yearReleased,
         imageLink
     });
 

@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
 });
 
 
-router.get("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) => {
+router.get("/add", csrfProtection, asyncHandler(async (req, res) => {
     res.render("director-add", {
         csrfToken: req.csrfToken()
     });

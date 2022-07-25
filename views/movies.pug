@@ -1,0 +1,15 @@
+extends layout.pug
+block content
+    table
+        thead
+            th Title
+            th Director
+            th Year Released
+            th Image
+        tbody
+            each movie in movies
+                tr
+                    td= movie.title
+                    td= movie.directorName
+                    td= movie.yearReleased
+                    img(src=movie.imageLink)
