@@ -6,8 +6,9 @@ const session = require("express-session");
 const { restoreUser } = require("./auth");
 const { environment, sessionSecret } = require("./config");
 
-const indexRoutes = require("./routes/index");
-const userRoutes = require("./routes/user");
+const indexRouter = require("./routes/index");
+const usersRouter = require("./routes/users");
+const directorsRouter = require("./routes/directors");
 
 const app = express();
 
@@ -26,8 +27,9 @@ app.use(session({
 app.use(express.urlencoded({ extended: false }));
 app.use(restoreUser);
 
-app.use("/", indexRoutes)
-app.use("/user", userRoutes);
+app.use("/", indexRouter)
+app.use("/users", usersRouter);
+app.use("/directors", directorsRouter);
 
 
 app.use((req, res, next) => {

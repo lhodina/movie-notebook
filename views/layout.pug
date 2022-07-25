@@ -6,11 +6,11 @@ html
         p Navbar coming soon
         if locals.authenticated
             span Welcome #{user.username}!
-            form(action="/user/logout" method="post")
+            form(action="/users/logout" method="post")
                 button(type="submit") Logout
         else
             span
-                a(href="/user/login") Login
-                a(href="/user/register") Register
+                a(href="/users/login") Login
+                a(href="/users/register") Register
 
         block content

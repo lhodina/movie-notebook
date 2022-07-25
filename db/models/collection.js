@@ -14,13 +14,13 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     Collection.belongsTo(models.User, { foreignKey: 'user_Id' });
 
-    // const columnMapping = {
-    //   through: 'MovieCollection',
-    //   otherKey: 'movieId',
-    //   foreignKey: 'collectionId'
-    // }
 
-    // Collection.belongsToMany(models.Movie, columnMapping);
+    const collectionMapping = {
+      through: 'MovieCollection',
+      otherKey: 'movieId',
+      foreignKey: 'collectionId'
+    }
+    Collection.belongsToMany(models.Movie, collectionMapping);
   };
   return Collection;
 };

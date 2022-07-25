@@ -12,11 +12,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(100)
       },
-      movieId: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        // references: { model: 'Movies' }
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

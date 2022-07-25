@@ -4,8 +4,8 @@ const bcrypt = require("bcryptjs");
 
 const { csrfProtection, asyncHandler } = require("../utils");
 const db = require("../db/models");
-const { loginUser, logoutUser } = require("../auth");
 const { User } = db;
+const { loginUser, logoutUser } = require("../auth");
 
 const router = express.Router();
 
@@ -36,7 +36,7 @@ const validateLogin = [
 
 
 router.get("/", (req, res) => {
-    res.send("Howdy from user router");
+    res.send("Howdy from users router");
 });
 
 
@@ -130,7 +130,7 @@ router.post("/login", csrfProtection, validateLogin, asyncHandler(async (req, re
 
 router.post("/logout", (req, res) => {
     logoutUser(req, res);
-    res.redirect("/user/login");
+    res.redirect("/users/login");
 });
 
 
