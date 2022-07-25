@@ -1,0 +1,14 @@
+extends layout.pug
+include utils.pug
+block content
+    form(action="/movies" method="post")
+        input(type="hidden" name="_csrf" value=csrfToken)
+        +field("Title", "title")
+        label(for="directorId") Choose or Add a Director
+        input(name="directorId" list="directors")
+        datalist(id="directors" name="directors")
+            each director in directors
+                option(value=director.name)
+        +field("Release Date", "releaseDate", "date")
+        +field("Image Link", "imageLink")
+        button(type="submit") Add

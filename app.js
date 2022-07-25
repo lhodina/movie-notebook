@@ -9,6 +9,7 @@ const { environment, sessionSecret } = require("./config");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const directorsRouter = require("./routes/directors");
+const moviesRouter = require("./routes/movies");
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use(restoreUser);
 app.use("/", indexRouter)
 app.use("/users", usersRouter);
 app.use("/directors", directorsRouter);
+app.use("/movies", moviesRouter);
 
 
 app.use((req, res, next) => {
