@@ -1,0 +1,9 @@
+extends layout.pug
+block content
+    h2= movie.title
+    h3 Director
+    p= movie.directorId
+    h3 Release Date
+    p= movie.releaseDate
+    div
+        img(src=movie.imageLink)

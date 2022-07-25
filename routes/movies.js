@@ -22,14 +22,7 @@ const validateMovie = [
 router.get("/", async (req, res) => {
     const movies = await Movie.findAll();
     const directors = await Director.findAll();
-    for (let director of directors) {
-        for (let movie of movies) {
-            if (movie.directorId === director.id) {
-                movie.directorName = director.name;
-            }
-        }
-    }
-
+    
     res.render("movies", {
         movies,
         directors
@@ -58,14 +51,9 @@ router.get("/add", csrfProtection, asyncHandler(async (req, res) => {
 
 
 router.post("/", csrfProtection, asyncHandler(async (req, res) => {
-    console.log("req.body:", req.body);
-
     const name = req.body.directorId;
-    console.log("name:", name);
 
     let director = await Director.findOne({ where: { name } });
-    console.log("director:", director);
-
     if (!director) {
         director = await Director.create({
             name
@@ -73,7 +61,6 @@ router.post("/", csrfProtection, asyncHandler(async (req, res) => {
     }
 
     const directorId = director.id;
-    console.log("directorId:", directorId);
 
     const {
         title,
@@ -91,6 +78,12 @@ router.post("/", csrfProtection, asyncHandler(async (req, res) => {
     res.redirect("/movies");
 }));
 
+
+router.get("/:id", asyncHandler(async (req, res) => {
+    const movieId = parseInt(req.params.id, 10);
+    const movie = await Movie.findByPk(movieId);
+    res.render("movie", { movie });
+}));
 
 
 module.exports = router;

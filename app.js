@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
@@ -17,6 +18,7 @@ app.set("view engine", "pug");
 
 app.use(morgan("dev"));
 app.use(cookieParser(sessionSecret));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
     name: 'movie-notebook.sid',
