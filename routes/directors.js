@@ -60,8 +60,6 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
         favoriteMovies.push(favoriteMovie);
     }
 
-
-
     let years = [];
     let today = new Date().getFullYear();
     for (let i = 1888; i < today + 1; i++) {
