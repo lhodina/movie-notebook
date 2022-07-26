@@ -18,11 +18,9 @@ const validateDirector = [
 
 router.get("/", async (req, res) => {
     const directors = await Director.findAll();
-    if (directors) {
-        res.send(directors);
-    } else {
-        res.send("Directors coming soon...");
-    }
+    res.render("directors", {
+        directors
+    });
 });
 
 
@@ -47,8 +45,15 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const director = await Director.findByPk(directorId);
     const directors = await Director.findAll();
     const movies = await Movie.findAll();
-    const directedMovies = await Movie.findAll({ where: { directorId } } );
-    const favoriteMovies = await DirectorFavorite.findAll({ where: { directorId }});
+    const directedMovies = await Movie.findAll({ where: { directorId } });
+    console.log("directedMovies:", directedMovies);
+
+    const favoriteMovies = await Movie.findAll({
+        through: DirectorFavorite,
+        where: { directorId }
+    });
+
+    console.log("favoriteMovies:", favoriteMovies);
 
     let years = [];
     let today = new Date().getFullYear();

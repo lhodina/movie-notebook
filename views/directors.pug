@@ -1,0 +1,9 @@
+extends layout.pug
+block content
+    table
+        thead
+            th Name
+        tbody
+            each director in directors
+                tr
+                    td= director.name

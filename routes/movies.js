@@ -22,7 +22,7 @@ const validateMovie = [
 router.get("/", async (req, res) => {
     const movies = await Movie.findAll();
     const directors = await Director.findAll();
-    
+
     res.render("movies", {
         movies,
         directors
@@ -38,8 +38,6 @@ router.get("/add", csrfProtection, asyncHandler(async (req, res) => {
     for (let i = 1888; i < today + 1; i++) {
         years.push(i);
     }
-
-    console.log("years:", years);
 
     res.render("movie-add", {
         movies,
