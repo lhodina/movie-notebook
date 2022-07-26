@@ -1,11 +1,13 @@
 extends layout.pug
 include utils.pug
 block content
+    h2= director.name
     h3 Add a Favorite Movie
     form(action=`/directors/${director.id}/favorites/add` method="post")
             input(type="hidden" name="_csrf" value=csrfToken)
             label(for="selectFavorite") Choose a Movie
             select(name="selectFavorite")
+                option(value=null) --Choose Movie--
                 each movie in movies
                     option(value=movie.title)= movie.title
             label() Or Add a New Movie
@@ -22,9 +24,6 @@ block content
             +field("Image Link", "imageLink")
             button(type="submit") Add Favorite
             a(href=`directors/${director.id}`) Cancel
-
-    h3 Director
-    span= director.name
 
     h3 Movies Directed
     ul

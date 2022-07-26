@@ -72,21 +72,30 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
 router.post("/:id/favorites/add", csrfProtection, asyncHandler(async (req, res) => {
     const { selectFavorite } = req.body;
+    console.log("selectFavorite:", selectFavorite);
     let movie;
+
+    const directorName = req.body.directorId;
+
+    let director = await Director.findOne({ where: { name: directorName } });
+    if (!director) {
+        director = await Director.create({
+            name: directorName
+        });
+    }
 
     const {
         title,
-        directorId,
         yearReleased,
         imageLink
     } = req.body;
 
-    if (selectFavorite) {
+    if (selectFavorite !== "--Choose Movie--") {
         movie = await Movie.findOne({ where: { title: selectFavorite } });
     } else {
         movie = await Movie.create({
             title,
-            directorId,
+            directorId: director.id,
             yearReleased,
             imageLink
         });
