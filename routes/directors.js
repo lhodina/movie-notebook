@@ -48,12 +48,19 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const directedMovies = await Movie.findAll({ where: { directorId } });
     console.log("directedMovies:", directedMovies);
 
-    const favoriteMovies = await Movie.findAll({
-        through: DirectorFavorite,
-        where: { directorId }
-    });
+    const favoriteMovieIds = await DirectorFavorite.findAll({
+        where: { director_Id: directorId }
+    }).map((fav) => fav.dataValues.movie_Id);
 
-    console.log("favoriteMovies:", favoriteMovies);
+    console.log("favoriteMovieIds:", favoriteMovieIds);
+
+    const favoriteMovies = [];
+    for (let favoriteMovieId of favoriteMovieIds) {
+        const favoriteMovie = await Movie.findByPk(favoriteMovieId);
+        favoriteMovies.push(favoriteMovie);
+    }
+
+
 
     let years = [];
     let today = new Date().getFullYear();
@@ -109,11 +116,11 @@ router.post("/:id/favorites/add", csrfProtection, asyncHandler(async (req, res) 
     const current_director_id = parseInt(req.params.id, 10);
 
     const directorFavorite = await DirectorFavorite.create({
-        directorId: current_director_id,
-        movieId: movie.id,
+        director_Id: current_director_id,
+        movie_Id: movie.id,
     });
 
-    res.redirect("/");
+    res.redirect(`/directors/${current_director_id}`);
 }));
 
 

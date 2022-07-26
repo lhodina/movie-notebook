@@ -13,8 +13,8 @@ module.exports = (sequelize, DataTypes) => {
 
     const directorFavMapping = {
       through: 'DirectorFavorite',
-      otherKey: 'movieId',
-      foreignKey: 'directorId'
+      otherKey: 'movie_Id',
+      foreignKey: 'director_Id'
     };
     Director.belongsToMany(models.Movie, directorFavMapping);
   };

@@ -27,8 +27,8 @@ module.exports = (sequelize, DataTypes) => {
 
     const directorFavMapping = {
       through: 'DirectorFavorite',
-      otherKey: 'directorId',
-      foreignKey: 'movieId'
+      otherKey: 'director_Id',
+      foreignKey: 'movie_Id'
     }
     Movie.belongsToMany(models.Director, directorFavMapping);
 

@@ -1,11 +1,11 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const DirectorFavorite = sequelize.define('DirectorFavorite', {
-    directorId: {
+    director_Id: {
       allowNull: false,
       type: DataTypes.INTEGER
     },
-    movieId: {
+    movie_Id: {
       allowNull: false,
       type: DataTypes.INTEGER
     }
