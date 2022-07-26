@@ -1,2 +1,4 @@
-h2 {color: chartreuse}
-button {color: hotpink}
+h2 {
+    font-size: 72px;
+    font-family: 'Courier New', Courier, monospace;
+}

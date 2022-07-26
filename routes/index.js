@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get("/", (req, res) => {
     res.render("index", {
-        title: "Splish-splash Page"
+        title: "INT. MOVIE NOTEBOOK OFFICES -- DAY"
     });
 });
 
