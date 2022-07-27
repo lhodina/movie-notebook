@@ -31,7 +31,7 @@ router.get("/add", csrfProtection, asyncHandler(async (req, res) => {
 }));
 
 
-router.post("/", validateDirector, csrfProtection, asyncHandler(async (req, res) => {
+router.post("/add", validateDirector, csrfProtection, asyncHandler(async (req, res) => {
     const { name } = req.body;
     const director = await Director.create({
         name
@@ -41,32 +41,42 @@ router.post("/", validateDirector, csrfProtection, asyncHandler(async (req, res)
 
 
 router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
-    const directorId = parseInt(req.params.id, 10);
-    const director = await Director.findByPk(directorId);
+    const current_director_id = parseInt(req.params.id, 10);
+    const director = await Director.findByPk(current_director_id);
     const directors = await Director.findAll();
     const movies = await Movie.findAll();
-    const directedMovies = await Movie.findAll({ where: { directorId } });
-    console.log("directedMovies:", directedMovies);
+    const directedMovies = await Movie.findAll({ where: { directorId: current_director_id } });
 
-    const favoriteMovieIds = await DirectorFavorite.findAll({
-        where: { director_Id: directorId }
-    }).map((fav) => fav.dataValues.movie_Id);
+    const favoriteMovies = await Movie.findAll({include: [
+        {
+            model: Director,
+            attributes: ['id', 'name'],
+            where: { id: current_director_id }
+        }
+    ]});
 
-    console.log("favoriteMovieIds:", favoriteMovieIds);
+    console.log("favoriteMovies:", favoriteMovies);
 
-    const favoriteMovies = [];
-    for (let favoriteMovieId of favoriteMovieIds) {
-        const favoriteMovie = await Movie.findByPk(favoriteMovieId);
-        favoriteMovies.push(favoriteMovie);
-    }
+
+    // Hack version works:
+    // const favoriteMovieIds = await DirectorFavorite.findAll({
+    //     where: { director_Id: directorId }
+    // }).map((fav) => fav.dataValues.movie_Id);
+
+    // console.log("favoriteMovieIds:", favoriteMovieIds);
+
+    // const favoriteMovies = [];
+    // for (let favoriteMovieId of favoriteMovieIds) {
+    //     const favoriteMovie = await Movie.findByPk(favoriteMovieId);
+    //     favoriteMovies.push(favoriteMovie);
+    // }
+
 
     let years = [];
     let today = new Date().getFullYear();
     for (let i = 1888; i < today + 1; i++) {
         years.push(i);
     }
-
-    console.log("years:", years);
 
     res.render("director", {
         director,

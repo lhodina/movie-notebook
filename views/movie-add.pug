@@ -1,7 +1,7 @@
 extends layout.pug
 include utils.pug
 block content
-    form(action="/movies" method="post")
+    form(action="/movies/add" method="post")
         input(type="hidden" name="_csrf" value=csrfToken)
         +field("Title", "title")
         label(for="directorId") Choose or Add a Director

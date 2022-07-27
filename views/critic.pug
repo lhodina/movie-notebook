@@ -1,0 +1,31 @@
+extends layout.pug
+include utils.pug
+block content
+    h2= critic.name
+    h3 Add or Select Favorite Movie
+    form(action=`/critics/${critic.id}/favorites/add` method="post")
+        input(type="hidden" name="_csrf" value=csrfToken)
+        label(for="selectFavorite") Choose a Movie
+        select(name="selectFavorite")
+            option(value=null) --Choose Movie--
+            each movie in movies
+                option(value=movie.title)= movie.title
+        label() Or Add a New Movie
+        +field("Title", "title")
+        label(for="directorId") Choose or Add a Director
+        input(name="directorId" list="directors")
+        datalist(id="directors" name="directors")
+            each director in directors
+                option(value=director.name)
+        label(for="yearReleased") Year Released
+        select(name="yearReleased")
+            each year in years
+                option(value=year)= year
+        +field("Image Link", "imageLink")
+        button(type="submit") Add Favorite
+        a(href=`critics/${critic.id}`) Cancel
+
+    h3 Favorite Movies
+        ul
+            each favoriteMovie in favoriteMovies
+                li= favoriteMovie.title

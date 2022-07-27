@@ -48,7 +48,7 @@ router.get("/add", csrfProtection, asyncHandler(async (req, res) => {
 }));
 
 
-router.post("/", csrfProtection, asyncHandler(async (req, res) => {
+router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
     const name = req.body.directorId;
 
     let director = await Director.findOne({ where: { name } });
