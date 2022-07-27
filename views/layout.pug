@@ -4,33 +4,35 @@ html
         title Movie Notebook
         link(rel='stylesheet' href='/stylesheets/index.css')
     body
-        div
-            span
-                a(href="/")
-                    button Home
-                a(href="/movies")
-                    button Movies
-                a(href="/directors")
-                    button Directors
-                a(href="/critics")
-                    button Critics
-                a(href="/movies/add")
-                    button Add Movie
-                a(href="/directors/add")
-                    button Add Director
-                a(href="/critics/add")
-                    button Add Critic
-                a(href="/collections/add")
-                    button Add Collection
+        span
+            a(href="/")
+                button Home
+            a(href="/movies")
+                button Movies
+            a(href="/directors")
+                button Directors
+            a(href="/critics")
+                button Critics
+            a(href="/movies/add")
+                button Add Movie
+            a(href="/directors/add")
+                button Add Director
+            a(href="/critics/add")
+                button Add Critic
+
+    if locals.authenticated
+        a(href="/collections/add")
+            button Add Collection
+        span Welcome #{user.username}!
+        form(action="/users/logout" method="post")
+            button(type="submit") Logout
+    else
         div
             span
                 a(href="/users/login")
                     button Login
                 a(href="/users/register")
                     button Register
-            if locals.authenticated
-                span Welcome #{user.username}!
-                form(action="/users/logout" method="post")
-                    button(type="submit") Logout
 
-        block content
+
+    block content

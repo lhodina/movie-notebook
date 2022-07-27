@@ -4,6 +4,6 @@ block content
     +validationErrorSummary(errors)
     form(action="/users/login" method="post")
         input(type="hidden" name="_csrf" value=csrfToken)
-        +field("Email", "email")
-        +field("Password", "password")
+        +field("Email", "email", "text","demo@demo.com")
+        +field("Password", "password", "text", "abcABC123!")
         button(type="submit") Login

@@ -1,0 +1,6 @@
+extends layout.pug
+block content
+    h2 User Home
+    each collection in collections
+        div
+            table= collection.name

@@ -10,7 +10,8 @@ block content
             option(value=null) --Choose Movie--
             each movie in movies
                 option(value=movie.title)= movie.title
-        label() Or Add a New Movie
+        br
+        text Or Add a New Movie
         +field("Title", "title")
         label(for="directorId") Choose or Add a Director
         input(name="directorId" list="directors")
