@@ -12,3 +12,22 @@ mixin field(labelText, fieldName, fieldType='text', fieldValue='', placeholder=n
             textarea(id=fieldName name=fieldName)= fieldValue
         else
             input(type=fieldType id=fieldName name=fieldName value=fieldValue placeholder=placeholder)
+
+mixin addMovieFormFields()
+    label(for="selectMovie") Choose a Movie
+    select(name="selectMovie")
+        option(value=null) --Choose Movie--
+        each movie in movies
+            option(value=movie.title)= movie.title
+    label() Or Add a New Movie
+    +field("Title", "title")
+    label(for="directorId") Choose or Add a Director
+    input(name="directorId" list="directors")
+    datalist(id="directors" name="directors")
+        each director in directors
+            option(value=director.name)
+    label(for="yearReleased") Year Released
+    select(name="yearReleased")
+        each year in years
+            option(value=year)= year
+    +field("Image Link", "imageLink")

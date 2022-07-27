@@ -12,6 +12,7 @@ const usersRouter = require("./routes/users");
 const directorsRouter = require("./routes/directors");
 const moviesRouter = require("./routes/movies");
 const criticsRouter = require("./routes/critics");
+const collectionsRouter = require("./routes/collections");
 
 const app = express();
 
@@ -36,6 +37,7 @@ app.use("/users", usersRouter);
 app.use("/directors", directorsRouter);
 app.use("/movies", moviesRouter);
 app.use("/critics", criticsRouter);
+app.use("/collections", collectionsRouter);
 
 
 app.use((req, res, next) => {
