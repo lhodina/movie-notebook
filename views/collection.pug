@@ -1,0 +1,9 @@
+extends layout.pug
+include utils.pug
+block content
+    h2= collection.name
+    h3 Add Movie
+    form(action=`/collections/${collection.id}/add-movie` method="post")
+        input(type="hidden" name="_csrf" value=csrfToken)
+        +addMovieFormFields()
+        button(type="submit") Add

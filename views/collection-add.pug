@@ -1,7 +1,7 @@
 extends layout.pug
 include utils.pug
 block content
-    h2 Collection
+    h2 Add Collection
     form(action="/collections/add" method="post")
         input(type="hidden" name="_csrf" value=csrfToken)
         +field("Collection Name", "collectionName")

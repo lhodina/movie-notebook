@@ -28,7 +28,7 @@ router.get("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) =>
 
 router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
     console.log("req.body:", req.body);
-    
+
     const { userId } = req.session.auth;
     const { collectionName } = req.body;
 
@@ -67,9 +67,77 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
         });
     }
 
+    if (movie) {
+        const movieCollection = await MovieCollection.create({
+            movieId: movie.id,
+            collectionId: collection.id
+        });
+    }
+
     res.redirect("/");
 }));
 
+
+router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
+    const collectionId = parseInt(req.params.id, 10);
+    const collection = await Collection.findByPk(collectionId);
+    const movies = await Movie.findAll();
+    const directors = await Director.findAll();
+    let years = [];
+    let today = new Date().getFullYear();
+    for (let i = 1888; i < today + 1; i++) {
+        years.push(i);
+    }
+
+    res.render("collection", {
+        collection,
+        movies,
+        directors,
+        years,
+        csrfToken: req.csrfToken()
+    });
+}));
+
+
+router.post("/:id/add-movie", csrfProtection, asyncHandler(async (req, res) => {
+    const collectionId = parseInt(req.params.id, 10);
+    const { selectMovie } = req.body;
+    console.log("selectMovie:", selectMovie);
+    let movie;
+
+    const directorName = req.body.directorId;
+
+    let director = await Director.findOne({ where: { name: directorName } });
+    if (!director) {
+        director = await Director.create({
+            name: directorName
+        });
+    }
+
+    const {
+        title,
+        yearReleased,
+        imageLink
+    } = req.body;
+
+    if (selectMovie !== "--Choose Movie--") {
+        movie = await Movie.findOne({ where: { title: selectMovie } });
+    } else {
+        movie = await Movie.create({
+            title,
+            directorId: director.id,
+            yearReleased,
+            imageLink
+        });
+    }
+
+    const movieCollection = await MovieCollection.create({
+        movieId: movie.id,
+        collectionId
+    });
+
+    res.redirect("/");
+}));
 
 
 module.exports = router;
