@@ -33,7 +33,6 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
 
 router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const criticId = parseInt(req.params.id, 10);
-    const critic = await Critic.findByPk(criticId);
     const movies = await Movie.findAll();
     const directors = await Director.findAll();
     let years = [];
@@ -42,15 +41,39 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
         years.push(i);
     }
 
-    const favoriteMovies = await Movie.findAll({include: [
-        {
-            model: Critic,
-            attributes: ['id', 'name'],
-            where: { id: criticId }
+    const critic = await Critic.findByPk(criticId, {
+        include: {
+            model: Movie,
+            include: Director
         }
-    ]});
+    });
 
-    console.log("favoriteMovies:", favoriteMovies);
+
+
+    // WORKS:
+    // const favoriteMovies = await Movie.findAll({include: [
+    //     {
+    //         model: Critic,
+    //         attributes: ['id', 'name'],
+    //         where: { id: criticId }
+    //     }
+    // ]});
+
+    const favoriteMovies = critic.dataValues.Movies.map(movieData => {
+        const data = movieData.dataValues;
+        const movie = {
+            title: data.title,
+            director: data.Director.name,
+            yearReleased: data.yearReleased,
+            imageLink: data.imageLink
+        };
+
+        return movie;
+    });
+
+
+    console.log("*****favoriteMovies:", favoriteMovies);
+
 
     res.render("critic", {
         critic,

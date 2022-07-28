@@ -27,6 +27,17 @@ block content
         a(href=`critics/${critic.id}`) Cancel
 
     h3 Favorite Movies
-        ul
-            each favoriteMovie in favoriteMovies
-                li= favoriteMovie.title
+    each favoriteMovie in favoriteMovies
+        table= favoriteMovie.title
+            thead
+                tr
+                    th Director
+                    th Year Released
+                    th Image
+            tbody
+                tr
+                    td= favoriteMovie.director
+                    td= favoriteMovie.yearReleased
+                    td= favoriteMovie.imageLink
+        br
+        br

@@ -1,7 +1,7 @@
 const express = require("express");
 
 const { environment } = require("../config");
-const { User, Collection, Movie, MovieCollection, Director } = require("../db/models");
+const { Collection, Movie, Director } = require("../db/models");
 const { asyncHandler } = require("../utils");
 
 const router = express.Router();
@@ -9,16 +9,6 @@ const router = express.Router();
 router.get("/", asyncHandler(async (req, res) => {
     if (req.session.auth) {
         const { userId } = req.session.auth;
-
-        // TESTING DUPLICATE
-        // const collections = await Collection.findAll({
-        //     where: { user_Id: userId },
-        //     include: {
-        //         model: Movie,
-        //         include: Director
-        //     }
-        // });
-
 
         const collections = await Collection.findAll({
             where: { user_Id: userId },
@@ -48,11 +38,6 @@ router.get("/", asyncHandler(async (req, res) => {
             return displayShelf;
         });
 
-        console.log("*****collections:", collections);
-        for (let collection of collections) {
-            console.log("*****collection.movies:", collection.movies);
-        }
-
         res.render("user-home", {
             collections
         });
@@ -60,7 +45,6 @@ router.get("/", asyncHandler(async (req, res) => {
         res.render("index", {
             title: "MOVIE NOTEBOOK",
         });
-
     }
 }));
 
