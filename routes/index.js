@@ -10,51 +10,47 @@ router.get("/", asyncHandler(async (req, res) => {
     if (req.session.auth) {
         const { userId } = req.session.auth;
 
-        const collections = await Collection.findAll({
-            where: { user_Id: userId },
-            include: {
-                model: Movie,
-                include: Director
-            }
-        })
-
-
+        // TESTING DUPLICATE
         // const collections = await Collection.findAll({
         //     where: { user_Id: userId },
         //     include: {
         //         model: Movie,
         //         include: Director
         //     }
-        // }).map(collectionData => {
-        //     const collection = collectionData.dataValues;
-        //     const collectionName = collection.name;
-        //     const movies = collection.Movies.map( movieData => {
-        //         const data = movieData.dataValues;
-        //         let cleanedMovie = {
-        //             title: data.title,
-        //             directorId: data.directorId,
-        //             yearReleased: data.yearReleased,
-        //             imageLink: data.imageLink
-        //         };
-
-        //         return cleanedMovie;
-        //     });
-
-        //     const displayShelf = {
-        //         name: collectionName,
-        //         movies
-        //     }
-        //     return displayShelf;
         // });
+
+
+        const collections = await Collection.findAll({
+            where: { user_Id: userId },
+            include: {
+                model: Movie,
+                include: Director
+            }
+        }).map(collectionData => {
+            const collection = collectionData.dataValues;
+            const collectionName = collection.name;
+            const movies = collection.Movies.map( movieData => {
+                const data = movieData.dataValues;
+                let cleanedMovie = {
+                    title: data.title,
+                    director: data.Director.name,
+                    yearReleased: data.yearReleased,
+                    imageLink: data.imageLink
+                };
+
+                return cleanedMovie;
+            });
+
+            const displayShelf = {
+                name: collectionName,
+                movies
+            }
+            return displayShelf;
+        });
 
         console.log("*****collections:", collections);
         for (let collection of collections) {
-            console.log("*****collection.dataValues.name:", collection.dataValues.name);
-            console.log("*****collection.datavalues.Movies:", collection.dataValues.Movies);
-            const movies = collection.dataValues.Movies;
-            for (let movie of movies) {
-                console.log("movie.Director:", movie.Director);
-            }
+            console.log("*****collection.movies:", collection.movies);
         }
 
         res.render("user-home", {

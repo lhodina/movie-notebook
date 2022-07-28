@@ -1,21 +1,21 @@
 extends layout.pug
 block content
     h2 User Home
-    //- each collection in collections
-    //-     div
-    //-         table= collection.name
-    //-             thead
-    //-                 tr
-    //-                     th Title
-    //-                     th Director
-    //-                     th Year Released
-    //-                     th Image
-    //-             tbody
-    //-                 each movie in collection.movies
-    //-                     tr
-    //-                         td= movie.title
-    //-                         td= movie.director
-    //-                         td= movie.yearReleased
-    //-                         td= movie.imageLink
-    //-         br
-    //-         br
+    each collection in collections
+        div
+            table= collection.name
+                thead
+                    tr
+                        th Title
+                        th Director
+                        th Year Released
+                        th Image
+                tbody
+                    each movie in collection.movies
+                        tr
+                            td= movie.title
+                            td= movie.director
+                            td= movie.yearReleased
+                            td= movie.imageLink
+            br
+            br
