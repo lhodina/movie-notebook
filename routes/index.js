@@ -1,7 +1,7 @@
 const express = require("express");
 
 const { environment } = require("../config");
-const { User, Collection, Movie, MovieCollection } = require("../db/models");
+const { User, Collection, Movie, MovieCollection, Director } = require("../db/models");
 const { asyncHandler } = require("../utils");
 
 const router = express.Router();
@@ -12,55 +12,50 @@ router.get("/", asyncHandler(async (req, res) => {
 
         const collections = await Collection.findAll({
             where: { user_Id: userId },
-            include: Movie
-        }).map(collectionData => {
-            const collection = collectionData.dataValues;
-            const collectionName = collection.name;
-            const movies = collection.Movies.map(movieData => {
-                const data = movieData.dataValues;
-                const cleanedMovie = {
-                    title: data.title,
-                    directorId: data.directorId,
-                    yearReleased: data.yearReleased,
-                    imageLink: data.imageLink
-                };
-                return cleanedMovie;
-            });
-
-            const displayShelf = {
-                name: collectionName,
-                movies
+            include: {
+                model: Movie,
+                include: Director
             }
-            return displayShelf;
-        });
+        })
+
+
+        // const collections = await Collection.findAll({
+        //     where: { user_Id: userId },
+        //     include: {
+        //         model: Movie,
+        //         include: Director
+        //     }
+        // }).map(collectionData => {
+        //     const collection = collectionData.dataValues;
+        //     const collectionName = collection.name;
+        //     const movies = collection.Movies.map( movieData => {
+        //         const data = movieData.dataValues;
+        //         let cleanedMovie = {
+        //             title: data.title,
+        //             directorId: data.directorId,
+        //             yearReleased: data.yearReleased,
+        //             imageLink: data.imageLink
+        //         };
+
+        //         return cleanedMovie;
+        //     });
+
+        //     const displayShelf = {
+        //         name: collectionName,
+        //         movies
+        //     }
+        //     return displayShelf;
+        // });
 
         console.log("*****collections:", collections);
         for (let collection of collections) {
-            console.log(collection.name);
-            console.log(collection.movies);
+            console.log("*****collection.dataValues.name:", collection.dataValues.name);
+            console.log("*****collection.datavalues.Movies:", collection.dataValues.Movies);
+            const movies = collection.dataValues.Movies;
+            for (let movie of movies) {
+                console.log("movie.Director:", movie.Director);
+            }
         }
-
-        // for (let collection of collections) {
-        //     console.log("*****collection.name:", collection.name);
-        //     console.log("*****collection.Movies:", collection.Movies);
-        //     for (let movie of collection.Movies) {
-        //         console.log("*****movie.dataValues:", movie.dataValues);
-        //     }
-        // }
-
-
-        // // const shelfDisplay = {
-        // //     collection name,
-                    // array of movie objects
-        // //
-        //             title,
-        //             director,
-        //             year released
-        //             image,
-
-
-        // // }
-
 
         res.render("user-home", {
             collections
