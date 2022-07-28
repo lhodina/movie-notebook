@@ -47,13 +47,11 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const movies = await Movie.findAll();
     const directedMovies = await Movie.findAll({ where: { directorId: current_director_id } });
 
-    const favoriteMovies = await Movie.findAll({include: [
+    const favoriteMovies = await Movie.findAll({include:
         {
             model: Director,
-            attributes: ['id', 'name'],
             where: { id: current_director_id }
-        }
-    ]});
+        }});
 
     console.log("favoriteMovies:", favoriteMovies);
 

@@ -10,18 +10,57 @@ router.get("/", asyncHandler(async (req, res) => {
     if (req.session.auth) {
         const { userId } = req.session.auth;
 
-        const collections = await Collection.findAll({include: [
-                {
-                    model: User,
-                    where: { id: userId }
-                },
-                {
-                    model: Movie,
-                    through: MovieCollection
-                }
-        ]});
+        const collections = await Collection.findAll({
+            where: { user_Id: userId },
+            include: Movie
+        }).map(collectionData => {
+            const collection = collectionData.dataValues;
+            const collectionName = collection.name;
+            const movies = collection.Movies.map(movieData => {
+                const data = movieData.dataValues;
+                const cleanedMovie = {
+                    title: data.title,
+                    directorId: data.directorId,
+                    yearReleased: data.yearReleased,
+                    imageLink: data.imageLink
+                };
+                return cleanedMovie;
+            });
 
-        console.log("collections:", collections);
+            const displayShelf = {
+                name: collectionName,
+                movies
+            }
+            return displayShelf;
+        });
+
+        console.log("*****collections:", collections);
+        for (let collection of collections) {
+            console.log(collection.name);
+            console.log(collection.movies);
+        }
+
+        // for (let collection of collections) {
+        //     console.log("*****collection.name:", collection.name);
+        //     console.log("*****collection.Movies:", collection.Movies);
+        //     for (let movie of collection.Movies) {
+        //         console.log("*****movie.dataValues:", movie.dataValues);
+        //     }
+        // }
+
+
+        // // const shelfDisplay = {
+        // //     collection name,
+                    // array of movie objects
+        // //
+        //             title,
+        //             director,
+        //             year released
+        //             image,
+
+
+        // // }
+
 
         res.render("user-home", {
             collections
@@ -30,8 +69,8 @@ router.get("/", asyncHandler(async (req, res) => {
         res.render("index", {
             title: "MOVIE NOTEBOOK",
         });
-    }
 
+    }
 }));
 
 if (environment !== "production") {
