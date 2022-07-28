@@ -48,17 +48,6 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
         }
     });
 
-
-
-    // WORKS:
-    // const favoriteMovies = await Movie.findAll({include: [
-    //     {
-    //         model: Critic,
-    //         attributes: ['id', 'name'],
-    //         where: { id: criticId }
-    //     }
-    // ]});
-
     const favoriteMovies = critic.dataValues.Movies.map(movieData => {
         const data = movieData.dataValues;
         const movie = {

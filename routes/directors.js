@@ -42,32 +42,30 @@ router.post("/add", validateDirector, csrfProtection, asyncHandler(async (req, r
 
 router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const current_director_id = parseInt(req.params.id, 10);
-    const director = await Director.findByPk(current_director_id);
     const directors = await Director.findAll();
     const movies = await Movie.findAll();
     const directedMovies = await Movie.findAll({ where: { directorId: current_director_id } });
 
-    const favoriteMovies = await Movie.findAll({include:
-        {
-            model: Director,
-            where: { id: current_director_id }
-        }});
+    const director = await Director.findByPk(current_director_id, {
+        include: {
+            model: Movie,
+            include: Director
+        }
+    });
 
-    console.log("favoriteMovies:", favoriteMovies);
+    const favoriteMovies = director.dataValues.Movies.map(movieData => {
+        const movie = movieData.dataValues;
+        const displayMovie = {
+            id: movie.id,
+            title: movie.title,
+            director: movie.Director.dataValues.name,
+            yearReleased: movie.yearReleased,
+            imageLink: movie.imageLink
+        }
+        return displayMovie;
+    });
 
-
-    // Hack version works:
-    // const favoriteMovieIds = await DirectorFavorite.findAll({
-    //     where: { director_Id: directorId }
-    // }).map((fav) => fav.dataValues.movie_Id);
-
-    // console.log("favoriteMovieIds:", favoriteMovieIds);
-
-    // const favoriteMovies = [];
-    // for (let favoriteMovieId of favoriteMovieIds) {
-    //     const favoriteMovie = await Movie.findByPk(favoriteMovieId);
-    //     favoriteMovies.push(favoriteMovie);
-    // }
+    console.log("*****favoriteMovies:", favoriteMovies);
 
 
     let years = [];
