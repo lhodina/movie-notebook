@@ -3,7 +3,7 @@ const { check, validationResult } = require("express-validator");
 
 const { csrfProtection, asyncHandler } = require("../utils");
 const db = require("../db/models");
-const { Movie, Director } = db;
+const { Movie, Director, User, UserNote } = db;
 const { requireAuth } = require("../auth");
 
 const router = express.Router();
@@ -35,7 +35,7 @@ router.get("/add", csrfProtection, asyncHandler(async (req, res) => {
     const directors = await Director.findAll();
     let years = [];
     let today = new Date().getFullYear();
-    for (let i = 1888; i < today + 1; i++) {
+    for (let i = 1920; i < today + 1; i++) {
         years.push(i);
     }
 
@@ -83,5 +83,39 @@ router.get("/:id", asyncHandler(async (req, res) => {
     res.render("movie", { movie });
 }));
 
+
+
+router.get("/:id/user-notes/add", requireAuth, csrfProtection, asyncHandler(async (req, res) => {
+    const movieId = parseInt(req.params.id, 10);
+    const movie = await Movie.findByPk(movieId);
+    res.render("user-note-add", {
+        movie,
+        csrfToken: req.csrfToken()
+    });
+}));
+
+router.post("/:id/user-notes/add", requireAuth, csrfProtection, asyncHandler(async (req, res) => {
+    console.log("req.body:", req.body);
+    const { userId } = req.session.auth;
+    const movieId = parseInt(req.params.id, 10);
+
+    let {
+        review,
+        watchedStatus,
+        starRating
+    } = req.body;
+
+
+    console.log()
+    const userNote = await UserNote.create({
+        userId,
+        movieId,
+        review,
+        rating: starRating,
+        watchedStatus
+    });
+
+    res.redirect("/");
+}));
 
 module.exports = router;

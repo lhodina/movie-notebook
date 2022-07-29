@@ -14,7 +14,7 @@ router.get("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) =>
     const directors = await Director.findAll();
     let years = [];
     let today = new Date().getFullYear();
-    for (let i = 1888; i < today + 1; i++) {
+    for (let i = 1920; i < today + 1; i++) {
         years.push(i);
     }
     res.render("collection-add", {
@@ -34,7 +34,7 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
 
     const collection = await Collection.create({
         name: collectionName,
-        user_Id: userId
+        userId
     });
 
     const { selectMovie } = req.body;
@@ -85,7 +85,7 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const directors = await Director.findAll();
     let years = [];
     let today = new Date().getFullYear();
-    for (let i = 1888; i < today + 1; i++) {
+    for (let i = 1920; i < today + 1; i++) {
         years.push(i);
     }
 
@@ -136,6 +136,7 @@ router.post("/:id/add-movie", csrfProtection, asyncHandler(async (req, res) => {
         collectionId
     });
 
+    res.redirect('/');
 }));
 
 

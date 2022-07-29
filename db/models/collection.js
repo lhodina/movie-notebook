@@ -5,14 +5,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING(100)
     },
-    user_Id:{
+    userId:{
       allowNull: false,
       type: DataTypes.INTEGER
     }
   }, {});
   Collection.associate = function(models) {
     // associations can be defined here
-    Collection.belongsTo(models.User, { foreignKey: 'user_Id' });
+    Collection.belongsTo(models.User, { foreignKey: 'userId' });
 
 
     const collectionMapping = {

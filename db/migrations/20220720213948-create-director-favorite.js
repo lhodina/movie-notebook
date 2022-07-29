@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: { model: 'Directors' }
       },
-      movie_Id: {
+      movieId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: { model: 'Movies' }

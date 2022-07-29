@@ -11,7 +11,7 @@ router.get("/", asyncHandler(async (req, res) => {
         const { userId } = req.session.auth;
 
         const collections = await Collection.findAll({
-            where: { user_Id: userId },
+            where: { userId },
             include: {
                 model: Movie,
                 include: Director
@@ -22,6 +22,7 @@ router.get("/", asyncHandler(async (req, res) => {
             const movies = collection.Movies.map( movieData => {
                 const data = movieData.dataValues;
                 let cleanedMovie = {
+                    id: data.id,
                     title: data.title,
                     director: data.Director.name,
                     yearReleased: data.yearReleased,
@@ -32,6 +33,7 @@ router.get("/", asyncHandler(async (req, res) => {
             });
 
             const displayShelf = {
+                id: collection.id,
                 name: collectionName,
                 movies
             }
@@ -49,6 +51,12 @@ router.get("/", asyncHandler(async (req, res) => {
         });
     }
 }));
+
+
+router.post("/", asyncHandler(async (req, res) =>{
+    console.log("req.body:", req.body);
+}));
+
 
 if (environment !== "production") {
     router.get("/error-test", () => {

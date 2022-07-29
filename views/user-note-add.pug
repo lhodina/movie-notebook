@@ -1,27 +1,13 @@
 extends layout.pug
 include utils.pug
 block content
-    h2 Add a Movie
-    br
-    form(action="/movies/add" method="post")
+    h2 Add User Note for #{movie.title}
+    form(action=`/movies/${movie.id}/user-notes/add`, method="post")
         input(type="hidden" name="_csrf" value=csrfToken)
-        +field("Title", "title")
+        label(for="review") Review
+        textarea(name="review", cols="30", rows="10")
         br
-        label(for="directorId") Choose or Add a Director
-        input(name="directorId" list="directors")
-        br
-        datalist(id="directors" name="directors")
-            each director in directors
-                option(value=director.name)
-        br
-        label(for="yearReleased") Year Released
-        select(name="yearReleased")
-            each year in years
-                option(value=year)= year
-        br
-        +field("Image Link", "imageLink")
-        br
-        span Rating
+        label(for="rating") Rating
         div.starRating
             input(type="radio" id="five" name="starRating" value="5")
             label(for="five" )
@@ -34,4 +20,6 @@ block content
             input(type="radio" id="one" name="starRating" value="1")
             label(for="one")
         br
-        button(type="submit") Add
+        +field("Watched", "watchedStatus", "radio", "1")
+        +field("Want to Watch", "watchedStatus", "radio", "0")
+        button(type="submit") Save

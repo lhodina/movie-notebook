@@ -70,7 +70,7 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
     let years = [];
     let today = new Date().getFullYear();
-    for (let i = 1888; i < today + 1; i++) {
+    for (let i = 1920; i < today + 1; i++) {
         years.push(i);
     }
 
@@ -121,7 +121,7 @@ router.post("/:id/favorites/add", csrfProtection, asyncHandler(async (req, res) 
 
     const directorFavorite = await DirectorFavorite.create({
         director_Id: current_director_id,
-        movie_Id: movie.id,
+        movieId: movie.id,
     });
 
     res.redirect(`/directors/${current_director_id}`);
