@@ -2,3 +2,43 @@ h2 {
     font-size: 72px;
     font-family: 'Courier New', Courier, monospace;
 }
+
+.starRating {
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    justify-content: center;
+    width: 120px;
+}
+
+.starRating input {
+    display: none;
+}
+
+.starRating > label {
+    color: gold;
+    width: 20px;
+    height: 20px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 20px;
+    transition: 0.2s ease;
+}
+
+.starRating > label:hover:before, .starRating > label:hover ~ label:before {
+    color: gold;
+    content: '\2605';
+    position: absolute;
+    transition: 0.2s ease;
+}
+
+.starRating label:active::before {
+    transform:scale(1.1);
+}
+
+.starRating label::before {
+    content: '\2606';
+}
+
+.starRating input:checked ~ label:before {
+    content: '\2605';
+}

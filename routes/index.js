@@ -38,6 +38,8 @@ router.get("/", asyncHandler(async (req, res) => {
             return displayShelf;
         });
 
+
+
         res.render("user-home", {
             collections
         });
