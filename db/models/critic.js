@@ -14,6 +14,13 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'criticId'
     };
     Critic.belongsToMany(models.Movie, criticFavMapping);
+
+    const userMapping = {
+      through: 'FavoriteCritic',
+      otherKey: 'userId',
+      foreignKey: 'criticId'
+    };
+    Critic.belongsToMany(models.User, userMapping);
   };
   return Critic;
 };

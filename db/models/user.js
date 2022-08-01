@@ -20,6 +20,20 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     User.hasMany(models.Collection, { foreignKey: 'userId' });
     User.hasMany(models.UserNote, { foreignKey: 'userId' });
+
+    const directorMapping = {
+      through: 'FavoriteDirector',
+      otherKey: 'directorId',
+      foreignKey: 'userId'
+    };
+    User.belongsToMany(models.Director, directorMapping);
+
+    const criticMapping = {
+      through: 'FavoriteCritic',
+      otherKey: 'criticId',
+      foreignKey: 'userId'
+    };
+    User.belongsToMany(models.Critic, criticMapping);
   };
   return User;
 };

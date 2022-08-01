@@ -1,0 +1,9 @@
+extends layout.pug
+block content
+    form(action="/favorite-directors/add", method="post")
+        input(type="hidden" name="_csrf" value=csrfToken)
+        label(for="director") Choose or Add a Director
+        input(name="directorName" list="directors")
+        datalist(id="directors" name="directors")
+            each director in directors
+                option(value=director.name)

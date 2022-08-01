@@ -1,8 +1,9 @@
 const express = require("express");
+const { requireAuth } = require("../auth");
 
 const { environment } = require("../config");
-const { Collection, Movie, Director } = require("../db/models");
-const { asyncHandler } = require("../utils");
+const { User, Collection, Movie, Director, FavoriteDirector, Critic, FavoriteCritic } = require("../db/models");
+const { asyncHandler, csrfProtection } = require("../utils");
 
 const router = express.Router();
 
@@ -40,10 +41,23 @@ router.get("/", asyncHandler(async (req, res) => {
             return displayShelf;
         });
 
+        const user = await User.findByPk(userId, {
+            include: {
+                model: Director,
+                include: User
+            }
+        });
+
+        console.log("*****user:", user);
+
+        const favoriteDirectors = user.dataValues.Directors;
+        console.log("*****favoriteDirectors:", favoriteDirectors);
 
 
         res.render("user-home", {
-            collections
+            collections,
+            user,
+            favoriteDirectors
         });
     } else {
         res.render("index", {
@@ -53,8 +67,33 @@ router.get("/", asyncHandler(async (req, res) => {
 }));
 
 
-router.post("/", asyncHandler(async (req, res) =>{
-    console.log("req.body:", req.body);
+
+router.get("/favorite-directors/add", csrfProtection, requireAuth, asyncHandler(async (req, res) => {
+    const { userId } = req.session.auth;
+    const directors = await Director.findAll();
+    res.render("favorite-director-add", {
+        directors,
+        csrfToken: req.csrfToken()
+    });
+}));
+
+
+router.post("/favorite-directors/add", csrfProtection, asyncHandler(async (req, res) => {
+    const { userId } = req.session.auth;
+    const { directorName } = req.body;
+    let director = await Director.findOne({ where: { name: directorName } });
+    if (!director) {
+        director = await Director.create({
+            name: directorName
+        });
+    }
+
+    const favoriteDirector = await FavoriteDirector.create({
+        userId,
+        directorId: director.id
+    });
+
+    res.redirect("/");
 }));
 
 

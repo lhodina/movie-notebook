@@ -20,3 +20,8 @@ block content
                             td= movie.imageLink
             br
             br
+
+    h3 Favorite Directors
+    ul
+        each favoriteDirector in favoriteDirectors
+            li= favoriteDirector.name

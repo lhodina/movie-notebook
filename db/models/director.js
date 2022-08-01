@@ -17,6 +17,13 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'director_Id'
     };
     Director.belongsToMany(models.Movie, directorFavMapping);
+
+    const userMapping = {
+      through: 'FavoriteDirector',
+      otherKey: 'userId',
+      foreignKey: 'directorId'
+    };
+    Director.belongsToMany(models.User, userMapping);
   };
   return Director;
 };

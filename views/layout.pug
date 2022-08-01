@@ -23,6 +23,8 @@ html
     if locals.authenticated
         a(href="/collections/add")
             button Add Collection
+        a(href="/favorite-directors/add")
+            button Add Favorite Director
         span Welcome #{user.username}!
         form(action="/users/logout" method="post")
             button(type="submit") Logout

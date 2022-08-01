@@ -1,5 +1,6 @@
 const express = require("express");
 const { check, validationResult } = require("express-validator");
+const { Op } = require("sequelize");
 
 const { csrfProtection, asyncHandler } = require("../utils");
 const db = require("../db/models");
@@ -77,15 +78,33 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
 }));
 
 
-router.get("/:id", asyncHandler(async (req, res) => {
+router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const movieId = parseInt(req.params.id, 10);
     const movie = await Movie.findByPk(movieId);
-    res.render("movie", { movie });
+    if (req.session.auth) {
+        const { userId } = req.session.auth;
+        const userNotes = await UserNote.findOne({
+            where: {
+                [Op.and]: [
+                    { userId },
+                    { movieId }
+                ]
+            }
+        });
+        console.log("*****userNotes:", userNotes);
+        res.render("movie", {
+            movie,
+            userNotes,
+            csrfToken: req.csrfToken()
+         });
+    } else {
+        res.render("movie", { movie });
+    }
 }));
 
 
 
-router.get("/:id/user-notes/add", requireAuth, csrfProtection, asyncHandler(async (req, res) => {
+router.get("/:id/add-notes", requireAuth, csrfProtection, asyncHandler(async (req, res) => {
     const movieId = parseInt(req.params.id, 10);
     const movie = await Movie.findByPk(movieId);
     res.render("user-note-add", {
@@ -94,7 +113,7 @@ router.get("/:id/user-notes/add", requireAuth, csrfProtection, asyncHandler(asyn
     });
 }));
 
-router.post("/:id/user-notes/add", requireAuth, csrfProtection, asyncHandler(async (req, res) => {
+router.post("/:id/add-notes", requireAuth, csrfProtection, asyncHandler(async (req, res) => {
     console.log("req.body:", req.body);
     const { userId } = req.session.auth;
     const movieId = parseInt(req.params.id, 10);
