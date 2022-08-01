@@ -1,0 +1,9 @@
+extends layout.pug
+block content
+    form(action="/favorite-critics/add", method="post")
+        input(type="hidden" name="_csrf" value=csrfToken)
+        label(for="critic") Choose or Add a Critic
+        input(name="criticName" list="critics")
+        datalist(id="critics" name="critics")
+            each critic in critics
+                option(value=critic.name)

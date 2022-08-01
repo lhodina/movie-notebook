@@ -1,6 +1,7 @@
 extends layout.pug
 block content
     h2 User Home
+    h3 Collections
     each collection in collections
         div
             a(href=`/collections/${collection.id}`)= collection.name
@@ -25,3 +26,8 @@ block content
     ul
         each favoriteDirector in favoriteDirectors
             li= favoriteDirector.name
+
+    h3 Favorite Critics
+    ul
+        each favoriteCritic in favoriteCritics
+            li= favoriteCritic.name

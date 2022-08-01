@@ -42,22 +42,30 @@ router.get("/", asyncHandler(async (req, res) => {
         });
 
         const user = await User.findByPk(userId, {
-            include: {
-                model: Director,
-                include: User
-            }
+            include:
+                [
+                    {
+                        model: Director,
+                        include: User
+                    },
+                    {
+                        model: Critic,
+                        include: User
+                    }
+                ]
         });
 
         console.log("*****user:", user);
 
         const favoriteDirectors = user.dataValues.Directors;
-        console.log("*****favoriteDirectors:", favoriteDirectors);
+        const favoriteCritics = user.dataValues.Critics;
 
 
         res.render("user-home", {
             collections,
             user,
-            favoriteDirectors
+            favoriteDirectors,
+            favoriteCritics
         });
     } else {
         res.render("index", {
@@ -69,7 +77,6 @@ router.get("/", asyncHandler(async (req, res) => {
 
 
 router.get("/favorite-directors/add", csrfProtection, requireAuth, asyncHandler(async (req, res) => {
-    const { userId } = req.session.auth;
     const directors = await Director.findAll();
     res.render("favorite-director-add", {
         directors,
@@ -95,6 +102,35 @@ router.post("/favorite-directors/add", csrfProtection, asyncHandler(async (req, 
 
     res.redirect("/");
 }));
+
+
+router.get("/favorite-critics/add", csrfProtection, requireAuth, asyncHandler(async (req, res) => {
+    const critics = await Critic.findAll();
+    res.render("favorite-critic-add", {
+        critics,
+        csrfToken: req.csrfToken()
+    });
+}));
+
+
+router.post("/favorite-critics/add", csrfProtection, asyncHandler(async (req, res) => {
+    const { userId } = req.session.auth;
+    const { criticName } = req.body;
+    let critic = await Critic.findOne({ where: { name: criticName } });
+    if (!critic) {
+        critic = await Critic.create({
+            name: criticName
+        });
+    }
+
+    const favoriteCritic = await FavoriteCritic.create({
+        userId,
+        criticId: critic.id
+    });
+
+    res.redirect("/");
+}));
+
 
 
 if (environment !== "production") {
