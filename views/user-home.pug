@@ -12,6 +12,9 @@ block content
                         th Director
                         th Year Released
                         th Image
+                        th Review
+                        th Rating
+                        th Status
                 tbody
                     each movie in collection.movies
                         tr
@@ -19,6 +22,9 @@ block content
                             td= movie.director
                             td= movie.yearReleased
                             td= movie.imageLink
+                            td= movie.review
+                            td= movie.rating
+                            td= movie.watchedStatus
             br
             br
 

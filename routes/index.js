@@ -2,7 +2,7 @@ const express = require("express");
 const { requireAuth } = require("../auth");
 
 const { environment } = require("../config");
-const { User, Collection, Movie, Director, FavoriteDirector, Critic, FavoriteCritic } = require("../db/models");
+const { User, Collection, Movie, Director, FavoriteDirector, Critic, FavoriteCritic, UserNote } = require("../db/models");
 const { asyncHandler, csrfProtection } = require("../utils");
 
 const router = express.Router();
@@ -13,15 +13,21 @@ router.get("/", asyncHandler(async (req, res) => {
 
         const collections = await Collection.findAll({
             where: { userId },
-            include: {
-                model: Movie,
-                include: Director
-            }
+            include:
+                {
+                    model: Movie,
+                    include: [
+                        { model: Director },
+                        { model: UserNote }
+                    ]
+                }
         }).map(collectionData => {
             const collection = collectionData.dataValues;
             const collectionName = collection.name;
+
             const movies = collection.Movies.map( movieData => {
                 const data = movieData.dataValues;
+
                 let cleanedMovie = {
                     id: data.id,
                     title: data.title,
@@ -29,6 +35,17 @@ router.get("/", asyncHandler(async (req, res) => {
                     yearReleased: data.yearReleased,
                     imageLink: data.imageLink
                 };
+
+                const userNotes = data.UserNotes;
+                console.log("*****userNotes:", userNotes)
+                let userNote;
+
+                if (userNotes.length) {
+                    userNote = userNotes[0].dataValues;
+                    cleanedMovie.review = userNote.review;
+                    cleanedMovie.rating = userNote.rating;
+                    cleanedMovie.watchedStatus = userNote.watchedStatus
+                }
 
                 return cleanedMovie;
             });
@@ -55,7 +72,6 @@ router.get("/", asyncHandler(async (req, res) => {
                 ]
         });
 
-        console.log("*****user:", user);
 
         const favoriteDirectors = user.dataValues.Directors;
         const favoriteCritics = user.dataValues.Critics;
