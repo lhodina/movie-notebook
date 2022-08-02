@@ -1,5 +1,6 @@
 extends layout.pug
 block content
+    script(src="/scripts/index.js" type="module")
     h2 User Home
     h3 Collections
     each collection in collections
@@ -15,25 +16,34 @@ block content
                         th Review
                         th Rating
                         th Status
+                        th
+
                 tbody
                     each movie in collection.movies
                         tr
-                            td= movie.title
+                            td
+                                a(href=`/movies/${movie.id}`) #{movie.title}
                             td= movie.director
                             td= movie.yearReleased
-                            td= movie.imageLink
+                            if movie.imageLink
+                                td
+                                    img(src=movie.imageLink width=60 height=90)
+                            else
+                                td Add Image
                             td= movie.review
                             td= movie.rating
                             td= movie.watchedStatus
+                            td
+                                a(href=`/movies/${movie.id}`) edit
             br
             br
 
-    h3 Favorite Directors
+    h3 Your Favorite Directors
     ul
         each favoriteDirector in favoriteDirectors
             li= favoriteDirector.name
 
-    h3 Favorite Critics
+    h3 Your Favorite Critics
     ul
         each favoriteCritic in favoriteCritics
             li= favoriteCritic.name

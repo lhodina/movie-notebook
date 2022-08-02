@@ -3,6 +3,12 @@ h2 {
     font-family: 'Courier New', Courier, monospace;
 }
 
+.poster {
+    height: 90px;
+    width: 60px;
+    /* aspect-ratio: auto 2 / 3; */
+}
+
 .starRating {
     display: flex;
     align-items: center;

@@ -19,6 +19,7 @@ const app = express();
 app.set("view engine", "pug");
 
 app.use(morgan("dev"));
+app.use(express.json());
 app.use(cookieParser(sessionSecret));
 app.use(express.static(path.join(__dirname, 'public')));
 

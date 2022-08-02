@@ -37,7 +37,6 @@ router.get("/", asyncHandler(async (req, res) => {
                 };
 
                 const userNotes = data.UserNotes;
-                console.log("*****userNotes:", userNotes)
                 let userNote;
 
                 if (userNotes.length) {

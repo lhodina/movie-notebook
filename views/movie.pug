@@ -4,8 +4,13 @@ block content
     h2= movie.title
     h3 Director
     p= movie.directorId
-    h3 Release Date
-    p= movie.releaseDate
+    h3 Year Released
+    p= movie.yearReleased
+    h3 Image
+    if movie.imageLink
+        img(src=`movie.imageLink`)
+    else
+        p Add image
     div
         img(src=movie.imageLink)
 

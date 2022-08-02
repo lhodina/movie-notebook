@@ -91,7 +91,7 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
                 ]
             }
         });
-        console.log("*****userNotes:", userNotes);
+        
         res.render("movie", {
             movie,
             userNotes,
