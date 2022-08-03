@@ -11,52 +11,6 @@ router.get("/", asyncHandler(async (req, res) => {
     if (req.session.auth) {
         const { userId } = req.session.auth;
 
-        const collections = await Collection.findAll({
-            where: { userId },
-            include:
-                {
-                    model: Movie,
-                    include: [
-                        { model: Director },
-                        { model: UserNote }
-                    ]
-                }
-        }).map(collectionData => {
-            const collection = collectionData.dataValues;
-            const collectionName = collection.name;
-
-            const movies = collection.Movies.map( movieData => {
-                const data = movieData.dataValues;
-
-                let cleanedMovie = {
-                    id: data.id,
-                    title: data.title,
-                    director: data.Director.name,
-                    yearReleased: data.yearReleased,
-                    imageLink: data.imageLink
-                };
-
-                const userNotes = data.UserNotes;
-                let userNote;
-
-                if (userNotes.length) {
-                    userNote = userNotes[0].dataValues;
-                    cleanedMovie.review = userNote.review;
-                    cleanedMovie.rating = userNote.rating;
-                    cleanedMovie.watchedStatus = userNote.watchedStatus
-                }
-
-                return cleanedMovie;
-            });
-
-            const displayShelf = {
-                id: collection.id,
-                name: collectionName,
-                movies
-            }
-            return displayShelf;
-        });
-
         const user = await User.findByPk(userId, {
             include:
                 [
@@ -71,10 +25,75 @@ router.get("/", asyncHandler(async (req, res) => {
                 ]
         });
 
-
         const favoriteDirectors = user.dataValues.Directors;
         const favoriteCritics = user.dataValues.Critics;
 
+        const directors = await Director.findAll({ include: Movie });
+
+        const collections = await Collection.findAll({
+            where: { userId },
+            include:
+                {
+                    model: Movie,
+                    include: [
+                        { model: Director },
+                        {
+                            model: Critic,
+                            include: { model: Movie }
+                        },
+                        { model: UserNote }
+                    ]
+                }
+        }).map((collectionData) => {
+            const collection = collectionData.dataValues;
+            const collectionName = collection.name;
+
+            const movies = collection.Movies.map((movieData) => {
+                const data = movieData.dataValues;
+                const critics = data.Critics.map((criticData) => criticData.dataValues);
+
+                let cleanedMovie = {
+                    id: data.id,
+                    title: data.title,
+                    director: data.Director.name,
+                    yearReleased: data.yearReleased,
+                    imageLink: data.imageLink,
+                    likedByDirectors: [],
+                    likedByCritics: critics
+                };
+
+                for (let director of directors) {
+                    const directorId = director.dataValues.id;
+                    const movies = director.dataValues.Movies;
+                    for (let movieData of movies) {
+                        const movie = movieData.dataValues;
+                        if ( movie.title == cleanedMovie.title) {
+                            cleanedMovie.likedByDirectors.push(director.name);
+                        }
+                    }
+                }
+
+                const userNotes = data.UserNotes;
+                let userNote;
+
+                if (userNotes.length) {
+                    userNote = userNotes[0].dataValues;
+                    cleanedMovie.review = userNote.review;
+                    cleanedMovie.rating = userNote.rating;
+                    cleanedMovie.watchedStatus = userNote.watchedStatus
+                }
+
+                return cleanedMovie;
+            });
+
+
+            const displayShelf = {
+                id: collection.id,
+                name: collectionName,
+                movies
+            }
+            return displayShelf;
+        });
 
         res.render("user-home", {
             collections,

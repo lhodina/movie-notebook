@@ -47,10 +47,9 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const directedMovies = await Movie.findAll({ where: { directorId: current_director_id } });
 
     const director = await Director.findByPk(current_director_id, {
-        include: {
-            model: Movie,
-            include: Director
-        }
+        include: { model: Movie,
+        include: Director
+    }
     });
 
     const favoriteMovies = director.dataValues.Movies.map(movieData => {
@@ -64,9 +63,6 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
         }
         return displayMovie;
     });
-
-    console.log("*****favoriteMovies:", favoriteMovies);
-
 
     let years = [];
     let today = new Date().getFullYear();

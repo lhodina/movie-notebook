@@ -16,34 +16,53 @@ block content
                         th Review
                         th Rating
                         th Status
+                        th Loved By
                         th
 
                 tbody
-                    each movie in collection.movies
-                        tr
+                each movie in collection.movies
+                    tr
+                        td
+                            a(href=`/movies/${movie.id}`) #{movie.title}
+                        td= movie.director
+                        td= movie.yearReleased
+                        if movie.imageLink
                             td
-                                a(href=`/movies/${movie.id}`) #{movie.title}
-                            td= movie.director
-                            td= movie.yearReleased
-                            if movie.imageLink
-                                td
-                                    img(src=movie.imageLink width=60 height=90)
-                            else
-                                td Add Image
+                                img(src=movie.imageLink width=60 height=90)
+                        else
+                            td Add Image
+                        if movie.review
                             td= movie.review
+                        else
+                            td Add Review
+                        if movie.rating
                             td= movie.rating
-                            td= movie.watchedStatus
-                            td
-                                a(href=`/movies/${movie.id}`) edit
-            br
-            br
+                        else
+                            td Add Rating
+                        if movie.watchedStatus
+                            td Watched
+                        else
+                            td Want to Watch
+                        td
+                            ul
+                                each critic in movie.likedByCritics
+                                    li= critic.name
+                                each director in movie.likedByDirectors
+                                    li= director
+
+                        td
+                            a(href=`/movies/${movie.id}`) edit
+        br
+        br
 
     h3 Your Favorite Directors
     ul
         each favoriteDirector in favoriteDirectors
-            li= favoriteDirector.name
+            li
+                a(href=`/directors/${favoriteDirector.id}`)= favoriteDirector.name
 
     h3 Your Favorite Critics
     ul
         each favoriteCritic in favoriteCritics
-            li= favoriteCritic.name
+            li
+                a(href=`/critics/${favoriteCritic.id}`)= favoriteCritic.name
