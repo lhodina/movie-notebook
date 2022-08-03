@@ -2,10 +2,10 @@ extends layout.pug
 block content
     script(src="/scripts/index.js" type="module")
     h2 User Home
-    h3 Collections
     each collection in collections
         div
-            a(href=`/collections/${collection.id}`)= collection.name
+            h3
+                a(href=`/collections/${collection.id}`)= collection.name
             table
                 thead
                     tr
@@ -45,10 +45,11 @@ block content
                             td Want to Watch
                         td
                             ul
+                            if (movie.likedByCritics)
                                 each critic in movie.likedByCritics
                                     li= critic.name
-                                each director in movie.likedByDirectors
-                                    li= director
+                            each director in movie.likedByDirectors
+                                li= director
 
                         td
                             a(href=`/movies/${movie.id}`) edit

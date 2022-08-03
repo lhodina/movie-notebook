@@ -26,7 +26,10 @@ router.get("/", asyncHandler(async (req, res) => {
         });
 
         const favoriteDirectors = user.dataValues.Directors;
+        const favoriteDirectorNames = favoriteDirectors.map(director => director.name)
+
         const favoriteCritics = user.dataValues.Critics;
+        const favoriteCriticNames = favoriteCritics.map(critic => critic.name);
 
         const directors = await Director.findAll({ include: Movie });
 
@@ -50,8 +53,9 @@ router.get("/", asyncHandler(async (req, res) => {
 
             const movies = collection.Movies.map((movieData) => {
                 const data = movieData.dataValues;
-                const critics = data.Critics.map((criticData) => criticData.dataValues);
 
+                const critics = data.Critics.map(criticData => criticData.dataValues).filter(critic => favoriteCriticNames.includes(critic.name));
+            
                 let cleanedMovie = {
                     id: data.id,
                     title: data.title,
@@ -63,11 +67,10 @@ router.get("/", asyncHandler(async (req, res) => {
                 };
 
                 for (let director of directors) {
-                    const directorId = director.dataValues.id;
                     const movies = director.dataValues.Movies;
                     for (let movieData of movies) {
                         const movie = movieData.dataValues;
-                        if ( movie.title == cleanedMovie.title) {
+                        if ( movie.title === cleanedMovie.title && favoriteDirectorNames.includes(director.name)) {
                             cleanedMovie.likedByDirectors.push(director.name);
                         }
                     }
@@ -83,6 +86,7 @@ router.get("/", asyncHandler(async (req, res) => {
                     cleanedMovie.watchedStatus = userNote.watchedStatus
                 }
 
+                // console.log("*****cleanedMovie:", cleanedMovie);
                 return cleanedMovie;
             });
 
