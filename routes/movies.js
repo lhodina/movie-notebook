@@ -91,7 +91,7 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
                 ]
             }
         });
-        
+
         res.render("movie", {
             movie,
             userNotes,
@@ -124,15 +124,29 @@ router.post("/:id/add-notes", requireAuth, csrfProtection, asyncHandler(async (r
         starRating
     } = req.body;
 
+    const userNote = await UserNote.findOne({
+        where: {
+            [Op.and]: [ {userId}, {movieId} ]
+        }
+    })
 
-    console.log()
-    const userNote = await UserNote.create({
-        userId,
-        movieId,
-        review,
-        rating: starRating,
-        watchedStatus
-    });
+    if (userNote) {
+        await userNote.update({
+            userId,
+            movieId,
+            review,
+            rating: starRating,
+            watchedStatus
+        });
+    } else {
+        await UserNote.create({
+            userId,
+            movieId,
+            review,
+            rating: starRating,
+            watchedStatus
+        });
+    }
 
     res.redirect("/");
 }));
