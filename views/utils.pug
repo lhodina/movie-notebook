@@ -5,6 +5,7 @@ mixin validationErrorSummary(errors)
             each error in errors
                 li= error
 
+
 mixin field(labelText, fieldName, fieldType='text', fieldValue='', placeholder=null)
     div
         label(for=fieldName)= labelText
@@ -12,6 +13,26 @@ mixin field(labelText, fieldName, fieldType='text', fieldValue='', placeholder=n
             textarea(id=fieldName name=fieldName)= fieldValue
         else
             input(type=fieldType id=fieldName name=fieldName value=fieldValue placeholder=placeholder)
+
+
+mixin movieInfoFields()
+    +field("Title", "title")
+    br
+    label(for="directorId") Choose or Add a Director
+    input(name="directorId" list="directors")
+    br
+    datalist(id="directors" name="directors")
+        each director in directors
+            option(value=director.name)
+    br
+    label(for="yearReleased") Year Released (optional)
+    select(name="yearReleased")
+        option() --Year--
+        each year in years
+            option(value=year)= year
+    br
+    +field("Image Link (optional)", "imageLink")
+
 
 mixin addMovieFormFields()
     label(for="selectMovie") Choose a Movie
@@ -21,14 +42,34 @@ mixin addMovieFormFields()
             option(value=movie.title)= movie.title
     br
     text Or Add a New Movie
-    +field("Title", "title")
-    label(for="directorId") Choose or Add a Director
-    input(name="directorId" list="directors")
-    datalist(id="directors" name="directors")
-        each director in directors
-            option(value=director.name)
-    label(for="yearReleased") Year Released
-    select(name="yearReleased")
-        each year in years
-            option(value=year)= year
-    +field("Image Link", "imageLink")
+    +movieInfoFields()
+
+
+mixin userNoteFields()
+    if locals.authenticated
+        span Rating
+        div.starRating
+            input(type="radio" id="five" name="starRating" value="5")
+            label(for="five" )
+            input(type="radio" id="four" name="starRating" value="4")
+            label(for="four")
+            input(type="radio" id="three" name="starRating" value="3")
+            label(for="three")
+            input(type="radio" id="two" name="starRating" value="2")
+            label(for="two")
+            input(type="radio" id="one" name="starRating" value="1")
+            label(for="one")
+        br
+        label(for="review") Review
+        textarea(name="review", cols="30", rows="10")
+        br
+        label(for="collectionList") Add This Movie to a Collection or Create a New Collection
+        input(name="collectionList" list="collectionList")
+        br
+        datalist(id="collectionList" name="collectionList")
+            if collections
+                each collection in collections
+                    option(value=collection.name)
+        br
+        +field("Watched", "watchedStatus", "radio", "1")
+        +field("Want to Watch", "watchedStatus", "radio", "0")

@@ -1,13 +1,14 @@
 const express = require("express");
 const { check, validationResult } = require("express-validator");
 
-const { csrfProtection, asyncHandler } = require("../utils");
+const { csrfProtection, asyncHandler, getYears } = require("../utils");
 const db = require("../db/models");
 const { Critic, CriticFavorite, Movie, Director } = db;
 const { requireAuth } = require("../auth");
 
 const router = express.Router();
 
+const years = getYears();
 
 router.get("/", asyncHandler(async (req, res) => {
     const critics = await Critic.findAll();
@@ -35,11 +36,6 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const criticId = parseInt(req.params.id, 10);
     const movies = await Movie.findAll();
     const directors = await Director.findAll();
-    let years = [];
-    let today = new Date().getFullYear();
-    for (let i = 1888; i < today + 1; i++) {
-        years.push(i);
-    }
 
     const critic = await Critic.findByPk(criticId, {
         include: {
@@ -59,10 +55,6 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
         return movie;
     });
-
-
-    console.log("*****favoriteMovies:", favoriteMovies);
-
 
     res.render("critic", {
         critic,

@@ -2,13 +2,14 @@ const express = require("express");
 const { check, validationResult } = require("express-validator");
 const { Op } = require("sequelize");
 
-const { csrfProtection, asyncHandler } = require("../utils");
+const { csrfProtection, asyncHandler, getYears } = require("../utils");
 const db = require("../db/models");
-const { Movie, Director, User, UserNote } = db;
+const { Movie, Director, UserNote, Collection } = db;
 const { requireAuth } = require("../auth");
 
 const router = express.Router();
 
+const years = getYears();
 
 const validateMovie = [
     check("title")
@@ -34,18 +35,25 @@ router.get("/", async (req, res) => {
 router.get("/add", csrfProtection, asyncHandler(async (req, res) => {
     const movies = await Movie.findAll();
     const directors = await Director.findAll();
-    let years = [];
-    let today = new Date().getFullYear();
-    for (let i = 1920; i < today + 1; i++) {
-        years.push(i);
-    }
 
-    res.render("movie-add", {
-        movies,
-        directors,
-        years,
-        csrfToken: req.csrfToken()
-    });
+    if (req.session.auth) {
+        const { userId } = req.session.auth;
+        const collections = await Collection.findAll({ where: userId });
+        res.render("movie-add", {
+            movies,
+            directors,
+            collections,
+            years,
+            csrfToken: req.csrfToken()
+        });
+    } else {
+        res.render("movie-add", {
+            movies,
+            directors,
+            years,
+            csrfToken: req.csrfToken()
+        });
+    }
 }));
 
 
@@ -64,7 +72,8 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
     const {
         title,
         yearReleased,
-        imageLink
+        imageLink,
+        collectionList
     } = req.body;
 
     const movie = await Movie.create({
@@ -74,6 +83,23 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
         imageLink
     });
 
+    if (req.session.auth) {
+        const { userId } = req.session.auth;
+        let collection = await Collection.findOne({ where: { name: collectionList }});
+
+        if (!collection) {
+            collection = await Collection.create({
+                name: collectionList.name,
+                userId
+            });
+        }
+
+        await MovieCollection.create({
+            movieId: movie.id,
+            collectionId: collection.id
+        });
+    }
+
     res.redirect("/movies");
 }));
 
@@ -81,6 +107,8 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
 router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const movieId = parseInt(req.params.id, 10);
     const movie = await Movie.findByPk(movieId);
+    const directors = await Director.findAll();
+
     if (req.session.auth) {
         const { userId } = req.session.auth;
         const userNotes = await UserNote.findOne({
@@ -94,14 +122,15 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
         res.render("movie", {
             movie,
+            directors,
             userNotes,
+            years,
             csrfToken: req.csrfToken()
          });
     } else {
         res.render("movie", { movie });
     }
 }));
-
 
 
 router.get("/:id/add-notes", requireAuth, csrfProtection, asyncHandler(async (req, res) => {

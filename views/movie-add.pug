@@ -5,33 +5,7 @@ block content
     br
     form(action="/movies/add" method="post")
         input(type="hidden" name="_csrf" value=csrfToken)
-        +field("Title", "title")
+        +movieInfoFields()
         br
-        label(for="directorId") Choose or Add a Director
-        input(name="directorId" list="directors")
-        br
-        datalist(id="directors" name="directors")
-            each director in directors
-                option(value=director.name)
-        br
-        label(for="yearReleased") Year Released
-        select(name="yearReleased")
-            each year in years
-                option(value=year)= year
-        br
-        +field("Image Link", "imageLink")
-        br
-        span Rating
-        div.starRating
-            input(type="radio" id="five" name="starRating" value="5")
-            label(for="five" )
-            input(type="radio" id="four" name="starRating" value="4")
-            label(for="four")
-            input(type="radio" id="three" name="starRating" value="3")
-            label(for="three")
-            input(type="radio" id="two" name="starRating" value="2")
-            label(for="two")
-            input(type="radio" id="one" name="starRating" value="1")
-            label(for="one")
-        br
+        +userNoteFields()
         button(type="submit") Add

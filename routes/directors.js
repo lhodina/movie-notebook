@@ -1,13 +1,14 @@
 const express = require("express");
 const { check, validationResult } = require("express-validator");
 
-const { csrfProtection, asyncHandler } = require("../utils");
+const { csrfProtection, asyncHandler, getYears } = require("../utils");
 const db = require("../db/models");
 const { Director, Movie, DirectorFavorite } = db;
 const { requireAuth } = require("../auth");
 
 const router = express.Router();
 
+const years = getYears();
 
 const validateDirector = [
     check("name")
@@ -63,12 +64,6 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
         }
         return displayMovie;
     });
-
-    let years = [];
-    let today = new Date().getFullYear();
-    for (let i = 1920; i < today + 1; i++) {
-        years.push(i);
-    }
 
     res.render("director", {
         director,

@@ -20,8 +20,20 @@ const handleValidationErrors = (req, res, next) => {
 };
 
 
+const getYears = () => {
+    let years = [];
+    let today = new Date().getFullYear();
+    for (let i = 1920; i < today + 1; i++) {
+        years.push(i);
+    }
+
+    return years;
+};
+
+
 module.exports = {
     csrfProtection,
     asyncHandler,
-    handleValidationErrors
+    handleValidationErrors,
+    getYears
 };

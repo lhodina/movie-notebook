@@ -10,7 +10,8 @@ block content
         tbody
             each movie in movies
                 tr
-                    td= movie.title
+                    td
+                        a(href=`/movies/${movie.id}`)= movie.title
                     td= movie.directorId
                     td= movie.yearReleased
                     td= movie.imageLink

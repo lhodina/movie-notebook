@@ -7,4 +7,5 @@ block content
         tbody
             each director in directors
                 tr
-                    td= director.name
+                    td
+                        a(href=`/directors/${director.id}`)= director.name

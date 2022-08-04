@@ -3,4 +3,5 @@ block content
     h2 Critics
     ul
         each critic in critics
-            li= critic.name
+            li
+                a(href=`/critics/${critic.id}`)= critic.name

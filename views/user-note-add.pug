@@ -4,22 +4,5 @@ block content
     h2 Add User Note for #{movie.title}
     form(action=`/movies/${movie.id}/add-notes`, method="post")
         input(type="hidden" name="_csrf" value=csrfToken)
-        label(for="review") Review
-        textarea(name="review", cols="30", rows="10")
-        br
-        label(for="rating") Rating
-        div.starRating
-            input(type="radio" id="five" name="starRating" value="5")
-            label(for="five" )
-            input(type="radio" id="four" name="starRating" value="4")
-            label(for="four")
-            input(type="radio" id="three" name="starRating" value="3")
-            label(for="three")
-            input(type="radio" id="two" name="starRating" value="2")
-            label(for="two")
-            input(type="radio" id="one" name="starRating" value="1")
-            label(for="one")
-        br
-        +field("Watched", "watchedStatus", "radio", "1")
-        +field("Want to Watch", "watchedStatus", "radio", "0")
+        +userNoteFields()
         button(type="submit") Save

@@ -55,7 +55,7 @@ router.get("/", asyncHandler(async (req, res) => {
                 const data = movieData.dataValues;
 
                 const critics = data.Critics.map(criticData => criticData.dataValues).filter(critic => favoriteCriticNames.includes(critic.name));
-            
+
                 let cleanedMovie = {
                     id: data.id,
                     title: data.title,
@@ -86,7 +86,6 @@ router.get("/", asyncHandler(async (req, res) => {
                     cleanedMovie.watchedStatus = userNote.watchedStatus
                 }
 
-                // console.log("*****cleanedMovie:", cleanedMovie);
                 return cleanedMovie;
             });
 
@@ -113,7 +112,6 @@ router.get("/", asyncHandler(async (req, res) => {
 }));
 
 
-
 router.get("/favorite-directors/add", csrfProtection, requireAuth, asyncHandler(async (req, res) => {
     const directors = await Director.findAll();
     res.render("favorite-director-add", {
@@ -133,7 +131,7 @@ router.post("/favorite-directors/add", csrfProtection, asyncHandler(async (req, 
         });
     }
 
-    const favoriteDirector = await FavoriteDirector.create({
+    await FavoriteDirector.create({
         userId,
         directorId: director.id
     });
@@ -161,7 +159,7 @@ router.post("/favorite-critics/add", csrfProtection, asyncHandler(async (req, re
         });
     }
 
-    const favoriteCritic = await FavoriteCritic.create({
+    await FavoriteCritic.create({
         userId,
         criticId: critic.id
     });

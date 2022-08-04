@@ -1,22 +1,20 @@
 const express = require("express");
 const { check, validationResult } = require("express-validator");
 
-const { csrfProtection, asyncHandler } = require("../utils");
+const { csrfProtection, asyncHandler, getYears } = require("../utils");
 const db = require("../db/models");
 const { Collection, MovieCollection, Movie, Director } = db;
 const { requireAuth } = require("../auth");
 
 const router = express.Router();
 
+const years = getYears();
 
 router.get("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) => {
     const movies = await Movie.findAll();
     const directors = await Director.findAll();
-    let years = [];
-    let today = new Date().getFullYear();
-    for (let i = 1920; i < today + 1; i++) {
-        years.push(i);
-    }
+
+
     res.render("collection-add", {
         movies,
         directors,
@@ -83,11 +81,6 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const collection = await Collection.findByPk(collectionId);
     const movies = await Movie.findAll();
     const directors = await Director.findAll();
-    let years = [];
-    let today = new Date().getFullYear();
-    for (let i = 1920; i < today + 1; i++) {
-        years.push(i);
-    }
 
     res.render("collection", {
         collection,
