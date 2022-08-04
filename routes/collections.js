@@ -66,7 +66,7 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
     }
 
     if (movie) {
-        const movieCollection = await MovieCollection.create({
+        await MovieCollection.create({
             movieId: movie.id,
             collectionId: collection.id
         });
@@ -78,13 +78,17 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
 
 router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const collectionId = parseInt(req.params.id, 10);
-    const collection = await Collection.findByPk(collectionId);
+    const collection = await Collection.findByPk(collectionId, { include: Movie });
+    const collectionMovies = collection.dataValues.Movies.map(data => data.dataValues)
     const movies = await Movie.findAll();
     const directors = await Director.findAll();
+
+    console.log("*****collectionMovies:", collectionMovies);
 
     res.render("collection", {
         collection,
         movies,
+        collectionMovies,
         directors,
         years,
         csrfToken: req.csrfToken()
@@ -124,7 +128,7 @@ router.post("/:id/add-movie", csrfProtection, asyncHandler(async (req, res) => {
         });
     }
 
-    const movieCollection = await MovieCollection.create({
+    await MovieCollection.create({
         movieId: movie.id,
         collectionId
     });

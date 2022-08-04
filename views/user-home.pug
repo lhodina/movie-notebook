@@ -8,7 +8,8 @@ block content
             h3
                 a(href=`/collections/${collection.id}`)= collection.name
             +displayMovies(collection.movies)
-            
+        a(href=`/collections/${collection.id}`) Add Movie
+
     h3 Your Favorite Directors
     ul
         each favoriteDirector in favoriteDirectors

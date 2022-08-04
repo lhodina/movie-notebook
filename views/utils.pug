@@ -37,7 +37,7 @@ mixin movieInfoFields()
 mixin addMovieFormFields()
     label(for="selectMovie") Choose a Movie
     select(name="selectMovie")
-        option(value=null) --Choose Movie--
+        option(value="--Choose Movie--") --Choose Movie--
         each movie in movies
             option(value=movie.title)= movie.title
     br
@@ -155,8 +155,8 @@ mixin displayMovies(movies)
                         if (movie.likedByCritics)
                             each critic in movie.likedByCritics
                                 li= critic.name
-                        each director in movie.likedByDirectors
-                            li= director
-
+                        if (movie.likedByDirectors)
+                            each director in movie.likedByDirectors
+                                li= director
                 td
                     a(href=`/movies/${movie.id}`) edit

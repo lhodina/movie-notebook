@@ -7,3 +7,6 @@ block content
         input(type="hidden" name="_csrf" value=csrfToken)
         +addMovieFormFields()
         button(type="submit") Add
+
+    h3 Movies
+    +displayMovies(collectionMovies)
