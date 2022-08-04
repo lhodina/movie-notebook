@@ -32,7 +32,7 @@ router.get("/", async (req, res) => {
 });
 
 
-router.get("/add", csrfProtection, asyncHandler(async (req, res) => {
+router.get("/add", csrfProtection, validateMovie, asyncHandler(async (req, res) => {
     const movies = await Movie.findAll();
     const directors = await Director.findAll();
 
@@ -106,8 +106,9 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
 
 router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const movieId = parseInt(req.params.id, 10);
-    const movie = await Movie.findByPk(movieId);
+    const movie = await Movie.findByPk(movieId, { include: Director });
     const directors = await Director.findAll();
+    const director = movie.dataValues.Director;
 
     if (req.session.auth) {
         const { userId } = req.session.auth;
@@ -120,15 +121,24 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
             }
         });
 
+        const collections = await Collection.findAll({ where: userId });
+
         res.render("movie", {
             movie,
+            director,
             directors,
+            collections,
             userNotes,
             years,
             csrfToken: req.csrfToken()
          });
     } else {
-        res.render("movie", { movie });
+        res.render("movie", {
+            movie,
+            director,
+            directors,
+            years
+         });
     }
 }));
 
@@ -141,6 +151,7 @@ router.get("/:id/add-notes", requireAuth, csrfProtection, asyncHandler(async (re
         csrfToken: req.csrfToken()
     });
 }));
+
 
 router.post("/:id/add-notes", requireAuth, csrfProtection, asyncHandler(async (req, res) => {
     console.log("req.body:", req.body);

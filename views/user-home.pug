@@ -1,4 +1,5 @@
 extends layout.pug
+include utils.pug
 block content
     script(src="/scripts/index.js" type="module")
     h2 User Home
@@ -6,57 +7,8 @@ block content
         div
             h3
                 a(href=`/collections/${collection.id}`)= collection.name
-            table
-                thead
-                    tr
-                        th Title
-                        th Director
-                        th Year Released
-                        th Image
-                        th Review
-                        th Rating
-                        th Status
-                        th Loved By
-                        th
-
-                tbody
-                each movie in collection.movies
-                    tr
-                        td
-                            a(href=`/movies/${movie.id}`) #{movie.title}
-                        td= movie.director
-                        td= movie.yearReleased
-                        if movie.imageLink
-                            td
-                                img(src=movie.imageLink width=60 height=90)
-                        else
-                            td
-                                img(src="" width=60 height=90)
-                        if movie.review
-                            td= movie.review
-                        else
-                            td Add Review
-                        if movie.rating
-                            td= movie.rating
-                        else
-                            td Add Rating
-                        if movie.watchedStatus
-                            td Watched
-                        else
-                            td Want to Watch
-                        td
-                            ul
-                            if (movie.likedByCritics)
-                                each critic in movie.likedByCritics
-                                    li= critic.name
-                            each director in movie.likedByDirectors
-                                li= director
-
-                        td
-                            a(href=`/movies/${movie.id}`) edit
-        br
-        br
-
+            +displayMovies(collection.movies)
+            
     h3 Your Favorite Directors
     ul
         each favoriteDirector in favoriteDirectors

@@ -73,3 +73,90 @@ mixin userNoteFields()
         br
         +field("Watched", "watchedStatus", "radio", "1")
         +field("Want to Watch", "watchedStatus", "radio", "0")
+
+
+mixin displayMovie(movie)
+    table= movie.title
+        thead
+            tr
+                th Director
+                th Year Released
+                th Image
+        tbody
+            tr
+                td= director.name
+                td= movie.yearReleased
+                if movie.imageLink
+                    td
+                        img(src=`${movie.imageLink}`)
+                else
+                    td
+                        div.poster-placeholder
+                            span +
+
+    br
+
+
+mixin displayMovies(movies)
+    table
+        thead
+            tr
+                th Title
+                th Director
+                th Year Released
+                th Image
+                th Review
+                th Rating
+                th Status
+                if (collection)
+                    th Loved By
+                th
+
+        tbody
+        each movie in movies
+            tr
+                td
+                    a(href=`/movies/${movie.id}`) #{movie.title}
+                td= movie.director
+                td= movie.yearReleased
+                if movie.imageLink
+                    td
+                        img(src=movie.imageLink width=60 height=90)
+                else
+                    td
+                        div.poster-placeholder
+                            span +
+                if movie.review
+                    td= movie.review
+                else
+                    td
+                        div.review-placeholder
+                td
+                    div.starRating
+                        //- DO SOMETHING WITH movie.rating
+                        input(type="radio" id="five" name="starRating" value="5")
+                        label(for="five" )
+                        input(type="radio" id="four" name="starRating" value="4")
+                        label(for="four")
+                        input(type="radio" id="three" name="starRating" value="3")
+                        label(for="three")
+                        input(type="radio" id="two" name="starRating" value="2")
+                        label(for="two")
+                        input(type="radio" id="one" name="starRating" value="1")
+                        label(for="one")
+
+                if movie.watchedStatus
+                    td Watched
+                else
+                    td Want to Watch
+                if (collection)
+                    td
+                        ul
+                        if (movie.likedByCritics)
+                            each critic in movie.likedByCritics
+                                li= critic.name
+                        each director in movie.likedByDirectors
+                            li= director
+
+                td
+                    a(href=`/movies/${movie.id}`) edit

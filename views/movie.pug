@@ -1,23 +1,11 @@
 extends layout.pug
 include utils.pug
 block content
-    h2= movie.title
-    h3 Director
-    p= movie.directorId
-    h3 Year Released
-    p= movie.yearReleased
-    h3 Image
-    if movie.imageLink
-        img(src=`movie.imageLink`)
-    else
-        p Add image
-    div
-        img(src=movie.imageLink)
-
-    h3 Add Notes
-    form(action=`/movies/${movie.id}/add-notes`, method="post")
-        input(type="hidden" name="_csrf" value=csrfToken)
-        +movieInfoFields()
-        br
-        +userNoteFields()
+    +displayMovie(movie)
+    if locals.authenticated
+        h3 Add Notes
+        form(action=`/movies/${movie.id}/add-notes`, method="post")
+            input(type="hidden" name="_csrf" value=csrfToken)
+            +userNoteFields()
+            br
         button(type="submit") Save

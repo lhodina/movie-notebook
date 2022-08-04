@@ -47,6 +47,7 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const favoriteMovies = critic.dataValues.Movies.map(movieData => {
         const data = movieData.dataValues;
         const movie = {
+            id: data.id,
             title: data.title,
             director: data.Director.name,
             yearReleased: data.yearReleased,

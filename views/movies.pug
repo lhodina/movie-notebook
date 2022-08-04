@@ -1,17 +1,6 @@
 extends layout.pug
+include utils.pug
 block content
     h2 Movies
-    table
-        thead
-            th Title
-            th Director
-            th Year Released
-            th Image
-        tbody
-            each movie in movies
-                tr
-                    td
-                        a(href=`/movies/${movie.id}`)= movie.title
-                    td= movie.directorId
-                    td= movie.yearReleased
-                    td= movie.imageLink
+    +displayMovies(movies)
+

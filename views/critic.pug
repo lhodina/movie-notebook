@@ -9,17 +9,5 @@ block content
         button(type="submit") Add Favorite
 
     h3 #{critic.name}'s Favorite Movies
-    each favoriteMovie in favoriteMovies
-        table= favoriteMovie.title
-            thead
-                tr
-                    th Director
-                    th Year Released
-                    th Image
-            tbody
-                tr
-                    td= favoriteMovie.director
-                    td= favoriteMovie.yearReleased
-                    td= favoriteMovie.imageLink
-        br
-        br
+    +displayMovies(favoriteMovies)
+

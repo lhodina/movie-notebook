@@ -3,10 +3,20 @@ h2 {
     font-family: 'Courier New', Courier, monospace;
 }
 
-.poster {
+.poster, .poster-placeholder {
     height: 90px;
     width: 60px;
     /* aspect-ratio: auto 2 / 3; */
+}
+
+.poster-placeholder, .review-placeholder {
+    border: 1px solid lightgray;
+    color: gray;
+}
+
+.review-placeholder {
+    height: 90px;
+    width: 300px;
 }
 
 .starRating {
