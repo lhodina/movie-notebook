@@ -1,17 +1,6 @@
 
-console.log(`
-  MICHAEL
-Good MOOORNING VIETNAAAAAAAAAM!
-  PAM
-Michael.
-  MICHAEL
-...goodmorningfrom public/scripts/index.js noonecares.
-  PAM
-Michael.
-  MICHAEL
-Good morning.
-`);
+console.log("Hewwow");
 
-// document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
-// });
+});

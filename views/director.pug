@@ -9,8 +9,8 @@ block content
             button(type="submit") Add Favorite
             a(href=`directors/${director.id}`) Cancel
 
-    h3 Movies Directed
+    h3 Movies Directed by #{director.name}
     +displayMovies(directedMovies)
 
-    h3 Favorite Movies
+    h3 #{director.name}'s Favorite Movies
     +displayMovies(favoriteMovies)

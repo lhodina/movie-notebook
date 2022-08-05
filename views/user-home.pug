@@ -3,6 +3,13 @@ include utils.pug
 block content
     script(src="/scripts/index.js" type="module")
     h2 User Home
+    h3 Collections
+    ul
+    each collection in collections
+        li
+            a(href=`/collections/${collection.id}`)= collection.name
+
+
     each collection in collections
         div
             h3

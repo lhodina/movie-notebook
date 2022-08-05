@@ -69,12 +69,14 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
 
     const directorId = director.id;
 
-    const {
+    let {
         title,
         yearReleased,
         imageLink,
         collectionList
     } = req.body;
+
+    if (typeof yearReleased !== "number") yearReleased = null;
 
     const movie = await Movie.create({
         title,
@@ -85,22 +87,25 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
 
     if (req.session.auth) {
         const { userId } = req.session.auth;
-        let collection = await Collection.findOne({ where: { name: collectionList }});
+        if (collectionList) {
+            let collection = await Collection.findOne({ where: { name: collectionList }});
 
-        if (!collection) {
-            collection = await Collection.create({
-                name: collectionList.name,
-                userId
+            if (!collection) {
+                collection = await Collection.create({
+                    name: collectionList.name,
+                    userId
+                });
+            }
+
+            await MovieCollection.create({
+                movieId: movie.id,
+                collectionId: collection.id
             });
         }
 
-        await MovieCollection.create({
-            movieId: movie.id,
-            collectionId: collection.id
-        });
     }
 
-    res.redirect("/movies");
+    res.redirect("/");
 }));
 
 
@@ -190,5 +195,6 @@ router.post("/:id/add-notes", requireAuth, csrfProtection, asyncHandler(async (r
 
     res.redirect("/");
 }));
+
 
 module.exports = router;

@@ -15,6 +15,7 @@ router.get("/", asyncHandler(async (req, res) => {
     res.render("critics", {
         critics
     });
+    // res.json({ critics });
 }));
 
 
@@ -107,6 +108,26 @@ router.post("/:id/favorites/add", csrfProtection, asyncHandler (async (req, res)
     });
 
     res.redirect(`/critics/${criticId}`);
+}));
+
+
+router.post("/:id/delete", csrfProtection, async (req, res) => {
+    const criticId = req.params.id;
+    const critic = await Critic.findByPk(criticId);
+    await critic.destroy();
+    res.redirect("/critics");
+});
+
+
+router.delete("/:id", asyncHandler(async (req, res, next) => {
+    const criticId = req.params.id;
+    const critic = await Critic.findByPk(criticId);
+    if (critic) {
+        await critic.destroy();
+        res.json({ message: "Success"})
+    } else {
+        console.log("DANGER WILL ROBINSON. Couldn't get critic");
+    }
 }));
 
 
