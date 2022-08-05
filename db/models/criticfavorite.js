@@ -3,7 +3,8 @@ module.exports = (sequelize, DataTypes) => {
   const CriticFavorite = sequelize.define('CriticFavorite', {
     criticId: {
       allowNull: false,
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      onDelete: 'cascade'
     },
     movieId: {
       allowNull: false,

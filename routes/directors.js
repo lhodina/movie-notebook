@@ -91,14 +91,16 @@ router.post("/:id/favorites/add", csrfProtection, asyncHandler(async (req, res) 
         });
     }
 
-    const {
+    let {
         title,
         yearReleased,
         imageLink
     } = req.body;
 
-    if (selectFavorite !== "--Choose Movie--") {
-        movie = await Movie.findOne({ where: { title: selectFavorite } });
+    if (typeof yearReleased !== "number") yearReleased = null;
+
+    if (selectMovie !== "--Choose Movie--") {
+        movie = await Movie.findOne({ where: { title: selectMovie } });
     } else {
         movie = await Movie.create({
             title,
@@ -110,7 +112,7 @@ router.post("/:id/favorites/add", csrfProtection, asyncHandler(async (req, res) 
 
     const current_director_id = parseInt(req.params.id, 10);
 
-    const directorFavorite = await DirectorFavorite.create({
+    await DirectorFavorite.create({
         director_Id: current_director_id,
         movieId: movie.id,
     });

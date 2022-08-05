@@ -70,8 +70,8 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
 
 router.post("/:id/favorites/add", csrfProtection, asyncHandler (async (req, res) => {
-    const { selectFavorite } = req.body;
-    console.log("selectFavorite:", selectFavorite);
+    const { selectMovie } = req.body;
+    console.log("selectMovie:", selectMovie);
     let movie;
 
     const directorName = req.body.directorId;
@@ -83,14 +83,16 @@ router.post("/:id/favorites/add", csrfProtection, asyncHandler (async (req, res)
         });
     }
 
-    const {
+    let {
         title,
         yearReleased,
         imageLink
     } = req.body;
 
-    if (selectFavorite !== "--Choose Movie--") {
-        movie = await Movie.findOne({ where: { title: selectFavorite } });
+    if (typeof yearReleased !== "number") yearReleased = null;
+
+    if (selectMovie !== "--Choose Movie--") {
+        movie = await Movie.findOne({ where: { title: selectMovie } });
     } else {
         movie = await Movie.create({
             title,
@@ -102,7 +104,7 @@ router.post("/:id/favorites/add", csrfProtection, asyncHandler (async (req, res)
 
     const criticId = parseInt(req.params.id, 10);
 
-    const criticFavorite = await CriticFavorite.create({
+    await CriticFavorite.create({
         criticId,
         movieId: movie.id,
     });
