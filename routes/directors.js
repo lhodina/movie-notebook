@@ -34,7 +34,7 @@ router.get("/add", csrfProtection, asyncHandler(async (req, res) => {
 
 router.post("/add", validateDirector, csrfProtection, asyncHandler(async (req, res) => {
     const { name } = req.body;
-    const director = await Director.create({
+    await Director.create({
         name
     });
     res.redirect("/directors");
@@ -45,41 +45,34 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const current_director_id = parseInt(req.params.id, 10);
     const directors = await Director.findAll();
     const movies = await Movie.findAll();
-    const directedMovies = await Movie.findAll({ where: { directorId: current_director_id } });
 
     const director = await Director.findByPk(current_director_id, {
-        include: { model: Movie,
-        include: Director
-    }
+        include: ['directedMovies', 'directorFavorites']
     });
 
-    const favoriteMovies = director.dataValues.Movies.map(movieData => {
-        const movie = movieData.dataValues;
-        const displayMovie = {
-            id: movie.id,
-            title: movie.title,
-            director: movie.Director.dataValues.name,
-            yearReleased: movie.yearReleased,
-            imageLink: movie.imageLink
-        }
-        return displayMovie;
-    });
+    console.log("*****director:", director);
+
+    const directedMovies = director.dataValues.directedMovies;
+    const favoriteMovies = director.dataValues.directorFavorites;
+
+    console.log("*****directedMovies:", directedMovies);
+    console.log("*****favoriteMovies:", favoriteMovies);
 
     res.render("director", {
         director,
         directors,
         movies,
+        years,
         directedMovies,
         favoriteMovies,
-        years,
         csrfToken: req.csrfToken()
     });
 }));
 
 
 router.post("/:id/favorites/add", csrfProtection, asyncHandler(async (req, res) => {
-    const { selectFavorite } = req.body;
-    console.log("selectFavorite:", selectFavorite);
+    const { selectMovie} = req.body;
+    console.log("selectMovie:", selectMovie);
     let movie;
 
     const directorName = req.body.directorId;

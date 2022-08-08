@@ -111,9 +111,10 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
 
 router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const movieId = parseInt(req.params.id, 10);
-    const movie = await Movie.findByPk(movieId, { include: Director });
+    const movie = await Movie.findByPk(movieId, { include: 'movieDirector' });
+    console.log("*****movie:", movie)
     const directors = await Director.findAll();
-    const director = movie.dataValues.Director;
+    const director = movie.dataValues.movieDirector;
 
     if (req.session.auth) {
         const { userId } = req.session.auth;

@@ -10,7 +10,8 @@ block content
             a(href=`directors/${director.id}`) Cancel
 
     h3 Movies Directed by #{director.name}
-    +displayMovies(directedMovies)
-
+    if (directedMovies)
+        +displayMovies(directedMovies)
     h3 #{director.name}'s Favorite Movies
-    +displayMovies(favoriteMovies)
+    if (favoriteMovies)
+        +displayMovies(favoriteMovies)

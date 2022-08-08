@@ -15,7 +15,8 @@ module.exports = (sequelize, DataTypes) => {
   Movie.associate = function(models) {
     // associations can be defined here
     Movie.hasMany(models.UserNote, { foreignKey: 'movieId' });
-    Movie.belongsTo(models.Director, { foreignKey: 'directorId' });
+
+    Movie.belongsTo(models.Director, { as: 'movieDirector', foreignKey: 'directorId' });
 
 
     const collectionMapping = {
@@ -27,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
 
 
     const directorFavMapping = {
+      as: 'favoritedByDirectors',
       through: 'DirectorFavorite',
       otherKey: 'director_Id',
       foreignKey: 'movieId'

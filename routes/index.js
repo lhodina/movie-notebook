@@ -31,6 +31,8 @@ router.get("/", asyncHandler(async (req, res) => {
         const favoriteCritics = user.dataValues.Critics;
         const favoriteCriticNames = favoriteCritics.map(critic => critic.name);
 
+
+        // UPDATE THE EAGER LOADING FOR DIRECTORS AND COLLECTIONS IN THE DATABASE USING ALIASES
         const directors = await Director.findAll({ include: Movie });
 
         const collections = await Collection.findAll({
