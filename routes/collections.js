@@ -54,7 +54,7 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
         imageLink
     } = req.body;
 
-    if (typeof yearReleased !== "number") yearReleased = null;
+    if (yearReleased === "--Year--") yearReleased = null;
 
     if (selectMovie !== "--Choose Movie--") {
         movie = await Movie.findOne({ where: { title: selectMovie } });
@@ -119,8 +119,8 @@ router.post("/:id/add-movie", csrfProtection, asyncHandler(async (req, res) => {
         imageLink
     } = req.body;
 
-    if (typeof yearReleased !== "number") yearReleased = null;
-
+    if (yearReleased === "--Year--") yearReleased = null;
+    
     if (selectMovie !== "--Choose Movie--") {
         movie = await Movie.findOne({ where: { title: selectMovie } });
     } else {

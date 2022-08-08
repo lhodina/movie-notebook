@@ -15,7 +15,6 @@ router.get("/", asyncHandler(async (req, res) => {
     res.render("critics", {
         critics
     });
-    // res.json({ critics });
 }));
 
 
@@ -28,7 +27,7 @@ router.get("/add", csrfProtection, asyncHandler(async (req, res) => {
 
 router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
     const { name } = req.body;
-    const critic = await Critic.create({ name });
+    await Critic.create({ name });
     res.redirect("/critics")
 }));
 
@@ -41,7 +40,7 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const critic = await Critic.findByPk(criticId, {
         include: {
             model: Movie,
-            include: Director
+            include: ["movieDirector", "favoritedByDirectors"]
         }
     });
 
@@ -50,10 +49,13 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
         const movie = {
             id: data.id,
             title: data.title,
-            director: data.Director.name,
+            director: data.movieDirector.name,
             yearReleased: data.yearReleased,
-            imageLink: data.imageLink
+            imageLink: data.imageLink,
+            favoritedByDirectors: data.favoritedByDirectors,
+            likedByCritics: data.likedByCritics
         };
+        console.log("*****movie:", movie);
 
         return movie;
     });
@@ -89,7 +91,7 @@ router.post("/:id/favorites/add", csrfProtection, asyncHandler (async (req, res)
         imageLink
     } = req.body;
 
-    if (typeof yearReleased !== "number") yearReleased = null;
+    if (yearReleased === "--Year--") yearReleased = null;
 
     if (selectMovie !== "--Choose Movie--") {
         movie = await Movie.findOne({ where: { title: selectMovie } });

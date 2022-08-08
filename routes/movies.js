@@ -2,9 +2,9 @@ const express = require("express");
 const { check, validationResult } = require("express-validator");
 const { Op } = require("sequelize");
 
-const { csrfProtection, asyncHandler, getYears } = require("../utils");
+const { csrfProtection, asyncHandler, getYears, getMovies } = require("../utils");
 const db = require("../db/models");
-const { Movie, Director, UserNote, Collection } = db;
+const { Movie, Director, User, UserNote, Collection, Critic } = db;
 const { requireAuth } = require("../auth");
 
 const router = express.Router();
@@ -22,7 +22,27 @@ const validateMovie = [
 
 
 router.get("/", async (req, res) => {
-    const movies = await Movie.findAll();
+    let user;
+    if (req.session.auth) {
+        const { userId } = req.session.auth;
+
+        user = await User.findByPk(userId, {
+            include:
+                [
+                    {
+                        model: Director,
+                        include: User
+                    },
+                    {
+                        model: Critic,
+                        include: User
+                    }
+                ]
+        });
+    }
+
+    const allMovies = await Movie.findAll({ include: ["movieDirector", "favoritedByDirectors", Critic] });
+    const movies = getMovies(allMovies, user)
     const directors = await Director.findAll();
 
     res.render("movies", {
@@ -76,7 +96,7 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
         collectionList
     } = req.body;
 
-    if (typeof yearReleased !== "number") yearReleased = null;
+    if (yearReleased === "--Year--") yearReleased = null;
 
     const movie = await Movie.create({
         title,
@@ -112,7 +132,6 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
 router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const movieId = parseInt(req.params.id, 10);
     const movie = await Movie.findByPk(movieId, { include: 'movieDirector' });
-    console.log("*****movie:", movie)
     const directors = await Director.findAll();
     const director = movie.dataValues.movieDirector;
 

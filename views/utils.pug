@@ -105,12 +105,13 @@ mixin displayMovies(movies)
                 th Director
                 th Year Released
                 th Image
-                th Review
-                th Rating
-                th Status
-                if (collection)
-                    th Loved By
-                th
+                if (locals.authenticated)
+                    th Review
+                    th Rating
+                    th Status
+                    th Liked By
+                    th
+
 
         tbody
         each movie in movies
@@ -126,37 +127,39 @@ mixin displayMovies(movies)
                     td
                         div.poster-placeholder
                             span +
-                if movie.review
-                    td= movie.review
-                else
+                if (locals.authenticated)
+                    if movie.review
+                        td= movie.review
+                    else
+                        td
+                            div.review-placeholder
                     td
-                        div.review-placeholder
-                td
-                    div.starRating
-                        //- DO SOMETHING WITH movie.rating
-                        input(type="radio" id="five" name="starRating" value="5")
-                        label(for="five" )
-                        input(type="radio" id="four" name="starRating" value="4")
-                        label(for="four")
-                        input(type="radio" id="three" name="starRating" value="3")
-                        label(for="three")
-                        input(type="radio" id="two" name="starRating" value="2")
-                        label(for="two")
-                        input(type="radio" id="one" name="starRating" value="1")
-                        label(for="one")
+                    
+                        div.starRating
+                            //- DO SOMETHING WITH movie.rating
+                            input(type="radio" id="five" name="starRating" value="5")
+                            label(for="five" )
+                            input(type="radio" id="four" name="starRating" value="4")
+                            label(for="four")
+                            input(type="radio" id="three" name="starRating" value="3")
+                            label(for="three")
+                            input(type="radio" id="two" name="starRating" value="2")
+                            label(for="two")
+                            input(type="radio" id="one" name="starRating" value="1")
+                            label(for="one")
 
-                if movie.watchedStatus
-                    td Watched
-                else
-                    td Want to Watch
-                if (collection)
+                    if movie.watchedStatus
+                        td Watched
+                    else
+                        td Want to Watch
+
                     td
                         ul
-                        if (movie.likedByCritics)
+                        if (movie.likedByCritics && movie.likedByCritics.length)
                             each critic in movie.likedByCritics
                                 li= critic.name
-                        if (movie.likedByDirectors)
+                        if (movie.likedByDirectors && movie.likedByDirectors.length)
                             each director in movie.likedByDirectors
-                                li= director
-                td
-                    a(href=`/movies/${movie.id}`) edit
+                                li= director.name
+                    td
+                        a(href=`/movies/${movie.id}`) edit

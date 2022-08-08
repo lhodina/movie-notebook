@@ -50,13 +50,8 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
         include: ['directedMovies', 'directorFavorites']
     });
 
-    console.log("*****director:", director);
-
     const directedMovies = director.dataValues.directedMovies;
     const favoriteMovies = director.dataValues.directorFavorites;
-
-    console.log("*****directedMovies:", directedMovies);
-    console.log("*****favoriteMovies:", favoriteMovies);
 
     res.render("director", {
         director,
@@ -72,7 +67,6 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
 router.post("/:id/favorites/add", csrfProtection, asyncHandler(async (req, res) => {
     const { selectMovie} = req.body;
-    console.log("selectMovie:", selectMovie);
     let movie;
 
     const directorName = req.body.directorId;
@@ -90,7 +84,7 @@ router.post("/:id/favorites/add", csrfProtection, asyncHandler(async (req, res) 
         imageLink
     } = req.body;
 
-    if (typeof yearReleased !== "number") yearReleased = null;
+    if (yearReleased === "--Year--") yearReleased = null;
 
     if (selectMovie !== "--Choose Movie--") {
         movie = await Movie.findOne({ where: { title: selectMovie } });
