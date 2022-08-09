@@ -4,7 +4,7 @@ const { Op } = require("sequelize");
 
 const { csrfProtection, asyncHandler, getYears, getMovies } = require("../utils");
 const db = require("../db/models");
-const { Movie, Director, User, UserNote, Collection, Critic } = db;
+const { Movie, MovieCollection, Director, User, UserNote, Collection, Critic } = db;
 const { requireAuth } = require("../auth");
 
 const router = express.Router();
@@ -98,21 +98,21 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
 
     if (yearReleased === "--Year--") yearReleased = null;
 
-    const movie = await Movie.create({
-        title,
-        directorId,
-        yearReleased,
-        imageLink
-    });
-
     if (req.session.auth) {
+        const movie = await Movie.create({
+            title,
+            directorId,
+            yearReleased,
+            imageLink
+        });
+
         const { userId } = req.session.auth;
         if (collectionList) {
             let collection = await Collection.findOne({ where: { name: collectionList }});
 
             if (!collection) {
                 collection = await Collection.create({
-                    name: collectionList.name,
+                    name: collectionList,
                     userId
                 });
             }
@@ -122,7 +122,6 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
                 collectionId: collection.id
             });
         }
-
     }
 
     res.redirect("/");
@@ -168,52 +167,15 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 }));
 
 
-router.get("/:id/add-notes", requireAuth, csrfProtection, asyncHandler(async (req, res) => {
-    const movieId = parseInt(req.params.id, 10);
+router.delete("/:id", asyncHandler(async (req, res, next) => {
+    const movieId = req.params.id;
     const movie = await Movie.findByPk(movieId);
-    res.render("user-note-add", {
-        movie,
-        csrfToken: req.csrfToken()
-    });
-}));
-
-
-router.post("/:id/add-notes", requireAuth, csrfProtection, asyncHandler(async (req, res) => {
-    console.log("req.body:", req.body);
-    const { userId } = req.session.auth;
-    const movieId = parseInt(req.params.id, 10);
-
-    let {
-        review,
-        watchedStatus,
-        starRating
-    } = req.body;
-
-    const userNote = await UserNote.findOne({
-        where: {
-            [Op.and]: [ {userId}, {movieId} ]
-        }
-    })
-
-    if (userNote) {
-        await userNote.update({
-            userId,
-            movieId,
-            review,
-            rating: starRating,
-            watchedStatus
-        });
+    if (movie) {
+        await movie.destroy();
+        res.json({ message: "Success"})
     } else {
-        await UserNote.create({
-            userId,
-            movieId,
-            review,
-            rating: starRating,
-            watchedStatus
-        });
+        console.log("DANGER WILL ROBINSON. Couldn't get movie");
     }
-
-    res.redirect("/");
 }));
 
 

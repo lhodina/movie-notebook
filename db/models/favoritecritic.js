@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     criticId: {
       allowNull: false,
-      type:DataTypes.INTEGER
+      type:DataTypes.INTEGER,
+      onDelete: 'cascade'
     }
   }, {});
   FavoriteCritic.associate = function(models) {

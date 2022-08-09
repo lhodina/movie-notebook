@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     movieId: {
       allowNull: false,
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      onDelete: 'cascade'
     },
     review: DataTypes.TEXT,
     rating: DataTypes.INTEGER,

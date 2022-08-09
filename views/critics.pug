@@ -5,6 +5,4 @@ block content
     each critic in critics
         div(id=`critic-container-${critic.id}`).critic-box
             a(href=`/critics/${critic.id}`)= critic.name
-            form(action=`/critics/${critic.id}/delete` method="post")
-                input(type="hidden" name="_csrf" value=csrfToken)
-                button(id=critic.id).delete-btn Delete
+            button(id=critic.id).delete-btn Delete

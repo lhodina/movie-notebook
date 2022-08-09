@@ -11,7 +11,8 @@ module.exports = {
       movieId: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        references: { model: 'Movies' }
+        references: { model: 'Movies' },
+        onDelete: 'cascade'
       },
       collectionId: {
         allowNull: false,

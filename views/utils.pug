@@ -1,3 +1,5 @@
+
+
 mixin validationErrorSummary(errors)
     if errors
         p The following errors occurred:
@@ -112,54 +114,55 @@ mixin displayMovies(movies)
                     th Liked By
                     th
 
-
         tbody
-        each movie in movies
-            tr
-                td
-                    a(href=`/movies/${movie.id}`) #{movie.title}
-                td= movie.director
-                td= movie.yearReleased
-                if movie.imageLink
+            each movie in movies
+                tr(id=`movie-container-${movie.id}`).movie-box
                     td
-                        img(src=movie.imageLink width=60 height=90)
-                else
-                    td
-                        div.poster-placeholder
-                            span +
-                if (locals.authenticated)
-                    if movie.review
-                        td= movie.review
+                        a(href=`/movies/${movie.id}`) #{movie.title}
+                    td= movie.director
+                    td= movie.yearReleased
+                    if movie.imageLink
+                        td
+                            img(src=movie.imageLink width=60 height=90)
                     else
                         td
-                            div.review-placeholder
-                    td
-                    
-                        div.starRating
-                            //- DO SOMETHING WITH movie.rating
-                            input(type="radio" id="five" name="starRating" value="5")
-                            label(for="five" )
-                            input(type="radio" id="four" name="starRating" value="4")
-                            label(for="four")
-                            input(type="radio" id="three" name="starRating" value="3")
-                            label(for="three")
-                            input(type="radio" id="two" name="starRating" value="2")
-                            label(for="two")
-                            input(type="radio" id="one" name="starRating" value="1")
-                            label(for="one")
+                            div.poster-placeholder
+                                span +
+                    if (locals.authenticated)
+                        if movie.review
+                            td= movie.review
+                        else
+                            td
+                                div.review-placeholder
+                        td
 
-                    if movie.watchedStatus
-                        td Watched
-                    else
-                        td Want to Watch
+                            div.starRating
+                                //- DO SOMETHING WITH movie.rating
+                                input(type="radio" id="five" name="starRating" value="5")
+                                label(for="five" )
+                                input(type="radio" id="four" name="starRating" value="4")
+                                label(for="four")
+                                input(type="radio" id="three" name="starRating" value="3")
+                                label(for="three")
+                                input(type="radio" id="two" name="starRating" value="2")
+                                label(for="two")
+                                input(type="radio" id="one" name="starRating" value="1")
+                                label(for="one")
 
-                    td
-                        ul
-                        if (movie.likedByCritics && movie.likedByCritics.length)
-                            each critic in movie.likedByCritics
-                                li= critic.name
-                        if (movie.likedByDirectors && movie.likedByDirectors.length)
-                            each director in movie.likedByDirectors
-                                li= director.name
-                    td
-                        a(href=`/movies/${movie.id}`) edit
+                        if movie.watchedStatus
+                            td Watched
+                        else
+                            td Want to Watch
+
+                        td
+                            ul
+                            if (movie.likedByCritics && movie.likedByCritics.length)
+                                each critic in movie.likedByCritics
+                                    li= critic.name
+                            if (movie.likedByDirectors && movie.likedByDirectors.length)
+                                each director in movie.likedByDirectors
+                                    li= director.name
+                        td
+                            a(href=`/movies/${movie.id}`) edit
+                        td
+                            button(id=movie.id).delete-btn Delete

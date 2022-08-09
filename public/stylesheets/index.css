@@ -58,3 +58,8 @@ h2 {
 .starRating input:checked ~ label:before {
     content: '\2605';
 }
+
+
+#movie-container-9 {
+    border: 1px solid black;
+}

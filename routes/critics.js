@@ -115,14 +115,6 @@ router.post("/:id/favorites/add", csrfProtection, asyncHandler (async (req, res)
 }));
 
 
-router.post("/:id/delete", csrfProtection, async (req, res) => {
-    const criticId = req.params.id;
-    const critic = await Critic.findByPk(criticId);
-    await critic.destroy();
-    res.redirect("/critics");
-});
-
-
 router.delete("/:id", asyncHandler(async (req, res, next) => {
     const criticId = req.params.id;
     const critic = await Critic.findByPk(criticId);
