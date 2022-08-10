@@ -8,7 +8,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     collectionId: {
       allowNull: false,
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      onDelete: 'cascade'
     }
   }, {});
   MovieCollection.associate = function(models) {

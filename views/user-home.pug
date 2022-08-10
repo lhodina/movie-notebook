@@ -1,7 +1,7 @@
 extends layout.pug
 include utils.pug
 block content
-    script(src="/scripts/index.js" type="module")
+    script(src="/scripts/collections.js" type="module")
     h2 User Home
     h3 Collections
     ul
@@ -11,11 +11,13 @@ block content
 
 
     each collection in collections
-        div
+        div(id=`collection-container-${collection.id}`).collection-box
             h3
                 a(href=`/collections/${collection.id}`)= collection.name
             +displayMovies(collection.movies)
-        a(href=`/collections/${collection.id}`) Add Movie
+            a(href=`/collections/${collection.id}`) Add Movie
+            button(id=collection.id).delete-btn Delete Collection
+
 
     h3 Your Favorite Directors
     ul

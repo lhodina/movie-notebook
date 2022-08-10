@@ -138,4 +138,16 @@ router.post("/:id/add-movie", csrfProtection, asyncHandler(async (req, res) => {
 }));
 
 
+router.delete("/:id", asyncHandler(async (req, res, next) => {
+    const collectionId = req.params.id;
+    const collection = await Collection.findByPk(collectionId);
+    if (collection) {
+        await collection.destroy();
+        res.json({ message: "Success"})
+    } else {
+        console.log("DANGER WILL ROBINSON. Couldn't get collection");
+    }
+}));
+
+
 module.exports = router;
