@@ -66,12 +66,13 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
 
 router.post("/:id/favorites/add", csrfProtection, asyncHandler(async (req, res) => {
-    const { selectMovie} = req.body;
+    const { selectMovie } = req.body;
     let movie;
 
     const directorName = req.body.directorName;
-
-    let director = await Director.findOne({ where: { name: directorName } });
+    const directorId = parseInt(req.params.id, 10);
+    let director = await Director.findByPk(directorId);
+ 
     if (!director) {
         director = await Director.create({
             name: directorName

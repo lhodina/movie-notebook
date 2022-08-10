@@ -24,9 +24,7 @@ router.get("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) =>
 }));
 
 
-router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
-    console.log("*****req.body:", req.body);
-
+router.post("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) => {
     const { userId } = req.session.auth;
     const { collectionName } = req.body;
 

@@ -131,10 +131,11 @@ mixin displayMovies(movies)
 
                     if (locals.authenticated)
                         if movie.review
-                            td= movie.review
+                            td
+                                a(href=`/movies/${movie.id}`) View
                         else
                             td
-                                div.review-placeholder
+                                a(href=`/movies/${movie.id}`) Add Review
                         td
 
                             div.starRating
@@ -156,11 +157,12 @@ mixin displayMovies(movies)
                             td Want to Watch
 
                         td
-                            ul
                             if (movie.likedByCritics && movie.likedByCritics.length)
+                                ul
                                 each critic in movie.likedByCritics
                                     li= critic.name
                             if (movie.likedByDirectors && movie.likedByDirectors.length)
+                                ul
                                 each director in movie.likedByDirectors
                                     li= director.name
                         td
