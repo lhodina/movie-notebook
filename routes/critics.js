@@ -55,7 +55,6 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
             favoritedByDirectors: data.favoritedByDirectors,
             likedByCritics: data.likedByCritics
         };
-        console.log("*****movie:", movie);
 
         return movie;
     });
@@ -76,7 +75,7 @@ router.post("/:id/favorites/add", csrfProtection, asyncHandler (async (req, res)
     console.log("selectMovie:", selectMovie);
     let movie;
 
-    const directorName = req.body.directorId;
+    const directorName = req.body.directorName;
 
     let director = await Director.findOne({ where: { name: directorName } });
     if (!director) {

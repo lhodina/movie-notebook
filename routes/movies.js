@@ -58,7 +58,8 @@ router.get("/add", csrfProtection, validateMovie, asyncHandler(async (req, res) 
 
     if (req.session.auth) {
         const { userId } = req.session.auth;
-        const collections = await Collection.findAll({ where: userId });
+        const collections = await Collection.findAll({ where: { userId } });
+
         res.render("movie-add", {
             movies,
             directors,
@@ -78,24 +79,29 @@ router.get("/add", csrfProtection, validateMovie, asyncHandler(async (req, res) 
 
 
 router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
-    const name = req.body.directorId;
+    const { userId } = req.session.auth;
 
-    let director = await Director.findOne({ where: { name } });
+    let {
+        directorName,
+        title,
+        yearReleased,
+        imageLink,
+        starRating,
+        review,
+        collectionList,
+        watchedStatus
+    } = req.body;
+
+    let director = await Director.findOne({ where: { name: directorName } });
     if (!director) {
         director = await Director.create({
-            name
+            name: directorName
         });
     }
 
     const directorId = director.id;
 
-    let {
-        title,
-        yearReleased,
-        imageLink,
-        collectionList
-    } = req.body;
-
+    const rating = parseInt(starRating, 10);
     if (yearReleased === "--Year--") yearReleased = null;
 
     if (req.session.auth) {
@@ -106,7 +112,14 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
             imageLink
         });
 
-        const { userId } = req.session.auth;
+        await UserNote.create({
+            userId,
+            movieId: movie.id,
+            review,
+            rating,
+            watchedStatus
+        });
+
         if (collectionList) {
             let collection = await Collection.findOne({ where: { name: collectionList }});
 

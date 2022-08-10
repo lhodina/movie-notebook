@@ -48,7 +48,6 @@ router.get("/", asyncHandler(async (req, res) => {
             const collectionName = collection.name;
 
             const movies = getMovies(collection.Movies, user);
-            console.log("*****movies:", movies);
 
             const displayShelf = {
                 id: collection.id,

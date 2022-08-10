@@ -16,7 +16,8 @@ module.exports = {
       directorId: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        references: { model: 'Directors' }
+        references: { model: 'Directors' },
+        onDelete: 'cascade'
       },
       createdAt: {
         allowNull: false,

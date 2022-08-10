@@ -25,7 +25,7 @@ router.get("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) =>
 
 
 router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
-    console.log("req.body:", req.body);
+    console.log("*****req.body:", req.body);
 
     const { userId } = req.session.auth;
     const { collectionName } = req.body;
@@ -36,10 +36,7 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
     });
 
     const { selectMovie } = req.body;
-    console.log("selectMovie:", selectMovie);
-    let movie;
-
-    const directorName = req.body.directorId;
+    const directorName = req.body.directorName;
 
     let director = await Director.findOne({ where: { name: directorName } });
     if (!director) {
@@ -55,6 +52,8 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
     } = req.body;
 
     if (yearReleased === "--Year--") yearReleased = null;
+
+    let movie;
 
     if (selectMovie !== "--Choose Movie--") {
         movie = await Movie.findOne({ where: { title: selectMovie } });
@@ -85,8 +84,6 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const movies = await Movie.findAll();
     const directors = await Director.findAll();
 
-    console.log("*****collectionMovies:", collectionMovies);
-
     res.render("collection", {
         collection,
         movies,
@@ -104,7 +101,7 @@ router.post("/:id/add-movie", csrfProtection, asyncHandler(async (req, res) => {
     console.log("selectMovie:", selectMovie);
     let movie;
 
-    const directorName = req.body.directorId;
+    const directorName = req.body.directorName;
 
     let director = await Director.findOne({ where: { name: directorName } });
     if (!director) {
@@ -120,7 +117,7 @@ router.post("/:id/add-movie", csrfProtection, asyncHandler(async (req, res) => {
     } = req.body;
 
     if (yearReleased === "--Year--") yearReleased = null;
-    
+
     if (selectMovie !== "--Choose Movie--") {
         movie = await Movie.findOne({ where: { title: selectMovie } });
     } else {

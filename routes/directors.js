@@ -42,11 +42,11 @@ router.post("/add", validateDirector, csrfProtection, asyncHandler(async (req, r
 
 
 router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
-    const current_director_id = parseInt(req.params.id, 10);
+    const directorId = parseInt(req.params.id, 10);
     const directors = await Director.findAll();
     const movies = await Movie.findAll();
 
-    const director = await Director.findByPk(current_director_id, {
+    const director = await Director.findByPk(directorId, {
         include: ['directedMovies', 'directorFavorites']
     });
 
@@ -69,7 +69,7 @@ router.post("/:id/favorites/add", csrfProtection, asyncHandler(async (req, res) 
     const { selectMovie} = req.body;
     let movie;
 
-    const directorName = req.body.directorId;
+    const directorName = req.body.directorName;
 
     let director = await Director.findOne({ where: { name: directorName } });
     if (!director) {
@@ -97,14 +97,24 @@ router.post("/:id/favorites/add", csrfProtection, asyncHandler(async (req, res) 
         });
     }
 
-    const current_director_id = parseInt(req.params.id, 10);
-
     await DirectorFavorite.create({
-        director_Id: current_director_id,
+        director_Id: director.id,
         movieId: movie.id,
     });
 
-    res.redirect(`/directors/${current_director_id}`);
+    res.redirect(`/directors/${director.id}`);
+}));
+
+
+router.delete("/:id", asyncHandler(async (req, res, next) => {
+    const directorId = req.params.id;
+    const director = await Director.findByPk(directorId);
+    if (director) {
+        await director.destroy();
+        res.json({ message: "Success"})
+    } else {
+        console.log("DANGER WILL ROBINSON. Couldn't get director");
+    }
 }));
 
 

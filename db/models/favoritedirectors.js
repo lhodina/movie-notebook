@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     directorId: {
       allowNull: false,
-      type:DataTypes.INTEGER
+      type:DataTypes.INTEGER,
+      onDelete: 'cascade'
     }
   }, {});
   FavoriteDirector.associate = function(models) {

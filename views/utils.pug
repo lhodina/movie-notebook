@@ -20,8 +20,8 @@ mixin field(labelText, fieldName, fieldType='text', fieldValue='', placeholder=n
 mixin movieInfoFields()
     +field("Title", "title")
     br
-    label(for="directorId") Choose or Add a Director
-    input(name="directorId" list="directors")
+    label(for="directorName") Choose or Add a Director
+    input(name="directorName" list="directors")
     br
     datalist(id="directors" name="directors")
         each director in directors
@@ -78,7 +78,8 @@ mixin userNoteFields()
 
 
 mixin displayMovie(movie)
-    table= movie.title
+    h2= movie.title
+    table
         thead
             tr
                 th Director
@@ -94,8 +95,7 @@ mixin displayMovie(movie)
                 else
                     td
                         div.poster-placeholder
-                            span +
-
+                            span
     br
 
 
@@ -103,10 +103,10 @@ mixin displayMovies(movies)
     table
         thead
             tr
+                th
                 th Title
                 th Director
                 th Year Released
-                th Image
                 if (locals.authenticated)
                     th Review
                     th Rating
@@ -117,17 +117,18 @@ mixin displayMovies(movies)
         tbody
             each movie in movies
                 tr(id=`movie-container-${movie.id}`).movie-box
+                if movie.imageLink
+                    td
+                        img(src=movie.imageLink width=60 height=90)
+                else
+                    td
+                        div.poster-placeholder
+                            span
                     td
                         a(href=`/movies/${movie.id}`) #{movie.title}
                     td= movie.director
                     td= movie.yearReleased
-                    if movie.imageLink
-                        td
-                            img(src=movie.imageLink width=60 height=90)
-                    else
-                        td
-                            div.poster-placeholder
-                                span +
+
                     if (locals.authenticated)
                         if movie.review
                             td= movie.review
