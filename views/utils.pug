@@ -124,48 +124,47 @@ mixin displayMovies(movies)
                     td
                         div.poster-placeholder
                             span
+                td
+                    a(href=`/movies/${movie.id}`) #{movie.title}
+                td= movie.director
+                td= movie.yearReleased
+
+                if (locals.authenticated)
+                    if movie.review
+                        td
+                            a(href=`/movies/${movie.id}`) View
+                    else
+                        td
+                            a(href=`/movies/${movie.id}`) Add Review
                     td
-                        a(href=`/movies/${movie.id}`) #{movie.title}
-                    td= movie.director
-                    td= movie.yearReleased
+                        div.starRating
+                            //- DO SOMETHING WITH movie.rating
+                            input(type="radio" id="five" name="starRating" value="5")
+                            label(for="five" )
+                            input(type="radio" id="four" name="starRating" value="4")
+                            label(for="four")
+                            input(type="radio" id="three" name="starRating" value="3")
+                            label(for="three")
+                            input(type="radio" id="two" name="starRating" value="2")
+                            label(for="two")
+                            input(type="radio" id="one" name="starRating" value="1")
+                            label(for="one")
 
-                    if (locals.authenticated)
-                        if movie.review
-                            td
-                                a(href=`/movies/${movie.id}`) View
-                        else
-                            td
-                                a(href=`/movies/${movie.id}`) Add Review
-                        td
+                    if movie.watchedStatus
+                        td Watched
+                    else
+                        td Want to Watch
 
-                            div.starRating
-                                //- DO SOMETHING WITH movie.rating
-                                input(type="radio" id="five" name="starRating" value="5")
-                                label(for="five" )
-                                input(type="radio" id="four" name="starRating" value="4")
-                                label(for="four")
-                                input(type="radio" id="three" name="starRating" value="3")
-                                label(for="three")
-                                input(type="radio" id="two" name="starRating" value="2")
-                                label(for="two")
-                                input(type="radio" id="one" name="starRating" value="1")
-                                label(for="one")
-
-                        if movie.watchedStatus
-                            td Watched
-                        else
-                            td Want to Watch
-
-                        td
-                            if (movie.likedByCritics && movie.likedByCritics.length)
-                                ul
-                                each critic in movie.likedByCritics
-                                    li= critic.name
-                            if (movie.likedByDirectors && movie.likedByDirectors.length)
-                                ul
-                                each director in movie.likedByDirectors
-                                    li= director.name
-                        td
-                            a(href=`/movies/${movie.id}`) edit
-                        td
-                            button(id=movie.id).delete-btn Delete
+                    td
+                        if (movie.likedByCritics && movie.likedByCritics.length)
+                            ul
+                            each critic in movie.likedByCritics
+                                li= critic.name
+                        if (movie.likedByDirectors && movie.likedByDirectors.length)
+                            ul
+                            each director in movie.likedByDirectors
+                                li= director.name
+                    td
+                        a(href=`/movies/${movie.id}`) edit
+                    td
+                        button(id=movie.id).delete-btn Delete

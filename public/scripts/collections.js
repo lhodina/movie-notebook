@@ -1,6 +1,6 @@
-const deleteButtons = document.querySelectorAll('.delete-btn');
+const collectionDeleteButtons = document.querySelectorAll('.delete-collection');
 
-for (let button of deleteButtons) {
+for (let button of collectionDeleteButtons) {
     button.addEventListener("click", async (event) => {
         event.preventDefault();
         const collectionId = event.target.id;

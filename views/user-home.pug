@@ -2,6 +2,7 @@ extends layout.pug
 include utils.pug
 block content
     script(src="/scripts/collections.js" type="module")
+    script(src="/scripts/movies.js" type="module")
     h2 User Home
     h3 Collections
     ul
@@ -16,7 +17,7 @@ block content
                 a(href=`/collections/${collection.id}`)= collection.name
             +displayMovies(collection.movies)
             a(href=`/collections/${collection.id}`) Add Movie
-            button(id=collection.id).delete-btn Delete Collection
+            button(id=collection.id).delete-collection Delete Collection
 
 
     h3 Your Favorite Directors
