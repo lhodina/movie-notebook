@@ -3,31 +3,39 @@ include utils.pug
 block content
     script(src="/scripts/collections.js" type="module")
     script(src="/scripts/movies.js" type="module")
-    h2 User Home
-    h3 Collections
-    ul
-    each collection in collections
-        li
-            a(href=`/collections/${collection.id}`)= collection.name
+    link(rel='stylesheet' href='/stylesheets/home-page.css')
+    main
+        h2 User Home
+        div(id="sidebar")
+            h3 Collections
+            ul
+            if (!collections.length)
+                a(href="/collections/add")
+                    button Add Collection
+            each collection in collections
+                li
+                    a(href=`/collections/${collection.id}`)= collection.name
 
+            h3 Your Favorite Directors
+            ul
+                each favoriteDirector in favoriteDirectors
+                    li
+                        a(href=`/directors/${favoriteDirector.id}`)= favoriteDirector.name
+            a(href="/favorite-directors/add")
+                button Add Favorite Director
 
-    each collection in collections
-        div(id=`collection-container-${collection.id}`).collection-box
-            h3
-                a(href=`/collections/${collection.id}`)= collection.name
-            +displayMovies(collection.movies)
-            a(href=`/collections/${collection.id}`) Add Movie
-            button(id=collection.id).delete-collection Delete Collection
-
-
-    h3 Your Favorite Directors
-    ul
-        each favoriteDirector in favoriteDirectors
-            li
-                a(href=`/directors/${favoriteDirector.id}`)= favoriteDirector.name
-
-    h3 Your Favorite Critics
-    ul
-        each favoriteCritic in favoriteCritics
-            li
-                a(href=`/critics/${favoriteCritic.id}`)= favoriteCritic.name
+            h3 Your Favorite Critics
+            ul
+                each favoriteCritic in favoriteCritics
+                    li
+                        a(href=`/critics/${favoriteCritic.id}`)= favoriteCritic.name
+            a(href="/favorite-critics/add")
+                    button Add Favorite Critic
+        div(id="main-collection-display")
+            each collection in collections
+                div(id=`collection-container-${collection.id}`).collection-box
+                    h3
+                        a(href=`/collections/${collection.id}`)= collection.name
+                    +displayMovies(collection.movies)
+                    a(href=`/collections/${collection.id}`) Add Movie
+                    button(id=collection.id).delete-collection Delete Collection

@@ -1,0 +1,24 @@
+main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+h2 {
+    width: 100%;
+}
+
+#sidebar {
+    margin: 10px;
+}
+
+#main-collection-display {
+    border: 1px solid lightgray;
+    /* max-height: 500px;
+    overflow-y: auto; */
+    width: 75%;
+    margin: 10px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+}
