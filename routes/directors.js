@@ -65,9 +65,6 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
         const movie = movieData.dataValues;
         const director = movieData.dataValues.directorOfFavorite.dataValues.name;
 
-        // console.log("*****movie:", movie);
-        // console.log("*****directorName:", directorName);
-
         const cleanedMovie = {
             id: movie.id,
             title: movie.title,
@@ -79,8 +76,6 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
         return cleanedMovie;
     });
-
-    console.log("*****favoriteMovies:", favoriteMovies);
 
     res.render("director", {
         director,

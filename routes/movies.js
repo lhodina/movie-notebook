@@ -149,7 +149,7 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
     if (req.session.auth) {
         const { userId } = req.session.auth;
-        const userNotes = await UserNote.findOne({
+        const userNotesData = await UserNote.findOne({
             where: {
                 [Op.and]: [
                     { userId },
@@ -158,6 +158,8 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
             }
         });
 
+        const userNotes = userNotesData.dataValues;
+        
         const collections = await Collection.findAll({ where: userId });
 
         res.render("movie", {

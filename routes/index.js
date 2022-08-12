@@ -57,8 +57,11 @@ router.get("/", asyncHandler(async (req, res) => {
             return displayShelf;
         });
 
+        const displayCollection = collections[0];
+
         res.render("user-home", {
             collections,
+            displayCollection,
             favoriteDirectors,
             favoriteCritics
         });
