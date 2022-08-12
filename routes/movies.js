@@ -158,8 +158,11 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
             }
         });
 
-        const userNotes = userNotesData.dataValues;
-        
+        let userNotes;
+        if (userNotesData) {
+            userNotes = userNotesData.dataValues;
+        }
+       
         const collections = await Collection.findAll({ where: userId });
 
         res.render("movie", {

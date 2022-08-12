@@ -132,7 +132,7 @@ router.post("/:id/add-movie", csrfProtection, asyncHandler(async (req, res) => {
         collectionId
     });
 
-    res.redirect('/');
+    res.redirect(`/collections/${collectionId}`);
 }));
 
 
