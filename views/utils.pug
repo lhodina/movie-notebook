@@ -126,7 +126,8 @@ mixin displayMovies(movies)
                             span
                 td
                     a(href=`/movies/${movie.id}`) #{movie.title}
-                td= movie.director
+                td
+                    a(href=`/directors/${movie.directorId}`)= movie.director
                 td= movie.yearReleased
 
                 if (locals.authenticated)

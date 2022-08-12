@@ -2,16 +2,32 @@ extends layout.pug
 include utils.pug
 block content
     h2= director.name
-    h3 Add a Favorite Movie
+    h3 Add a Movie Liked by #{director.name}
     form(action=`/directors/${director.id}/favorites/add` method="post")
         input(type="hidden" name="_csrf" value=csrfToken)
         +addMovieFormFields()
-        button(type="submit") Add Favorite
+        button(type="submit") Add
+        a(href=`directors/${director.id}`) Cancel
+
+    h3 Add a Movie Directed by #{director.name}
+    form(action=`/directors/${director.id}/movies-directed/add` method="post")
+        input(type="hidden" name="_csrf" value=csrfToken)
+        //- +addMovieFormFields()
+        +field("Title", "title")
+        br
+        label(for="yearReleased") Year Released (optional)
+        select(name="yearReleased")
+            option() --Year--
+            each year in years
+                option(value=year)= year
+        br
+        +field("Image Link (optional)", "imageLink")
+        button(type="submit") Add
         a(href=`directors/${director.id}`) Cancel
 
     h3 Movies Directed by #{director.name}
     if (directedMovies)
         +displayMovies(directedMovies)
-    h3 #{director.name}'s Favorite Movies
+    h3 Movies Liked by #{director.name}
     if (favoriteMovies)
         +displayMovies(favoriteMovies)

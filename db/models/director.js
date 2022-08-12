@@ -10,7 +10,6 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     Director.hasMany(models.Movie, { as: 'directedMovies', foreignKey: 'directorId' });
 
-
     const directorFavMapping = {
       as: 'directorFavorites',
       through: 'DirectorFavorite',

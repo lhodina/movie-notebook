@@ -1,8 +1,6 @@
 const { validationResult } = require("express-validator");
 const csrf= require("csurf");
 
-const { User, Director, Critic } = require("./db/models");
-
 const csrfProtection = csrf({ cookie: true });
 const asyncHandler = (handler) => (req, res, next) => handler(req, res, next).catch(next);
 
@@ -47,6 +45,7 @@ const getMovies = (movies, user="") => movies.map( (movieData) => {
             id: data.id,
             title: data.title,
             director: data.movieDirector.name,
+            directorId: data.movieDirector.id,
             yearReleased: data.yearReleased,
             imageLink: data.imageLink,
             likedByDirectors: directors,
@@ -68,6 +67,7 @@ const getMovies = (movies, user="") => movies.map( (movieData) => {
             id: data.id,
             title: data.title,
             director: data.movieDirector.name,
+            directorId: data.movieDirector.id,
             yearReleased: data.yearReleased,
             imageLink: data.imageLink
         }

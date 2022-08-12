@@ -47,11 +47,40 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const movies = await Movie.findAll();
 
     const director = await Director.findByPk(directorId, {
-        include: ['directedMovies', 'directorFavorites']
+        include: [
+            'directedMovies',
+            {
+                model: Movie,
+                as: 'directorFavorites',
+                include: {model: Director, as: 'directorOfFavorite' }
+            }
+        ]
     });
 
     const directedMovies = director.dataValues.directedMovies;
-    const favoriteMovies = director.dataValues.directorFavorites;
+
+    const favoriteMovieData = director.dataValues.directorFavorites;
+
+    const favoriteMovies = favoriteMovieData.map(movieData => {
+        const movie = movieData.dataValues;
+        const director = movieData.dataValues.directorOfFavorite.dataValues.name;
+
+        // console.log("*****movie:", movie);
+        // console.log("*****directorName:", directorName);
+
+        const cleanedMovie = {
+            id: movie.id,
+            title: movie.title,
+            directorId: movie.directorId,
+            director,
+            yearReleased: movie.yearReleased,
+            imageLink: movie.imageLink
+        };
+
+        return cleanedMovie;
+    });
+
+    console.log("*****favoriteMovies:", favoriteMovies);
 
     res.render("director", {
         director,
@@ -65,17 +94,43 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 }));
 
 
-router.post("/:id/favorites/add", csrfProtection, asyncHandler(async (req, res) => {
-    const { selectMovie } = req.body;
-    let movie;
 
-    const directorName = req.body.directorName;
+router.post("/:id/movies-directed/add", csrfProtection, asyncHandler(async (req, res) => {
     const directorId = parseInt(req.params.id, 10);
-    let director = await Director.findByPk(directorId);
- 
-    if (!director) {
-        director = await Director.create({
-            name: directorName
+
+    let {
+        title,
+        yearReleased,
+        imageLink
+    } = req.body;
+
+    if (yearReleased === "--Year--") yearReleased = null;
+
+    await Movie.create({
+        title,
+        directorId,
+        yearReleased,
+        imageLink
+    });
+
+    res.redirect(`/directors/${directorId}`);
+}));
+
+
+
+router.post("/:id/favorites/add", csrfProtection, asyncHandler(async (req, res) => {
+    const currentDirectorId = parseInt(req.params.id, 10);
+    const currentDirector = await Director.findByPk(currentDirectorId);
+
+    const otherDirectorName = req.body.directorName;
+    let otherDirector = await Director.findOne({ where: { name: otherDirectorName } });
+    if (!otherDirector) {
+        otherDirector = await Director.create({ name: otherDirectorName });
+    }
+
+    if (!otherDirector) {
+        otherDirector = await Director.create({
+            name: otherDirectorName
         });
     }
 
@@ -87,23 +142,25 @@ router.post("/:id/favorites/add", csrfProtection, asyncHandler(async (req, res) 
 
     if (yearReleased === "--Year--") yearReleased = null;
 
+    const { selectMovie } = req.body;
+    let movie;
     if (selectMovie !== "--Choose Movie--") {
         movie = await Movie.findOne({ where: { title: selectMovie } });
     } else {
         movie = await Movie.create({
             title,
-            directorId: director.id,
+            directorId: otherDirector.id,
             yearReleased,
             imageLink
         });
     }
 
     await DirectorFavorite.create({
-        director_Id: director.id,
+        director_Id: currentDirector.id,
         movieId: movie.id,
     });
 
-    res.redirect(`/directors/${director.id}`);
+    res.redirect(`/directors/${currentDirector.id}`);
 }));
 
 

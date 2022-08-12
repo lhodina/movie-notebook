@@ -7,15 +7,13 @@ block content
     main
         h2 User Home
         div(id="sidebar")
-            h3 Collections
+            h3 Your Collections
             ul
-            if (!collections.length)
-                a(href="/collections/add")
-                    button Add Collection
             each collection in collections
                 li
                     a(href=`/collections/${collection.id}`)= collection.name
-
+            a(href="/collections/add")
+                    button Add Collection
             h3 Your Favorite Directors
             ul
                 each favoriteDirector in favoriteDirectors
@@ -31,6 +29,14 @@ block content
                         a(href=`/critics/${favoriteCritic.id}`)= favoriteCritic.name
             a(href="/favorite-critics/add")
                     button Add Favorite Critic
+
+            h3 Recommended for You
+            ul
+                li Movie with most tags
+                li Movie with second most tags
+                li Etc.
+
+
         div(id="main-collection-display")
             each collection in collections
                 div(id=`collection-container-${collection.id}`).collection-box

@@ -22,6 +22,12 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'cascade'
      });
 
+    Movie.belongsTo(models.Director, {
+      as: 'directorOfFavorite',
+      foreignKey: 'directorId',
+      onDelete: 'cascade'
+     });
+
 
     const collectionMapping = {
       through: 'MovieCollection',
