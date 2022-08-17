@@ -57,11 +57,11 @@ router.get("/", asyncHandler(async (req, res) => {
             return displayShelf;
         });
 
-        let displayCollection = collections[0];
+        // let displayCollection = collections[0];
 
         res.render("user-home", {
             collections,
-            displayCollection,
+            // displayCollection,
             favoriteDirectors,
             favoriteCritics
         });

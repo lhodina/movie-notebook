@@ -10,12 +10,12 @@ block content
         div(id="sidebar")
             h3 Your Collections
             ul
-
             each collection in collections
                 li
                     a(id=`collection-${collection.id}-link` class='collection-link' href=`/collections/${collection.id}`)= collection.name
             a(href="/collections/add")
                     button Add Collection
+
             h3 Your Favorite Directors
             ul
                 each favoriteDirector in favoriteDirectors
@@ -38,11 +38,11 @@ block content
                 li Movie with second most tags
                 li Etc.
 
-
-        div(id="main-collection-display")
-            div(id=`collection-container-${displayCollection.id}`).collection-box
-                h3
-                    a(href=`/collections/${displayCollection.id}`)= displayCollection.name
-                +displayMovies(displayCollection.movies)
-                a(href=`/collections/${displayCollection.id}`) Add Movie
-                button(id=displayCollection.id).delete-collection Delete Collection
+        div(id="display")
+            each collection in collections
+                div(id=`collection-container-${collection.id}` hidden)
+                    h3
+                        a(href=`/collections/${collection.id}`)= collection.name
+                    +displayMovies(collection.movies)
+                    a(href=`/collections/${collection.id}`) Add Movie
+                    button(id=collection.id).delete-collection Delete Collection

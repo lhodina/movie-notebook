@@ -2,6 +2,10 @@ console.log("Hello from the index.js script");
 
 
 const collectionLinks = document.querySelectorAll('.collection-link');
+
+// const collectionContainers = document.querySelectorAll('.collection-container');
+// console.log("collectionContainers:", collectionContainers);
+
 for (let link of collectionLinks) {
     link.addEventListener("click", async (event) => {
         event.preventDefault();
@@ -9,14 +13,20 @@ for (let link of collectionLinks) {
         console.log("*****collectionIdString:", collectionIdString);
         const collectionId = collectionIdString.split('-')[1];
         console.log("*****collectionId:", collectionId);
-        const res = await fetch(`/collections/${collectionId}`);
-        console.log("***res:", res);
-
-        
-        // const data = await res.json();
-        // console.log("data:", data);
+        let previousDisplay = document.getElementsByClassName('displayCollection')[0];
+        console.log("*****previousDisplay:", previousDisplay);
+        if (previousDisplay) {
+            previousDisplay.classList.remove("displayCollection");
+            previousDisplay.style.display = "none";
+        }
+        const displayCollection = document.getElementById(`collection-container-${collectionId}`);
+        displayCollection.setAttribute('class', 'displayCollection');
+        displayCollection.removeAttribute("hidden");
+        displayCollection.style.display = "block";
+        console.log("*****displayCollection:", displayCollection);
     });
 }
+
 
 
 // const deleteButtons = document.querySelectorAll('.delete-btn');

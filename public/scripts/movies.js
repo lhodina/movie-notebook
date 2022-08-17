@@ -1,4 +1,4 @@
-console.log("HELLOW FROM DA MOVIES SCRIPT HAHA SCRIPT");
+console.log("Hello from the movies.js script");
 const deleteButtons = document.querySelectorAll('.delete-btn');
 
 for (let button of deleteButtons) {
