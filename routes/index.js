@@ -2,7 +2,7 @@ const express = require("express");
 const { requireAuth } = require("../auth");
 
 const { environment } = require("../config");
-const { User, Collection, Movie, Director, FavoriteDirector, Critic, FavoriteCritic, UserNote } = require("../db/models");
+const { User, Collection, Movie, MovieCollection, Director, FavoriteDirector, Critic, FavoriteCritic, UserNote } = require("../db/models");
 const { asyncHandler, csrfProtection, getMovies } = require("../utils");
 
 const router = express.Router();
@@ -27,6 +27,45 @@ router.get("/", asyncHandler(async (req, res) => {
 
         const favoriteDirectors = user.dataValues.Directors;
         const favoriteCritics = user.dataValues.Critics;
+
+        const allMovies = await Movie.findAll({
+            include: [
+                'movieDirector',
+                'favoritedByDirectors',
+                {
+                    model: Critic,
+                    include: { model: Movie }
+                },
+                { model: UserNote }
+            ]
+        });
+
+        const recommended = getMovies(allMovies, user);
+        const sortedRecs = recommended.sort((a, b) => b.recommendedScore - a.recommendedScore);
+        const mostRecommended = sortedRecs.filter(rec => rec.recommendedScore > 0);
+        console.log("*****mostRecommended:", mostRecommended);
+
+        let recommendationsCollection = await Collection.findOne({ where: {name: "Most Recommended"} });
+
+        if (!recommendationsCollection) {
+            recommendationsCollection = await Collection.create({
+                name: "Most Recommended",
+                userId: user.id
+            });
+        }
+
+        const recsId = recommendationsCollection.id;
+        console.log("*****recsId:", recsId);
+
+        const buildRecsCollection = mostRecommended.map(rec => {
+            return {
+                movieId: rec.id,
+                collectionId: recsId
+            }
+        });
+
+        console.log("*****buildRecsCollection:", buildRecsCollection);
+        await MovieCollection.bulkCreate(buildRecsCollection);
 
         const collections = await Collection.findAll({
             where: { userId },
@@ -57,11 +96,11 @@ router.get("/", asyncHandler(async (req, res) => {
             return displayShelf;
         });
 
-
         res.render("user-home", {
             collections,
             favoriteDirectors,
-            favoriteCritics
+            favoriteCritics,
+            mostRecommended
         });
     } else {
         res.render("index", {

@@ -40,11 +40,8 @@ const getMovies = (movies, user="") => movies.map( (movieData) => {
         const critics = data.Critics.map(criticData => criticData.dataValues).filter(critic => favoriteCriticNames.includes(critic.name));
 
         const favoriteDirectors = user.dataValues.Directors;
-        // console.log("*****favoriteDirectors:", favoriteDirectors);
         const favoriteDirectorNames = favoriteDirectors.map(director => director.name);
-        // console.log("*****favoriteDirectorNames:", favoriteDirectorNames);
         const directors = data.favoritedByDirectors.map(directorData => directorData.dataValues).filter(director => favoriteDirectorNames.includes(director.name));
-        // console.log("*****directors:", directors);
 
         let cleanedMovie = {
             id: data.id,
@@ -79,7 +76,7 @@ const getMovies = (movies, user="") => movies.map( (movieData) => {
 
         if (directedByFavorite) {
             recommendedScore++;
-            console.log(" + Directed by one of your favorite directors");
+            console.log(" + Directed by one of your favorite directors:", cleanedMovie.director);
         }
 
         if (cleanedMovie.watchedStatus === false) {
@@ -95,7 +92,7 @@ const getMovies = (movies, user="") => movies.map( (movieData) => {
 
         if (cleanedMovie.likedByCritics.length) {
             for (let critic of cleanedMovie.likedByCritics) {
-                console.log(" + Liked by one of your favorite directors:", critic.name);
+                console.log(" + Liked by one of your favorite critics:", critic.name);
             }
         }
 
@@ -115,6 +112,9 @@ const getMovies = (movies, user="") => movies.map( (movieData) => {
         }
     }
 });
+
+
+
 
 
 module.exports = {

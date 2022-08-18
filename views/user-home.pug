@@ -34,9 +34,8 @@ block content
 
             h3 Recommended for You
             ul
-                li Movie with most tags
-                li Movie with second most tags
-                li Etc.
+            each rec in mostRecommended
+                li= rec.title
 
         div(id="display")
             each collection in collections
