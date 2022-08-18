@@ -105,10 +105,12 @@ mixin displayMovie(movie)
     br
 
 
-mixin displayMovies(movies)
+mixin displayMovies(movies, isRecCollection=false)
     table
         thead
             tr
+                if isRecCollection
+                    th Recommended Score
                 th
                 th Title
                 th Director
@@ -123,6 +125,8 @@ mixin displayMovies(movies)
         tbody
             each movie in movies
                 tr(id=`movie-container-${movie.id}`).movie-box
+                if isRecCollection
+                    td= movie.recommendedScore
                 if movie.imageLink
                     td
                         img(src=movie.imageLink width=60 height=90)

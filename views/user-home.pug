@@ -37,6 +37,9 @@ block content
                 div(id=`collection-container-${collection.id}` hidden)
                     h3
                         a(href=`/collections/${collection.id}`)= collection.name
-                    +displayMovies(collection.movies)
+                    if collection.name === "Most Recommended"
+                        +displayMovies(collection.movies, isRecCollection=true)
+                    else
+                        +displayMovies(collection.movies)
                     a(href=`/collections/${collection.id}`) Add Movie
                     button(id=collection.id).delete-collection Delete Collection
