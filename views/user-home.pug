@@ -32,11 +32,6 @@ block content
             a(href="/favorite-critics/add")
                     button Add Favorite Critic
 
-            h3 Recommended for You
-            ul
-            each rec in mostRecommended
-                li= rec.title
-
         div(id="display")
             each collection in collections
                 div(id=`collection-container-${collection.id}` hidden)

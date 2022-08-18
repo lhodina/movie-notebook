@@ -66,6 +66,8 @@ const getMovies = (movies, user="") => movies.map( (movieData) => {
 
         let recommendedScore = 0;
 
+        const reasons = [];
+
         const directorLikes = cleanedMovie.likedByDirectors.length;
         recommendedScore += directorLikes;
 
@@ -76,30 +78,29 @@ const getMovies = (movies, user="") => movies.map( (movieData) => {
 
         if (directedByFavorite) {
             recommendedScore++;
-            console.log(" + Directed by one of your favorite directors:", cleanedMovie.director);
+            reasons.push(` + Directed by one of your favorite directors: ${cleanedMovie.director}`);
         }
 
         if (cleanedMovie.watchedStatus === false) {
             recommendedScore++;
-            console.log(" + You marked this movie Want to Watch");
+            reasons.push(" + You marked this movie Want to Watch");
         }
 
         if (cleanedMovie.likedByDirectors.length) {
             for (let director of cleanedMovie.likedByDirectors) {
-                console.log(" + Liked by one of your favorite directors:", director.name);
+                reasons.push(` + Liked by one of your favorite directors: ${director.name}`);
             }
         }
 
         if (cleanedMovie.likedByCritics.length) {
             for (let critic of cleanedMovie.likedByCritics) {
-                console.log(" + Liked by one of your favorite critics:", critic.name);
+                reasons.push(` + Liked by one of your favorite critics: ${critic.name}`);
             }
         }
 
         cleanedMovie.recommendedScore = recommendedScore;
+        cleanedMovie.reasons = reasons;
 
-        console.log("*****cleanedMovie:", cleanedMovie);
-        console.log("");
         return cleanedMovie;
     } else {
         return {
@@ -112,9 +113,6 @@ const getMovies = (movies, user="") => movies.map( (movieData) => {
         }
     }
 });
-
-
-
 
 
 module.exports = {

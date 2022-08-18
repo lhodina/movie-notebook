@@ -43,7 +43,6 @@ router.get("/", asyncHandler(async (req, res) => {
         const recommended = getMovies(allMovies, user);
         const sortedRecs = recommended.sort((a, b) => b.recommendedScore - a.recommendedScore);
         const mostRecommended = sortedRecs.filter(rec => rec.recommendedScore > 0);
-        console.log("*****mostRecommended:", mostRecommended);
 
         let recommendationsCollection = await Collection.findOne({ where: {name: "Most Recommended"} });
 
@@ -55,7 +54,6 @@ router.get("/", asyncHandler(async (req, res) => {
         }
 
         const recsId = recommendationsCollection.id;
-        console.log("*****recsId:", recsId);
 
         const buildRecsCollection = mostRecommended.map(rec => {
             return {
@@ -64,7 +62,6 @@ router.get("/", asyncHandler(async (req, res) => {
             }
         });
 
-        console.log("*****buildRecsCollection:", buildRecsCollection);
         await MovieCollection.bulkCreate(buildRecsCollection);
 
         const collections = await Collection.findAll({
@@ -85,8 +82,15 @@ router.get("/", asyncHandler(async (req, res) => {
         }).map((collectionData) => {
             const collection = collectionData.dataValues;
             const collectionName = collection.name;
+            const movieList = getMovies(collection.Movies, user);
+            let movies;
 
-            const movies = getMovies(collection.Movies, user);
+            if (collectionName === "Most Recommended") {
+                const sortedRecs = movieList.sort((a, b) => b.recommendedScore - a.recommendedScore);
+                movies = sortedRecs.filter(rec => rec.recommendedScore > 0);
+            } else {
+                movies = movieList;
+            }
 
             const displayShelf = {
                 id: collection.id,
@@ -99,8 +103,7 @@ router.get("/", asyncHandler(async (req, res) => {
         res.render("user-home", {
             collections,
             favoriteDirectors,
-            favoriteCritics,
-            mostRecommended
+            favoriteCritics
         });
     } else {
         res.render("index", {
