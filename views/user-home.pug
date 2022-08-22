@@ -35,11 +35,11 @@ block content
         div(id="display")
             each collection in collections
                 div(id=`collection-container-${collection.id}` hidden)
-                    h3
-                        a(href=`/collections/${collection.id}`)= collection.name
                     if collection.name === "Most Recommended"
+                        h3= collection.name
                         +displayMovies(collection.movies, isRecCollection=true)
                     else
+                        a(href=`/collections/${collection.id}`)= collection.name
                         +displayMovies(collection.movies)
-                    a(href=`/collections/${collection.id}`) Add Movie
-                    button(id=collection.id).delete-collection Delete Collection
+                        a(href=`/collections/${collection.id}`) Add Movie
+                        button(id=collection.id).delete-collection Delete Collection

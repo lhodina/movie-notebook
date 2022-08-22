@@ -7,6 +7,7 @@ const { asyncHandler, csrfProtection, getMovies } = require("../utils");
 
 const router = express.Router();
 
+
 router.get("/", asyncHandler(async (req, res) => {
     if (req.session.auth) {
         const { userId } = req.session.auth;
@@ -40,9 +41,15 @@ router.get("/", asyncHandler(async (req, res) => {
             ]
         });
 
-        const recommended = getMovies(allMovies, user);
-        const sortedRecs = recommended.sort((a, b) => b.recommendedScore - a.recommendedScore);
+        const userMovies = getMovies(allMovies, user);
+        console.log("*****userMovies:", userMovies);
+
+        const sortedRecs = userMovies.sort((a, b) => b.recommendedScore - a.recommendedScore);
         const mostRecommended = sortedRecs.filter(rec => rec.recommendedScore > 0);
+
+        const wantToWatch = userMovies.filter(movie => movie.watchedStatus === false);
+        console.log("*****wantToWatch:", wantToWatch);
+
 
         let recommendationsCollection = await Collection.findOne({ where: {name: "Most Recommended"} });
 
@@ -63,6 +70,27 @@ router.get("/", asyncHandler(async (req, res) => {
         });
 
         await MovieCollection.bulkCreate(buildRecsCollection);
+
+        let wantToWatchCollection = await Collection.findOne({ where: {name: "Want to Watch"} });
+
+        if (!wantToWatchCollection) {
+            wantToWatchCollection = await Collection.create({
+                name: "Want to Watch",
+                userId: user.id
+            });
+        }
+
+        const wantToWatchId = wantToWatchCollection.id;
+
+        const buildWantToWatch = wantToWatch.map(toWatch => {
+            return {
+                movieId: toWatch.id,
+                collectionId: wantToWatchId
+            }
+        });
+
+        await MovieCollection.bulkCreate(buildWantToWatch);
+
 
         const collections = await Collection.findAll({
             where: { userId },

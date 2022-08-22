@@ -162,7 +162,7 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
         if (userNotesData) {
             userNotes = userNotesData.dataValues;
         }
-       
+
         const collections = await Collection.findAll({ where: userId });
 
         res.render("movie", {
@@ -183,6 +183,7 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
          });
     }
 }));
+
 
 
 router.delete("/:id", asyncHandler(async (req, res, next) => {
