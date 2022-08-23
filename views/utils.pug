@@ -175,8 +175,8 @@ mixin displayMovies(movies, isRecCollection=false)
                             ul
                             each director in movie.likedByDirectors
                                 li= director.name
-                    if (!isRecCollection)
-                        td
+                    td
                             a(href=`/movies/${movie.id}`) edit
+                    if (!isRecCollection)
                         td
                             button(id=movie.id).delete-btn Delete

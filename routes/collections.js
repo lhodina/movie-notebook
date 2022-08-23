@@ -3,7 +3,7 @@ const { check, validationResult } = require("express-validator");
 
 const { csrfProtection, asyncHandler, getYears } = require("../utils");
 const db = require("../db/models");
-const { Collection, MovieCollection, Movie, Director } = db;
+const { Collection, MovieCollection, Movie, Director, UserNote } = db;
 const { requireAuth } = require("../auth");
 
 const router = express.Router();
@@ -93,10 +93,11 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 }));
 
 
-router.post("/:id/add-movie", csrfProtection, asyncHandler(async (req, res) => {
+router.post("/:id", csrfProtection, asyncHandler(async (req, res) => {
+    const { userId } = req.session.auth;
     const collectionId = parseInt(req.params.id, 10);
     const { selectMovie } = req.body;
-    let movie;
+
 
     const directorName = req.body.directorName;
 
@@ -110,10 +111,18 @@ router.post("/:id/add-movie", csrfProtection, asyncHandler(async (req, res) => {
     let {
         title,
         yearReleased,
-        imageLink
+        imageLink,
+        starRating,
+        review,
+        collectionList,
+        watchedStatus
     } = req.body;
 
     if (yearReleased === "--Year--") yearReleased = null;
+
+    const rating = parseInt(starRating, 10);
+
+    let movie;
 
     if (selectMovie !== "--Choose Movie--") {
         movie = await Movie.findOne({ where: { title: selectMovie } });
@@ -125,6 +134,14 @@ router.post("/:id/add-movie", csrfProtection, asyncHandler(async (req, res) => {
             imageLink
         });
     }
+
+    await UserNote.create({
+        userId,
+        movieId: movie.id,
+        review,
+        rating,
+        watchedStatus
+    });
 
     await MovieCollection.create({
         movieId: movie.id,
