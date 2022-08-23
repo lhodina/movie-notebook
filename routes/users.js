@@ -57,8 +57,6 @@ router.post("/register", csrfProtection, validateRegistration, asyncHandler(asyn
         password
     } = req.body;
 
-    console.log("req.body:", req.body);
-
     const user = User.build({
         username,
         email

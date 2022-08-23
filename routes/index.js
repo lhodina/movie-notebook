@@ -44,52 +44,52 @@ router.get("/", asyncHandler(async (req, res) => {
         const userMovies = getMovies(allMovies, user);
         console.log("*****userMovies:", userMovies);
 
-        const sortedRecs = userMovies.sort((a, b) => b.recommendedScore - a.recommendedScore);
-        const mostRecommended = sortedRecs.filter(rec => rec.recommendedScore > 0);
+        if (userMovies.length) {
+            const sortedRecs = userMovies.sort((a, b) => b.recommendedScore - a.recommendedScore);
+            const mostRecommended = sortedRecs.filter(rec => rec.recommendedScore > 0);
+            console.log("*****mostRecommended:", mostRecommended);
+            const wantToWatch = userMovies.filter(movie => movie.watchedStatus === false);
 
-        const wantToWatch = userMovies.filter(movie => movie.watchedStatus === false);
-        console.log("*****wantToWatch:", wantToWatch);
+            let recommendationsCollection = await Collection.findOne({ where: {name: "Most Recommended"} });
 
-
-        let recommendationsCollection = await Collection.findOne({ where: {name: "Most Recommended"} });
-
-        if (!recommendationsCollection) {
-            recommendationsCollection = await Collection.create({
-                name: "Most Recommended",
-                userId: user.id
-            });
-        }
-
-        const recsId = recommendationsCollection.id;
-
-        const buildRecsCollection = mostRecommended.map(rec => {
-            return {
-                movieId: rec.id,
-                collectionId: recsId
+            if (!recommendationsCollection) {
+                recommendationsCollection = await Collection.create({
+                    name: "Most Recommended",
+                    userId: user.id
+                });
             }
-        });
 
-        await MovieCollection.bulkCreate(buildRecsCollection);
+            const recsId = recommendationsCollection.id;
 
-        let wantToWatchCollection = await Collection.findOne({ where: {name: "Want to Watch"} });
-
-        if (!wantToWatchCollection) {
-            wantToWatchCollection = await Collection.create({
-                name: "Want to Watch",
-                userId: user.id
+            const buildRecsCollection = mostRecommended.map(rec => {
+                return {
+                    movieId: rec.id,
+                    collectionId: recsId
+                }
             });
-        }
 
-        const wantToWatchId = wantToWatchCollection.id;
+            await MovieCollection.bulkCreate(buildRecsCollection);
 
-        const buildWantToWatch = wantToWatch.map(toWatch => {
-            return {
-                movieId: toWatch.id,
-                collectionId: wantToWatchId
+            let wantToWatchCollection = await Collection.findOne({ where: {name: "Want to Watch"} });
+
+            if (!wantToWatchCollection) {
+                wantToWatchCollection = await Collection.create({
+                    name: "Want to Watch",
+                    userId: user.id
+                });
+
+                const wantToWatchId = wantToWatchCollection.id;
+
+                const buildWantToWatch = wantToWatch.map(toWatch => {
+                    return {
+                        movieId: toWatch.id,
+                        collectionId: wantToWatchId
+                    }
+                });
+
+                await MovieCollection.bulkCreate(buildWantToWatch);
             }
-        });
-
-        await MovieCollection.bulkCreate(buildWantToWatch);
+        }
 
 
         const collections = await Collection.findAll({

@@ -166,7 +166,7 @@ router.delete("/:id", asyncHandler(async (req, res, next) => {
         await director.destroy();
         res.json({ message: "Success"})
     } else {
-        console.log("DANGER WILL ROBINSON. Couldn't get director");
+        console.log("Couldn't get director");
     }
 }));
 

@@ -96,7 +96,6 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 router.post("/:id/add-movie", csrfProtection, asyncHandler(async (req, res) => {
     const collectionId = parseInt(req.params.id, 10);
     const { selectMovie } = req.body;
-    console.log("selectMovie:", selectMovie);
     let movie;
 
     const directorName = req.body.directorName;
@@ -143,7 +142,7 @@ router.delete("/:id", asyncHandler(async (req, res, next) => {
         await collection.destroy();
         res.json({ message: "Success"})
     } else {
-        console.log("DANGER WILL ROBINSON. Couldn't get collection");
+        console.log("Couldn't get collection");
     }
 }));
 

@@ -193,7 +193,7 @@ router.delete("/:id", asyncHandler(async (req, res, next) => {
         await movie.destroy();
         res.json({ message: "Success"})
     } else {
-        console.log("DANGER WILL ROBINSON. Couldn't get movie");
+        console.log("Couldn't get movie");
     }
 }));
 
