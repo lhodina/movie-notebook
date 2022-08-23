@@ -34,7 +34,7 @@ const getYears = () => {
 const getMovies = (movies, user="") => movies.map( (movieData) => {
     const data = movieData.dataValues;
 
-    if (user) {
+     if (user) {
         const favoriteCritics = user.dataValues.Critics;
         const favoriteCriticNames = favoriteCritics.map(critic => critic.name);
         const critics = data.Critics.map(criticData => criticData.dataValues).filter(critic => favoriteCriticNames.includes(critic.name));

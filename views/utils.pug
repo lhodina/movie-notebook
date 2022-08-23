@@ -161,7 +161,7 @@ mixin displayMovies(movies, isRecCollection=false)
                             input(type="radio" id="one" name="starRating" value="1")
                             label(for="one")
 
-                    if movie.watchedStatus
+                    if movie.watchedStatus == true
                         td Watched
                     else
                         td Want to Watch

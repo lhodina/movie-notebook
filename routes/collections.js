@@ -11,7 +11,7 @@ const router = express.Router();
 const years = getYears();
 
 router.get("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) => {
-    const movies = await Movie.findAll();
+    const movies = await Movie.findAll({ include: UserNote });
     const directors = await Director.findAll();
 
 
@@ -46,10 +46,14 @@ router.post("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) =
     let {
         title,
         yearReleased,
-        imageLink
+        imageLink,
+        starRating,
+        review,
+        watchedStatus
     } = req.body;
 
     if (yearReleased === "--Year--") yearReleased = null;
+    const rating = parseInt(starRating, 10);
 
     let movie;
 
@@ -70,6 +74,14 @@ router.post("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) =
             collectionId: collection.id
         });
     }
+
+    await UserNote.create({
+        userId,
+        movieId: movie.id,
+        review,
+        rating,
+        watchedStatus
+    });
 
     res.redirect("/");
 }));
@@ -98,7 +110,6 @@ router.post("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const collectionId = parseInt(req.params.id, 10);
     const { selectMovie } = req.body;
 
-
     const directorName = req.body.directorName;
 
     let director = await Director.findOne({ where: { name: directorName } });
@@ -114,7 +125,6 @@ router.post("/:id", csrfProtection, asyncHandler(async (req, res) => {
         imageLink,
         starRating,
         review,
-        collectionList,
         watchedStatus
     } = req.body;
 
@@ -133,15 +143,15 @@ router.post("/:id", csrfProtection, asyncHandler(async (req, res) => {
             yearReleased,
             imageLink
         });
-    }
 
-    await UserNote.create({
-        userId,
-        movieId: movie.id,
-        review,
-        rating,
-        watchedStatus
-    });
+        await UserNote.create({
+            userId,
+            movieId: movie.id,
+            review,
+            rating,
+            watchedStatus
+        });
+    }
 
     await MovieCollection.create({
         movieId: movie.id,

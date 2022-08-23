@@ -41,7 +41,7 @@ router.get("/", async (req, res) => {
         });
     }
 
-    const allMovies = await Movie.findAll({ include: ["movieDirector", "favoritedByDirectors", Critic] });
+    const allMovies = await Movie.findAll({ include: ["movieDirector", "favoritedByDirectors", Critic, UserNote] });
     const movies = getMovies(allMovies, user)
     const directors = await Director.findAll();
 
