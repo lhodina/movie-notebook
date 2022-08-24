@@ -71,6 +71,7 @@ mixin userNoteFields()
         else
             textarea(name="review", cols="30", rows="10")
         br
+
         label(for="collectionList") Add This Movie to a Collection or Create a New Collection
         input(name="collectionList" list="collectionList")
         br
@@ -133,7 +134,6 @@ mixin displayMovies(movies, isRecCollection=false)
                 else
                     td
                         div.poster-placeholder
-                            span
                 td
                     a(href=`/movies/${movie.id}`) #{movie.title}
                 td
@@ -147,19 +147,28 @@ mixin displayMovies(movies, isRecCollection=false)
                     else
                         td
                             a(href=`/movies/${movie.id}`) Add Review
-                    td
-                        div.starRating
-                            //- DO SOMETHING WITH movie.rating
-                            input(type="radio" id="five" name="starRating" value="5")
-                            label(for="five" )
-                            input(type="radio" id="four" name="starRating" value="4")
-                            label(for="four")
-                            input(type="radio" id="three" name="starRating" value="3")
-                            label(for="three")
-                            input(type="radio" id="two" name="starRating" value="2")
-                            label(for="two")
-                            input(type="radio" id="one" name="starRating" value="1")
-                            label(for="one")
+                    if movie.rating
+                        td
+                            if (movie.rating === 5)
+                                span.solid-star
+                                span.solid-star
+                                span.solid-star
+                                span.solid-star
+                                span.solid-star
+                            if (movie.rating === 4)
+                                span.solid-star
+                                span.solid-star
+                                span.solid-star
+                                span.solid-star
+                            if (movie.rating === 3)
+                                span.solid-star
+                                span.solid-star
+                                span.solid-star
+                            if (movie.rating === 2)
+                                span.solid-star
+                                span.solid-star
+                            if (movie.rating === 1)
+                                span.solid-star
 
                     if movie.watchedStatus === true
                         td Watched

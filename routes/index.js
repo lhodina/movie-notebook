@@ -89,13 +89,10 @@ router.get("/", asyncHandler(async (req, res) => {
             const wantToWatchId = wantToWatchCollection.id;
 
             const wantToWatch = userMovies.filter(movie => movie.watchedStatus === false);
-            console.log("*****wantToWatch:", wantToWatch);
 
             const toWatch = await MovieCollection.findAll({where: { collectionId: wantToWatchId}})
-            console.log("*****toWatch:", toWatch);
 
             const alreadyWantToWatch = toWatch.map(watched => watched.dataValues.movieId);
-            console.log("*****alreadyWantToWatch:", alreadyWantToWatch);
 
             const buildWantToWatch = wantToWatch.map(toWatch => {
                 return {
@@ -103,8 +100,6 @@ router.get("/", asyncHandler(async (req, res) => {
                     collectionId: wantToWatchId
                 }
             }).filter(each => !alreadyWantToWatch.includes(each.movieId));
-
-            console.log("*****buildWantToWatch:", buildWantToWatch);
 
             if (buildWantToWatch) {
                 await MovieCollection.bulkCreate(buildWantToWatch);
