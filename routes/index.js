@@ -91,21 +91,24 @@ router.get("/", asyncHandler(async (req, res) => {
             const wantToWatch = userMovies.filter(movie => movie.watchedStatus === false);
             console.log("*****wantToWatch:", wantToWatch);
 
-            // const alreadyWantToWatch = wantToWatch.map(watched => watched.dataValues.id);
-            // console.log("*****alreadyWantToWatch:", alreadyWantToWatch);
+            const toWatch = await MovieCollection.findAll({where: { collectionId: wantToWatchId}})
+            console.log("*****toWatch:", toWatch);
 
-            // const buildWantToWatch = wantToWatch.map(toWatch => {
-            //     return {
-            //         movieId: toWatch.id,
-            //         collectionId: wantToWatchId
-            //     }
-            // }).filter(each => !alreadyWantToWatch.includes(each.movieId));
+            const alreadyWantToWatch = toWatch.map(watched => watched.dataValues.movieId);
+            console.log("*****alreadyWantToWatch:", alreadyWantToWatch);
 
-            // console.log("*****buildWantToWatch:", buildWantToWatch);
+            const buildWantToWatch = wantToWatch.map(toWatch => {
+                return {
+                    movieId: toWatch.id,
+                    collectionId: wantToWatchId
+                }
+            }).filter(each => !alreadyWantToWatch.includes(each.movieId));
 
-            // if (buildWantToWatch) {
-            //     await MovieCollection.bulkCreate(buildWantToWatch);
-            // }
+            console.log("*****buildWantToWatch:", buildWantToWatch);
+
+            if (buildWantToWatch) {
+                await MovieCollection.bulkCreate(buildWantToWatch);
+            }
     }
 
 
