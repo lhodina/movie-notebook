@@ -101,7 +101,11 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
 
     const directorId = director.id;
 
-    const rating = parseInt(starRating, 10);
+    let rating;
+    if (starRating) {
+        rating = parseInt(starRating, 10);
+    }
+
     if (yearReleased === "--Year--") yearReleased = null;
 
     if (req.session.auth) {
@@ -112,13 +116,16 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
             imageLink
         });
 
-        await UserNote.create({
-            userId,
-            movieId: movie.id,
-            review,
-            rating,
-            watchedStatus
-        });
+        if (rating || review || watchedStatus === true || watchedStatus === false) {
+            await UserNote.create({
+                userId,
+                movieId: movie.id,
+                review,
+                rating,
+                watchedStatus
+            });
+        }
+
 
         if (collectionList) {
             let collection = await Collection.findOne({ where: { name: collectionList }});

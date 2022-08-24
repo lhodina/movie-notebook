@@ -49,6 +49,7 @@ router.get("/", asyncHandler(async (req, res) => {
             const sortedRecs = userMovies.sort((a, b) => b.recommendedScore - a.recommendedScore);
             const mostRecommended = sortedRecs.filter(rec => rec.recommendedScore > 0);
 
+
             let recommendationsCollection = await Collection.findOne({ where: {name: "Most Recommended"} });
 
             if (!recommendationsCollection) {
@@ -76,30 +77,36 @@ router.get("/", asyncHandler(async (req, res) => {
             }
 
 
-            let wantToWatchCollection = await Collection.findOne({ where: {name: "Want to Watch"} });
 
-            if (!wantToWatchCollection) {
-                wantToWatchCollection = await Collection.create({
-                    name: "Want to Watch",
-                    userId: user.id
-                });
-            }
+            // let wantToWatchCollection = await Collection.findOne({ where: {name: "Want to Watch"} });
 
-            const wantToWatchId = wantToWatchCollection.id;
+            // if (!wantToWatchCollection) {
+            //     wantToWatchCollection = await Collection.create({
+            //         name: "Want to Watch",
+            //         userId: user.id
+            //     });
+            // }
 
-            const wantToWatch = userMovies.filter(movie => movie.watchedStatus === false);
-            console.log("*****wantToWatch:", wantToWatch);
+            // const wantToWatchId = wantToWatchCollection.id;
 
-            const buildWantToWatch = wantToWatch.map(toWatch => {
-                return {
-                    movieId: toWatch.id,
-                    collectionId: wantToWatchId
-                }
-            });
+            // const wantToWatch = userMovies.filter(movie => movie.watchedStatus === false);
+            // console.log("*****wantToWatch:", wantToWatch);
 
-            console.log("*****buildWantToWatch:", buildWantToWatch);
+            // const alreadyWantToWatch = wantToWatch.map(watched => watched.dataValues.id);
+            // console.log("*****alreadyWantToWatch:", alreadyWantToWatch);
 
-            await MovieCollection.bulkCreate(buildWantToWatch);
+            // const buildWantToWatch = wantToWatch.map(toWatch => {
+            //     return {
+            //         movieId: toWatch.id,
+            //         collectionId: wantToWatchId
+            //     }
+            // }).filter(each => !alreadyWantToWatch.includes(each.movieId));
+
+            // console.log("*****buildWantToWatch:", buildWantToWatch);
+
+            // if (buildWantToWatch) {
+            //     await MovieCollection.bulkCreate(buildWantToWatch);
+            // }
     }
 
 
