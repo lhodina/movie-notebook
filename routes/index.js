@@ -77,20 +77,19 @@ router.get("/", asyncHandler(async (req, res) => {
             }
 
 
+            let wantToWatchCollection = await Collection.findOne({ where: {name: "Want to Watch"} });
 
-            // let wantToWatchCollection = await Collection.findOne({ where: {name: "Want to Watch"} });
+            if (!wantToWatchCollection) {
+                wantToWatchCollection = await Collection.create({
+                    name: "Want to Watch",
+                    userId: user.id
+                });
+            }
 
-            // if (!wantToWatchCollection) {
-            //     wantToWatchCollection = await Collection.create({
-            //         name: "Want to Watch",
-            //         userId: user.id
-            //     });
-            // }
+            const wantToWatchId = wantToWatchCollection.id;
 
-            // const wantToWatchId = wantToWatchCollection.id;
-
-            // const wantToWatch = userMovies.filter(movie => movie.watchedStatus === false);
-            // console.log("*****wantToWatch:", wantToWatch);
+            const wantToWatch = userMovies.filter(movie => movie.watchedStatus === false);
+            console.log("*****wantToWatch:", wantToWatch);
 
             // const alreadyWantToWatch = wantToWatch.map(watched => watched.dataValues.id);
             // console.log("*****alreadyWantToWatch:", alreadyWantToWatch);
