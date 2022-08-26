@@ -1,6 +1,7 @@
 extends layout.pug
 include utils.pug
 block content
+    script(src="/scripts/add-new-movie.js" type="module")
     h2= collection.name
     if collection.name !== "Most Recommended"
         h3 Add Movie
@@ -8,7 +9,7 @@ block content
             input(type="hidden" name="_csrf" value=csrfToken)
             +addMovieFormFields()
             +userNoteFields()
-            button(type="submit") Add
+            button(type="submit") Submit
 
         h3 Movies
         +displayMovies(collectionMovies)

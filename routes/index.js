@@ -43,7 +43,6 @@ router.get("/", asyncHandler(async (req, res) => {
         });
 
          const userMovies = getMovies(allMovies, user);
-         console.log("*****userMovies:", userMovies);
 
         if (userMovies.length) {
             const sortedRecs = userMovies.sort((a, b) => b.recommendedScore - a.recommendedScore);

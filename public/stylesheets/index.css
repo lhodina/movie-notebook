@@ -65,3 +65,9 @@ h2 {
     color: gold;
     font-size: 20px;
 }
+
+.empty-star::before {
+    content: '\2606';
+    color: gold;
+    font-size: 20px;
+}

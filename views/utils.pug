@@ -37,51 +37,58 @@ mixin movieInfoFields()
 
 
 mixin addMovieFormFields()
-    label(for="selectMovie") Choose a Movie
+    label(for="selectMovie") Search Movies:
+    br
     select(name="selectMovie")
         option(value="--Choose Movie--") --Choose Movie--
         each movie in movies
             option(value=movie.title)= movie.title
     br
-    text Or Add a New Movie
-    +movieInfoFields()
+    br
+    text ...Or Create New Movie 
+    button(id="add-movie-button") v
+    br
+    div.add-new-movie
+        +movieInfoFields()
 
 
 mixin userNoteFields()
     if locals.authenticated
-        span Rating
-        if (userNotes && userNotes.rating)
-            span= userNotes.rating
-        else
-            div.starRating
-                input(type="radio" id="five" name="starRating" value="5")
-                label(for="five" )
-                input(type="radio" id="four" name="starRating" value="4")
-                label(for="four")
-                input(type="radio" id="three" name="starRating" value="3")
-                label(for="three")
-                input(type="radio" id="two" name="starRating" value="2")
-                label(for="two")
-                input(type="radio" id="one" name="starRating" value="1")
-                label(for="one")
-        br
-        label(for="review") Review
-        if (userNotes && userNotes.review)
-            textarea(name="review", cols="30", rows="10")= userNotes.review
-        else
-            textarea(name="review", cols="30", rows="10")
-        br
+        div.add-new-movie
+            h4 Your Notes (optional):
+            span Rating
+            if (userNotes && userNotes.rating)
+                span= userNotes.rating
+            else
+                div.starRating
+                    input(type="radio" id="five" name="starRating" value="5")
+                    label(for="five" )
+                    input(type="radio" id="four" name="starRating" value="4")
+                    label(for="four")
+                    input(type="radio" id="three" name="starRating" value="3")
+                    label(for="three")
+                    input(type="radio" id="two" name="starRating" value="2")
+                    label(for="two")
+                    input(type="radio" id="one" name="starRating" value="1")
+                    label(for="one")
+            br
+            label(for="review") Review
+            if (userNotes && userNotes.review)
+                textarea(name="review", cols="30", rows="10")= userNotes.review
+            else
+                textarea(name="review", cols="30", rows="10")
+            br
 
-        label(for="collectionList") Add This Movie to a Collection or Create a New Collection
-        input(name="collectionList" list="collectionList")
-        br
-        datalist(id="collectionList" name="collectionList")
-            if collections
-                each collection in collections
-                    option(value=collection.name)
-        br
-        +field("Watched", "watchedStatus", "radio", "1")
-        +field("Want to Watch", "watchedStatus", "radio", "0")
+            label(for="collectionList") Add This Movie to a Collection or Create a New Collection
+            input(name="collectionList" list="collectionList")
+            br
+            datalist(id="collectionList" name="collectionList")
+                if collections
+                    each collection in collections
+                        option(value=collection.name)
+            br
+            +field("Watched", "watchedStatus", "radio", "1")
+            +field("Want to Watch", "watchedStatus", "radio", "0")
 
 
 mixin displayMovie(movie)
@@ -160,15 +167,32 @@ mixin displayMovies(movies, isRecCollection=false)
                                 span.solid-star
                                 span.solid-star
                                 span.solid-star
+                                span.empty-star
                             if (movie.rating === 3)
                                 span.solid-star
                                 span.solid-star
                                 span.solid-star
+                                span.empty-star
+                                span.empty-star
                             if (movie.rating === 2)
                                 span.solid-star
                                 span.solid-star
+                                span.empty-star
+                                span.empty-star
+                                span.empty-star
                             if (movie.rating === 1)
                                 span.solid-star
+                                span.empty-star
+                                span.empty-star
+                                span.empty-star
+                                span.empty-star
+                    else
+                        td
+                            span.empty-star
+                            span.empty-star
+                            span.empty-star
+                            span.empty-star
+                            span.empty-star
 
                     if movie.watchedStatus === true
                         td Watched
