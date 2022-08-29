@@ -1,4 +1,5 @@
 const express = require("express");
+const { Op } = require("sequelize");
 const { check, validationResult } = require("express-validator");
 
 const { csrfProtection, asyncHandler, getYears } = require("../utils");
@@ -189,10 +190,25 @@ router.delete("/:id", asyncHandler(async (req, res, next) => {
 
 router.delete("/:id/:movieId", asyncHandler(async (req, res, next) => {
     const collectionId = req.params.id;
+    console.log("*****collectionId:", collectionId);
     const collection = await Collection.findByPk(collectionId);
     const movieId = req.params.movieId;
     console.log("*****movieId:", movieId);
-}))
+
+    const movieCollection = await MovieCollection.findOne({
+        where: {
+            [Op.and]: [
+                { movieId },
+                { collectionId }
+            ]
+        }
+    });
+
+    console.log("*****movieCollection:", movieCollection);
+
+    await movieCollection.destroy();
+    res.json({ message: "Success"})
+}));
 
 
 module.exports = router;
