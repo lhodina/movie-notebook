@@ -116,7 +116,7 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
             rating = parseInt(starRating, 10);
         }
 
-        
+
         if (rating || review || watchedStatus !== undefined) {
             await UserNote.create({
                 userId,
@@ -192,6 +192,51 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     }
 }));
 
+
+// router.put("/:id", asyncHandler(async (req, res, next) => {
+//     const { userId } = req.session.auth;
+//     const movieId = parseInt(req.params.id, 10);
+//     const movie = await Movie.findByPk(movieId);
+
+//     console.log("****movie:", movie);
+
+//     const userNote = await UserNote.findOne({ where: {
+//         [Op.and]: [
+//             { userId },
+//             { movieId }
+//         ]
+//     } });
+
+//     let {
+//         directorName,
+//         title,
+//         yearReleased,
+//         imageLink,
+//         starRating,
+//         review,
+//         collectionList,
+//         watchedStatus
+//     } = req.body;
+
+//     if (movie) {
+//         await movie.update({
+//             title,
+//             directorId,
+//             yearReleased,
+//             imageLink
+//         });
+//     }
+
+//     if (userNote) {
+//         await userNote.update({
+//             userId,
+//             movieId,
+//             review,
+//             rating,
+//             watchedStatus
+//         });
+//     }
+// }));
 
 
 router.delete("/:id", asyncHandler(async (req, res, next) => {

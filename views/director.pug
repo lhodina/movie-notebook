@@ -1,6 +1,7 @@
 extends layout.pug
 include utils.pug
 block content
+    script(src="/scripts/add-new-movie.js" type="module")
     h2= director.name
     h3 Add a Movie Liked by #{director.name}
     form(action=`/directors/${director.id}/favorites/add` method="post")
@@ -12,7 +13,6 @@ block content
     h3 Add a Movie Directed by #{director.name}
     form(action=`/directors/${director.id}/movies-directed/add` method="post")
         input(type="hidden" name="_csrf" value=csrfToken)
-        //- +addMovieFormFields()
         +field("Title", "title")
         br
         label(for="yearReleased") Year Released (optional)

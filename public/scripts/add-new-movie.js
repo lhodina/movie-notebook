@@ -10,6 +10,7 @@ const addButton = document.getElementById("add-movie-button");
 
 addButton.addEventListener("click", async (event) => {
     event.preventDefault();
+
     for (let section of sectionsToHide) {
         if (section.style.display === "block") {
             section.style.display = "none";

@@ -1,5 +1,7 @@
 extends layout.pug
 block content
+    if (errorMessage)
+        p= errorMessage
     form(action="/favorite-critics/add", method="post")
         input(type="hidden" name="_csrf" value=csrfToken)
         label(for="critic") Choose or Add a Critic
@@ -7,3 +9,5 @@ block content
         datalist(id="critics" name="critics")
             each critic in critics
                 option(value=critic.name)
+        br
+        button(type="submit") Submit

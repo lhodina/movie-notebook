@@ -37,17 +37,18 @@ mixin movieInfoFields()
 
 
 mixin addMovieFormFields()
-    label(for="selectMovie") Search Movies:
-    br
-    select(name="selectMovie")
-        option(value="--Choose Movie--") --Choose Movie--
-        each movie in movies
-            option(value=movie.title)= movie.title
-    br
-    br
-    text ...Or Create New Movie 
-    button(id="add-movie-button") v
-    br
+    div.search-movies
+        label(for="selectMovie") Search Movies:
+        br
+        select(name="selectMovie")
+            option(value="--Choose Movie--") --Choose Movie--
+            each movie in movies
+                option(value=movie.title)= movie.title
+        br
+        br
+        text ...Or Create New Movie
+        button(id="add-movie-button") v
+        br
     div.add-new-movie
         +movieInfoFields()
 

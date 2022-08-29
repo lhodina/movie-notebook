@@ -167,6 +167,11 @@ router.get("/favorite-directors/add", csrfProtection, requireAuth, asyncHandler(
 router.post("/favorite-directors/add", csrfProtection, asyncHandler(async (req, res) => {
     const { userId } = req.session.auth;
     const { directorName } = req.body;
+    const favoriteDirectorsData = await FavoriteDirector.findAll({ where: userId });
+    console.log("*****favoriteDirectorsData:", favoriteDirectorsData);
+    const favoriteDirectorIds = favoriteDirectorsData.map(director => director.dataValues.directorId);
+    console.log("*****favoriteDirectorIds:", favoriteDirectorIds);
+
     let director = await Director.findOne({ where: { name: directorName } });
     if (!director) {
         director = await Director.create({
@@ -174,12 +179,22 @@ router.post("/favorite-directors/add", csrfProtection, asyncHandler(async (req, 
         });
     }
 
-    await FavoriteDirector.create({
-        userId,
-        directorId: director.id
-    });
+    if (!favoriteDirectorIds.includes(director.id)) {
+        await FavoriteDirector.create({
+            userId,
+            directorId: director.id
+        });
 
-    res.redirect("/");
+        res.redirect("/");
+    } else {
+        const directors = await Director.findAll();
+        const errorMessage = `${directorName} is already one of your favorite directors!`;
+        res.render("favorite-director-add", {
+            directors,
+            errorMessage,
+            csrfToken: req.csrfToken()
+        });
+    }
 }));
 
 
@@ -195,6 +210,9 @@ router.get("/favorite-critics/add", csrfProtection, requireAuth, asyncHandler(as
 router.post("/favorite-critics/add", csrfProtection, asyncHandler(async (req, res) => {
     const { userId } = req.session.auth;
     const { criticName } = req.body;
+    const favoriteCriticsData = await FavoriteCritic.findAll({ where: userId });
+    const favoriteCriticIds = favoriteCriticsData.map(critic => critic.dataValues.criticId);
+
     let critic = await Critic.findOne({ where: { name: criticName } });
     if (!critic) {
         critic = await Critic.create({
@@ -202,12 +220,20 @@ router.post("/favorite-critics/add", csrfProtection, asyncHandler(async (req, re
         });
     }
 
-    await FavoriteCritic.create({
-        userId,
-        criticId: critic.id
-    });
-
-    res.redirect("/");
+    if (!favoriteCriticIds.includes(critic.id)) {
+        await FavoriteCritic.create({
+            userId,
+            criticId: critic.id
+        });
+    } else {
+        const critics = await Critic.findAll();
+        const errorMessage = `${criticName} is already one of your favorite critics!`;
+        res.render("favorite-critic-add", {
+            critics,
+            errorMessage,
+            csrfToken: req.csrfToken()
+        });
+    }
 }));
 
 

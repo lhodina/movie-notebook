@@ -89,8 +89,21 @@ router.post("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) =
 
 router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const collectionId = parseInt(req.params.id, 10);
-    const collection = await Collection.findByPk(collectionId, { include: Movie });
-    const collectionMovies = collection.dataValues.Movies.map(data => data.dataValues)
+    const collection = await Collection.findByPk(collectionId, {
+        include: {
+            model: Movie,
+            include: "movieDirector"
+        }
+    });
+
+    const collectionMovies = collection.dataValues.Movies.map(data =>
+        {
+            const movie = data.dataValues;
+            const director = movie.movieDirector.dataValues.name;
+            movie.director = director;
+            return movie;
+        });
+
     const movies = await Movie.findAll();
     const directors = await Director.findAll();
 

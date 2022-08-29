@@ -1,5 +1,7 @@
 extends layout.pug
 block content
+    if (errorMessage)
+        p= errorMessage
     form(action="/favorite-directors/add", method="post")
         input(type="hidden" name="_csrf" value=csrfToken)
         label(for="director") Choose or Add a Director
