@@ -7,5 +7,5 @@ block content
         input(type="hidden" name="_csrf" value=csrfToken)
         +field("Collection Name", "collectionName")
         +addMovieFormFields()
-        +userNoteFields()
+        +userNoteFields(isAddCollection=true)
         button(type="submit") Create

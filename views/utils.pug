@@ -52,7 +52,7 @@ mixin addMovieFormFields()
         +movieInfoFields()
 
 
-mixin userNoteFields()
+mixin userNoteFields(isAddCollection)
     if locals.authenticated
         div.add-new-movie
             h4 Your Notes (optional):
@@ -79,16 +79,17 @@ mixin userNoteFields()
                 textarea(name="review", cols="30", rows="10")
             br
 
-            label(for="collectionList") Add This Movie to a Collection or Create a New Collection
-            input(name="collectionList" list="collectionList")
-            br
-            datalist(id="collectionList" name="collectionList")
-                if collections
-                    each collection in collections
-                        option(value=collection.name)
-            br
-            +field("Watched", "watchedStatus", "radio", "1")
-            +field("Want to Watch", "watchedStatus", "radio", "0")
+            if (isAddCollection === false)
+                label(for="collectionList") Add This Movie to a Collection or Create a New Collection
+                input(name="collectionList" list="collectionList")
+                br
+                datalist(id="collectionList" name="collectionList")
+                    if collections
+                        each collection in collections
+                            option(value=collection.name)
+                br
+                +field("Watched", "watchedStatus", "radio", "1")
+                +field("Want to Watch", "watchedStatus", "radio", "0")
 
 
 mixin displayMovie(movie)
@@ -113,7 +114,7 @@ mixin displayMovie(movie)
     br
 
 
-mixin displayMovies(movies, isRecCollection=false)
+mixin displayMovies(movies, isRecCollection=false, isMoviesPage=false)
     table
         thead
             tr
@@ -212,6 +213,9 @@ mixin displayMovies(movies, isRecCollection=false)
                                     li= director.name
                         td
                                 a(href=`/movies/${movie.id}`) edit
-                        if (!isRecCollection)
+                        if (isMoviesPage === true)
                             td
                                 button(id=movie.id).delete-btn Delete
+                        else
+                            td
+                                button(id=movie.id).remove-btn Remove

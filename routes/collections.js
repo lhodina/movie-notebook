@@ -187,4 +187,12 @@ router.delete("/:id", asyncHandler(async (req, res, next) => {
 }));
 
 
+router.delete("/:id/:movieId", asyncHandler(async (req, res, next) => {
+    const collectionId = req.params.id;
+    const collection = await Collection.findByPk(collectionId);
+    const movieId = req.params.movieId;
+    console.log("*****movieId:", movieId);
+}))
+
+
 module.exports = router;
