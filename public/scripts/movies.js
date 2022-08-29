@@ -10,10 +10,13 @@ for (let button of deleteButtons) {
         });
 
         const data = await res.json();
+        console.log("data:", data);
 
         if (data.message === "Success") {
             const container = document.querySelector(`#movie-container-${movieId}`);
+            console.log("*****container:", container);
             container.remove();
+            console.log("*****container after remove:", container);
         } else {
             console.log("Failed to get data.");
         }
