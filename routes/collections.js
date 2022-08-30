@@ -54,10 +54,14 @@ router.post("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) =
     } = req.body;
 
     if (yearReleased === "--Year--") yearReleased = null;
-    const rating = parseInt(starRating, 10);
+
+    let rating;
+    if (starRating) {
+        rating = parseInt(starRating, 10);
+    }
+
 
     let movie;
-
     if (selectMovie !== "--Choose Movie--") {
         movie = await Movie.findOne({ where: { title: selectMovie } });
     } else {
@@ -144,7 +148,10 @@ router.post("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
     if (yearReleased === "--Year--") yearReleased = null;
 
-    const rating = parseInt(starRating, 10);
+    let rating;
+    if (starRating) {
+        rating = parseInt(starRating, 10);
+    }
 
     let movie;
 
@@ -191,7 +198,6 @@ router.delete("/:id", asyncHandler(async (req, res, next) => {
 router.delete("/:id/:movieId", asyncHandler(async (req, res, next) => {
     const collectionId = req.params.id;
     console.log("*****collectionId:", collectionId);
-    const collection = await Collection.findByPk(collectionId);
     const movieId = req.params.movieId;
     console.log("*****movieId:", movieId);
 
@@ -203,8 +209,6 @@ router.delete("/:id/:movieId", asyncHandler(async (req, res, next) => {
             ]
         }
     });
-
-    console.log("*****movieCollection:", movieCollection);
 
     await movieCollection.destroy();
     res.json({ message: "Success"})
