@@ -8,7 +8,7 @@ block content
         form(action=`/collections/${collection.id}` method="post")
             input(type="hidden" name="_csrf" value=csrfToken)
             +addMovieFormFields()
-            +userNoteFields()
+            +userNoteFields(userCollections, movieCollections)
             button(type="submit") Submit
 
         h3 Movies

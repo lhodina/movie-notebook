@@ -151,7 +151,7 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
 
 router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const movieId = parseInt(req.params.id, 10);
-    const movie = await Movie.findByPk(movieId, { include: 'movieDirector' });
+    const movie = await Movie.findByPk(movieId, { include: ['movieDirector', Collection] });
     const directors = await Director.findAll();
     const director = movie.dataValues.movieDirector;
 
@@ -171,13 +171,18 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
             userNotes = userNotesData.dataValues;
         }
 
-        const collections = await Collection.findAll({ where: userId });
+        const collectionsData = movie.dataValues.Collections;
+
+        const movieCollections = collectionsData.map(collection => collection.dataValues);
+
+        const userCollections = await Collection.findAll({ where: { userId: userId} });
 
         res.render("movie", {
             movie,
             director,
             directors,
-            collections,
+            userCollections,
+            movieCollections,
             userNotes,
             years,
             csrfToken: req.csrfToken()
@@ -193,19 +198,19 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 }));
 
 
-// router.put("/:id", asyncHandler(async (req, res, next) => {
-//     const { userId } = req.session.auth;
-//     const movieId = parseInt(req.params.id, 10);
-//     const movie = await Movie.findByPk(movieId);
+router.put("/:id", asyncHandler(async (req, res, next) => {
+    const { userId } = req.session.auth;
+    const movieId = parseInt(req.params.id, 10);
+    const movie = await Movie.findByPk(movieId);
 
-//     console.log("****movie:", movie);
+    const userNote = await UserNote.findOne({ where: {
+        [Op.and]: [
+            { userId },
+            { movieId }
+        ]
+    } });
 
-//     const userNote = await UserNote.findOne({ where: {
-//         [Op.and]: [
-//             { userId },
-//             { movieId }
-//         ]
-//     } });
+    console.log("*****req.body:", req.body);
 
 //     let {
 //         directorName,
@@ -236,7 +241,7 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 //             watchedStatus
 //         });
 //     }
-// }));
+}));
 
 
 router.delete("/:id", asyncHandler(async (req, res, next) => {

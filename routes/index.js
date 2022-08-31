@@ -168,9 +168,7 @@ router.post("/favorite-directors/add", csrfProtection, asyncHandler(async (req, 
     const { userId } = req.session.auth;
     const { directorName } = req.body;
     const favoriteDirectorsData = await FavoriteDirector.findAll({ where: userId });
-    console.log("*****favoriteDirectorsData:", favoriteDirectorsData);
     const favoriteDirectorIds = favoriteDirectorsData.map(director => director.dataValues.directorId);
-    console.log("*****favoriteDirectorIds:", favoriteDirectorIds);
 
     let director = await Director.findOne({ where: { name: directorName } });
     if (!director) {

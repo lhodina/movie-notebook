@@ -48,9 +48,7 @@ for (let button of removeButtons) {
         if (data.message === "Success") {
             const container = document.querySelector(`#movie-container-${movieId}`);
             container.remove();
-            console.log("*****container.innerHTML:", container.innerHTML);
-            container.innerHTML = "";
-            console.log("*****container after:", container.innerHTML);
+
         } else {
             console.log("Failed to get data.");
         }

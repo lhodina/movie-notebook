@@ -17,22 +17,37 @@ mixin field(labelText, fieldName, fieldType='text', fieldValue='', placeholder=n
 
 
 mixin movieInfoFields()
-    +field("Title", "title")
+    if (movie)
+        +field("Title", "title", "text", movie.title)
+    else
+        +field("Title", "title")
     br
     label(for="directorName") Choose or Add a Director
-    input(name="directorName" list="directors")
+    if (director)
+        input(name="directorName" list="directors" value=`${director.name}`)
+    else
+        input(name="directorName" list="directors")
     br
     datalist(id="directors" name="directors")
         each director in directors
             option(value=director.name)
     br
     label(for="yearReleased") Year Released (optional)
-    select(name="yearReleased")
-        option() --Year--
-        each year in years
-            option(value=year)= year
+    if (movie)
+        select(name="yearReleased")
+            option()= movie.yearReleased
+            each year in years
+                option(value=year)= year
+    else
+        select(name="yearReleased")
+            option() --Year--
+            each year in years
+                option(value=year)= year
     br
-    +field("Image Link (optional)", "imageLink")
+    if (movie)
+        +field("Image Link (optional)", "imageLink", "", movie.imageLink)
+    else
+        +field("Image Link (optional)", "imageLink")
 
 
 mixin addMovieFormFields()
@@ -52,7 +67,7 @@ mixin addMovieFormFields()
         +movieInfoFields()
 
 
-mixin userNoteFields(isAddCollection)
+mixin userNoteFields(userCollections, movieCollections, isAddCollection=false)
     if locals.authenticated
         div.add-new-movie
             h4 Your Notes (optional):
@@ -80,16 +95,43 @@ mixin userNoteFields(isAddCollection)
             br
 
             if (isAddCollection === false)
+                if (movieCollections)
+                    span Belongs to Collections:
+                    ul
+                        each collection in movieCollections
+                            if (collection.name !== "Most Recommended" && collection.name !== "Want to Watch")
+                                a(href=`/collections/${collection.id}`)= collection.name
+
                 label(for="collectionList") Add This Movie to a Collection or Create a New Collection
                 input(name="collectionList" list="collectionList")
                 br
                 datalist(id="collectionList" name="collectionList")
-                    if collections
-                        each collection in collections
-                            option(value=collection.name)
+                    if userCollections
+                        each collection in userCollections
+                            if (collection.name !== "Most Recommended" && collection.name !== "Want to Watch" && !movieCollections.includes(collection.name))
+                                option(value=collection.name)
                 br
-                +field("Watched", "watchedStatus", "radio", "1")
-                +field("Want to Watch", "watchedStatus", "radio", "0")
+                if (userNotes && userNotes.watchedStatus === true)
+                    input(type="radio" id="watched" name="watched" value="1" checked)
+                    label(for="watched") Watched
+                    //- +field("Watched", "watchedStatus", "radio", "1", checked=true)
+                    br
+                    input(type="radio" id="wantToWatch" name="wantToWatch" value="0")
+                    label(for="wantToWatch") Want To Watch
+                    //- +field("Want to Watch", "watchedStatus", "radio", "0")
+                else if (userNotes && userNotes.watchedStatus === false)
+                    input(type="radio" id="watched" name="watched" value="1")
+                    label(for="watched") Watched
+                    //- +field("Watched", "watchedStatus", "radio", "1", checked=true)
+                    br
+                    input(type="radio" id="wantToWatch" name="wantToWatch" value="0" checked)
+                    label(for="wantToWatch") Want To Watch
+                else
+                    input(type="radio" id="watched" name="watched" value="1")
+                    label(for="watched") Watched
+                    br
+                    input(type="radio" id="wantToWatch" name="wantToWatch" value="0")
+                    label(for="wantToWatch") Want To Watch
 
 
 mixin displayMovie(movie)
