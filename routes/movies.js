@@ -174,6 +174,7 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
         const collectionsData = movie.dataValues.Collections;
 
         const movieCollections = collectionsData.map(collection => collection.dataValues);
+        const movieCollectionNames = collectionsData.map(collection => collection.dataValues.name);
 
         const userCollections = await Collection.findAll({ where: { userId: userId} });
 
@@ -183,6 +184,7 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
             directors,
             userCollections,
             movieCollections,
+            movieCollectionNames,
             userNotes,
             years,
             csrfToken: req.csrfToken()
@@ -212,35 +214,41 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
 
     console.log("*****req.body:", req.body);
 
-//     let {
-//         directorName,
-//         title,
-//         yearReleased,
-//         imageLink,
-//         starRating,
-//         review,
-//         collectionList,
-//         watchedStatus
-//     } = req.body;
+    let {
+        title,
+        directorName,
+        yearReleased,
+        imageLink,
+        starRating,
+        review,
+        collectionList,
+        watchedStatus
+    } = req.body;
 
-//     if (movie) {
-//         await movie.update({
-//             title,
-//             directorId,
-//             yearReleased,
-//             imageLink
-//         });
-//     }
+    let director = await Director.findOne({ where: { name: directorName } });
 
-//     if (userNote) {
-//         await userNote.update({
-//             userId,
-//             movieId,
-//             review,
-//             rating,
-//             watchedStatus
-//         });
-//     }
+    if (!director) {
+        await Director.create({ name: directorName });
+    }
+
+    if (movie) {
+        await movie.update({
+            title,
+            directorId: director.id,
+            yearReleased,
+            imageLink
+        });
+    }
+
+    if (userNote) {
+        await userNote.update({
+            userId,
+            movieId,
+            review,
+            rating: starRating,
+            watchedStatus
+        });
+    }
 }));
 
 

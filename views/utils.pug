@@ -67,7 +67,7 @@ mixin addMovieFormFields()
         +movieInfoFields()
 
 
-mixin userNoteFields(userCollections, movieCollections, isAddCollection=false)
+mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, isAddCollection=false)
     if locals.authenticated
         div.add-new-movie
             h4 Your Notes (optional):
@@ -108,7 +108,7 @@ mixin userNoteFields(userCollections, movieCollections, isAddCollection=false)
                 datalist(id="collectionList" name="collectionList")
                     if userCollections
                         each collection in userCollections
-                            if (collection.name !== "Most Recommended" && collection.name !== "Want to Watch" && !movieCollections.includes(collection.name))
+                            if (collection.name !== "Most Recommended" && collection.name !== "Want to Watch" && !movieCollectionNames.includes(collection.name))
                                 option(value=collection.name)
                 br
                 if (userNotes && userNotes.watchedStatus === true)
