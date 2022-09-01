@@ -124,7 +124,6 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
 
 router.post("/:id", csrfProtection, asyncHandler(async (req, res) => {
-    console.log("*****req.body:", req.body);
     const { userId } = req.session.auth;
     const collectionId = parseInt(req.params.id, 10);
     const { selectMovie } = req.body;
@@ -198,9 +197,7 @@ router.delete("/:id", asyncHandler(async (req, res, next) => {
 
 router.delete("/:id/:movieId", asyncHandler(async (req, res, next) => {
     const collectionId = req.params.id;
-    console.log("*****collectionId:", collectionId);
     const movieId = req.params.movieId;
-    console.log("*****movieId:", movieId);
 
     const movieCollection = await MovieCollection.findOne({
         where: {

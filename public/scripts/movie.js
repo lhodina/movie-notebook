@@ -23,7 +23,7 @@ form.addEventListener("submit", async (e) => {
         starRating: data.starRating,
         review: data.review,
         collectionList: data.collectionList,
-        watchedStatus: data.watched
+        watchedStatus: data.watchedStatus
     }
 
 
@@ -36,4 +36,6 @@ form.addEventListener("submit", async (e) => {
             "Content-Type": "application/json",
         }
     });
+
+    window.location = "/";
 });

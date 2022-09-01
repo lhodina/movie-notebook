@@ -201,18 +201,10 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
 
 router.put("/:id", asyncHandler(async (req, res, next) => {
+    console.log("*****req.body:", req.body);
     const { userId } = req.session.auth;
     const movieId = parseInt(req.params.id, 10);
     const movie = await Movie.findByPk(movieId);
-
-    const userNote = await UserNote.findOne({ where: {
-        [Op.and]: [
-            { userId },
-            { movieId }
-        ]
-    } });
-
-    console.log("*****req.body:", req.body);
 
     let {
         title,
@@ -240,7 +232,22 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
         });
     }
 
-    if (userNote) {
+    let userNote = await UserNote.findOne({ where: {
+        [Op.and]: [
+            { userId },
+            { movieId }
+        ]
+    } });
+
+    if (!userNote) {
+        userNote = await UserNote.create({
+            userId,
+            movieId,
+            review,
+            rating: starRating,
+            watchedStatus
+        });
+    } else {
         await userNote.update({
             userId,
             movieId,
@@ -249,6 +256,24 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
             watchedStatus
         });
     }
+
+    if (collectionList) {
+        let collection = await Collection.findOne({ where: { name: collectionList } });
+        if (!collection) {
+            await Collection.create({
+                name: collectionList,
+                userId
+            });
+        }
+
+        await MovieCollection.create({
+            movieId,
+            collectionId: collection.id
+        });
+    }
+
+
+    res.redirect("/");
 }));
 
 
