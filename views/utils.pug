@@ -74,6 +74,36 @@ mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, is
             span Rating
             if (userNotes && userNotes.rating)
                 span= userNotes.rating
+                div.starRating
+                    if (userNotes.rating === 5)
+                        input(type="radio" id="five" name="starRating" value="5" checked)
+                    else
+                        input(type="radio" id="five" name="starRating" value="5")
+                    label(for="five" )
+
+                    if (userNotes.rating === 4)
+                        input(type="radio" id="four" name="starRating" value="4" checked)
+                    else
+                        input(type="radio" id="four" name="starRating" value="4")
+                    label(for="four")
+
+                    if (userNotes.rating === 3)
+                        input(type="radio" id="three" name="starRating" value="3" checked)
+                    else
+                        input(type="radio" id="three" name="starRating" value="3")
+                    label(for="three")
+
+                    if (userNotes.rating === 2)
+                        input(type="radio" id="two" name="starRating" value="2" checked)
+                    else
+                        input(type="radio" id="two" name="starRating" value="2")
+                    label(for="two")
+
+                    if (userNotes.rating === 1)
+                        input(type="radio" id="one" name="starRating" value="1" checked)
+                    else
+                        input(type="radio" id="one" name="starRating" value="1")
+                    label(for="one")
             else
                 div.starRating
                     input(type="radio" id="five" name="starRating" value="5")
