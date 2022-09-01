@@ -124,6 +124,7 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
 
 router.post("/:id", csrfProtection, asyncHandler(async (req, res) => {
+    console.log("*****req.body:", req.body);
     const { userId } = req.session.auth;
     const collectionId = parseInt(req.params.id, 10);
     const { selectMovie } = req.body;

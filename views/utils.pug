@@ -112,26 +112,30 @@ mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, is
                                 option(value=collection.name)
                 br
                 if (userNotes && userNotes.watchedStatus === true)
-                    input(type="radio" id="watched" name="watched" value="1" checked)
-                    label(for="watched") Watched
-                    //- +field("Watched", "watchedStatus", "radio", "1", checked=true)
-                    br
-                    input(type="radio" id="wantToWatch" name="wantToWatch" value="0")
-                    label(for="wantToWatch") Want To Watch
-                    //- +field("Want to Watch", "watchedStatus", "radio", "0")
+                    fieldset
+                        div
+                            input(type="radio" id="watched" name="watchedStatus" value="1" checked)
+                            label(for="watched") Watched
+                        div
+                            input(type="radio" id="wantToWatch" name="watchedStatus" value="0")
+                            label(for="wantToWatch") Want To Watch
                 else if (userNotes && userNotes.watchedStatus === false)
-                    input(type="radio" id="watched" name="watched" value="1")
-                    label(for="watched") Watched
-                    //- +field("Watched", "watchedStatus", "radio", "1", checked=true)
-                    br
-                    input(type="radio" id="wantToWatch" name="wantToWatch" value="0" checked)
-                    label(for="wantToWatch") Want To Watch
+                    fieldset
+                        div
+                            input(type="radio" id="watched" name="watchedStatus" value="1")
+                            label(for="watched") Watched
+
+                        div
+                            input(type="radio" id="wantToWatch" name="watchedStatus" value="0" checked)
+                            label(for="wantToWatch") Want To Watch
                 else
-                    input(type="radio" id="watched" name="watched" value="1")
-                    label(for="watched") Watched
-                    br
-                    input(type="radio" id="wantToWatch" name="wantToWatch" value="0")
-                    label(for="wantToWatch") Want To Watch
+                    fieldset
+                        div
+                            input(type="radio" id="watched" name="watchedStatus" value="1")
+                            label(for="watched") Watched
+                        div
+                            input(type="radio" id="wantToWatch" name="watchedStatus" value="0")
+                            label(for="wantToWatch") Want To Watch
 
 
 mixin displayMovie(movie)
