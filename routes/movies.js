@@ -220,13 +220,15 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
     let director = await Director.findOne({ where: { name: directorName } });
 
     if (!director) {
-        await Director.create({ name: directorName });
+        director = await Director.create({ name: directorName });
     }
+
+    console.log("*****director:", director);
 
     if (movie) {
         await movie.update({
             title,
-            directorId: director.id,
+            directorId: director.dataValues.id,
             yearReleased,
             imageLink
         });
@@ -271,7 +273,6 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
             collectionId: collection.id
         });
     }
-
 
     res.redirect("/");
 }));

@@ -1,8 +1,6 @@
 
 const form = document.getElementsByClassName("movie-edit-form")[0];
-console.log("form:", form);
 const movieId = form.id;
-console.log("movieId:", movieId);
 
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -11,7 +9,6 @@ form.addEventListener("submit", async (e) => {
 
     const data = {};
     for (let entry of entries) {
-        console.log("entry:", entry);
         data[entry[0]] = entry[1];
     }
 
@@ -24,10 +21,7 @@ form.addEventListener("submit", async (e) => {
         review: data.review,
         collectionList: data.collectionList,
         watchedStatus: data.watchedStatus
-    }
-
-
-    console.log("body:", body);
+    };
 
     const res = await fetch(`http://localhost:8080/movies/${movieId}`, {
         method: "PUT",
