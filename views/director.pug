@@ -2,6 +2,7 @@ extends layout.pug
 include utils.pug
 block content
     script(src="/scripts/add-new-movie.js" type="module")
+    script(src="/scripts/director.js" type="module")
     h2= director.name
     h3 Add a Movie Liked by #{director.name}
     form(action=`/directors/${director.id}/favorites/add` method="post")
@@ -25,9 +26,12 @@ block content
         button(type="submit") Add
         a(href=`directors/${director.id}`) Cancel
 
-    h3 Movies Directed by #{director.name}
-    if (directedMovies)
-        +displayMovies(directedMovies)
-    h3 Movies Liked by #{director.name}
-    if (favoriteMovies)
-        +displayMovies(favoriteMovies)
+    div(id="movies-directed")
+        h3 Movies Directed by #{director.name}
+        if (directedMovies)
+            +displayMovies(directedMovies, "moviesDirected")
+
+    div(id="movies-liked")
+        h3 Movies Liked by #{director.name}
+        if (favoriteMovies)
+            +displayMovies(favoriteMovies, "moviesLiked")

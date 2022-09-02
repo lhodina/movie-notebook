@@ -60,6 +60,9 @@ h2 {
     content: '\2605';
 }
 
+
+
+
 .solid-star::before {
     content: '\2605';
     color: gold;

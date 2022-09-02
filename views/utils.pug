@@ -117,7 +117,7 @@ mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, is
                     input(type="radio" id="one" name="starRating" value="1")
                     label(for="one")
             br
-            label(for="review") Review
+            label(for="review") Notes
             if (userNotes && userNotes.review)
                 textarea(name="review", cols="30", rows="10")= userNotes.review
             else
@@ -190,18 +190,18 @@ mixin displayMovie(movie)
     br
 
 
-mixin displayMovies(movies, isRecCollection=false, isMoviesPage=false)
+mixin displayMovies(movies, location)
     table
         thead
             tr
-                if isRecCollection
+                if (location === "recCollection")
                     th Recommended Score
                 th
                 th Title
                 th Director
                 th Year Released
                 if (locals.authenticated)
-                    th Review
+                    th Notes
                     th Rating
                     th Status
                     th Liked By
@@ -210,7 +210,7 @@ mixin displayMovies(movies, isRecCollection=false, isMoviesPage=false)
         tbody
             each movie in movies
                 tr(id=`movie-container-${movie.id}`).movie-box
-                    if isRecCollection
+                    if (location === "recCollection")
                         td= movie.recommendedScore
                     if movie.imageLink
                         td
@@ -230,7 +230,7 @@ mixin displayMovies(movies, isRecCollection=false, isMoviesPage=false)
                                 a(href=`/movies/${movie.id}`) View
                         else
                             td
-                                a(href=`/movies/${movie.id}`) Add Review
+                                a(href=`/movies/${movie.id}`) Add Notes
                         if movie.rating
                             td
                                 if (movie.rating === 5)
@@ -288,9 +288,11 @@ mixin displayMovies(movies, isRecCollection=false, isMoviesPage=false)
                                     li= director.name
                         td
                             a(href=`/movies/${movie.id}`) edit
-                        if (isMoviesPage === true)
+                        if (location === "moviesPage")
                             td
                                 button(id=movie.id).delete-btn Delete
+                        else if (location === "moviesDirected")
+                            td
                         else
                             td
                                 button(id=movie.id).remove-btn Remove

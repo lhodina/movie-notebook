@@ -3,4 +3,4 @@ include utils.pug
 block content
     script(src="/scripts/movies.js" type="module")
     h2 Movies
-    +displayMovies(movies, isRecCollection=false, isMoviesPage=true)
+    +displayMovies(movies, "moviesPage")

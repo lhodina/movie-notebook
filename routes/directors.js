@@ -159,6 +159,25 @@ router.post("/:id/favorites/add", csrfProtection, asyncHandler(async (req, res) 
 }));
 
 
+router.delete("/:id/favorites/:movieId", asyncHandler(async (req, res, next) => {
+    const directorId = req.params.id;
+    const movieId = req.params.movieId;
+
+    console.log("*****directorId:", directorId);
+    console.log("*****movieId:", movieId);
+
+    const directorFav = await DirectorFavorite.findOne({ where: {
+        director_Id: directorId,
+        movieId
+    } });
+
+    console.log("*****directorFav:", directorFav);
+
+    await directorFav.destroy();
+    res.json({ message: "Success" });
+}))
+
+
 router.delete("/:id", asyncHandler(async (req, res, next) => {
     const directorId = req.params.id;
     const director = await Director.findByPk(directorId);
