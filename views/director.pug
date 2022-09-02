@@ -26,12 +26,14 @@ block content
         button(type="submit") Add
         a(href=`directors/${director.id}`) Cancel
 
-    div(id="movies-directed")
         h3 Movies Directed by #{director.name}
-        if (directedMovies)
+        if (directedMovies.length)
             +displayMovies(directedMovies, "moviesDirected")
+        else
+            p No movies added yet
 
-    div(id="movies-liked")
         h3 Movies Liked by #{director.name}
-        if (favoriteMovies)
+        if (favoriteMovies.length)
             +displayMovies(favoriteMovies, "moviesLiked")
+        else
+            p No movies added yet

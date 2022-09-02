@@ -113,6 +113,23 @@ router.post("/:id/favorites/add", csrfProtection, asyncHandler (async (req, res)
 }));
 
 
+router.delete("/:id/favorites/:movieId", asyncHandler(async (req, res, next) => {
+    const criticId = req.params.id;
+    const movieId = req.params.movieId;
+
+    const criticFav = await CriticFavorite.findOne({ where: {
+        criticId,
+        movieId
+    } });
+
+    console.log("criticFav:", criticFav);
+
+    await criticFav.destroy();
+    res.json({ message: "Success" });
+}));
+
+
+
 router.delete("/:id", asyncHandler(async (req, res, next) => {
     const criticId = req.params.id;
     const critic = await Critic.findByPk(criticId);

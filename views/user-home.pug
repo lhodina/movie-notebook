@@ -34,11 +34,12 @@ block content
 
         div(id="display")
             each collection in collections
-                div(id=`collection-container-${collection.id}` hidden)
-                    if collection.name === "Most Recommended"
+                if collection.name === "Most Recommended"
+                    div(id=`collection-container-${collection.id}` class="recommended" hidden)
                         h3= collection.name
                         +displayMovies(collection.movies, "recCollection")
-                    else
+                else
+                    div(id=`collection-container-${collection.id}` hidden)
                         a(href=`/collections/${collection.id}`)= collection.name
                         +displayMovies(collection.movies, "home")
                         a(href=`/collections/${collection.id}`) Add Movie
