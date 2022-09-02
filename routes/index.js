@@ -1,5 +1,7 @@
 const express = require("express");
 const { requireAuth } = require("../auth");
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 const { environment } = require("../config");
 const { User, Collection, Movie, MovieCollection, Director, FavoriteDirector, Critic, FavoriteCritic, UserNote } = require("../db/models");
@@ -46,7 +48,7 @@ router.get("/", asyncHandler(async (req, res) => {
 
         if (userMovies.length) {
             const sortedRecs = userMovies.sort((a, b) => b.recommendedScore - a.recommendedScore);
-            const mostRecommended = sortedRecs.filter(rec => rec.recommendedScore > 0);
+            const mostRecommended = sortedRecs.filter(rec => rec.recommendedScore > 1);
 
 
             let recommendationsCollection = await Collection.findOne({ where: {name: "Most Recommended"} });
@@ -232,6 +234,21 @@ router.post("/favorite-critics/add", csrfProtection, asyncHandler(async (req, re
             csrfToken: req.csrfToken()
         });
     }
+}));
+
+
+router.get("/search", asyncHandler(async (req, res) => {
+    console.log("req.query:", req.query);
+    const { q } = req.query;
+    console.log("q:", q);
+
+    let movies = await Movie.findAll({ where: { title: { [Op.like]: "%" + q + "%" } } });
+    console.log("movies:", movies);
+
+    const searchResults = movies.map(data => data.dataValues.title);
+    res.render("layout", {
+        searchResults
+    });
 }));
 
 
