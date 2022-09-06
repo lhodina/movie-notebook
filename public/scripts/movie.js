@@ -31,5 +31,5 @@ form.addEventListener("submit", async (e) => {
         }
     });
 
-    window.location = "/";
+    // window.location = "/";
 });

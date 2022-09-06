@@ -1,5 +1,3 @@
-// const { search } = require("../../routes");
-
 console.log("Hello from the search.js script");
 
 const searchForm = document.getElementById("search-form");
@@ -13,8 +11,6 @@ searchBar.addEventListener("input", async (event) => {
     const value = event.target.value.toLowerCase();
 
     if (value) {
-        console.log("value:", value);
-
         const res = await fetch(`/search/${value}`, {
             method: "GET"
         });
@@ -24,26 +20,23 @@ searchBar.addEventListener("input", async (event) => {
         const directorResults = results.directorResults;
         const criticResults = results.criticResults;
         const collectionResults = results.collectionResults;
-        console.log("movieResults:", movieResults);
-        console.log("directorResults:", directorResults);
-        console.log("criticResults:", criticResults);
-        console.log("collectionResults:", collectionResults);
+
         searchResultsList.innerHTML = "";
 
         for (let result of movieResults) {
-            searchResultsList.innerHTML += `<li>${result.title}</li>`;
+            searchResultsList.innerHTML += `<li><a href="/movies/${result.id}"}>${result.title}</a></li>`;
         }
 
         for (let result of directorResults) {
-            searchResultsList.innerHTML += `<li>${result.name}</li>`;
+            searchResultsList.innerHTML += `<li><a href="/directors/${result.id}"}>${result.name}</a></li>`;
         }
 
         for (let result of criticResults) {
-            searchResultsList.innerHTML += `<li>${result.name}</li>`;
+            searchResultsList.innerHTML += `<li><a href="/critics/${result.id}"}>${result.name}</a></li>`;
         }
 
         for (let result of collectionResults) {
-            searchResultsList.innerHTML += `<li>${result.name}</li>`;
+            searchResultsList.innerHTML += `<li><a href="/collections/${result.id}"}>${result.name}</a></li>`;
         }
     } else {
         searchResultsList.innerHTML = "";

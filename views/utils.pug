@@ -198,7 +198,8 @@ mixin displayMovies(movies, location)
                     th Recommended Score
                 th
                 th Title
-                th Director
+                if (location !== "moviesDirected")
+                    th Director
                 th Year Released
                 if (locals.authenticated)
                     th Notes

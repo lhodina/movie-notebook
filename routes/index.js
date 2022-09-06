@@ -242,8 +242,12 @@ router.get("/search/:value", asyncHandler(async (req, res) => {
     console.log("*****req.query:", req.query);
     let val = req.params.value.toLowerCase();
     console.log("*****val:", val);
-    // const { q } = req.query;
-    // console.log("*****q:", q);
+    const { q } = req.query;
+    console.log("*****q:", q);
+
+    // if (q) {
+    //     val = q;
+    // }
 
     // let movies = await Movie.findAll({ where: { title: { [Op.like]: "%" + q + "%" } } });
     const movies = await Movie.findAll({ where: {
@@ -252,8 +256,6 @@ router.get("/search/:value", asyncHandler(async (req, res) => {
         }
     }
     });
-
-    console.log("*****movies:", movies);
 
     const directors = await Director.findAll({ where: {
         name: {
@@ -276,21 +278,10 @@ router.get("/search/:value", asyncHandler(async (req, res) => {
     }
     });
 
-    console.log("*****directors:", directors);
-    console.log("*****critics:", critics);
-    console.log("*****collections:", collections);
-
     const movieResults = movies.map(data => data.dataValues);
-    console.log("*****movieResults:", movieResults);
-
     const directorResults = directors.map(data => data.dataValues);
-    console.log("*****directorResults:", directorResults);
-
     const criticResults = critics.map(data => data.dataValues);
-    console.log("*****criticResults:", criticResults);
-
     const collectionResults = collections.map(data => data.dataValues);
-    console.log("*****collectionResults:", collectionResults);
 
     res.json({
         movieResults,
