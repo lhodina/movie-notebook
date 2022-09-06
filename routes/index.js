@@ -237,18 +237,67 @@ router.post("/favorite-critics/add", csrfProtection, asyncHandler(async (req, re
 }));
 
 
-router.get("/search", asyncHandler(async (req, res) => {
-    console.log("req.query:", req.query);
-    const { q } = req.query;
-    console.log("q:", q);
+router.get("/search/:value", asyncHandler(async (req, res) => {
+    console.log("*****req.body:", req.body);
+    console.log("*****req.query:", req.query);
+    let val = req.params.value.toLowerCase();
+    console.log("*****val:", val);
+    // const { q } = req.query;
+    // console.log("*****q:", q);
 
-    let movies = await Movie.findAll({ where: { title: { [Op.like]: "%" + q + "%" } } });
-    console.log("movies:", movies);
-
-    const searchResults = movies.map(data => data.dataValues.title);
-    res.render("layout", {
-        searchResults
+    // let movies = await Movie.findAll({ where: { title: { [Op.like]: "%" + q + "%" } } });
+    const movies = await Movie.findAll({ where: {
+        title: {
+            [Op.iLike]: "%" + val + "%"
+        }
+    }
     });
+
+    console.log("*****movies:", movies);
+
+    const directors = await Director.findAll({ where: {
+        name: {
+            [Op.iLike]: "%" + val + "%"
+        }
+    }
+    });
+
+    const critics = await Critic.findAll({ where: {
+        name: {
+            [Op.iLike]: "%" + val + "%"
+        }
+    }
+    });
+
+    const collections = await Collection.findAll({ where: {
+        name: {
+            [Op.iLike]: "%" + val + "%"
+        }
+    }
+    });
+
+    console.log("*****directors:", directors);
+    console.log("*****critics:", critics);
+    console.log("*****collections:", collections);
+
+    const movieResults = movies.map(data => data.dataValues);
+    console.log("*****movieResults:", movieResults);
+
+    const directorResults = directors.map(data => data.dataValues);
+    console.log("*****directorResults:", directorResults);
+
+    const criticResults = critics.map(data => data.dataValues);
+    console.log("*****criticResults:", criticResults);
+
+    const collectionResults = collections.map(data => data.dataValues);
+    console.log("*****collectionResults:", collectionResults);
+
+    res.json({
+        movieResults,
+        directorResults,
+        criticResults,
+        collectionResults
+     });
 }));
 
 

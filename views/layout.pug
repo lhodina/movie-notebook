@@ -28,15 +28,7 @@ html
         a(href="/favorite-critics/add")
             button Add Favorite Critic
 
-        form(action="/search" id="search-form")
-            input(type="search" id="search-bar" name="q" list="search-results")
-            button(type="submit" id="search-button") Search
-        if (searchResults)
-            datalist(id="search-results")
-                each result in searchResults
-                    option(value= result)
-
-        span Welcome #{user.username}!
+        span Welcome, #{user.username}
         form(action="/users/logout" method="post")
             button(type="submit") Logout
     else

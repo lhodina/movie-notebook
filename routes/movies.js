@@ -201,7 +201,6 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
 
 router.put("/:id", asyncHandler(async (req, res, next) => {
-    console.log("*****req.body:", req.body);
     const { userId } = req.session.auth;
     const movieId = parseInt(req.params.id, 10);
     const movie = await Movie.findByPk(movieId);
@@ -222,8 +221,6 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
     if (!director) {
         director = await Director.create({ name: directorName });
     }
-
-    console.log("*****director:", director);
 
     if (movie) {
         await movie.update({

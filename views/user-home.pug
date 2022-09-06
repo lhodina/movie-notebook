@@ -4,8 +4,23 @@ block content
     script(src="/scripts/index.js" type="module")
     script(src="/scripts/collections.js" type="module")
     script(src="/scripts/movies.js" type="module")
+    script(src="/scripts/search.js" type="module")
     link(rel='stylesheet' href='/stylesheets/home-page.css')
+
     main
+        div(class="form-container")
+            form(action="/search" id="search-form")
+                input(type="search" id="search-bar" name="q" list="search-results")
+                button(type="submit" id="search-button") Search
+        
+        div(class="search-results-container")
+            ul(class="search-results-list" id="search-results-list")
+
+            //- if (searchResults)
+            //-     datalist(id="search-results")
+            //-         each result in searchResults
+            //-             option(value= result.title)
+
         h2 User Home
         div(id="sidebar")
             h3 Your Collections
