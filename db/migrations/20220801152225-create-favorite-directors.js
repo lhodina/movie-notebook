@@ -19,6 +19,9 @@ module.exports = {
         references: { model: 'Directors' },
         onDelete: 'cascade'
       },
+      notes: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

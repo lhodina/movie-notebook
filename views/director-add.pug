@@ -5,4 +5,6 @@ block content
     form(action="/directors/add" method="post")
         input(type="hidden" name="_csrf" value=csrfToken)
         +field("Name", "name")
+        br
+        +field("Notes (optional)", "notes", "textarea")
         button(type="submit") Add

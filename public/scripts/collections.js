@@ -43,6 +43,7 @@ for (let button of removeButtons) {
 
         if (data.message === "Success") {
             const container = document.querySelector(`#movie-container-${movieId}`);
+            console.log("*****container:", container);
             container.remove();
 
         } else {

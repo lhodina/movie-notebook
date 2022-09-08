@@ -9,6 +9,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type:DataTypes.INTEGER,
       onDelete: 'cascade'
+    },
+    notes: {
+      type:DataTypes.STRING
     }
   }, {});
   FavoriteCritic.associate = function(models) {

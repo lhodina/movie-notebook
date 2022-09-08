@@ -234,22 +234,15 @@ router.post("/favorite-critics/add", csrfProtection, asyncHandler(async (req, re
             csrfToken: req.csrfToken()
         });
     }
+
+    res.redirect(`/`);
 }));
 
 
 router.get("/search/:value", asyncHandler(async (req, res) => {
-    console.log("*****req.body:", req.body);
-    console.log("*****req.query:", req.query);
     let val = req.params.value.toLowerCase();
-    console.log("*****val:", val);
     const { q } = req.query;
-    console.log("*****q:", q);
 
-    // if (q) {
-    //     val = q;
-    // }
-
-    // let movies = await Movie.findAll({ where: { title: { [Op.like]: "%" + q + "%" } } });
     const movies = await Movie.findAll({ where: {
         title: {
             [Op.iLike]: "%" + val + "%"

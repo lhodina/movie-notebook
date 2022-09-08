@@ -60,7 +60,6 @@ router.post("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) =
         rating = parseInt(starRating, 10);
     }
 
-
     let movie;
     if (selectMovie !== "--Choose Movie--") {
         movie = await Movie.findOne({ where: { title: selectMovie } });
@@ -80,13 +79,31 @@ router.post("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) =
         });
     }
 
-    await UserNote.create({
-        userId,
-        movieId: movie.id,
-        review,
-        rating,
-        watchedStatus
-    });
+    let userNote = await UserNote.findOne({ where: {
+        [Op.and]: [
+            { userId },
+            { movieId: movie.id }
+        ]
+    } });
+
+
+    if (!userNote) {
+        userNote = await UserNote.create({
+            userId,
+            movieId: movie.id,
+            review,
+            rating: starRating,
+            watchedStatus
+        });
+    } else {
+        await userNote.update({
+            userId,
+            movieId: movie.id,
+            review,
+            rating: starRating,
+            watchedStatus
+        });
+    }
 
     res.redirect("/");
 }));
@@ -97,13 +114,18 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const collection = await Collection.findByPk(collectionId, {
         include: {
             model: Movie,
-            include: "movieDirector"
+            include: [
+                "movieDirector",
+                UserNote
+            ]
         }
     });
+
 
     const collectionMovies = collection.dataValues.Movies.map(data =>
         {
             const movie = data.dataValues;
+            console.log("*****movie.UserNotes:", movie.UserNotes);
             const director = movie.movieDirector.dataValues.name;
             movie.director = director;
             return movie;
@@ -165,13 +187,17 @@ router.post("/:id", csrfProtection, asyncHandler(async (req, res) => {
             imageLink
         });
 
-        await UserNote.create({
-            userId,
-            movieId: movie.id,
-            review,
-            rating,
-            watchedStatus
-        });
+
+        if (review || rating || watchedStatus === true || watchedStatus === false) {
+            await UserNote.create({
+                userId,
+                movieId: movie.id,
+                review,
+                rating,
+                watchedStatus
+            });
+        }
+
     }
 
     await MovieCollection.create({
@@ -207,6 +233,7 @@ router.delete("/:id/:movieId", asyncHandler(async (req, res, next) => {
             ]
         }
     });
+
 
     await movieCollection.destroy();
     res.json({ message: "Success"})
