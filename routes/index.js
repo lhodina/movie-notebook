@@ -50,7 +50,6 @@ router.get("/", asyncHandler(async (req, res) => {
             const sortedRecs = userMovies.sort((a, b) => b.recommendedScore - a.recommendedScore);
             const mostRecommended = sortedRecs.filter(rec => rec.recommendedScore > 1);
 
-
             let recommendationsCollection = await Collection.findOne({ where: {name: "Most Recommended"} });
 
             if (!recommendationsCollection) {

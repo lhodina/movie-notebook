@@ -125,7 +125,6 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const collectionMovies = collection.dataValues.Movies.map(data =>
         {
             const movie = data.dataValues;
-            console.log("*****movie.UserNotes:", movie.UserNotes);
             const director = movie.movieDirector.dataValues.name;
             movie.director = director;
             return movie;
@@ -186,18 +185,16 @@ router.post("/:id", csrfProtection, asyncHandler(async (req, res) => {
             yearReleased,
             imageLink
         });
+    }
 
-
-        if (review || rating || watchedStatus === true || watchedStatus === false) {
-            await UserNote.create({
-                userId,
-                movieId: movie.id,
-                review,
-                rating,
-                watchedStatus
-            });
-        }
-
+    if (review || rating || watchedStatus !== undefined) {
+        await UserNote.create({
+            userId,
+            movieId: movie.id,
+            review,
+            rating,
+            watchedStatus
+        });
     }
 
     await MovieCollection.create({
