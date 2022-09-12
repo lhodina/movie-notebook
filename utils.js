@@ -23,7 +23,7 @@ const handleValidationErrors = (req, res, next) => {
 const getYears = () => {
     let years = [];
     let today = new Date().getFullYear();
-    for (let i = 1920; i < today + 1; i++) {
+    for (let i = today; i > 1919; i--) {
         years.push(i);
     }
 

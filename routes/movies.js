@@ -247,7 +247,7 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
         ]
     } });
 
-    if (!userNote && (review || rating || watchedStatus !== undefined)) {
+    if (!userNote && (review || starRating || watchedStatus !== undefined)) {
         userNote = await UserNote.create({
             userId,
             movieId,

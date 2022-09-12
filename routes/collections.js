@@ -48,7 +48,6 @@ router.post("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) =
         }
     }
 
-
     let {
         title,
         yearReleased,
@@ -61,6 +60,7 @@ router.post("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) =
     if (yearReleased === "--Year--") yearReleased = null;
 
     let movie;
+
     if (selectMovie !== "--Choose Movie--") {
         movie = await Movie.findOne({ where: { title: selectMovie } });
     } else {
@@ -87,7 +87,7 @@ router.post("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) =
     } });
 
 
-    if (!userNote && (review || rating || watchedStatus !== undefined)) {
+    if (!userNote && (review || starRating || watchedStatus !== undefined)) {
         userNote = await UserNote.create({
             userId,
             movieId: movie.id,
@@ -162,7 +162,6 @@ router.post("/:id", csrfProtection, asyncHandler(async (req, res) => {
         }
     }
 
-
     let {
         title,
         yearReleased,
@@ -173,11 +172,6 @@ router.post("/:id", csrfProtection, asyncHandler(async (req, res) => {
     } = req.body;
 
     if (yearReleased === "--Year--") yearReleased = null;
-
-    let rating;
-    if (starRating) {
-        rating = parseInt(starRating, 10);
-    }
 
     let movie;
 
@@ -192,12 +186,12 @@ router.post("/:id", csrfProtection, asyncHandler(async (req, res) => {
         });
     }
 
-    if (review || rating || watchedStatus !== undefined) {
+    if (review || starRating || watchedStatus !== undefined) {
         await UserNote.create({
             userId,
             movieId: movie.id,
             review,
-            rating,
+            rating: starRating,
             watchedStatus
         });
     }

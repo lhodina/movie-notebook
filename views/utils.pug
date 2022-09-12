@@ -73,7 +73,6 @@ mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, is
             h4 Your Notes (optional):
             span Rating
             if (userNotes && userNotes.rating)
-                span= userNotes.rating
                 div.starRating
                     if (userNotes.rating === 5)
                         input(type="radio" id="five" name="starRating" value="5" checked)
@@ -141,31 +140,31 @@ mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, is
                             if (collection.name !== "Most Recommended" && collection.name !== "Want to Watch" && !movieCollectionNames.includes(collection.name))
                                 option(value=collection.name)
                 br
-                if (userNotes && userNotes.watchedStatus === true)
-                    fieldset
-                        div
-                            input(type="radio" id="watched" name="watchedStatus" value="1" checked)
-                            label(for="watched") Watched
-                        div
-                            input(type="radio" id="wantToWatch" name="watchedStatus" value="0")
-                            label(for="wantToWatch") Want To Watch
-                else if (userNotes && userNotes.watchedStatus === false)
-                    fieldset
-                        div
-                            input(type="radio" id="watched" name="watchedStatus" value="1")
-                            label(for="watched") Watched
+            if (userNotes && userNotes.watchedStatus === true)
+                fieldset
+                    div
+                        input(type="radio" id="watched" name="watchedStatus" value="1" checked)
+                        label(for="watched") Watched
+                    div
+                        input(type="radio" id="wantToWatch" name="watchedStatus" value="0")
+                        label(for="wantToWatch") Want To Watch
+            else if (userNotes && userNotes.watchedStatus === false)
+                fieldset
+                    div
+                        input(type="radio" id="watched" name="watchedStatus" value="1")
+                        label(for="watched") Watched
 
-                        div
-                            input(type="radio" id="wantToWatch" name="watchedStatus" value="0" checked)
-                            label(for="wantToWatch") Want To Watch
-                else
-                    fieldset
-                        div
-                            input(type="radio" id="watched" name="watchedStatus" value="1")
-                            label(for="watched") Watched
-                        div
-                            input(type="radio" id="wantToWatch" name="watchedStatus" value="0")
-                            label(for="wantToWatch") Want To Watch
+                    div
+                        input(type="radio" id="wantToWatch" name="watchedStatus" value="0" checked)
+                        label(for="wantToWatch") Want To Watch
+            else
+                fieldset
+                    div
+                        input(type="radio" id="watched" name="watchedStatus" value="1")
+                        label(for="watched") Watched
+                    div
+                        input(type="radio" id="wantToWatch" name="watchedStatus" value="0")
+                        label(for="wantToWatch") Want To Watch
 
 
 mixin displayMovie(movie)

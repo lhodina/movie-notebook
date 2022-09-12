@@ -2,8 +2,8 @@
 const form = document.getElementsByClassName("movie-edit-form")[0];
 const movieId = form.id;
 
-form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+form.addEventListener("submit", async (event) => {
+    event.preventDefault();
     const formData = new FormData(form);
     const entries = formData.entries();
 
@@ -30,4 +30,6 @@ form.addEventListener("submit", async (e) => {
             "Content-Type": "application/json",
         }
     });
+
+    window.location = "/";
 });
