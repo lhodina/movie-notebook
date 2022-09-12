@@ -78,78 +78,93 @@ router.get("/add", csrfProtection, validateMovie, asyncHandler(async (req, res) 
 }));
 
 
-router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
-    const { userId } = req.session.auth;
+router.post("/add", csrfProtection, validateMovie, asyncHandler(async (req, res) => {
+    const validatorErrors = validationResult(req);
 
-    let {
-        directorName,
-        title,
-        yearReleased,
-        imageLink,
-        starRating,
-        review,
-        collectionList,
-        watchedStatus
-    } = req.body;
+    if (!validatorErrors.isEmpty()) {
+        const errors = validatorErrors.array().map((error) => error.msg);
+        const movies = await Movie.findAll();
+        const directors = await Director.findAll();
 
-    let director;
-
-    if (directorName) {
-        director = await Director.findOne({ where: { name: directorName } });
-        if (!director) {
-            director = await Director.create({
-                name: directorName
-            });
-        }
-    }
-
-    const directorId = director.id;
-
-    if (yearReleased === "--Year--") yearReleased = null;
-
-    if (req.session.auth) {
-        const movie = await Movie.create({
-            title,
-            directorId,
-            yearReleased,
-            imageLink
+        res.render("movie-add", {
+            movies,
+            directors,
+            years,
+            errors,
+            csrfToken: req.csrfToken()
         });
+    } else {
+        const { userId } = req.session.auth;
 
-        let rating;
-        if (starRating) {
-            rating = parseInt(starRating, 10);
+        let {
+            directorName,
+            title,
+            yearReleased,
+            imageLink,
+            starRating,
+            review,
+            collectionList,
+            watchedStatus
+        } = req.body;
+
+        let director;
+
+        if (directorName) {
+            director = await Director.findOne({ where: { name: directorName } });
+            if (!director) {
+                director = await Director.create({
+                    name: directorName
+                });
+            }
         }
 
+        const directorId = director.id;
 
-        if (rating || review || watchedStatus !== undefined) {
-            await UserNote.create({
-                userId,
-                movieId: movie.id,
-                review,
-                rating,
-                watchedStatus
+        if (yearReleased === "--Year--") yearReleased = null;
+
+        if (req.session.auth) {
+            const movie = await Movie.create({
+                title,
+                directorId,
+                yearReleased,
+                imageLink
             });
-        }
+
+            let rating;
+            if (starRating) {
+                rating = parseInt(starRating, 10);
+            }
 
 
-        if (collectionList) {
-            let collection = await Collection.findOne({ where: { name: collectionList }});
-
-            if (!collection) {
-                collection = await Collection.create({
-                    name: collectionList,
-                    userId
+            if (rating || review || watchedStatus !== undefined) {
+                await UserNote.create({
+                    userId,
+                    movieId: movie.id,
+                    review,
+                    rating,
+                    watchedStatus
                 });
             }
 
-            await MovieCollection.create({
-                movieId: movie.id,
-                collectionId: collection.id
-            });
-        }
-    }
+            if (collectionList) {
+                let collection = await Collection.findOne({ where: { name: collectionList }});
 
-    res.redirect("/");
+                if (!collection) {
+                    collection = await Collection.create({
+                        name: collectionList,
+                        userId
+                    });
+                }
+
+                await MovieCollection.create({
+                    movieId: movie.id,
+                    collectionId: collection.id
+                });
+            }
+        }
+
+        res.redirect("/");
+    }
 }));
 
 

@@ -2,6 +2,11 @@ extends layout.pug
 include utils.pug
 block content
     script(src="/scripts/add-new-movie.js" type="module")
+    if (errors)
+        ul
+            each error in errors
+                li= error
+                
     h2 Add Collection
     form(action="/collections/add" method="post")
         input(type="hidden" name="_csrf" value=csrfToken)

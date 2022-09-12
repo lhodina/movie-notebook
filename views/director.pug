@@ -3,14 +3,13 @@ include utils.pug
 block content
     script(src="/scripts/add-new-movie.js" type="module")
     script(src="/scripts/director.js" type="module")
+
+    +handleErrors(errors)
     h2= director.name
 
     h3 Movies Directed by #{director.name}
     if (directedMovies.length)
         +displayMovies(directedMovies, "moviesDirected")
-        //- ul
-        //-     each movie in directedMovies
-        //-         li= movie.title
     else
         p No movies added yet
     button(id="add-directed-button") Add
@@ -18,9 +17,6 @@ block content
     h3 Movies Liked by #{director.name}
     if (favoriteMovies.length)
         +displayMovies(favoriteMovies, "moviesLiked")
-        //- ul
-        //-     each movie in favoriteMovies
-        //-         li= movie.title
     else
         p No movies added yet
     button(id="add-favorite-button") Add

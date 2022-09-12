@@ -1,7 +1,6 @@
 
-mixin validationErrorSummary(errors)
+mixin handleErrors(errors)
     if errors
-        p The following errors occurred:
         ul
             each error in errors
                 li= error

@@ -1,8 +1,8 @@
 const express = require("express");
 const { Op } = require("sequelize");
-const { check, validationResult } = require("express-validator");
+const { check, oneOf, validationResult } = require("express-validator");
 
-const { csrfProtection, asyncHandler, getYears } = require("../utils");
+const { csrfProtection, asyncHandler, handleValidationErrors, getYears } = require("../utils");
 const db = require("../db/models");
 const { Collection, MovieCollection, Movie, Director, UserNote } = db;
 const { requireAuth } = require("../auth");
@@ -10,6 +10,19 @@ const { requireAuth } = require("../auth");
 const router = express.Router();
 
 const years = getYears();
+
+const validateCollection = [
+    check("collectionName")
+        .exists({ checkFalsy: true })
+            .withMessage("Collection name required"),
+    oneOf([
+        check("title")
+            .exists({ checkFalsy: true })
+        ,
+        check("selectMovie")
+            .not().equals("--Choose Movie--")
+    ], "Please include a movie")
+];
 
 router.get("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) => {
     const movies = await Movie.findAll({ include: UserNote });
@@ -25,87 +38,104 @@ router.get("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) =>
 }));
 
 
-router.post("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) => {
+router.post("/add", requireAuth, csrfProtection, validateCollection, asyncHandler(async (req, res) => {
     const { userId } = req.session.auth;
     const { collectionName } = req.body;
 
-    const collection = await Collection.create({
-        name: collectionName,
-        userId
-    });
+    const movies = await Movie.findAll({ include: UserNote });
+    const directors = await Director.findAll();
 
-    const { selectMovie } = req.body;
-    const directorName = req.body.directorName;
+    const validatorErrors = validationResult(req);
 
-    let director;
+    if (!validatorErrors.isEmpty()) {
+        const errors = validatorErrors.array().map((error) => error.msg);
 
-    if (directorName) {
-        director = await Director.findOne({ where: { name: directorName } });
-        if (!director) {
-            director = await Director.create({
-                name: directorName
+        res.render("collection-add", {
+            movies,
+            directors,
+            years,
+            errors,
+            csrfToken: req.csrfToken()
+        });
+    } else {
+        const collection = await Collection.create({
+            name: collectionName,
+            userId
+        });
+
+        const { selectMovie } = req.body;
+        const directorName = req.body.directorName;
+
+        let director;
+
+        if (directorName) {
+            director = await Director.findOne({ where: { name: directorName } });
+            if (!director) {
+                director = await Director.create({
+                    name: directorName
+                });
+            }
+        }
+
+        let {
+            title,
+            yearReleased,
+            imageLink,
+            starRating,
+            review,
+            watchedStatus
+        } = req.body;
+
+        if (yearReleased === "--Year--") yearReleased = null;
+
+        let movie;
+
+        if (selectMovie !== "--Choose Movie--") {
+            movie = await Movie.findOne({ where: { title: selectMovie } });
+        } else {
+            movie = await Movie.create({
+                title,
+                directorId: director.id,
+                yearReleased,
+                imageLink
             });
         }
+
+        if (movie) {
+            await MovieCollection.create({
+                movieId: movie.id,
+                collectionId: collection.id
+            });
+        }
+
+        let userNote = await UserNote.findOne({ where: {
+            [Op.and]: [
+                { userId },
+                { movieId: movie.id }
+            ]
+        } });
+
+
+        if (!userNote && (review || starRating || watchedStatus !== undefined)) {
+            userNote = await UserNote.create({
+                userId,
+                movieId: movie.id,
+                review,
+                rating: starRating,
+                watchedStatus
+            });
+        } else if (userNote) {
+            await userNote.update({
+                userId,
+                movieId: movie.id,
+                review,
+                rating: starRating,
+                watchedStatus
+            });
+        }
+
+        res.redirect("/");
     }
-
-    let {
-        title,
-        yearReleased,
-        imageLink,
-        starRating,
-        review,
-        watchedStatus
-    } = req.body;
-
-    if (yearReleased === "--Year--") yearReleased = null;
-
-    let movie;
-
-    if (selectMovie !== "--Choose Movie--") {
-        movie = await Movie.findOne({ where: { title: selectMovie } });
-    } else {
-        movie = await Movie.create({
-            title,
-            directorId: director.id,
-            yearReleased,
-            imageLink
-        });
-    }
-
-    if (movie) {
-        await MovieCollection.create({
-            movieId: movie.id,
-            collectionId: collection.id
-        });
-    }
-
-    let userNote = await UserNote.findOne({ where: {
-        [Op.and]: [
-            { userId },
-            { movieId: movie.id }
-        ]
-    } });
-
-
-    if (!userNote && (review || starRating || watchedStatus !== undefined)) {
-        userNote = await UserNote.create({
-            userId,
-            movieId: movie.id,
-            review,
-            rating: starRating,
-            watchedStatus
-        });
-    } else if (userNote) {
-        await userNote.update({
-            userId,
-            movieId: movie.id,
-            review,
-            rating: starRating,
-            watchedStatus
-        });
-    }
-
-    res.redirect("/");
 }));
 
 

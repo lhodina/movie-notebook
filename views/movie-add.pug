@@ -1,6 +1,7 @@
 extends layout.pug
 include utils.pug
 block content
+    +handleErrors(errors)
     h2 Add a Movie
     br
     form(action="/movies/add" method="post")

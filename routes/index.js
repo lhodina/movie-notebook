@@ -1,5 +1,6 @@
 const express = require("express");
 const { requireAuth } = require("../auth");
+const { check, validationResult } = require("express-validator");
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
@@ -9,6 +10,11 @@ const { asyncHandler, csrfProtection, getMovies } = require("../utils");
 
 const router = express.Router();
 
+const validateFavorite = [
+    check("name")
+        .exists({ checkFalsy: true })
+        .withMessage("Please enter a name")
+];
 
 router.get("/", asyncHandler(async (req, res) => {
     if (req.session.auth) {
@@ -106,7 +112,6 @@ router.get("/", asyncHandler(async (req, res) => {
             }
     }
 
-
         const collections = await Collection.findAll({
             where: { userId },
             include:
@@ -165,34 +170,46 @@ router.get("/favorite-directors/add", csrfProtection, requireAuth, asyncHandler(
 }));
 
 
-router.post("/favorite-directors/add", csrfProtection, asyncHandler(async (req, res) => {
-    const { userId } = req.session.auth;
-    const { directorName } = req.body;
-    const favoriteDirectorsData = await FavoriteDirector.findAll({ where: userId });
-    const favoriteDirectorIds = favoriteDirectorsData.map(director => director.dataValues.directorId);
+router.post("/favorite-directors/add", csrfProtection, validateFavorite, asyncHandler(async (req, res) => {
+    const validatorErrors = validationResult(req);
 
-    let director = await Director.findOne({ where: { name: directorName } });
-    if (!director) {
-        director = await Director.create({
-            name: directorName
-        });
-    }
-
-    if (!favoriteDirectorIds.includes(director.id)) {
-        await FavoriteDirector.create({
-            userId,
-            directorId: director.id
-        });
-
-        res.redirect("/");
-    } else {
+    if (!validatorErrors.isEmpty()) {
+        const errors = validatorErrors.array().map((error) => error.msg);
         const directors = await Director.findAll();
-        const errorMessage = `${directorName} is already one of your favorite directors!`;
         res.render("favorite-director-add", {
             directors,
-            errorMessage,
+            errors,
             csrfToken: req.csrfToken()
         });
+    } else {
+        const { userId } = req.session.auth;
+        const { directorName } = req.body;
+        const favoriteDirectorsData = await FavoriteDirector.findAll({ where: userId });
+        const favoriteDirectorIds = favoriteDirectorsData.map(director => director.dataValues.directorId);
+
+        let director = await Director.findOne({ where: { name: directorName } });
+        if (!director) {
+            director = await Director.create({
+                name: directorName
+            });
+        }
+
+        if (!favoriteDirectorIds.includes(director.id)) {
+            await FavoriteDirector.create({
+                userId,
+                directorId: director.id
+            });
+
+            res.redirect("/");
+        } else {
+            const directors = await Director.findAll();
+            const errors = [`${directorName} is already one of your favorite directors!`];
+            res.render("favorite-director-add", {
+                directors,
+                errors,
+                csrfToken: req.csrfToken()
+            });
+        }
     }
 }));
 
@@ -206,35 +223,47 @@ router.get("/favorite-critics/add", csrfProtection, requireAuth, asyncHandler(as
 }));
 
 
-router.post("/favorite-critics/add", csrfProtection, asyncHandler(async (req, res) => {
-    const { userId } = req.session.auth;
-    const { criticName } = req.body;
-    const favoriteCriticsData = await FavoriteCritic.findAll({ where: userId });
-    const favoriteCriticIds = favoriteCriticsData.map(critic => critic.dataValues.criticId);
+router.post("/favorite-critics/add", csrfProtection, validateFavorite, asyncHandler(async (req, res) => {
+    const validatorErrors = validationResult(req);
 
-    let critic = await Critic.findOne({ where: { name: criticName } });
-    if (!critic) {
-        critic = await Critic.create({
-            name: criticName
-        });
-    }
-
-    if (!favoriteCriticIds.includes(critic.id)) {
-        await FavoriteCritic.create({
-            userId,
-            criticId: critic.id
-        });
-    } else {
+    if (!validatorErrors.isEmpty()) {
+        const errors = validatorErrors.array().map((error) => error.msg);
         const critics = await Critic.findAll();
-        const errorMessage = `${criticName} is already one of your favorite critics!`;
         res.render("favorite-critic-add", {
             critics,
-            errorMessage,
+            errors,
             csrfToken: req.csrfToken()
         });
-    }
+    } else {
+        const { userId } = req.session.auth;
+        const { name } = req.body;
+        const favoriteCriticsData = await FavoriteCritic.findAll({ where: userId });
+        const favoriteCriticIds = favoriteCriticsData.map(critic => critic.dataValues.criticId);
 
-    res.redirect(`/`);
+        let critic = await Critic.findOne({ where: { name } });
+        if (!critic) {
+            critic = await Critic.create({
+                name
+            });
+        }
+
+        if (!favoriteCriticIds.includes(critic.id)) {
+            await FavoriteCritic.create({
+                userId,
+                criticId: critic.id
+            });
+        } else {
+            const critics = await Critic.findAll();
+            const errors = [`${name} is already one of your favorite critics!`];
+            res.render("favorite-critic-add", {
+                critics,
+                errors,
+                csrfToken: req.csrfToken()
+            });
+        }
+
+        res.redirect(`/`);
+    }
 }));
 
 

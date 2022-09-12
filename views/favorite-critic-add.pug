@@ -1,11 +1,11 @@
 extends layout.pug
+include utils.pug
 block content
-    if (errorMessage)
-        p= errorMessage
+    +handleErrors(errors)
     form(action="/favorite-critics/add", method="post")
         input(type="hidden" name="_csrf" value=csrfToken)
         label(for="critic") Choose or Add a Critic
-        input(name="criticName" list="critics")
+        input(name="name" list="critics")
         datalist(id="critics" name="critics")
             each critic in critics
                 option(value=critic.name)
