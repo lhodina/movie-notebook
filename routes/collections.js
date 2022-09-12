@@ -37,12 +37,17 @@ router.post("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) =
     const { selectMovie } = req.body;
     const directorName = req.body.directorName;
 
-    let director = await Director.findOne({ where: { name: directorName } });
-    if (!director) {
-        director = await Director.create({
-            name: directorName
-        });
+    let director;
+
+    if (directorName) {
+        director = await Director.findOne({ where: { name: directorName } });
+        if (!director) {
+            director = await Director.create({
+                name: directorName
+            });
+        }
     }
+
 
     let {
         title,
@@ -54,11 +59,6 @@ router.post("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) =
     } = req.body;
 
     if (yearReleased === "--Year--") yearReleased = null;
-
-    let rating;
-    if (starRating) {
-        rating = parseInt(starRating, 10);
-    }
 
     let movie;
     if (selectMovie !== "--Choose Movie--") {
@@ -87,7 +87,7 @@ router.post("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) =
     } });
 
 
-    if (!userNote) {
+    if (!userNote && (review || rating || watchedStatus !== undefined)) {
         userNote = await UserNote.create({
             userId,
             movieId: movie.id,
@@ -95,7 +95,7 @@ router.post("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) =
             rating: starRating,
             watchedStatus
         });
-    } else {
+    } else if (userNote) {
         await userNote.update({
             userId,
             movieId: movie.id,
@@ -151,12 +151,17 @@ router.post("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
     const directorName = req.body.directorName;
 
-    let director = await Director.findOne({ where: { name: directorName } });
-    if (!director) {
-        director = await Director.create({
-            name: directorName
-        });
+    let director;
+
+    if (directorName) {
+        director = await Director.findOne({ where: { name: directorName } });
+        if (!director) {
+            director = await Director.create({
+                name: directorName
+            });
+        }
     }
+
 
     let {
         title,

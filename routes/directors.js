@@ -123,12 +123,6 @@ router.post("/:id/favorites/add", csrfProtection, asyncHandler(async (req, res) 
         otherDirector = await Director.create({ name: otherDirectorName });
     }
 
-    if (!otherDirector) {
-        otherDirector = await Director.create({
-            name: otherDirectorName
-        });
-    }
-
     let {
         title,
         yearReleased,

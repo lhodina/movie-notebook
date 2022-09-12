@@ -76,11 +76,15 @@ router.post("/:id/favorites/add", csrfProtection, asyncHandler (async (req, res)
 
     const directorName = req.body.directorName;
 
-    let director = await Director.findOne({ where: { name: directorName } });
-    if (!director) {
-        director = await Director.create({
-            name: directorName
-        });
+    let director;
+
+    if (directorName) {
+        director = await Director.findOne({ where: { name: directorName } });
+        if (!director) {
+            director = await Director.create({
+                name: directorName
+            });
+        }
     }
 
     let {

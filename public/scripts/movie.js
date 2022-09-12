@@ -30,6 +30,4 @@ form.addEventListener("submit", async (e) => {
             "Content-Type": "application/json",
         }
     });
-
-    // window.location = "/";
 });

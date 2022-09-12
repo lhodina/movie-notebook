@@ -92,11 +92,15 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
         watchedStatus
     } = req.body;
 
-    let director = await Director.findOne({ where: { name: directorName } });
-    if (!director) {
-        director = await Director.create({
-            name: directorName
-        });
+    let director;
+
+    if (directorName) {
+        director = await Director.findOne({ where: { name: directorName } });
+        if (!director) {
+            director = await Director.create({
+                name: directorName
+            });
+        }
     }
 
     const directorId = director.id;
@@ -216,11 +220,16 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
         watchedStatus
     } = req.body;
 
-    let director = await Director.findOne({ where: { name: directorName } });
+    let director;
 
-    if (!director) {
-        director = await Director.create({ name: directorName });
+    if (directorName) {
+        director = await Director.findOne({ where: { name: directorName } });
+
+        if (!director) {
+            director = await Director.create({ name: directorName });
+        }
     }
+
 
     if (movie) {
         await movie.update({
@@ -238,7 +247,7 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
         ]
     } });
 
-    if (!userNote) {
+    if (!userNote && (review || rating || watchedStatus !== undefined)) {
         userNote = await UserNote.create({
             userId,
             movieId,
@@ -246,7 +255,7 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
             rating: starRating,
             watchedStatus
         });
-    } else {
+    } else if (userNote) {
         await userNote.update({
             userId,
             movieId,
