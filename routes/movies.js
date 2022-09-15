@@ -15,7 +15,7 @@ const validateMovie = [
     check("title")
         .exists({ checkFalsy: true })
         .withMessage("Please enter a movie title"),
-    check("directorId")
+    check("directorName")
         .exists({ checkFalsy: true })
         .withMessage("Please include a director")
 ];
@@ -120,7 +120,11 @@ router.post("/add", csrfProtection, validateMovie, asyncHandler(async (req, res)
 
         const directorId = director.id;
 
-        if (yearReleased === "--Year--") yearReleased = null;
+        if (yearReleased === "--Year--") yearReleased = 0;
+        let rating;
+        if (starRating) {
+            rating = parseInt(starRating, 10);
+        }
 
         if (req.session.auth) {
             const movie = await Movie.create({
@@ -129,12 +133,6 @@ router.post("/add", csrfProtection, validateMovie, asyncHandler(async (req, res)
                 yearReleased,
                 imageLink
             });
-
-            let rating;
-            if (starRating) {
-                rating = parseInt(starRating, 10);
-            }
-
 
             if (rating || review || watchedStatus !== undefined) {
                 await UserNote.create({
@@ -220,6 +218,7 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
 
 router.put("/:id", asyncHandler(async (req, res, next) => {
+    console.log("*****req.body:", req.body);
     const { userId } = req.session.auth;
     const movieId = parseInt(req.params.id, 10);
     const movie = await Movie.findByPk(movieId);
@@ -235,6 +234,12 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
         watchedStatus
     } = req.body;
 
+    if (yearReleased === "--Year--") yearReleased = 0;
+    let rating;
+    if (starRating) {
+        rating = parseInt(starRating, 10);
+    }
+
     let director;
 
     if (directorName) {
@@ -246,8 +251,17 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
     }
 
 
+    console.log("*****title:", title);
+    console.log("*****director.dataValues.id:", director.dataValues.id);
+    console.log("*****yearReleased:", yearReleased);
+    console.log("*****imageLink:", imageLink);
+    console.log("*****typeof director.dataValues.id:", typeof director.dataValues.id);
+    console.log("*****movie:", movie);
+
+
     if (movie) {
         await movie.update({
+            movieId,
             title,
             directorId: director.dataValues.id,
             yearReleased,
@@ -262,12 +276,12 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
         ]
     } });
 
-    if (!userNote && (review || starRating || watchedStatus !== undefined)) {
+    if (!userNote && (review || rating || watchedStatus !== undefined)) {
         userNote = await UserNote.create({
             userId,
             movieId,
             review,
-            rating: starRating,
+            rating,
             watchedStatus
         });
     } else if (userNote) {
@@ -275,7 +289,7 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
             userId,
             movieId,
             review,
-            rating: starRating,
+            rating,
             watchedStatus
         });
     }

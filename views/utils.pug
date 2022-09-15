@@ -34,12 +34,12 @@ mixin movieInfoFields(location)
     label(for="yearReleased") Year Released (optional)
     if (movie)
         select(name="yearReleased")
-            option()= movie.yearReleased
+            if (movie.yearReleased !== 0)
+                option()= movie.yearReleased
             each year in years
                 option(value=year)= year
     else
         select(name="yearReleased")
-            option() --Year--
             each year in years
                 option(value=year)= year
     br
@@ -177,7 +177,10 @@ mixin displayMovie(movie)
         tbody
             tr
                 td= director.name
-                td= movie.yearReleased
+                if (movie.yearReleased !== 0)
+                    td= movie.yearReleased
+                else
+                    td
                 if movie.imageLink
                     td
                         img(src=`${movie.imageLink}`)
@@ -221,7 +224,10 @@ mixin displayMovies(movies, location)
                         a(href=`/movies/${movie.id}`) #{movie.title}
                     td
                         a(href=`/directors/${movie.directorId}`)= movie.director
-                    td= movie.yearReleased
+                    if (movie.yearReleased !== 0)
+                        td= movie.yearReleased
+                    else
+                        td
 
                     if (locals.authenticated)
                         if movie.review

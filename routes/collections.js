@@ -86,7 +86,12 @@ router.post("/add", requireAuth, csrfProtection, validateCollection, asyncHandle
             watchedStatus
         } = req.body;
 
-        if (yearReleased === "--Year--") yearReleased = null;
+        if (yearReleased === "--Year--") yearReleased = 0;
+
+        let rating;
+        if (starRating) {
+            rating = parseInt(starRating, 10);
+        }
 
         let movie;
 
@@ -116,12 +121,12 @@ router.post("/add", requireAuth, csrfProtection, validateCollection, asyncHandle
         } });
 
 
-        if (!userNote && (review || starRating || watchedStatus !== undefined)) {
+        if (!userNote && (review || rating || watchedStatus !== undefined)) {
             userNote = await UserNote.create({
                 userId,
                 movieId: movie.id,
                 review,
-                rating: starRating,
+                rating,
                 watchedStatus
             });
         } else if (userNote) {
@@ -129,7 +134,7 @@ router.post("/add", requireAuth, csrfProtection, validateCollection, asyncHandle
                 userId,
                 movieId: movie.id,
                 review,
-                rating: starRating,
+                rating,
                 watchedStatus
             });
         }
@@ -201,7 +206,11 @@ router.post("/:id", csrfProtection, asyncHandler(async (req, res) => {
         watchedStatus
     } = req.body;
 
-    if (yearReleased === "--Year--") yearReleased = null;
+    if (yearReleased === "--Year--") yearReleased = 0;
+    let rating;
+    if (starRating) {
+        rating = parseInt(starRating, 10);
+    }
 
     let movie;
 
@@ -216,12 +225,12 @@ router.post("/:id", csrfProtection, asyncHandler(async (req, res) => {
         });
     }
 
-    if (review || starRating || watchedStatus !== undefined) {
+    if (review || rating || watchedStatus !== undefined) {
         await UserNote.create({
             userId,
             movieId: movie.id,
             review,
-            rating: starRating,
+            rating,
             watchedStatus
         });
     }

@@ -188,7 +188,7 @@ router.post("/:id/movies-directed/add", csrfProtection, validateDirectedMovie, a
             imageLink
         } = req.body;
 
-        if (yearReleased === "--Year--") yearReleased = null;
+        if (yearReleased === "--Year--") yearReleased = 0;
 
         await Movie.create({
             title,
@@ -215,7 +215,7 @@ router.post("/:id/favorites/add", csrfProtection, validateFavoriteMovie, asyncHa
         imageLink
     } = req.body;
 
-    if (yearReleased === "--Year--") yearReleased = null;
+    if (yearReleased === "--Year--") yearReleased = 0;
 
 
     if (title) {

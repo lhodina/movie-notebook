@@ -104,7 +104,7 @@ router.post("/:id/favorites/add", csrfProtection, asyncHandler (async (req, res)
         imageLink
     } = req.body;
 
-    if (yearReleased === "--Year--") yearReleased = null;
+    if (yearReleased === "--Year--") yearReleased = 0;
 
     if (selectMovie !== "--Choose Movie--") {
         movie = await Movie.findOne({ where: { title: selectMovie } });
