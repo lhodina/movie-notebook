@@ -116,7 +116,6 @@ const getMovies = (movies, user="") => movies.map( (movieData) => {
 
 
 
-
 module.exports = {
     csrfProtection,
     asyncHandler,

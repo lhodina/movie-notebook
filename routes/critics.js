@@ -1,9 +1,9 @@
 const express = require("express");
 const { check, validationResult } = require("express-validator");
-
+const { Op } = require("sequelize");
 const { csrfProtection, asyncHandler, getYears } = require("../utils");
 const db = require("../db/models");
-const { Critic, CriticFavorite, Movie, Director } = db;
+const { Critic, FavoriteCritic, CriticFavorite, Movie, Director } = db;
 const { requireAuth } = require("../auth");
 
 const router = express.Router();
@@ -33,6 +33,7 @@ router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
 
 
 router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
+    const { userId } = req.session.auth;
     const criticId = parseInt(req.params.id, 10);
     const movies = await Movie.findAll();
     const directors = await Director.findAll();
@@ -41,6 +42,15 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
         include: {
             model: Movie,
             include: ["movieDirector", "favoritedByDirectors"]
+        }
+    });
+
+    let favoriteCritic = await FavoriteCritic.findOne({
+        where: {
+            [Op.and]: [
+                { userId },
+                { criticId }
+            ]
         }
     });
 
@@ -61,6 +71,7 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
     res.render("critic", {
         critic,
+        favoriteCritic,
         movies,
         directors,
         years,
@@ -114,6 +125,16 @@ router.post("/:id/favorites/add", csrfProtection, asyncHandler (async (req, res)
     });
 
     res.redirect(`/critics/${criticId}`);
+}));
+
+
+router.post("/:id/notes", csrfProtection, asyncHandler(async (req, res, next) => {
+    const { userId } = req.session.auth;
+    let { notes } = req.body;
+    const criticId = parseInt(req.params.id, 10);
+    const favoriteCritic = await FavoriteCritic.findOne({ where: { userId, criticId }});
+    await favoriteCritic.update({ userId, criticId, notes });
+    res.redirect("/");
 }));
 
 

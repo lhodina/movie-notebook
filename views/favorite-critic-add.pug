@@ -10,4 +10,7 @@ block content
             each critic in critics
                 option(value=critic.name)
         br
+        label(for="criticNotes") Notes
+        textarea(name="criticNotes" id="criticNotes")
+        br
         button(type="submit") Submit

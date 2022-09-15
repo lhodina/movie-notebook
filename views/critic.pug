@@ -12,3 +12,12 @@ block content
 
     h3 #{critic.name}'s Favorite Movies
     +displayMovies(favoriteMovies, "criticFavorites")
+
+    h3 Notes
+    form(action=`/critics/${critic.id}/notes` method="post")
+        input(type="hidden" name="_csrf" value=csrfToken)
+        if (favoriteCritic.notes)
+            textarea(name="notes")= favoriteCritic.notes
+        else
+            textarea(name="notes" ) Add a note
+        button(type="submit") Save Note

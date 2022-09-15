@@ -236,7 +236,7 @@ router.post("/favorite-critics/add", csrfProtection, validateFavorite, asyncHand
         });
     } else {
         const { userId } = req.session.auth;
-        const { name } = req.body;
+        const { name, criticNotes } = req.body;
         const favoriteCriticsData = await FavoriteCritic.findAll({ where: userId });
         const favoriteCriticIds = favoriteCriticsData.map(critic => critic.dataValues.criticId);
 
@@ -250,7 +250,8 @@ router.post("/favorite-critics/add", csrfProtection, validateFavorite, asyncHand
         if (!favoriteCriticIds.includes(critic.id)) {
             await FavoriteCritic.create({
                 userId,
-                criticId: critic.id
+                criticId: critic.id,
+                notes: criticNotes
             });
         } else {
             const critics = await Critic.findAll();

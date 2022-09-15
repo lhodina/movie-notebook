@@ -15,14 +15,14 @@ mixin field(labelText, fieldName, fieldType='text', fieldValue='', placeholder=n
             input(type=fieldType id=fieldName name=fieldName value=fieldValue placeholder=placeholder)
 
 
-mixin movieInfoFields()
+mixin movieInfoFields(location)
     if (movie)
         +field("Title", "title", "text", movie.title)
     else
         +field("Title", "title")
     br
     label(for="directorName") Choose or Add a Director
-    if (director)
+    if (director && location !== "director")
         input(name="directorName" list="directors" value=`${director.name}`)
     else
         input(name="directorName" list="directors")
@@ -49,7 +49,7 @@ mixin movieInfoFields()
         +field("Image Link (optional)", "imageLink")
 
 
-mixin addMovieFormFields()
+mixin addMovieFormFields(location)
     div.search-movies
         label(for="selectMovie") Search Movies:
         br
@@ -63,7 +63,7 @@ mixin addMovieFormFields()
         button(id="add-movie-button") v
         br
     div.add-new-movie
-        +movieInfoFields()
+        +movieInfoFields(location)
 
 
 mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, isAddCollection=false)

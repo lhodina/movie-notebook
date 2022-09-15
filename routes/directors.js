@@ -1,9 +1,10 @@
 const express = require("express");
 const { check, validationResult } = require("express-validator");
+const { Op } = require("sequelize");
 
 const { csrfProtection, asyncHandler, getYears } = require("../utils");
 const db = require("../db/models");
-const { Director, Movie, DirectorFavorite } = db;
+const { Director, Movie, DirectorFavorite, FavoriteDirector } = db;
 const { requireAuth } = require("../auth");
 
 const router = express.Router();
@@ -68,6 +69,8 @@ router.post("/add", validateDirector, csrfProtection, asyncHandler(async (req, r
 
 
 router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
+    const { userId } = req.session.auth;
+
     const directorId = parseInt(req.params.id, 10);
     const directors = await Director.findAll();
     const movies = await Movie.findAll();
@@ -103,8 +106,18 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
         return cleanedMovie;
     });
 
+    let favoriteDirector = await FavoriteDirector.findOne({
+        where: {
+            [Op.and]: [
+                { userId },
+                { directorId }
+            ]
+        }
+    });
+
     res.render("director", {
         director,
+        favoriteDirector,
         directors,
         movies,
         years,
@@ -191,41 +204,50 @@ router.post("/:id/movies-directed/add", csrfProtection, validateDirectedMovie, a
 
 router.post("/:id/favorites/add", csrfProtection, validateFavoriteMovie, asyncHandler(async (req, res) => {
     const currentDirectorId = parseInt(req.params.id, 10);
-    const currentDirector = await Director.findByPk(currentDirectorId);
 
-    const otherDirectorName = req.body.directorName;
-    let otherDirector = await Director.findOne({ where: { name: otherDirectorName } });
-    if (!otherDirector) {
-        otherDirector = await Director.create({ name: otherDirectorName });
-    }
+    let movie;
 
     let {
         title,
+        selectMovie,
+        directorName,
         yearReleased,
         imageLink
     } = req.body;
 
     if (yearReleased === "--Year--") yearReleased = null;
 
-    const { selectMovie } = req.body;
-    let movie;
-    if (selectMovie !== "--Choose Movie--") {
-        movie = await Movie.findOne({ where: { title: selectMovie } });
-    } else {
+
+    if (title) {
+        let directorOfFavorite = await Director.findOne({ where: { name: directorName }});
+
+        if (!directorOfFavorite) {
+            directorOfFavorite = await Director.create({name: directorName});
+        }
+
         movie = await Movie.create({
             title,
-            directorId: otherDirector.id,
+            directorId: directorOfFavorite.id,
             yearReleased,
             imageLink
         });
+    } else {
+        movie = await Movie.findOne({ where: { title: selectMovie } });
     }
 
-    await DirectorFavorite.create({
-        director_Id: currentDirector.id,
-        movieId: movie.id,
-    });
+    await DirectorFavorite.create({ director_Id: currentDirectorId, movieId: movie.id });
 
-    res.redirect(`/directors/${currentDirector.id}`);
+    res.redirect(`/directors/${currentDirectorId}`);
+}));
+
+
+router.post("/:id/notes", csrfProtection, asyncHandler(async (req, res, next) => {
+    const { userId } = req.session.auth;
+    let { notes } = req.body;
+    const directorId = parseInt(req.params.id, 10);
+    const favoriteDirector = await FavoriteDirector.findOne({ where: { userId, directorId }});
+    await favoriteDirector.update({ userId, directorId, notes });
+    res.redirect("/");
 }));
 
 

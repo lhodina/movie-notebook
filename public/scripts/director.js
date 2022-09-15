@@ -31,7 +31,6 @@ for (let button of removeButtons) {
 
 
 addDirectedButton.addEventListener("click", async (event) => {
-    console.log("where's me directeds?")
     addFavoriteForm.style.display = "none";
 
     addDirectedForm.removeAttribute("hidden");
@@ -40,7 +39,6 @@ addDirectedButton.addEventListener("click", async (event) => {
 
 
 addFavoriteButton.addEventListener("click", async (event) => {
-    console.log("where's me favorite?")
     addDirectedForm.style.display = "none";
 
     addFavoriteForm.removeAttribute("hidden");

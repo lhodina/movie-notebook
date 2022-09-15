@@ -23,9 +23,9 @@ block content
 
     form(action=`/directors/${director.id}/favorites/add` id="add-favorite-form" method="post" hidden)
         input(type="hidden" name="_csrf" value=csrfToken)
-        +addMovieFormFields()
+        +addMovieFormFields("director")
         button(type="submit") Add
-        a(href=`directors/${director.id}`) Cancel
+        a(href=`/directors/${director.id}`) Cancel
 
     form(action=`/directors/${director.id}/movies-directed/add` id="add-directed-form" method="post" hidden)
         input(type="hidden" name="_csrf" value=csrfToken)
@@ -39,7 +39,13 @@ block content
         br
         +field("Image Link (optional)", "imageLink")
         button(type="submit") Add
-        a(href=`directors/${director.id}`) Cancel
+        a(href=`/directors/${director.id}`) Cancel
 
     h3 Notes
-    p= director.notes
+    form(action=`/directors/${director.id}/notes` method="post")
+        input(type="hidden" name="_csrf" value=csrfToken)
+        if (favoriteDirector.notes)
+            textarea(name="notes")= favoriteDirector.notes
+        else
+            textarea(name="notes" ) Add a note
+        button(type="submit") Save Note
