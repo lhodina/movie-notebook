@@ -3,6 +3,7 @@ include utils.pug
 block content
     script(src="/scripts/add-new-movie.js" type="module")
     script(src="/scripts/critic.js" type="module")
+    +handleErrors(errors)
     h2= critic.name
     h3 Add or Select a New Favorite Movie
     form(action=`/critics/${critic.id}/favorites/add` method="post")

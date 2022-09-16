@@ -2,7 +2,7 @@ const { validationResult } = require("express-validator");
 const csrf= require("csurf");
 const { Op } = require("sequelize");
 const db = require("./db/models");
-const { Director, Movie, FavoriteDirector } = db;
+const { Director, Movie, FavoriteDirector, Critic, FavoriteCritic } = db;
 
 const csrfProtection = csrf({ cookie: true });
 const asyncHandler = (handler) => (req, res, next) => handler(req, res, next).catch(next);
@@ -181,11 +181,63 @@ const getDirector = async (req, res, directorId, errors) => {
 }
 
 
+const getCritic = async (req, res, criticId, errors) => {
+    const { userId } = req.session.auth;
+    const movies = await Movie.findAll();
+    const directors = await Director.findAll();
+
+    const critic = await Critic.findByPk(criticId, {
+        include: {
+            model: Movie,
+            include: ["movieDirector", "favoritedByDirectors"]
+        }
+    });
+
+    let favoriteCritic = await FavoriteCritic.findOne({
+        where: {
+            [Op.and]: [
+                { userId },
+                { criticId }
+            ]
+        }
+    });
+
+    const favoriteMovies = critic.dataValues.Movies.map(movieData => {
+        const data = movieData.dataValues;
+        const movie = {
+            id: data.id,
+            title: data.title,
+            director: data.movieDirector.name,
+            yearReleased: data.yearReleased,
+            imageLink: data.imageLink,
+            favoritedByDirectors: data.favoritedByDirectors,
+            likedByCritics: data.likedByCritics
+        };
+
+        return movie;
+    });
+
+    const years = getYears();
+
+    res.render("critic", {
+        critic,
+        favoriteCritic,
+        movies,
+        directors,
+        years,
+        favoriteMovies,
+        errors,
+        csrfToken: req.csrfToken()
+    });
+}
+
+
 module.exports = {
     csrfProtection,
     asyncHandler,
     handleValidationErrors,
     getYears,
     getMovies,
-    getDirector
+    getDirector,
+    getCritic
 };

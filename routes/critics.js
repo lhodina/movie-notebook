@@ -1,14 +1,27 @@
 const express = require("express");
 const { check, validationResult } = require("express-validator");
 const { Op } = require("sequelize");
-const { csrfProtection, asyncHandler, getYears } = require("../utils");
+const { csrfProtection, asyncHandler, getYears, getCritic } = require("../utils");
 const db = require("../db/models");
 const { Critic, FavoriteCritic, CriticFavorite, Movie, Director } = db;
 const { requireAuth } = require("../auth");
 
 const router = express.Router();
 
-const years = getYears();
+const validateCritic = [
+    check("name")
+        .exists({ checkFalsy: true })
+        .withMessage("Please enter a critic name")
+];
+
+const validateFavoriteMovie = [
+    check("title")
+        .exists({ checkFalsy: true })
+        .withMessage("Please enter a movie title"),
+    check("directorName")
+        .exists({ checkFalsy: true })
+        .withMessage("Please include a director")
+];
 
 router.get("/", asyncHandler(async (req, res) => {
     const critics = await Critic.findAll();
@@ -25,106 +38,80 @@ router.get("/add", csrfProtection, asyncHandler(async (req, res) => {
 }));
 
 
-router.post("/add", csrfProtection, asyncHandler(async (req, res) => {
-    const { name } = req.body;
-    await Critic.create({ name });
-    res.redirect("/critics")
+router.post("/add", csrfProtection, validateCritic, asyncHandler(async (req, res) => {
+    const validatorErrors = validationResult(req);
+
+    if (!validatorErrors.isEmpty()) {
+        const errors = validatorErrors.array().map((error) => error.msg);
+
+        res.render("critic-add", {
+            errors,
+            csrfToken: req.csrfToken()
+        });
+    } else {
+        const { name } = req.body;
+        await Critic.create({ name });
+        res.redirect("/critics")
+    }
 }));
 
 
 router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
-    const { userId } = req.session.auth;
     const criticId = parseInt(req.params.id, 10);
-    const movies = await Movie.findAll();
-    const directors = await Director.findAll();
-
-    const critic = await Critic.findByPk(criticId, {
-        include: {
-            model: Movie,
-            include: ["movieDirector", "favoritedByDirectors"]
-        }
-    });
-
-    let favoriteCritic = await FavoriteCritic.findOne({
-        where: {
-            [Op.and]: [
-                { userId },
-                { criticId }
-            ]
-        }
-    });
-
-    const favoriteMovies = critic.dataValues.Movies.map(movieData => {
-        const data = movieData.dataValues;
-        const movie = {
-            id: data.id,
-            title: data.title,
-            director: data.movieDirector.name,
-            yearReleased: data.yearReleased,
-            imageLink: data.imageLink,
-            favoritedByDirectors: data.favoritedByDirectors,
-            likedByCritics: data.likedByCritics
-        };
-
-        return movie;
-    });
-
-    res.render("critic", {
-        critic,
-        favoriteCritic,
-        movies,
-        directors,
-        years,
-        favoriteMovies,
-        csrfToken: req.csrfToken()
-    });
+    getCritic(req, res, criticId);
 }));
 
 
-router.post("/:id/favorites/add", csrfProtection, asyncHandler (async (req, res) => {
-    const { selectMovie } = req.body;
-    let movie;
-
-    const directorName = req.body.directorName;
-
-    let director;
-
-    if (directorName) {
-        director = await Director.findOne({ where: { name: directorName } });
-        if (!director) {
-            director = await Director.create({
-                name: directorName
-            });
-        }
-    }
-
-    let {
-        title,
-        yearReleased,
-        imageLink
-    } = req.body;
-
-    if (yearReleased === "--Year--") yearReleased = 0;
-
-    if (selectMovie !== "--Choose Movie--") {
-        movie = await Movie.findOne({ where: { title: selectMovie } });
-    } else {
-        movie = await Movie.create({
-            title,
-            directorId: director.id,
-            yearReleased,
-            imageLink
-        });
-    }
-
+router.post("/:id/favorites/add", validateFavoriteMovie, csrfProtection, asyncHandler (async (req, res) => {
     const criticId = parseInt(req.params.id, 10);
 
-    await CriticFavorite.create({
-        criticId,
-        movieId: movie.id,
-    });
+    const validatorErrors = validationResult(req);
+    if (!validatorErrors.isEmpty()) {
+        const errors = validatorErrors.array().map((error) => error.msg);
+        getCritic(req, res, criticId, errors);
+    } else {
+        const { selectMovie } = req.body;
+        let movie;
 
-    res.redirect(`/critics/${criticId}`);
+        const directorName = req.body.directorName;
+
+        let director;
+
+        if (directorName) {
+            director = await Director.findOne({ where: { name: directorName } });
+            if (!director) {
+                director = await Director.create({
+                    name: directorName
+                });
+            }
+        }
+
+        let {
+            title,
+            yearReleased,
+            imageLink
+        } = req.body;
+
+        if (yearReleased === "--Year--") yearReleased = 0;
+
+        if (selectMovie !== "--Choose Movie--") {
+            movie = await Movie.findOne({ where: { title: selectMovie } });
+        } else {
+            movie = await Movie.create({
+                title,
+                directorId: director.id,
+                yearReleased,
+                imageLink
+            });
+        }
+
+        await CriticFavorite.create({
+            criticId,
+            movieId: movie.id,
+        });
+
+        res.redirect(`/critics/${criticId}`);
+    }
 }));
 
 
