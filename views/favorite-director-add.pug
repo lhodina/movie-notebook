@@ -9,4 +9,8 @@ block content
         datalist(id="directors" name="directors")
             each director in directors
                 option(value=director.name)
-        button() Submit
+        br
+        label(for="notes") Notes
+        textarea(name="notes")
+        br
+        button(type="submit") Submit

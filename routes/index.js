@@ -10,10 +10,16 @@ const { asyncHandler, csrfProtection, getMovies } = require("../utils");
 
 const router = express.Router();
 
-const validateFavorite = [
+const validateFavoriteDirector = [
+    check("directorName")
+        .exists({ checkFalsy: true })
+        .withMessage("Please enter a favorite director name")
+];
+
+const validateFavoriteCritic = [
     check("name")
         .exists({ checkFalsy: true })
-        .withMessage("Please enter a name")
+        .withMessage("Please enter a favorite critic name")
 ];
 
 router.get("/", asyncHandler(async (req, res) => {
@@ -170,7 +176,7 @@ router.get("/favorite-directors/add", csrfProtection, requireAuth, asyncHandler(
 }));
 
 
-router.post("/favorite-directors/add", csrfProtection, validateFavorite, asyncHandler(async (req, res) => {
+router.post("/favorite-directors/add", csrfProtection, validateFavoriteDirector, asyncHandler(async (req, res) => {
     const validatorErrors = validationResult(req);
 
     if (!validatorErrors.isEmpty()) {
@@ -183,7 +189,7 @@ router.post("/favorite-directors/add", csrfProtection, validateFavorite, asyncHa
         });
     } else {
         const { userId } = req.session.auth;
-        const { directorName } = req.body;
+        const { directorName, notes } = req.body;
         const favoriteDirectorsData = await FavoriteDirector.findAll({ where: userId });
         const favoriteDirectorIds = favoriteDirectorsData.map(director => director.dataValues.directorId);
 
@@ -197,7 +203,8 @@ router.post("/favorite-directors/add", csrfProtection, validateFavorite, asyncHa
         if (!favoriteDirectorIds.includes(director.id)) {
             await FavoriteDirector.create({
                 userId,
-                directorId: director.id
+                directorId: director.id,
+                notes
             });
 
             res.redirect("/");
@@ -223,7 +230,7 @@ router.get("/favorite-critics/add", csrfProtection, requireAuth, asyncHandler(as
 }));
 
 
-router.post("/favorite-critics/add", csrfProtection, validateFavorite, asyncHandler(async (req, res) => {
+router.post("/favorite-critics/add", csrfProtection, validateFavoriteCritic, asyncHandler(async (req, res) => {
     const validatorErrors = validationResult(req);
 
     if (!validatorErrors.isEmpty()) {
@@ -236,7 +243,7 @@ router.post("/favorite-critics/add", csrfProtection, validateFavorite, asyncHand
         });
     } else {
         const { userId } = req.session.auth;
-        const { name, criticNotes } = req.body;
+        const { name, notes } = req.body;
         const favoriteCriticsData = await FavoriteCritic.findAll({ where: userId });
         const favoriteCriticIds = favoriteCriticsData.map(critic => critic.dataValues.criticId);
 
@@ -251,7 +258,7 @@ router.post("/favorite-critics/add", csrfProtection, validateFavorite, asyncHand
             await FavoriteCritic.create({
                 userId,
                 criticId: critic.id,
-                notes: criticNotes
+                notes
             });
         } else {
             const critics = await Critic.findAll();
