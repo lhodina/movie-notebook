@@ -2,7 +2,7 @@ const express = require("express");
 const { check, validationResult } = require("express-validator");
 const { Op } = require("sequelize");
 
-const { csrfProtection, asyncHandler, getYears } = require("../utils");
+const { csrfProtection, asyncHandler, getYears, getDirector } = require("../utils");
 const db = require("../db/models");
 const { Director, Movie, DirectorFavorite, FavoriteDirector } = db;
 const { requireAuth } = require("../auth");
@@ -69,116 +69,111 @@ router.post("/add", validateDirector, csrfProtection, asyncHandler(async (req, r
 
 
 router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
-    const { userId } = req.session.auth;
-
     const directorId = parseInt(req.params.id, 10);
-    const directors = await Director.findAll();
-    const movies = await Movie.findAll();
+    getDirector(req, res, directorId);
 
-    const director = await Director.findByPk(directorId, {
-        include: [
-            'directedMovies',
-            {
-                model: Movie,
-                as: 'directorFavorites',
-                include: {model: Director, as: 'directorOfFavorite' }
-            }
-        ]
-    });
+    // const { userId } = req.session.auth;
 
-    const directedMovies = director.dataValues.directedMovies;
+    // const directorId = parseInt(req.params.id, 10);
+    // const directors = await Director.findAll();
+    // const movies = await Movie.findAll();
 
-    const favoriteMovieData = director.dataValues.directorFavorites;
+    // const director = await Director.findByPk(directorId, {
+    //     include: [
+    //         'directedMovies',
+    //         {
+    //             model: Movie,
+    //             as: 'directorFavorites',
+    //             include: {model: Director, as: 'directorOfFavorite' }
+    //         }
+    //     ]
+    // });
 
-    const favoriteMovies = favoriteMovieData.map(movieData => {
-        const movie = movieData.dataValues;
-        const director = movieData.dataValues.directorOfFavorite.dataValues.name;
+    // const directedMovies = director.dataValues.directedMovies;
 
-        const cleanedMovie = {
-            id: movie.id,
-            title: movie.title,
-            directorId: movie.directorId,
-            director,
-            yearReleased: movie.yearReleased,
-            imageLink: movie.imageLink
-        };
+    // const favoriteMovieData = director.dataValues.directorFavorites;
 
-        return cleanedMovie;
-    });
+    // const favoriteMovies = favoriteMovieData.map(movieData => {
+    //     const movie = movieData.dataValues;
+    //     const director = movieData.dataValues.directorOfFavorite.dataValues.name;
 
-    let favoriteDirector = await FavoriteDirector.findOne({
-        where: {
-            [Op.and]: [
-                { userId },
-                { directorId }
-            ]
-        }
-    });
+    //     const cleanedMovie = {
+    //         id: movie.id,
+    //         title: movie.title,
+    //         directorId: movie.directorId,
+    //         director,
+    //         yearReleased: movie.yearReleased,
+    //         imageLink: movie.imageLink
+    //     };
 
-    res.render("director", {
-        director,
-        favoriteDirector,
-        directors,
-        movies,
-        years,
-        directedMovies,
-        favoriteMovies,
-        csrfToken: req.csrfToken()
-    });
+    //     return cleanedMovie;
+    // });
+
+    // let favoriteDirector = await FavoriteDirector.findOne({
+    //     where: {
+    //         [Op.and]: [
+    //             { userId },
+    //             { directorId }
+    //         ]
+    //     }
+    // });
+
+
 }));
 
 
 
 router.post("/:id/movies-directed/add", csrfProtection, validateDirectedMovie, asyncHandler(async (req, res) => {
     const validatorErrors = validationResult(req);
-
+    const directorId = parseInt(req.params.id, 10);
     if (!validatorErrors.isEmpty()) {
         const errors = validatorErrors.array().map((error) => error.msg);
-        const directorId = parseInt(req.params.id, 10);
-        const directors = await Director.findAll();
-        const movies = await Movie.findAll();
+        getDirector(req, res, directorId, errors);
 
-        const director = await Director.findByPk(directorId, {
-            include: [
-                'directedMovies',
-                {
-                    model: Movie,
-                    as: 'directorFavorites',
-                    include: {model: Director, as: 'directorOfFavorite' }
-                }
-            ]
-        });
+        // const directors = await Director.findAll();
+        // const movies = await Movie.findAll();
 
-        const directedMovies = director.dataValues.directedMovies;
+        // const director = await Director.findByPk(directorId, {
+        //     include: [
+        //         'directedMovies',
+        //         {
+        //             model: Movie,
+        //             as: 'directorFavorites',
+        //             include: {model: Director, as: 'directorOfFavorite' }
+        //         }
+        //     ]
+        // });
 
-        const favoriteMovieData = director.dataValues.directorFavorites;
+        // const directedMovies = director.dataValues.directedMovies;
 
-        const favoriteMovies = favoriteMovieData.map(movieData => {
-            const movie = movieData.dataValues;
-            const director = movieData.dataValues.directorOfFavorite.dataValues.name;
+        // const favoriteMovieData = director.dataValues.directorFavorites;
 
-            const cleanedMovie = {
-                id: movie.id,
-                title: movie.title,
-                directorId: movie.directorId,
-                director,
-                yearReleased: movie.yearReleased,
-                imageLink: movie.imageLink
-            };
+        // const favoriteMovies = favoriteMovieData.map(movieData => {
+        //     const movie = movieData.dataValues;
+        //     const director = movieData.dataValues.directorOfFavorite.dataValues.name;
 
-            return cleanedMovie;
-        });
+        //     const cleanedMovie = {
+        //         id: movie.id,
+        //         title: movie.title,
+        //         directorId: movie.directorId,
+        //         director,
+        //         yearReleased: movie.yearReleased,
+        //         imageLink: movie.imageLink
+        //     };
 
-        res.render("director", {
-            director,
-            directors,
-            movies,
-            years,
-            directedMovies,
-            favoriteMovies,
-            errors,
-            csrfToken: req.csrfToken()
-        });
+        //     return cleanedMovie;
+        // });
+
+        // res.render("director", {
+        //     director,
+        //     directors,
+        //     movies,
+        //     years,
+        //     directedMovies,
+        //     favoriteMovies,
+        //     errors,
+        //     csrfToken: req.csrfToken()
+        // });
     } else {
         const directorId = parseInt(req.params.id, 10);
 
@@ -203,41 +198,45 @@ router.post("/:id/movies-directed/add", csrfProtection, validateDirectedMovie, a
 
 
 router.post("/:id/favorites/add", csrfProtection, validateFavoriteMovie, asyncHandler(async (req, res) => {
-    const currentDirectorId = parseInt(req.params.id, 10);
-
-    let movie;
-
-    let {
-        title,
-        selectMovie,
-        directorName,
-        yearReleased,
-        imageLink
-    } = req.body;
-
-    if (yearReleased === "--Year--") yearReleased = 0;
-
-
-    if (title) {
-        let directorOfFavorite = await Director.findOne({ where: { name: directorName }});
-
-        if (!directorOfFavorite) {
-            directorOfFavorite = await Director.create({name: directorName});
-        }
-
-        movie = await Movie.create({
+    const directorId = parseInt(req.params.id, 10);
+    const validatorErrors = validationResult(req);
+    if (!validatorErrors.isEmpty()) {
+        const errors = validatorErrors.array().map((error) => error.msg);
+        getDirector(req, res, directorId, errors);
+    } else {
+        let {
             title,
-            directorId: directorOfFavorite.id,
+            selectMovie,
+            directorName,
             yearReleased,
             imageLink
-        });
-    } else {
-        movie = await Movie.findOne({ where: { title: selectMovie } });
+        } = req.body;
+
+        if (yearReleased === "--Year--") yearReleased = 0;
+
+        let movie;
+
+        if (title) {
+            let directorOfFavorite = await Director.findOne({ where: { name: directorName }});
+
+            if (!directorOfFavorite) {
+                directorOfFavorite = await Director.create({name: directorName});
+            }
+
+            movie = await Movie.create({
+                title,
+                directorId: directorOfFavorite.id,
+                yearReleased,
+                imageLink
+            });
+        } else {
+            movie = await Movie.findOne({ where: { title: selectMovie } });
+        }
+
+        await DirectorFavorite.create({ director_Id: directorId, movieId: movie.id });
+
+        res.redirect(`/directors/${directorId}`);
     }
-
-    await DirectorFavorite.create({ director_Id: currentDirectorId, movieId: movie.id });
-
-    res.redirect(`/directors/${currentDirectorId}`);
 }));
 
 

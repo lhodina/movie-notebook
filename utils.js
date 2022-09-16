@@ -1,5 +1,8 @@
 const { validationResult } = require("express-validator");
 const csrf= require("csurf");
+const { Op } = require("sequelize");
+const db = require("./db/models");
+const { Director, Movie, FavoriteDirector } = db;
 
 const csrfProtection = csrf({ cookie: true });
 const asyncHandler = (handler) => (req, res, next) => handler(req, res, next).catch(next);
@@ -116,11 +119,73 @@ const getMovies = (movies, user="") => movies.map( (movieData) => {
 });
 
 
+const getDirector = async (req, res, directorId, errors) => {
+    const { userId } = req.session.auth;
+
+    const directors = await Director.findAll();
+    const movies = await Movie.findAll();
+
+    const director = await Director.findByPk(directorId, {
+        include: [
+            'directedMovies',
+            {
+                model: Movie,
+                as: 'directorFavorites',
+                include: {model: Director, as: 'directorOfFavorite' }
+            }
+        ]
+    });
+
+    const directedMovies = director.dataValues.directedMovies;
+
+    const favoriteMovieData = director.dataValues.directorFavorites;
+
+    const favoriteMovies = favoriteMovieData.map(movieData => {
+        const movie = movieData.dataValues;
+        const director = movieData.dataValues.directorOfFavorite.dataValues.name;
+
+        const cleanedMovie = {
+            id: movie.id,
+            title: movie.title,
+            directorId: movie.directorId,
+            director,
+            yearReleased: movie.yearReleased,
+            imageLink: movie.imageLink
+        };
+
+        return cleanedMovie;
+    });
+
+    let favoriteDirector = await FavoriteDirector.findOne({
+        where: {
+            [Op.and]: [
+                { userId },
+                { directorId }
+            ]
+        }
+    });
+
+    const years = getYears();
+
+    res.render("director", {
+        director,
+        favoriteDirector,
+        directors,
+        movies,
+        years,
+        directedMovies,
+        favoriteMovies,
+        errors,
+        csrfToken: req.csrfToken()
+    });
+}
+
 
 module.exports = {
     csrfProtection,
     asyncHandler,
     handleValidationErrors,
     getYears,
-    getMovies
+    getMovies,
+    getDirector
 };
