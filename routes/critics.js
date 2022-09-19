@@ -1,5 +1,5 @@
 const express = require("express");
-const { check, validationResult } = require("express-validator");
+const { check, validationResult, oneOf } = require("express-validator");
 const { Op } = require("sequelize");
 const { csrfProtection, asyncHandler, getYears, getCritic } = require("../utils");
 const db = require("../db/models");
@@ -15,12 +15,19 @@ const validateCritic = [
 ];
 
 const validateFavoriteMovie = [
-    check("title")
-        .exists({ checkFalsy: true })
-        .withMessage("Please enter a movie title"),
-    check("directorName")
-        .exists({ checkFalsy: true })
-        .withMessage("Please include a director")
+    oneOf([
+        check("title")
+            .exists({ checkFalsy: true }),
+        check("selectMovie")
+            .exists({ checkFalsy: true })
+    ], "Please enter a movie title")
+    ,
+    oneOf([
+        check("director")
+            .exists({ checkFalsy: true }),
+        check("selectMovie")
+            .exists({ checkFalsy: true })
+    ], "Please enter a director")
 ];
 
 router.get("/", asyncHandler(async (req, res) => {
@@ -70,33 +77,33 @@ router.post("/:id/favorites/add", validateFavoriteMovie, csrfProtection, asyncHa
         const errors = validatorErrors.array().map((error) => error.msg);
         getCritic(req, res, criticId, errors);
     } else {
-        const { selectMovie } = req.body;
         let movie;
-
-        const directorName = req.body.directorName;
-
-        let director;
-
-        if (directorName) {
-            director = await Director.findOne({ where: { name: directorName } });
-            if (!director) {
-                director = await Director.create({
-                    name: directorName
-                });
-            }
-        }
 
         let {
             title,
+            selectMovie,
             yearReleased,
             imageLink
         } = req.body;
 
-        if (yearReleased === "--Year--") yearReleased = 0;
-
         if (selectMovie !== "--Choose Movie--") {
             movie = await Movie.findOne({ where: { title: selectMovie } });
         } else {
+            const directorName = req.body.directorName;
+
+            let director;
+
+            if (directorName) {
+                director = await Director.findOne({ where: { name: directorName } });
+                if (!director) {
+                    director = await Director.create({
+                        name: directorName
+                    });
+                }
+            }
+
+            if (yearReleased === "--Year--") yearReleased = 0;
+
             movie = await Movie.create({
                 title,
                 directorId: director.id,

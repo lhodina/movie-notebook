@@ -2,7 +2,7 @@ const { validationResult } = require("express-validator");
 const csrf= require("csurf");
 const { Op } = require("sequelize");
 const db = require("./db/models");
-const { Director, Movie, FavoriteDirector, Critic, FavoriteCritic } = db;
+const { Director, Movie, FavoriteDirector, Critic, FavoriteCritic, User, UserNote } = db;
 
 const csrfProtection = csrf({ cookie: true });
 const asyncHandler = (handler) => (req, res, next) => handler(req, res, next).catch(next);
@@ -131,7 +131,7 @@ const getDirector = async (req, res, directorId, errors) => {
             {
                 model: Movie,
                 as: 'directorFavorites',
-                include: {model: Director, as: 'directorOfFavorite' }
+                include: [{model: Director, as: 'directorOfFavorite' }, {model: UserNote}]
             }
         ]
     });
@@ -143,6 +143,8 @@ const getDirector = async (req, res, directorId, errors) => {
     const favoriteMovies = favoriteMovieData.map(movieData => {
         const movie = movieData.dataValues;
         const director = movieData.dataValues.directorOfFavorite.dataValues.name;
+        const userNotesData = movie.UserNotes;
+        console.log("*****userNotesData:", userNotesData);
 
         const cleanedMovie = {
             id: movie.id,
@@ -152,6 +154,15 @@ const getDirector = async (req, res, directorId, errors) => {
             yearReleased: movie.yearReleased,
             imageLink: movie.imageLink
         };
+
+        if (userNotesData.length) {
+            const userNote = userNotesData[0].dataValues;
+            cleanedMovie.review = userNote.review;
+            cleanedMovie.rating = userNote.rating;
+            cleanedMovie.watchedStatus = userNote.watchedStatus;
+        }
+
+        console.log("*****cleanedMovie:", cleanedMovie);
 
         return cleanedMovie;
     });
@@ -183,13 +194,14 @@ const getDirector = async (req, res, directorId, errors) => {
 
 const getCritic = async (req, res, criticId, errors) => {
     const { userId } = req.session.auth;
+
     const movies = await Movie.findAll();
     const directors = await Director.findAll();
 
     const critic = await Critic.findByPk(criticId, {
         include: {
             model: Movie,
-            include: ["movieDirector", "favoritedByDirectors"]
+            include: [ { model: UserNote }, "movieDirector", "favoritedByDirectors" ]
         }
     });
 
@@ -204,6 +216,8 @@ const getCritic = async (req, res, criticId, errors) => {
 
     const favoriteMovies = critic.dataValues.Movies.map(movieData => {
         const data = movieData.dataValues;
+        const userNotesData = data.UserNotes;
+
         const movie = {
             id: data.id,
             title: data.title,
@@ -214,8 +228,16 @@ const getCritic = async (req, res, criticId, errors) => {
             likedByCritics: data.likedByCritics
         };
 
+        if (userNotesData.length) {
+            const userNote = userNotesData[0].dataValues;
+            movie.review = userNote.review;
+            movie.rating = userNote.rating;
+            movie.watchedStatus = userNote.watchedStatus;
+        }
+
         return movie;
     });
+
 
     const years = getYears();
 
