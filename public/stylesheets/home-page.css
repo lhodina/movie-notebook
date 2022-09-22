@@ -10,14 +10,63 @@ h2 {
 }
 
 #sidebar {
-    margin: 10px;
+    width: 20%;
+}
+
+#display {
+    width: 80%;
 }
 
 .displayCollection {
     border: 1px solid lightgray;
-    width: 75%;
     margin: 10px;
     padding: 10px;
     display: flex;
     justify-content: center;
+}
+
+table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead th:nth-child(1) {
+    width: 3%;
+}
+
+thead th:nth-child(2) {
+    width: 7%;
+}
+
+thead th:nth-child(3) {
+    width: 15%;
+}
+
+thead th:nth-child(4) {
+    width: 15%;
+}
+
+thead th:nth-child(5) {
+    width: 5%;
+}
+
+thead th:nth-child(6) {
+    width: 10%;
+}
+
+thead th:nth-child(7) {
+    width: 10%;
+}
+
+thead th:nth-child(8) {
+    width: 10%;
+}
+
+thead th:nth-child(9) {
+    width: 15%;
+}
+
+thead th:nth-child(10) {
+    width: 10%;
 }

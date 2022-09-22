@@ -196,7 +196,7 @@ mixin displayMovies(movies, location)
         thead
             tr
                 if (location === "recCollection")
-                    th Recommended Score
+                    th Score
                 th
                 th Title
                 if (location !== "moviesDirected")
@@ -291,13 +291,17 @@ mixin displayMovies(movies, location)
                                 ul
                                 each director in movie.likedByDirectors
                                     li= director.name
-                        td
-                            a(href=`/movies/${movie.id}`) edit
+                        //- td
+                        //-     a(href=`/movies/${movie.id}`) edit
                         if (location === "moviesPage")
                             td
+                                a(href=`/movies/${movie.id}`) Edit
+                                br
                                 button(id=movie.id).delete-btn Delete
                         else if (location === "moviesDirected")
                             td
                         else
                             td
+                                a(href=`/movies/${movie.id}`) Edit
+                                br
                                 button(id=movie.id).remove-btn Remove

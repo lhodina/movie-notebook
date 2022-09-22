@@ -12,12 +12,30 @@ nav {
     /* font-size: 20px; */
 }
 
+a:visited {
+    color: black;
+}
+
+a:active {
+    color:rgb(211, 211, 211);
+}
+
+a:hover {
+    /* font-size: larger; */
+    transform:scale(1.1);
+}
+
+
 nav a {
     color: white;
     text-decoration: none;
     margin: 5px 15px;
     font-weight: bold;
     font-family: 'Courier New', Courier, monospace;
+}
+
+nav a:visited {
+    color: white;
 }
 
 nav a:hover {
@@ -42,12 +60,17 @@ nav span {
 #search-results-container {
     position: absolute;
     float: right;
-    width: 275px;
+    width: 320px;
     border: 1px solid lightgray;
     padding: 5px;
     top: 85px;
     background-color: rgb(28, 26, 26);
     z-index: 1;
+}
+
+#search-results-container a {
+    margin: 5px;
+    font-size: 12px;
 }
 
 #search-results-list {
@@ -56,6 +79,10 @@ nav span {
 
 h2 {
     font-size: 50px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+h3 {
     font-family: 'Courier New', Courier, monospace;
 }
 

@@ -43,7 +43,7 @@ block content
     h3 Notes
     form(action=`/directors/${director.id}/notes` method="post")
         input(type="hidden" name="_csrf" value=csrfToken)
-        if (favoriteDirector.notes)
+        if (favoriteDirector && favoriteDirector.notes)
             textarea(name="notes")= favoriteDirector.notes
         else
             textarea(name="notes" ) Add a note
