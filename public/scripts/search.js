@@ -3,8 +3,11 @@ console.log("Hello from the search.js script");
 const searchForm = document.getElementById("search-form");
 const searchBar = document.getElementById("search-bar");
 const searchButton = document.getElementById("search-button");
+const searchResultsContainer = document.getElementById("search-results-container");
 const searchResultsList = document.getElementById("search-results-list");
 
+
+searchResultsContainer.style.display = "none";
 
 searchBar.addEventListener("input", async (event) => {
     event.preventDefault();
@@ -38,7 +41,10 @@ searchBar.addEventListener("input", async (event) => {
         for (let result of collectionResults) {
             searchResultsList.innerHTML += `<li><a href="/collections/${result.id}"}>${result.name}</a></li>`;
         }
+
+        searchResultsContainer.style.display = "block";
     } else {
         searchResultsList.innerHTML = "";
+        searchResultsContainer.style.display = "none";
     }
 });

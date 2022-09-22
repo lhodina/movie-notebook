@@ -1,3 +1,4 @@
+
 main {
     display: flex;
     flex-wrap: wrap;
@@ -14,8 +15,6 @@ h2 {
 
 .displayCollection {
     border: 1px solid lightgray;
-    /* max-height: 500px;
-    overflow-y: auto; */
     width: 75%;
     margin: 10px;
     padding: 10px;

@@ -127,16 +127,42 @@ const getDirector = async (req, res, directorId, errors) => {
 
     const director = await Director.findByPk(directorId, {
         include: [
-            'directedMovies',
+            {
+                model: Movie,
+                as: 'directedMovies',
+                include: [{ model: UserNote }]
+            }
+            ,
             {
                 model: Movie,
                 as: 'directorFavorites',
-                include: [{model: Director, as: 'directorOfFavorite' }, {model: UserNote}]
+                include: [{ model: Director, as: 'directorOfFavorite' }, { model: UserNote }]
             }
         ]
     });
 
-    const directedMovies = director.dataValues.directedMovies;
+    const directedMovieData = director.dataValues.directedMovies;
+    const directedMovies = directedMovieData.map(movieData => {
+        const movie = movieData.dataValues;
+        const userNotesData = movie.UserNotes;
+
+        const cleanedMovie = {
+            id: movie.id,
+            title: movie.title,
+            yearReleased: movie.yearReleased,
+            imageLink: movie.imageLink
+        };
+
+        if (userNotesData.length) {
+            const userNote = userNotesData[0].dataValues;
+            cleanedMovie.review = userNote.review;
+            cleanedMovie.rating = userNote.rating;
+            cleanedMovie.watchedStatus = userNote.watchedStatus;
+        }
+
+        return cleanedMovie;
+    });
+
 
     const favoriteMovieData = director.dataValues.directorFavorites;
 
@@ -144,7 +170,6 @@ const getDirector = async (req, res, directorId, errors) => {
         const movie = movieData.dataValues;
         const director = movieData.dataValues.directorOfFavorite.dataValues.name;
         const userNotesData = movie.UserNotes;
-        console.log("*****userNotesData:", userNotesData);
 
         const cleanedMovie = {
             id: movie.id,
@@ -161,8 +186,6 @@ const getDirector = async (req, res, directorId, errors) => {
             cleanedMovie.rating = userNote.rating;
             cleanedMovie.watchedStatus = userNote.watchedStatus;
         }
-
-        console.log("*****cleanedMovie:", cleanedMovie);
 
         return cleanedMovie;
     });

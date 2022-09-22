@@ -1,43 +1,42 @@
 doctype html
 html
+    script(src="/scripts/search.js" type="module")
     head
         title Movie Notebook
         link(rel='stylesheet' href='/stylesheets/index.css')
     body
-        span
-            a(href="/")
-                button Home
-            a(href="/movies")
-                button Movies
-            a(href="/directors")
-                button Directors
-            a(href="/critics")
-                button Critics
-            a(href="/movies/add")
-                button Add Movie
-            a(href="/directors/add")
-                button Add Director
-            a(href="/critics/add")
-                button Add Critic
+        nav
+            a(href="/") Home
+            //- a(href="/movies") Movies
+            //- a(href="/directors") Directors
+            //- a(href="/critics") Critics
+            a(href="/movies/add") Add Movie
+            //- a(href="/directors/add") Add Director
+            //- a(href="/critics/add") Add Critic
 
-    if locals.authenticated
-        a(href="/collections/add")
-            button Add Collection
-        a(href="/favorite-directors/add")
-            button Add Favorite Director
-        a(href="/favorite-critics/add")
-            button Add Favorite Critic
+            if locals.authenticated
+                a(href="/collections/add") Add Collection
+                a(href="/favorite-directors/add") Add Favorite Director
+                a(href="/favorite-critics/add") Add Favorite Critic
 
-        span Welcome, #{user.username}
-        form(action="/users/logout" method="post")
-            button(type="submit") Logout
-    else
-        div
-            span
-                a(href="/users/login")
-                    button Login
-                a(href="/users/register")
-                    button Register
+                div(class="form-container")
+                    form(action="/search" id="search-form")
+                        input(type="search" id="search-bar" name="q" list="search-results")
+                        img(src="/images/search-icon.png" width="20px" height="20px")
+                    div(id="search-results-container")
+                        ul(class="search-results-list" id="search-results-list")
+
+                span Welcome, #{user.username}
+
+                form(action="/users/logout" method="post")
+                    button(type="submit") Logout
+            else
+                div
+                    span
+                        a(href="/users/login")
+                            button Login
+                        a(href="/users/register")
+                            button Register
 
 
     block content

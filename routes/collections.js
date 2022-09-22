@@ -156,12 +156,19 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
         }
     });
 
-
     const collectionMovies = collection.dataValues.Movies.map(data =>
         {
             const movie = data.dataValues;
             const director = movie.movieDirector.dataValues.name;
             movie.director = director;
+
+            if (movie.UserNotes.length) {
+                const userNotes = movie.UserNotes[0].dataValues;
+                movie.review = userNotes.review;
+                movie.rating = userNotes.rating;
+                movie.watchedStatus = userNotes.watchedStatus;
+            }
+
             return movie;
         });
 

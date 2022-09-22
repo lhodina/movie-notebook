@@ -1,5 +1,5 @@
 const express = require("express");
-const { check, validationResult } = require("express-validator");
+const { check, validationResult, oneOf } = require("express-validator");
 
 const { csrfProtection, asyncHandler, getYears, getDirector } = require("../utils");
 const db = require("../db/models");
@@ -15,12 +15,19 @@ const validateDirector = [
 ];
 
 const validateFavoriteMovie = [
-    check("title")
-        .exists({ checkFalsy: true })
-        .withMessage("Please enter a movie title"),
-    check("directorName")
-        .exists({ checkFalsy: true })
-        .withMessage("Please include a director")
+    oneOf([
+        check("title")
+            .exists({ checkFalsy: true }),
+        check("selectMovie")
+            .exists({ checkFalsy: true })
+    ], "Please enter a movie title")
+    ,
+    oneOf([
+        check("director")
+            .exists({ checkFalsy: true }),
+        check("selectMovie")
+            .exists({ checkFalsy: true })
+    ], "Please enter a director")
 ];
 
 const validateDirectedMovie = [
@@ -102,6 +109,8 @@ router.post("/:id/movies-directed/add", csrfProtection, validateDirectedMovie, a
 
 
 router.post("/:id/favorites/add", csrfProtection, validateFavoriteMovie, asyncHandler(async (req, res) => {
+    console.log("*****req.body:", req.body);
+
     const directorId = parseInt(req.params.id, 10);
     const validatorErrors = validationResult(req);
     if (!validatorErrors.isEmpty()) {

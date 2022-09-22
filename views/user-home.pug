@@ -4,18 +4,9 @@ block content
     script(src="/scripts/index.js" type="module")
     script(src="/scripts/collections.js" type="module")
     script(src="/scripts/movies.js" type="module")
-    script(src="/scripts/search.js" type="module")
     link(rel='stylesheet' href='/stylesheets/home-page.css')
 
     main
-        div(class="form-container")
-            form(action="/search" id="search-form")
-                input(type="search" id="search-bar" name="q" list="search-results")
-                img(src="/images/search-icon.png" width="20px" height="20px")
-        div(class="search-results-container")
-            ul(class="search-results-list" id="search-results-list")
-
-        h2 User Home
         div(id="sidebar")
             h3 Your Collections
             ul

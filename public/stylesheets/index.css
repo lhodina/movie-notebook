@@ -1,4 +1,59 @@
 
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(28, 26, 26);
+    height: 75px;
+    color: white;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+    /* font-size: 20px; */
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 5px 15px;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+#search-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+}
+
+#search-form img {
+    background-color: white;
+}
+
+nav span {
+    margin: 5px;
+}
+
+#search-results-container {
+    position: absolute;
+    float: right;
+    width: 275px;
+    border: 1px solid lightgray;
+    padding: 5px;
+    top: 85px;
+    background-color: rgb(28, 26, 26);
+    z-index: 1;
+}
+
+#search-results-list {
+    list-style-type: none;
+}
+
 h2 {
     font-size: 50px;
     font-family: 'Courier New', Courier, monospace;
@@ -7,7 +62,6 @@ h2 {
 .poster, .poster-placeholder {
     height: 90px;
     width: 60px;
-    /* aspect-ratio: auto 2 / 3; */
 }
 
 .poster-placeholder, .review-placeholder {
@@ -59,9 +113,6 @@ h2 {
 .starRating input:checked ~ label:before {
     content: '\2605';
 }
-
-
-
 
 .solid-star::before {
     content: '\2605';
