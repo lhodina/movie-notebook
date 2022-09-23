@@ -250,15 +250,6 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
         }
     }
 
-
-    console.log("*****title:", title);
-    console.log("*****director.dataValues.id:", director.dataValues.id);
-    console.log("*****yearReleased:", yearReleased);
-    console.log("*****imageLink:", imageLink);
-    console.log("*****typeof director.dataValues.id:", typeof director.dataValues.id);
-    console.log("*****movie:", movie);
-
-
     if (movie) {
         await movie.update({
             movieId,
