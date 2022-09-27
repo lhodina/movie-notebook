@@ -6,7 +6,6 @@ const searchButton = document.getElementById("search-button");
 const searchResultsContainer = document.getElementById("search-results-container");
 const searchResultsList = document.getElementById("search-results-list");
 
-
 searchResultsContainer.style.display = "none";
 
 searchBar.addEventListener("input", async (event) => {

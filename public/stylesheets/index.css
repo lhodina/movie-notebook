@@ -1,15 +1,27 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
 
 nav {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     background-color: rgb(28, 26, 26);
     height: 75px;
     color: white;
     font-weight: bold;
     font-family: 'Courier New', Courier, monospace;
-    /* font-size: 20px; */
+}
+
+#nav-buttons {
+    display: flex;
+}
+
+#user {
+    display: flex;
+    padding: 10px;
 }
 
 a:visited {
@@ -21,7 +33,6 @@ a:active {
 }
 
 a:hover {
-    /* font-size: larger; */
     transform:scale(1.1);
 }
 
@@ -44,13 +55,22 @@ nav a:hover {
 
 #search-form {
     display: flex;
+    justify-content: flex-end;
     align-items: center;
-    justify-content: center;
     margin: 5px;
+    width: 320px;
 }
 
-#search-form img {
-    background-color: white;
+#search-form input {
+    border-radius: 10px;
+    width: 300px;
+    padding: 3px;
+    padding-left: 30px;
+}
+
+#search-icon {
+    position: relative;
+    left: 25px;
 }
 
 nav span {
@@ -76,6 +96,18 @@ nav span {
 #search-results-list {
     list-style-type: none;
 }
+
+
+#logout-button {
+    border-radius: 10px;
+    margin: 0 10px;
+    height: 30px;
+    width: 65px;
+    font-family: helvetica;
+    background-color: white;
+    font-weight: bold;
+}
+
 
 h2 {
     font-size: 50px;

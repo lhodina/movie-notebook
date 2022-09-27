@@ -8,7 +8,7 @@ block content
 
     main
         div(id="sidebar")
-            h3 Your Collections
+            h3 COLLECTIONS
             ul
             each collection in collections
                 li
@@ -16,7 +16,7 @@ block content
             a(href="/collections/add")
                     button Add Collection
 
-            h3 Your Favorite Directors
+            h3 FAVORITE DIRECTORS
             ul
                 each favoriteDirector in favoriteDirectors
                     li
@@ -24,7 +24,7 @@ block content
             a(href="/favorite-directors/add")
                 button Add Favorite Director
 
-            h3 Your Favorite Critics
+            h3 FAVORITE CRITICS
             ul
                 each favoriteCritic in favoriteCritics
                     li
@@ -36,7 +36,7 @@ block content
             each collection in collections
                 if collection.name === "Most Recommended"
                     div(id=`collection-container-${collection.id}` class="recommended" hidden)
-                        h3= collection.name
+                        h3 MOST RECOMMENDED
                         +displayMovies(collection.movies, "recCollection")
                 else
                     div(id=`collection-container-${collection.id}` hidden)

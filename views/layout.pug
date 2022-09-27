@@ -6,30 +6,27 @@ html
         link(rel='stylesheet' href='/stylesheets/index.css')
     body
         nav
-            a(href="/") Home
-            //- a(href="/movies") Movies
-            //- a(href="/directors") Directors
-            //- a(href="/critics") Critics
-            a(href="/movies/add") Add Movie
-            //- a(href="/directors/add") Add Director
-            //- a(href="/critics/add") Add Critic
-
             if locals.authenticated
-                a(href="/collections/add") Add Collection
-                a(href="/favorite-directors/add") Add Favorite Director
-                a(href="/favorite-critics/add") Add Favorite Critic
+                div(id="nav-buttons")
+                    a(href="/") HOME
+                    a(href="/movies/add") ADD MOVIE
+                    a(href="/collections/add") ADD COLLECTION
+                    a(href="/favorite-directors/add") ADD DIRECTOR
+                    a(href="/favorite-critics/add") ADD CRITIC
 
-                div(class="form-container")
-                    form(action="/search" id="search-form")
-                        input(type="search" id="search-bar" name="q" list="search-results")
-                        img(src="/images/search-icon.png" width="20px" height="20px")
-                    div(id="search-results-container")
-                        ul(class="search-results-list" id="search-results-list")
+                    div(class="form-container")
+                        form(action="/search" id="search-form")
+                            img(id="search-icon" src="/images/search-icon.png" width="17px" height="17px")
+                            input(type="search" id="search-bar" name="q" list="search-results")
 
-                span Welcome, #{user.username}
+                        div(id="search-results-container")
+                            ul(class="search-results-list" id="search-results-list")
 
-                form(action="/users/logout" method="post")
-                    button(type="submit") Logout
+                div(id="user")
+                    span Welcome, #{user.username}
+
+                    form(action="/users/logout" method="post")
+                        button(type="submit" id="logout-button") Logout
             else
                 div
                     span
@@ -37,6 +34,4 @@ html
                             button Login
                         a(href="/users/register")
                             button Register
-
-
     block content

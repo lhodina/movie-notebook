@@ -5,6 +5,23 @@ html, body {
     margin: 0;
 }
 
+
+body {
+    background-image: url("../images/love-hate.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+h1 {
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    margin-top: 50px;
+    font-size: 72px;
+}
+
+
 .form-container {
     display: flex;
     height: 75%;
@@ -16,9 +33,18 @@ form {
     border: 1px solid lightgray;
     padding: 10px;
     background-color: white;
+    border-radius: 5px;
 }
 
 
 form input {
+    margin: 5px;
+}
+
+
+button {
+    border-radius: 10px;
+    background-color: black;
+    color: white;
     margin: 5px;
 }

@@ -163,9 +163,6 @@ router.get("/", csrfProtection, asyncHandler(async (req, res) => {
         res.render("login", {
             csrfToken: req.csrfToken()
         });
-        // res.render("index", {
-        //     title: "MOVIE NOTEBOOK",
-        // });
     }
 }));
 
