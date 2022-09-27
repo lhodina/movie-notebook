@@ -7,7 +7,6 @@ html, body {
 
 main {
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-between;
 }
 
@@ -16,11 +15,23 @@ h2 {
 }
 
 #sidebar {
-    width: 20%;
+    min-width: 250px;
+    padding-left: 15px;
+}
+
+#sidebar a:hover {
+    transform:scale(1.1);
+}
+
+#sidebar button {
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    border-radius: 20px;
 }
 
 #display {
-    width: 80%;
+    flex-grow: 1;
 }
 
 .displayCollection {
