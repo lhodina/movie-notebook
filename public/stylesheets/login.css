@@ -1,0 +1,24 @@
+
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+.form-container {
+    display: flex;
+    height: 75%;
+}
+
+
+form {
+    margin: auto;
+    border: 1px solid lightgray;
+    padding: 10px;
+    background-color: white;
+}
+
+
+form input {
+    margin: 5px;
+}

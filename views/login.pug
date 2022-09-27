@@ -1,9 +1,16 @@
-extends layout.pug
+//- extends layout.pug
 include utils.pug
 block content
+    link(rel="stylesheet" href="/stylesheets/login.css")
     +handleErrors(errors)
-    form(action="/users/login" method="post")
-        input(type="hidden" name="_csrf" value=csrfToken)
-        +field("Email", "email", "text","demo@demo.com")
-        +field("Password", "password", "text", "abcABC123!")
-        button(type="submit") Login
+
+    h1 Movie Notebook
+
+    div(class="form-container")
+        form(action="/users/login" method="post")
+            h2 Log In
+            input(type="hidden" name="_csrf" value=csrfToken)
+            +field("Email", "email", "text","demo@demo.com")
+            +field("Password", "password", "text", "abcABC123!")
+            button(type="submit") Login 
+            a(href="/users/register") Register

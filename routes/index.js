@@ -22,7 +22,7 @@ const validateFavoriteCritic = [
         .withMessage("Please enter a favorite critic name")
 ];
 
-router.get("/", asyncHandler(async (req, res) => {
+router.get("/", csrfProtection, asyncHandler(async (req, res) => {
     if (req.session.auth) {
         const { userId } = req.session.auth;
 
@@ -160,9 +160,12 @@ router.get("/", asyncHandler(async (req, res) => {
             favoriteCritics
         });
     } else {
-        res.render("index", {
-            title: "MOVIE NOTEBOOK",
+        res.render("login", {
+            csrfToken: req.csrfToken()
         });
+        // res.render("index", {
+        //     title: "MOVIE NOTEBOOK",
+        // });
     }
 }));
 
