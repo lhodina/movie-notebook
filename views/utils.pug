@@ -293,13 +293,13 @@ mixin displayMovies(movies, location)
                                     li(class="liked-by-li")= director.name
                         if (location === "moviesPage")
                             td
-                                a(href=`/movies/${movie.id}`) Edit
+                                a(href=`/movies/${movie.id}`) View
                                 br
                                 button(id=movie.id).delete-btn Delete
                         else if (location === "moviesDirected")
                             td
                         else
                             td
-                                a(href=`/movies/${movie.id}`) Edit
+                                a(href=`/movies/${movie.id}`) View
                                 br
                                 button(id=movie.id).remove-btn Remove

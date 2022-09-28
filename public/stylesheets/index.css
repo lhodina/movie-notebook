@@ -24,9 +24,9 @@ nav {
     padding: 10px;
 }
 
-a:visited {
+/* a:visited {
     color: black;
-}
+} */
 
 a:active {
     color:rgb(211, 211, 211);
@@ -43,6 +43,7 @@ nav a {
     margin: 10px 15px;
     font-weight: bold;
     font-family: 'Courier New', Courier, monospace;
+    font-size: 20px;
 }
 
 nav a:visited {
@@ -62,7 +63,7 @@ nav a:hover {
 }
 
 #search-form input {
-    border-radius: 10px;
+    border-radius: 20px;
     width: 300px;
     padding: 3px;
     padding-left: 30px;
@@ -75,6 +76,7 @@ nav a:hover {
 
 nav span {
     margin: 5px;
+    font-size: 14px;
 }
 
 #search-results-container {
@@ -99,15 +101,20 @@ nav span {
 
 
 #logout-button {
-    border-radius: 10px;
+    border-radius: 20px;
     margin: 0 10px;
-    height: 30px;
-    width: 65px;
+    height: 25px;
+    width: 60px;
     font-family: helvetica;
     background-color: white;
     font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
 }
 
+#logout-button:hover {
+    transform:scale(1.1);
+}
 
 h2 {
     font-size: 50px;
