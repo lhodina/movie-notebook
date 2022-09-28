@@ -8,29 +8,32 @@ block content
 
     main
         div(id="sidebar")
-            h3 COLLECTIONS
-            ul
-                each collection in collections
-                    li
-                        a(id=`collection-${collection.id}-link` class='collection-link' href=`/collections/${collection.id}`)= collection.name
-            a(href="/collections/add")
-                button Add Collection
+            div(class="sidebar-section")
+                h3 COLLECTIONS
+                ul
+                    each collection in collections
+                        li
+                            a(id=`collection-${collection.id}-link` class='collection-link' href=`/collections/${collection.id}`)= collection.name
+                a(href="/collections/add")
+                    button Add Collection
 
-            h3 FAVORITE DIRECTORS
-            ul
-                each favoriteDirector in favoriteDirectors
-                    li
-                        a(href=`/directors/${favoriteDirector.id}`)= favoriteDirector.name
-            a(href="/favorite-directors/add")
-                button Add Favorite Director
+            div(class="sidebar-section")
+                h3 FAVORITE DIRECTORS
+                ul
+                    each favoriteDirector in favoriteDirectors
+                        li
+                            a(href=`/directors/${favoriteDirector.id}`)= favoriteDirector.name
+                a(href="/favorite-directors/add")
+                    button Add Favorite Director
 
-            h3 FAVORITE CRITICS
-            ul
-                each favoriteCritic in favoriteCritics
-                    li
-                        a(href=`/critics/${favoriteCritic.id}`)= favoriteCritic.name
-            a(href="/favorite-critics/add")
-                button Add Favorite Critic
+            div(class="sidebar-section")
+                h3 FAVORITE CRITICS
+                ul
+                    each favoriteCritic in favoriteCritics
+                        li
+                            a(href=`/critics/${favoriteCritic.id}`)= favoriteCritic.name
+                a(href="/favorite-critics/add")
+                    button Add Favorite Critic
 
         div(id="display")
             each collection in collections

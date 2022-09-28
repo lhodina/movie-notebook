@@ -284,15 +284,13 @@ mixin displayMovies(movies, location)
                             td
                         td
                             if (movie.likedByCritics && movie.likedByCritics.length)
-                                ul
+                                ul(class="liked-by-ul")
                                 each critic in movie.likedByCritics
-                                    li= critic.name
+                                    li(class="liked-by-li")= critic.name
                             if (movie.likedByDirectors && movie.likedByDirectors.length)
-                                ul
+                                ul(class="liked-by-ul")
                                 each director in movie.likedByDirectors
-                                    li= director.name
-                        //- td
-                        //-     a(href=`/movies/${movie.id}`) edit
+                                    li(class="liked-by-li")= director.name
                         if (location === "moviesPage")
                             td
                                 a(href=`/movies/${movie.id}`) Edit

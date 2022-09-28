@@ -16,7 +16,11 @@ h2 {
 
 #sidebar {
     min-width: 250px;
-    padding-left: 15px;
+    padding-left: 25px;
+}
+
+.sidebar-section {
+    margin: 50px 0;
 }
 
 #sidebar a:hover {
@@ -40,6 +44,23 @@ h2 {
     padding: 10px;
     display: flex;
     justify-content: center;
+}
+
+.liked-by-ul {
+    margin: 0;
+    padding: 0;
+}
+
+.liked-by-li {
+    list-style-type: none;
+    padding-left: 35px;
+    /* background-color: white; */
+    background-image: url("/images/laurels.png");
+    background-blend-mode: lighten;
+    background-size: 25px;
+    background-repeat: no-repeat;
+    background-position: 1px;
+    margin: 5px 0;
 }
 
 table {
