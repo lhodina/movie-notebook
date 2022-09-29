@@ -43,7 +43,10 @@ block content
                         +displayMovies(collection.movies, "recCollection")
                 else
                     div(id=`collection-container-${collection.id}` hidden)
-                        a(href=`/collections/${collection.id}`)= collection.name
+                        h3
+                            a(href=`/collections/${collection.id}`)= collection.name
                         +displayMovies(collection.movies, "home")
-                        a(href=`/collections/${collection.id}`) Add Movie
-                        button(id=collection.id).delete-collection Delete Collection
+
+                        div(id="collection-add-delete")
+                            a(href=`/collections/${collection.id}`) Add Movie
+                            button(id=collection.id).delete-collection Delete Collection

@@ -86,7 +86,7 @@ const getMovies = (movies, user="") => movies.map( (movieData) => {
         }
 
         if (cleanedMovie.watchedStatus === false) {
-            recommendedScore++;
+            recommendedScore += .5;
             reasons.push(" + You marked this movie Want to Watch");
         }
 

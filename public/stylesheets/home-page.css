@@ -89,6 +89,9 @@ a:hover {
     justify-content: center;
 }
 
+.displayCollection h3 {
+    margin: 15px;
+}
 
 .liked-by-ul {
     margin: 0;
@@ -119,42 +122,42 @@ table {
     border-collapse: collapse;
 }
 
+td {
+    padding: 10px 30px;
+}
+
 thead th:nth-child(1) {
-    width: 3%;
+    width: 10%;
 }
 
 thead th:nth-child(2) {
-    width: 7%;
+    width: 25%;
 }
 
 thead th:nth-child(3) {
-    width: 15%;
+    width: 20%;
 }
 
 thead th:nth-child(4) {
-    width: 15%;
+    width: 10%;
 }
 
 thead th:nth-child(5) {
-    width: 5%;
+    width: 25%;
 }
 
 thead th:nth-child(6) {
     width: 10%;
 }
 
-thead th:nth-child(7) {
-    width: 10%;
+#collection-add-delete {
+    margin: 10px;
 }
 
-thead th:nth-child(8) {
-    width: 10%;
-}
-
-thead th:nth-child(9) {
-    width: 15%;
-}
-
-thead th:nth-child(10) {
-    width: 10%;
+.delete-collection {
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    border-radius: 20px;
+    margin-left: 10px;
 }
