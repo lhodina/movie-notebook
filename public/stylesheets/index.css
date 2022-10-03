@@ -9,7 +9,7 @@ nav {
     justify-content: space-between;
     align-items: center;
     background-color: rgb(28, 26, 26);
-    height: 75px;
+    height: 60px;
     color: white;
     font-weight: bold;
     font-family: 'Courier New', Courier, monospace;
@@ -24,9 +24,6 @@ nav {
     padding: 10px;
 }
 
-/* a:visited {
-    color: black;
-} */
 
 a:active {
     color:rgb(211, 211, 211);

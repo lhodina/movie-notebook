@@ -1,12 +1,14 @@
 extends layout.pug
 include utils.pug
 block content
+    link(rel='stylesheet' href='/stylesheets/movie-add.css')
     +handleErrors(errors)
     h2 Add a Movie
     br
-    form(action="/movies/add" method="post")
-        input(type="hidden" name="_csrf" value=csrfToken)
-        +movieInfoFields()
-        br
-        +userNoteFields()
-        button(type="submit") Add
+    div(id="add-movie-form-container")
+        form(action="/movies/add" method="post")
+            input(type="hidden" name="_csrf" value=csrfToken)
+            +movieInfoFields("movie-add")
+            br
+            +userNoteFields(userCollections)
+            button(type="submit") Add

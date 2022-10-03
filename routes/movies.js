@@ -58,12 +58,13 @@ router.get("/add", csrfProtection, validateMovie, asyncHandler(async (req, res) 
 
     if (req.session.auth) {
         const { userId } = req.session.auth;
-        const collections = await Collection.findAll({ where: { userId } });
+        const userCollections = await Collection.findAll({ where: { userId } });
+        console.log("*****userCollections:", userCollections);
 
         res.render("movie-add", {
             movies,
             directors,
-            collections,
+            userCollections,
             years,
             csrfToken: req.csrfToken()
         });
@@ -218,7 +219,6 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
 
 router.put("/:id", asyncHandler(async (req, res, next) => {
-    console.log("*****req.body:", req.body);
     const { userId } = req.session.auth;
     const movieId = parseInt(req.params.id, 10);
     const movie = await Movie.findByPk(movieId);
