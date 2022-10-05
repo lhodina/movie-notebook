@@ -1,7 +1,29 @@
 h2 {
-    margin: 10px 0 10px 20px;
+    text-align: center;
+}
+
+main {
+    display: flex;
+    justify-content: center;
 }
 
 #add-movie-form-container {
     display: flex;
+    border: 1px solid lightgray;
+    width: 25%;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+
+#add-movie-form-container input, fieldset, select, textarea {
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    border-radius: 20px;
+    margin-right: 10px;
 }
