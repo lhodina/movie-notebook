@@ -2,7 +2,7 @@ const express = require("express");
 const { check, validationResult } = require("express-validator");
 const { Op } = require("sequelize");
 
-const { csrfProtection, asyncHandler, getYears, getMovies } = require("../utils");
+const { csrfProtection, asyncHandler, getYears, getMovies, removeFromWantToWatch } = require("../utils");
 const db = require("../db/models");
 const { Movie, MovieCollection, Director, User, UserNote, Collection, Critic } = db;
 const { requireAuth } = require("../auth");
@@ -284,27 +284,7 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
             watchedStatus
         });
 
-        console.log("*****watchedStatus:", watchedStatus);
-        console.log("*****typeof watchedStatus:", typeof watchedStatus);
-        if (watchedStatus === "1") {
-            const wantToWatch = await Collection.findOne({ where: { name: "Want to Watch" } });
-            console.log("*****wantToWatch:", wantToWatch);
-            if (wantToWatch) {
-                const collectionId = wantToWatch.dataValues.id;
-                console.log("*****collectionId:", collectionId);
-
-                const watchedMovie = await MovieCollection.findOne({ where: {
-                    [Op.and]: [
-                        { movieId },
-                        { collectionId }
-                    ]
-                } });
-
-                console.log("*****watchedMovie:", watchedMovie);
-
-                await watchedMovie.destroy();
-            }
-        }
+        removeFromWantToWatch(movieId, watchedStatus);
     }
 
     if (collectionList) {

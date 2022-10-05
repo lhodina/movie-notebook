@@ -10,10 +10,19 @@ block content
         div(id="sidebar")
             div(class="sidebar-section")
                 h3 COLLECTIONS
-                ul
-                    each collection in collections
-                        li
-                            a(id=`collection-${collection.id}-link` class='collection-link' href=`/collections/${collection.id}`)= collection.name
+                div(id="default-collections")
+                    ul
+                        each collection in collections
+                            if (collection.name === "Most Recommended" || collection.name === "Want to Watch")
+                                li
+                                    a(id=`collection-${collection.id}-link` class='collection-link' href=`/collections/${collection.id}`)= collection.name
+                div(id="other-collections")
+                    ul
+                        each collection in collections
+                            if (collection.name !== "Most Recommended" && collection.name !== "Want to Watch")
+                                li
+                                    a(id=`collection-${collection.id}-link` class='collection-link' href=`/collections/${collection.id}`)= collection.name
+
                 a(href="/collections/add")
                     button Add Collection
 

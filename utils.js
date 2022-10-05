@@ -2,7 +2,7 @@ const { validationResult } = require("express-validator");
 const csrf= require("csurf");
 const { Op } = require("sequelize");
 const db = require("./db/models");
-const { Director, Movie, FavoriteDirector, Critic, FavoriteCritic, User, UserNote } = db;
+const { Director, Movie, FavoriteDirector, Critic, FavoriteCritic, UserNote, Collection, MovieCollection } = db;
 
 const csrfProtection = csrf({ cookie: true });
 const asyncHandler = (handler) => (req, res, next) => handler(req, res, next).catch(next);
@@ -277,6 +277,25 @@ const getCritic = async (req, res, criticId, errors) => {
 }
 
 
+const removeFromWantToWatch = async (movieId, watchedStatus) => {
+    if (watchedStatus === "1") {
+        const wantToWatch = await Collection.findOne({ where: { name: "Want to Watch" } });
+        if (wantToWatch) {
+            const collectionId = wantToWatch.dataValues.id;
+
+            const watchedMovie = await MovieCollection.findOne({ where: {
+                [Op.and]: [
+                    { movieId },
+                    { collectionId }
+                ]
+            } });
+
+            await watchedMovie.destroy();
+        }
+    }
+}
+
+
 module.exports = {
     csrfProtection,
     asyncHandler,
@@ -284,5 +303,6 @@ module.exports = {
     getYears,
     getMovies,
     getDirector,
-    getCritic
+    getCritic,
+    removeFromWantToWatch
 };

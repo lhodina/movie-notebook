@@ -154,6 +154,10 @@ router.get("/", csrfProtection, asyncHandler(async (req, res) => {
             return displayShelf;
         });
 
+
+        console.log('collections:', collections);
+
+
         res.render("user-home", {
             collections,
             favoriteDirectors,
