@@ -283,6 +283,28 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
             rating,
             watchedStatus
         });
+
+        console.log("*****watchedStatus:", watchedStatus);
+        console.log("*****typeof watchedStatus:", typeof watchedStatus);
+        if (watchedStatus === "1") {
+            const wantToWatch = await Collection.findOne({ where: { name: "Want to Watch" } });
+            console.log("*****wantToWatch:", wantToWatch);
+            if (wantToWatch) {
+                const collectionId = wantToWatch.dataValues.id;
+                console.log("*****collectionId:", collectionId);
+
+                const watchedMovie = await MovieCollection.findOne({ where: {
+                    [Op.and]: [
+                        { movieId },
+                        { collectionId }
+                    ]
+                } });
+
+                console.log("*****watchedMovie:", watchedMovie);
+
+                await watchedMovie.destroy();
+            }
+        }
     }
 
     if (collectionList) {
