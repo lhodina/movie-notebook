@@ -18,11 +18,11 @@ mixin field(labelText, fieldName, fieldType='text', fieldValue='', placeholder=n
 
 mixin movieInfoFields(location)
     if (movie)
-        +field("Title", "title", "text", movie.title)
+        +field("*Title", "title", "text", movie.title)
     else
-        +field("Title", "title")
+        +field("*Title", "title")
     br
-    label(for="directorName") Director
+    label(for="directorName") *Director
     br
     if (director && location !== "director")
         input(name="directorName" list="directors" value=`${director.name}`)
@@ -33,7 +33,7 @@ mixin movieInfoFields(location)
         each director in directors
             option(value=director.name)
     br
-    label(for="yearReleased") Year Released (optional)
+    label(for="yearReleased") Year Released
     br
     if (movie)
         select(name="yearReleased")
@@ -47,9 +47,9 @@ mixin movieInfoFields(location)
                 option(value=year)= year
     br
     if (movie)
-        +field("Image Link (optional)", "imageLink", "", movie.imageLink)
+        +field("Image URL", "imageLink", "", movie.imageLink)
     else
-        +field("Image Link (optional)", "imageLink")
+        +field("Image URL", "imageLink")
 
 
 mixin addMovieFormFields(location)
@@ -72,7 +72,6 @@ mixin addMovieFormFields(location)
 mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, isAddCollection=false)
     if locals.authenticated
         div.add-new-movie
-            h4 Your Notes (optional):
             span Rating
             if (userNotes && userNotes.rating)
                 div.starRating

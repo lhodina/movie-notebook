@@ -151,6 +151,7 @@ router.get("/", csrfProtection, asyncHandler(async (req, res) => {
                 name: collectionName,
                 movies
             }
+
             return displayShelf;
         });
 
