@@ -1,0 +1,12 @@
+#add-collection-form-container {
+    display: flex;
+    border: 1px solid lightgray;
+    width: 25%;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+#add-collection-form-container input, text {
+    margin-bottom: 10px;
+}
+

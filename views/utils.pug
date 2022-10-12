@@ -62,8 +62,10 @@ mixin addMovieFormFields(location)
                 option(value=movie.title)= movie.title
         br
         br
-        text ...Or Create New Movie
-        button(id="add-movie-button") v
+        div(id="create-new-movie")
+            text ...Or Create New Movie
+            button(id="dropdown-button")
+                img(id="dropdown-icon" src="/images/dropdown.png")
         br
     div.add-new-movie
         +movieInfoFields(location)
@@ -131,13 +133,16 @@ mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, is
                     ul
                         each collection in movieCollections
                             li
-                                a(href=`/collections/${collection.id}`)= collection.name
+                                if (collection.name !== "Most Recommended")
+                                    a(href=`/collections/${collection.id}`)= collection.name
+                                else
+                                    a(href="/")= collection.name
 
-                label(for="collectionList") Add to Collection
-                br
-                input(name="collectionList" list="collectionList")
-                datalist(id="collectionList" name="collectionList")
-                    if userCollections
+                if (userCollections && userCollections.length > 2)
+                    label(for="collectionList") Add to Collection
+                    br
+                    input(name="collectionList" list="collectionList")
+                    datalist(id="collectionList" name="collectionList")
                         each collection in userCollections
                             if (collection.name !== "Most Recommended" && collection.name !== "Want to Watch")
                                 option(value=collection.name)

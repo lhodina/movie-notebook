@@ -6,9 +6,9 @@ for (let section of sectionsToHide) {
     section.style.display = "none";
 }
 
-const addButton = document.getElementById("add-movie-button");
+const dropdown = document.getElementById("create-new-movie");
 
-addButton.addEventListener("click", async (event) => {
+dropdown.addEventListener("click", async (event) => {
     event.preventDefault();
 
     for (let section of sectionsToHide) {

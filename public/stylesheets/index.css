@@ -190,3 +190,13 @@ h3 {
     color: gold;
     font-size: 20px;
 }
+
+#dropdown-button {
+    border: none;
+    background-color: transparent;
+}
+
+#dropdown-icon {
+    width: 10px;
+    height: 7px;
+}

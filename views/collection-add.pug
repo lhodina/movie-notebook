@@ -1,16 +1,19 @@
 extends layout.pug
 include utils.pug
 block content
+    link(rel='stylesheet' href='/stylesheets/collection-add.css')
+    link(rel='stylesheet' href='/stylesheets/movie-add.css')
     script(src="/scripts/add-new-movie.js" type="module")
     if (errors)
         ul
             each error in errors
                 li= error
-                
     h2 Add Collection
-    form(action="/collections/add" method="post")
-        input(type="hidden" name="_csrf" value=csrfToken)
-        +field("Collection Name", "collectionName")
-        +addMovieFormFields()
-        +userNoteFields(userCollections, movieCollections, movieCollectionNames, isAddCollection=true)
-        button(type="submit") Add
+    main
+        div(id="add-collection-form-container")
+            form(action="/collections/add" method="post")
+                input(type="hidden" name="_csrf" value=csrfToken)
+                +field("*Collection Name", "collectionName")
+                +addMovieFormFields()
+                +userNoteFields(userCollections, movieCollections, movieCollectionNames, isAddCollection=true)
+                button(type="submit") Add
