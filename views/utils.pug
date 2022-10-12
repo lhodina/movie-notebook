@@ -126,14 +126,14 @@ mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, is
             br
 
             if (isAddCollection === false)
-                if (movieCollections)
+                if (movieCollections && movieCollections.length)
                     span Belongs to Collections:
                     ul
                         each collection in movieCollections
-                            if (collection.name !== "Most Recommended" && collection.name !== "Want to Watch")
+                            li
                                 a(href=`/collections/${collection.id}`)= collection.name
 
-                label(for="collectionList") Collection
+                label(for="collectionList") Add to Collection
                 br
                 input(name="collectionList" list="collectionList")
                 datalist(id="collectionList" name="collectionList")
@@ -289,11 +289,18 @@ mixin displayMovies(movies, location)
                             if (movie.likedByCritics && movie.likedByCritics.length)
                                 ul(class="liked-by-ul")
                                 each critic in movie.likedByCritics
-                                    li(class="liked-by-li")= critic.name
+                                    li(class="liked-by-li")
+                                        a(href=`/critics/${critic.id}`) #{critic.name}
                             if (movie.likedByDirectors && movie.likedByDirectors.length)
                                 ul(class="liked-by-ul")
                                 each director in movie.likedByDirectors
-                                    li(class="liked-by-li")= director.name
+                                    li(class="liked-by-li")
+                                        a(href=`/directors/${director.id}`) #{director.name}
+                            if ((!movie.likedByDirectors && !movie.likedByCritics) || (!movie.likedByDirectors.length && !movie.likedByCritics.length))
+                                //- ul(class="liked-by-ul")
+                                //-     li(class="liked-by-li")
+                                //-         a(href=`/movies/${movie.id}`) No Likes Yet
+                                span No Likes Yet
                         if (location === "moviesPage")
                             td
                                 a(href=`/movies/${movie.id}`) View

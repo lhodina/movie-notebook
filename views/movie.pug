@@ -1,10 +1,14 @@
 extends layout.pug
 include utils.pug
 block content
+    link(rel='stylesheet' href='/stylesheets/movie-add.css')
     script(src="/scripts/movie.js" type="module")
-    form(id=`${movie.id}` class="movie-edit-form")
-        input(type="hidden" name="_csrf" value=csrfToken)
-        +movieInfoFields()
-        br
-        +userNoteFields(userCollections, movieCollections, movieCollectionNames)
-        button(type="submit") Update
+    h2= movie.title
+    main
+        div(id="add-movie-form-container")
+            form(id=`${movie.id}` class="movie-edit-form")
+                input(type="hidden" name="_csrf" value=csrfToken)
+                +movieInfoFields()
+                br
+                +userNoteFields(userCollections, movieCollections, movieCollectionNames)
+                button(type="submit") Update

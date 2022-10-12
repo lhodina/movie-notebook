@@ -70,7 +70,6 @@ router.post("/register", csrfProtection, validateRegistration, asyncHandler(asyn
         user.hashedPassword = hashedPassword;
         await user.save();
         loginUser(req, res, user);
-        console.log("LOGGING IN");
         res.redirect("/");
     } else {
         const errors = validatorErrors.array().map((error) => error.msg);

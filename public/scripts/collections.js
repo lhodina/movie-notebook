@@ -18,7 +18,7 @@ for (let button of collectionDeleteButtons) {
         if (data.message === "Success") {
             const container = document.querySelector(`#collection-container-${collectionId}`);
             container.remove();
-
+            window.location.reload()
         } else {
             console.log("Failed to get data.");
         }
@@ -43,7 +43,6 @@ for (let button of removeButtons) {
 
         if (data.message === "Success") {
             const container = document.querySelector(`#movie-container-${movieId}`);
-            console.log("*****container:", container);
             container.remove();
 
         } else {

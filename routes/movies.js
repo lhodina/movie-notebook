@@ -59,7 +59,6 @@ router.get("/add", csrfProtection, validateMovie, asyncHandler(async (req, res) 
     if (req.session.auth) {
         const { userId } = req.session.auth;
         const userCollections = await Collection.findAll({ where: { userId } });
-        console.log("*****userCollections:", userCollections);
 
         res.render("movie-add", {
             movies,
@@ -192,6 +191,8 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
         const collectionsData = movie.dataValues.Collections;
 
         const movieCollections = collectionsData.map(collection => collection.dataValues);
+        console.log('movieCollections:', movieCollections)
+
         const movieCollectionNames = collectionsData.map(collection => collection.dataValues.name);
 
         const userCollections = await Collection.findAll({ where: { userId: userId} });

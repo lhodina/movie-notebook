@@ -2,10 +2,12 @@ h2 {
     text-align: center;
 }
 
+
 main {
     display: flex;
     justify-content: center;
 }
+
 
 #add-movie-form-container {
     display: flex;
@@ -20,9 +22,11 @@ main {
     margin-bottom: 10px;
 }
 
+
 form {
     width: 75%;
 }
+
 
 input, textarea, fieldset {
     width: 100%;

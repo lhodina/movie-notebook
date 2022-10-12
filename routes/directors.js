@@ -109,8 +109,6 @@ router.post("/:id/movies-directed/add", csrfProtection, validateDirectedMovie, a
 
 
 router.post("/:id/favorites/add", csrfProtection, validateFavoriteMovie, asyncHandler(async (req, res) => {
-    console.log("*****req.body:", req.body);
-
     const directorId = parseInt(req.params.id, 10);
     const validatorErrors = validationResult(req);
     if (!validatorErrors.isEmpty()) {

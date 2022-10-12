@@ -141,8 +141,6 @@ router.delete("/:id/favorites/:movieId", asyncHandler(async (req, res, next) => 
         movieId
     } });
 
-    console.log("criticFav:", criticFav);
-
     await criticFav.destroy();
     res.json({ message: "Success" });
 }));
