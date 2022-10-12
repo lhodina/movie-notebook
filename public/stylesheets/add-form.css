@@ -9,7 +9,7 @@ main {
 }
 
 
-#add-movie-form-container {
+.form-container {
     display: flex;
     border: 1px solid lightgray;
     width: 25%;
@@ -18,7 +18,7 @@ main {
 }
 
 
-#add-movie-form-container input, fieldset, select, textarea {
+.form-container input, fieldset, select, textarea {
     margin-bottom: 10px;
 }
 

@@ -1,8 +1,7 @@
 extends layout.pug
 include utils.pug
 block content
-    link(rel='stylesheet' href='/stylesheets/collection-add.css')
-    link(rel='stylesheet' href='/stylesheets/movie-add.css')
+    link(rel='stylesheet' href='/stylesheets/add-form.css')
     script(src="/scripts/add-new-movie.js" type="module")
     if (errors)
         ul
@@ -10,7 +9,7 @@ block content
                 li= error
     h2 Add Collection
     main
-        div(id="add-collection-form-container")
+        div(class="form-container")
             form(action="/collections/add" method="post")
                 input(type="hidden" name="_csrf" value=csrfToken)
                 +field("*Collection Name", "collectionName")
