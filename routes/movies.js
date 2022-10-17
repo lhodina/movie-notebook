@@ -4,7 +4,7 @@ const { Op } = require("sequelize");
 
 const { csrfProtection, asyncHandler, getYears, getMovies, removeFromWantToWatch } = require("../utils");
 const db = require("../db/models");
-const { Movie, MovieCollection, Director, User, UserNote, Collection, Critic } = db;
+const { Movie, MovieCollection, Director, User, UserNote, Collection, Critic, Link } = db;
 const { requireAuth } = require("../auth");
 
 const router = express.Router();
@@ -104,8 +104,22 @@ router.post("/add", csrfProtection, validateMovie, asyncHandler(async (req, res)
             starRating,
             review,
             collectionList,
-            watchedStatus
+            watchedStatus,
+            linkText,
+            linkUrl
         } = req.body;
+
+        console.log('linkText:', linkText);
+        console.log('linkUrl:', linkUrl);
+
+        if (linkText && linkUrl) {
+            await Link.create({
+                userId,
+                table: "Movie",
+                linkText,
+                url: linkUrl
+            });
+        }
 
         let director;
 
@@ -197,6 +211,10 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
         const userCollections = await Collection.findAll({ where: { userId: userId} });
 
+        const links = await Link.findAll({ where: { table: "Movie" }});
+
+        console.log('links:', links)
+
         res.render("movie", {
             movie,
             director,
@@ -206,6 +224,7 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
             movieCollectionNames,
             userNotes,
             years,
+            links,
             csrfToken: req.csrfToken()
          });
     } else {

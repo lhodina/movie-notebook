@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'cascade'
     },
     notes: {
-      type:DataTypes.STRING
+      type:DataTypes.TEXT
     }
   }, {});
   FavoriteCritic.associate = function(models) {

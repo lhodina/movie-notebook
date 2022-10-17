@@ -20,7 +20,7 @@ module.exports = {
         onDelete: 'cascade'
       },
       notes: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       createdAt: {
         allowNull: false,
