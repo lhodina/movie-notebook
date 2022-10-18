@@ -20,7 +20,9 @@ form.addEventListener("submit", async (event) => {
         starRating: data.starRating,
         review: data.review,
         collectionList: data.collectionList,
-        watchedStatus: data.watchedStatus
+        watchedStatus: data.watchedStatus,
+        linkUrl: data.linkUrl,
+        linkText: data.linkText
     };
 
     const res = await fetch(`http://localhost:8080/movies/${movieId}`, {

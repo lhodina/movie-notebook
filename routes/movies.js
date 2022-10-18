@@ -109,18 +109,6 @@ router.post("/add", csrfProtection, validateMovie, asyncHandler(async (req, res)
             linkUrl
         } = req.body;
 
-        console.log('linkText:', linkText);
-        console.log('linkUrl:', linkUrl);
-
-        if (linkText && linkUrl) {
-            await Link.create({
-                userId,
-                table: "Movie",
-                linkText,
-                url: linkUrl
-            });
-        }
-
         let director;
 
         if (directorName) {
@@ -147,6 +135,19 @@ router.post("/add", csrfProtection, validateMovie, asyncHandler(async (req, res)
                 yearReleased,
                 imageLink
             });
+
+            console.log('linkText:', linkText);
+            console.log('linkUrl:', linkUrl);
+
+            if (linkText && linkUrl) {
+                await Link.create({
+                    userId,
+                    table: "Movie",
+                    tableItemId: movie.id,
+                    linkText,
+                    linkUrl
+                });
+            }
 
             if (rating || review || watchedStatus !== undefined) {
                 await UserNote.create({
@@ -188,6 +189,7 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
     if (req.session.auth) {
         const { userId } = req.session.auth;
+
         const userNotesData = await UserNote.findOne({
             where: {
                 [Op.and]: [
@@ -205,13 +207,20 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
         const collectionsData = movie.dataValues.Collections;
 
         const movieCollections = collectionsData.map(collection => collection.dataValues);
-        console.log('movieCollections:', movieCollections)
 
         const movieCollectionNames = collectionsData.map(collection => collection.dataValues.name);
 
         const userCollections = await Collection.findAll({ where: { userId: userId} });
 
-        const links = await Link.findAll({ where: { table: "Movie" }});
+        const links = await Link.findAll({
+            where: {
+                [Op.and]: [
+                    { table: "Movie" },
+                    { tableItemId: movieId }
+                ]
+
+            }
+        });
 
         console.log('links:', links)
 
@@ -239,9 +248,13 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
 
 router.put("/:id", asyncHandler(async (req, res, next) => {
+    console.log("*****req.body:", req.body);
     const { userId } = req.session.auth;
     const movieId = parseInt(req.params.id, 10);
     const movie = await Movie.findByPk(movieId);
+    const links = await Link.findAll({ where: { table: "Movie" }});
+
+    console.log('links:', links)
 
     let {
         title,
@@ -251,8 +264,24 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
         starRating,
         review,
         collectionList,
-        watchedStatus
+        watchedStatus,
+        linkText,
+        linkUrl
     } = req.body;
+
+
+    console.log('linkText:', linkText);
+    console.log('linkUrl:', linkUrl);
+
+    if (linkText && linkUrl) {
+        await Link.create({
+            userId,
+            table: "Movie",
+            tableItemId: movieId,
+            linkText,
+            linkUrl
+        });
+    }
 
     if (yearReleased === "--Year--") yearReleased = 0;
     let rating;

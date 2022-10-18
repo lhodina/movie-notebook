@@ -3,8 +3,9 @@ module.exports = (sequelize, DataTypes) => {
   const Link = sequelize.define('Link', {
     userId: DataTypes.INTEGER,
     table: DataTypes.STRING,
+    tableItemId: DataTypes.INTEGER,
     linkText: DataTypes.STRING,
-    url: DataTypes.TEXT
+    linkUrl: DataTypes.TEXT
   }, {});
   Link.associate = function(models) {
     // associations can be defined here

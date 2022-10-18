@@ -16,11 +16,15 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      tableItemId: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
       linkText: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      url: {
+      linkUrl: {
         allowNull: false,
         type: Sequelize.TEXT
       },

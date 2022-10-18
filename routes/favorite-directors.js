@@ -16,7 +16,6 @@ const validateFavoriteDirector = [
 
 router.get("/add", csrfProtection, asyncHandler(async (req, res) => {
     const directors = await Director.findAll();
-    console.log("*****WHAT'S HAPPENING??????")
     res.render("favorite-director-add", {
         directors,
         csrfToken: req.csrfToken()
