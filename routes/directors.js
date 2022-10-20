@@ -3,7 +3,7 @@ const { check, validationResult, oneOf } = require("express-validator");
 
 const { csrfProtection, asyncHandler, getYears, getDirector } = require("../utils");
 const db = require("../db/models");
-const { Director, Movie, DirectorFavorite, FavoriteDirector } = db;
+const { Director, Movie, DirectorFavorite, FavoriteDirector, Link } = db;
 const { requireAuth } = require("../auth");
 
 const router = express.Router();
@@ -157,6 +157,22 @@ router.post("/:id/notes", csrfProtection, asyncHandler(async (req, res, next) =>
     const directorId = parseInt(req.params.id, 10);
     const favoriteDirector = await FavoriteDirector.findOne({ where: { userId, directorId }});
     await favoriteDirector.update({ userId, directorId, notes });
+    res.redirect("/");
+}));
+
+
+router.post("/:id/links", csrfProtection, asyncHandler(async (req, res, next) => {
+    const { userId } = req.session.auth;
+    let { linkText, linkUrl } = req.body;
+    const directorId = parseInt(req.params.id, 10);
+
+    await Link.create({
+        userId,
+        table: "Director",
+        tableItemId: directorId,
+        linkText,
+        linkUrl
+    });
     res.redirect("/");
 }));
 

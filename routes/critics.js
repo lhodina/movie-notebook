@@ -3,7 +3,7 @@ const { check, validationResult, oneOf } = require("express-validator");
 const { Op } = require("sequelize");
 const { csrfProtection, asyncHandler, getYears, getCritic } = require("../utils");
 const db = require("../db/models");
-const { Critic, FavoriteCritic, CriticFavorite, Movie, Director } = db;
+const { Critic, FavoriteCritic, CriticFavorite, Movie, Director, Link } = db;
 const { requireAuth } = require("../auth");
 
 const router = express.Router();
@@ -129,6 +129,21 @@ router.post("/:id/notes", csrfProtection, asyncHandler(async (req, res, next) =>
     const favoriteCritic = await FavoriteCritic.findOne({ where: { userId, criticId }});
     await favoriteCritic.update({ userId, criticId, notes });
     res.redirect("/");
+}));
+
+
+router.post("/:id/links", csrfProtection, asyncHandler(async (req, res, next) => {
+    const { userId } = req.session.auth;
+    let { linkText, linkUrl } = req.body;
+    const criticId = parseInt(req.params.id, 10);
+
+    await Link.create({
+        userId,
+        table: "Critic",
+        tableItemId: criticId,
+        linkText,
+        linkUrl
+    });
 }));
 
 

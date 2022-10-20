@@ -136,9 +136,6 @@ router.post("/add", csrfProtection, validateMovie, asyncHandler(async (req, res)
                 imageLink
             });
 
-            console.log('linkText:', linkText);
-            console.log('linkUrl:', linkUrl);
-
             if (linkText && linkUrl) {
                 await Link.create({
                     userId,
@@ -215,14 +212,13 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
         const links = await Link.findAll({
             where: {
                 [Op.and]: [
+                    { userId },
                     { table: "Movie" },
                     { tableItemId: movieId }
                 ]
 
             }
         });
-
-        console.log('links:', links)
 
         res.render("movie", {
             movie,
@@ -248,13 +244,9 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
 
 router.put("/:id", asyncHandler(async (req, res, next) => {
-    console.log("*****req.body:", req.body);
     const { userId } = req.session.auth;
     const movieId = parseInt(req.params.id, 10);
     const movie = await Movie.findByPk(movieId);
-    const links = await Link.findAll({ where: { table: "Movie" }});
-
-    console.log('links:', links)
 
     let {
         title,
@@ -269,9 +261,6 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
         linkUrl
     } = req.body;
 
-
-    console.log('linkText:', linkText);
-    console.log('linkUrl:', linkUrl);
 
     if (linkText && linkUrl) {
         await Link.create({
@@ -333,6 +322,9 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
             watchedStatus
         });
 
+        console.log('watchedStatus:', watchedStatus);
+        console.log("typeof watchedStatus:", typeof watchedStatus);
+
         removeFromWantToWatch(movieId, watchedStatus);
     }
 
@@ -352,6 +344,23 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
     }
 
     res.redirect("/");
+}));
+
+
+router.post("/:id/links", csrfProtection, asyncHandler(async (req, res, next) => {
+    const { userId } = req.session.auth;
+    let { linkText, linkUrl } = req.body;
+    const movieId = parseInt(req.params.id, 10);
+
+    await Link.create({
+        userId,
+        table: "Movie",
+        tableItemId: movieId,
+        linkText,
+        linkUrl
+    });
+
+    res.redirect(`/movies/${movieId}`);
 }));
 
 

@@ -21,4 +21,7 @@ block content
             textarea(name="notes")= favoriteCritic.notes
         else
             textarea(name="notes" ) Add a note
+        br
         button(type="submit") Save Note
+    br
+    +links(links, `/critics/${critic.id}/links`)

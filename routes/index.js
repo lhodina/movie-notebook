@@ -203,7 +203,6 @@ router.get("/search/:value", asyncHandler(async (req, res) => {
 }));
 
 
-
 if (environment !== "production") {
     router.get("/error-test", () => {
         throw new Error("TEST ERROR...");

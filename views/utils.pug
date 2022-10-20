@@ -16,6 +16,25 @@ mixin field(labelText, fieldName, fieldType='text', fieldValue='', placeholder=n
             input(type=fieldType id=fieldName name=fieldName value=fieldValue placeholder=placeholder)
 
 
+mixin links(links, formAction)
+    div(id="links")
+        if (links)
+            span Links
+            ul
+                each link in links
+                    li
+                        a(href=`${link.linkUrl}`)= link.linkText
+        br
+        span Add a Link
+        form(id="add-link-form" action=formAction method="post")
+            input(type="hidden" name="_csrf" value=csrfToken)
+            +field("Link Text", "linkText")
+            +field("Link URL", "linkUrl")
+            button(type="submit" id="add-link-button") Add Link
+        br
+
+
+
 mixin movieInfoFields(location)
     if (movie)
         +field("*Title", "title", "text", movie.title)
@@ -126,14 +145,7 @@ mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, is
             else
                 textarea(name="review", cols="30", rows="10")
             br
-
-            div(id="links")
-                span Links
-                br
-                span Add a Link
-                +field("Link Text", "linkText")
-                +field("Link URL", "linkUrl")
-                br
+            //- +links(links, "movie")
 
             if (isAddCollection === false)
                 if (movieCollections && movieCollections.length)

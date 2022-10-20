@@ -2,6 +2,14 @@
 const form = document.getElementsByClassName("movie-edit-form")[0];
 const movieId = form.id;
 
+
+// const addLinkButton = document.getElementById("add-link-button");
+
+// addLinkButton.addEventListener("click", async (event) => {
+//     window.location.reload();
+// });
+
+
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const formData = new FormData(form);

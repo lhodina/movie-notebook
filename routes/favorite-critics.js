@@ -2,7 +2,7 @@ const express = require("express");
 const { requireAuth } = require("../auth");
 const { check, validationResult } = require("express-validator");
 
-const {  Critic, FavoriteCritic } = require("../db/models");
+const {  Critic, FavoriteCritic, Link } = require("../db/models");
 const { asyncHandler, csrfProtection } = require("../utils");
 
 const router = express.Router();
@@ -36,7 +36,7 @@ router.post("/add", csrfProtection, validateFavoriteCritic, asyncHandler(async (
         });
     } else {
         const { userId } = req.session.auth;
-        const { name, notes } = req.body;
+        const { name, notes, linkText, linkUrl } = req.body;
         const favoriteCriticsData = await FavoriteCritic.findAll({ where: userId });
         const favoriteCriticIds = favoriteCriticsData.map(critic => critic.dataValues.criticId);
 
@@ -53,6 +53,16 @@ router.post("/add", csrfProtection, validateFavoriteCritic, asyncHandler(async (
                 criticId: critic.id,
                 notes
             });
+
+            if (linkText && linkUrl) {
+                await Link.create({
+                    userId,
+                    table: "Critic",
+                    tableItemId: critic.id,
+                    linkText,
+                    linkUrl
+                });
+            }
         } else {
             const critics = await Critic.findAll();
             const errors = [`${name} is already one of your favorite critics!`];

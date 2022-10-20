@@ -8,7 +8,7 @@ block content
         div(class="form-container")
             form(action="/favorite-critics/add", method="post")
                 input(type="hidden" name="_csrf" value=csrfToken)
-                label(for="critic") Choose or Add a Critic
+                label(for="critic") *Choose or Add a Critic
                 input(name="name" list="critics")
                 datalist(id="critics" name="critics")
                     each critic in critics
@@ -16,5 +16,8 @@ block content
                 br
                 label(for="notes") Notes
                 textarea(name="notes")
+                br
+                +field("Link Text", "linkText")
+                +field("Link URL", "linkUrl")
                 br
                 button(type="submit") Submit

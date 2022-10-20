@@ -11,9 +11,6 @@ block content
                 +movieInfoFields()
                 br
                 +userNoteFields(userCollections, movieCollections, movieCollectionNames)
-                if (links)
-                    ul
-                        each link in links
-                            li
-                                a(href=`${link.linkUrl}`)= link.linkText
+                br
                 button(type="submit") Update
+            +links(links, `/movies/${movie.id}/links`)

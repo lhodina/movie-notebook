@@ -1,11 +1,11 @@
-extends layout.pug
-include utils.pug
-block content
-    link(rel='stylesheet' href='/stylesheets/add-form.css')
-    +handleErrors(errors)
-    main
-        div(class="form-container")
-            form(action="/critics/add" method="post")
-                input(type="hidden" name="_csrf" value=csrfToken)
-                +field("Name", "name")
-                button(type="submit") Add
+//- extends layout.pug
+//- include utils.pug
+//- block content
+//-     link(rel='stylesheet' href='/stylesheets/add-form.css')
+//-     +handleErrors(errors)
+//-     main
+//-         div(class="form-container")
+//-             form(action="/critics/add" method="post")
+//-                 input(type="hidden" name="_csrf" value=csrfToken)
+//-                 +field("Name", "name")
+//-                 button(type="submit") Add

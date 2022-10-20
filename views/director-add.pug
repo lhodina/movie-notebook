@@ -1,9 +1,9 @@
-extends layout.pug
-include utils.pug
-block content
-    +handleErrors(errors)
-    h2 Add a Director
-    form(action="/directors/add" method="post")
-        input(type="hidden" name="_csrf" value=csrfToken)
-        +field("Name", "name")
-        button(type="submit") Add
+//- extends layout.pug
+//- include utils.pug
+//- block content
+//-     +handleErrors(errors)
+//-     h2 Add a Director
+//-     form(action="/directors/add" method="post")
+//-         input(type="hidden" name="_csrf" value=csrfToken)
+//-         +field("Name", "name")
+//-         button(type="submit") Add

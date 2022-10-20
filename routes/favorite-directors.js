@@ -2,7 +2,7 @@ const express = require("express");
 const { requireAuth } = require("../auth");
 const { check, validationResult } = require("express-validator");
 const db = require("../db/models");
-const {  Director, FavoriteDirector } = db;
+const {  Director, FavoriteDirector, Link } = db;
 const { asyncHandler, csrfProtection } = require("../utils");
 
 const router = express.Router();
@@ -53,6 +53,16 @@ router.post("/add", csrfProtection, validateFavoriteDirector, asyncHandler(async
                 directorId: director.id,
                 notes
             });
+
+            if (linkText && linkUrl) {
+                await Link.create({
+                    userId,
+                    table: "Director",
+                    tableItemId: director.id,
+                    linkText,
+                    linkUrl
+                });
+            }
 
             res.redirect("/");
         } else {

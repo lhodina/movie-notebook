@@ -2,7 +2,7 @@ const { validationResult } = require("express-validator");
 const csrf= require("csurf");
 const { Op } = require("sequelize");
 const db = require("./db/models");
-const { Director, Movie, FavoriteDirector, Critic, FavoriteCritic, UserNote, Collection, MovieCollection } = db;
+const { Director, Movie, FavoriteDirector, Critic, FavoriteCritic, UserNote, Collection, MovieCollection, Link } = db;
 
 const csrfProtection = csrf({ cookie: true });
 const asyncHandler = (handler) => (req, res, next) => handler(req, res, next).catch(next);
@@ -199,6 +199,17 @@ const getDirector = async (req, res, directorId, errors) => {
         }
     });
 
+    const links = await Link.findAll({
+        where: {
+            [Op.and]: [
+                { userId },
+                { table: "Director" },
+                { tableItemId: director.id }
+            ]
+
+        }
+    });
+
     const years = getYears();
 
     res.render("director", {
@@ -209,6 +220,7 @@ const getDirector = async (req, res, directorId, errors) => {
         years,
         directedMovies,
         favoriteMovies,
+        links,
         errors,
         csrfToken: req.csrfToken()
     });
@@ -261,6 +273,15 @@ const getCritic = async (req, res, criticId, errors) => {
         return movie;
     });
 
+    const links = await Link.findAll({
+        where: {
+            [Op.and]: [
+                { userId },
+                { table: "Critic" },
+                { tableItemId: critic.id }
+            ]
+        }
+    });
 
     const years = getYears();
 
@@ -271,6 +292,7 @@ const getCritic = async (req, res, criticId, errors) => {
         directors,
         years,
         favoriteMovies,
+        links,
         errors,
         csrfToken: req.csrfToken()
     });
@@ -280,6 +302,8 @@ const getCritic = async (req, res, criticId, errors) => {
 const removeFromWantToWatch = async (movieId, watchedStatus) => {
     if (watchedStatus === "1") {
         const wantToWatch = await Collection.findOne({ where: { name: "Want to Watch" } });
+
+        console.log('wantToWatch:', wantToWatch)
         if (wantToWatch) {
             const collectionId = wantToWatch.dataValues.id;
 
@@ -290,7 +314,9 @@ const removeFromWantToWatch = async (movieId, watchedStatus) => {
                 ]
             } });
 
-            await watchedMovie.destroy();
+            console.log('watchedMovie:', watchedMovie)
+
+            if (watchedMovie) await watchedMovie.destroy();
         }
     }
 }

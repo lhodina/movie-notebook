@@ -47,4 +47,8 @@ block content
             textarea(name="notes")= favoriteDirector.notes
         else
             textarea(name="notes" ) Add a note
+        br
         button(type="submit") Save Note
+        br
+        
+    +links(links, `/directors/${director.id}/links`)
