@@ -166,6 +166,8 @@ router.post("/add", csrfProtection, validateMovie, asyncHandler(async (req, res)
                     });
                 }
 
+                console.log('collectionList:', collectionList)
+
                 await MovieCollection.create({
                     movieId: movie.id,
                     collectionId: collection.id
@@ -322,16 +324,14 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
             watchedStatus
         });
 
-        console.log('watchedStatus:', watchedStatus);
-        console.log("typeof watchedStatus:", typeof watchedStatus);
-
         removeFromWantToWatch(movieId, watchedStatus);
     }
+
 
     if (collectionList) {
         let collection = await Collection.findOne({ where: { name: collectionList } });
         if (!collection) {
-            await Collection.create({
+            collection = await Collection.create({
                 name: collectionList,
                 userId
             });

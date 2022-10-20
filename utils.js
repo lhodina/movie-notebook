@@ -303,7 +303,6 @@ const removeFromWantToWatch = async (movieId, watchedStatus) => {
     if (watchedStatus === "1") {
         const wantToWatch = await Collection.findOne({ where: { name: "Want to Watch" } });
 
-        console.log('wantToWatch:', wantToWatch)
         if (wantToWatch) {
             const collectionId = wantToWatch.dataValues.id;
 
@@ -313,8 +312,6 @@ const removeFromWantToWatch = async (movieId, watchedStatus) => {
                     { collectionId }
                 ]
             } });
-
-            console.log('watchedMovie:', watchedMovie)
 
             if (watchedMovie) await watchedMovie.destroy();
         }

@@ -158,14 +158,13 @@ mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, is
                                 else
                                     a(href="/")= collection.name
 
-                if (userCollections && userCollections.length > 2)
-                    label(for="collectionList") Add to Collection
-                    br
-                    input(name="collectionList" list="collectionList")
-                    datalist(id="collectionList" name="collectionList")
-                        each collection in userCollections
-                            if (collection.name !== "Most Recommended" && collection.name !== "Want to Watch")
-                                option(value=collection.name)
+                label(for="collectionList") Add to Collection
+                br
+                input(name="collectionList" list="collectionList")
+                datalist(id="collectionList" name="collectionList")
+                    each collection in userCollections
+                        if (collection.name !== "Most Recommended" && collection.name !== "Want to Watch")
+                            option(value=collection.name)
                 br
             if (userNotes && userNotes.watchedStatus === true)
                 fieldset

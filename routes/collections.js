@@ -276,8 +276,14 @@ router.delete("/:id/:movieId", asyncHandler(async (req, res, next) => {
         }
     });
 
-
     await movieCollection.destroy();
+
+    const collection = await Collection.findByPk(collectionId);
+    if (collection.name === "Want to Watch") {
+        const userNote = await UserNote.findByPk(movieId);
+        userNote.update({ watchedStatus: null })
+    }
+
     res.json({ message: "Success"})
 }));
 

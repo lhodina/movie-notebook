@@ -54,7 +54,7 @@ block content
                     div(id=`collection-container-${collection.id}` hidden)
                         h3= collection.name
                         +displayMovies(collection.movies, "home")
-
-                        div(id="collection-add-delete")
-                            a(href=`/collections/${collection.id}`) Add Movie
-                            button(id=collection.id).delete-collection Delete Collection
+                        if collection.name !== "Want to Watch"
+                            div(id="collection-add-delete")
+                                a(href=`/collections/${collection.id}`) Add Movie
+                                button(id=collection.id).delete-collection Delete Collection
