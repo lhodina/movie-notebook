@@ -1,6 +1,5 @@
 console.log("Hello from the index.js script");
 
-
 const collectionLinks = document.querySelectorAll('.collection-link');
 
 let displayCollection = document.getElementsByClassName("recommended")[0];

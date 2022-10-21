@@ -145,6 +145,9 @@ router.post("/add", requireAuth, csrfProtection, validateCollection, asyncHandle
 
 
 router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
+    const { userId } = req.session.auth;
+    const userCollections = await Collection.findAll({ where: { userId } });
+
     const collectionId = parseInt(req.params.id, 10);
     const collection = await Collection.findByPk(collectionId, {
         include: {
@@ -179,6 +182,7 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
         collection,
         movies,
         collectionMovies,
+        userCollections,
         directors,
         years,
         csrfToken: req.csrfToken()
@@ -247,7 +251,7 @@ router.post("/:id", csrfProtection, asyncHandler(async (req, res) => {
         collectionId
     });
 
-    res.redirect(`/collections/${collectionId}`);
+    res.redirect(`/`);
 }));
 
 

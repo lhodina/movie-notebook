@@ -1,15 +1,18 @@
-//- extends layout.pug
-//- include utils.pug
-//- block content
-//-     script(src="/scripts/add-new-movie.js" type="module")
-//-     h2= collection.name
-//-     if collection.name !== "Most Recommended"
-//-         h3 Add Movie
-//-         form(action=`/collections/${collection.id}` method="post")
-//-             input(type="hidden" name="_csrf" value=csrfToken)
-//-             +addMovieFormFields()
-//-             +userNoteFields(userCollections, movieCollections, movieCollectionNames)
-//-             button(type="submit") Submit
-
-//-         h3 Movies
-//-         +displayMovies(collectionMovies, "collection")
+extends layout.pug
+include utils.pug
+block content
+    link(rel='stylesheet' href='/stylesheets/add-form.css')
+    script(src="/scripts/add-new-movie.js" type="module")
+    if (errors)
+        ul
+            each error in errors
+                li= error
+    h2 Add Movie
+    main
+        div(class="form-container")
+            if collection.name !== "Most Recommended"
+                form(action=`/collections/${collection.id}` method="post")
+                    input(type="hidden" name="_csrf" value=csrfToken)
+                    +addMovieFormFields()
+                    +userNoteFields(userCollections, movieCollections, movieCollectionNames, location="collection")
+                    button(type="submit") Add

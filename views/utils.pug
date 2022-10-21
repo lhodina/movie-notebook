@@ -90,7 +90,7 @@ mixin addMovieFormFields(location)
         +movieInfoFields(location)
 
 
-mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, isAddCollection=false)
+mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, location)
     if locals.authenticated
         div.add-new-movie
             span Rating
@@ -145,9 +145,8 @@ mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, is
             else
                 textarea(name="review", cols="30", rows="10")
             br
-            //- +links(links, "movie")
 
-            if (isAddCollection === false)
+            if (location !== "addCollection")
                 if (movieCollections && movieCollections.length)
                     span Belongs to Collections:
                     ul
@@ -158,13 +157,13 @@ mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, is
                                 else
                                     a(href="/")= collection.name
 
-                label(for="collectionList") Add to Collection
-                br
-                input(name="collectionList" list="collectionList")
-                datalist(id="collectionList" name="collectionList")
-                    each collection in userCollections
-                        if (collection.name !== "Most Recommended" && collection.name !== "Want to Watch")
-                            option(value=collection.name)
+                if (location !== "collection")
+                    label(for="collectionList") Add to Collection
+                    input(name="collectionList" list="collectionList")
+                    datalist(id="collectionList" name="collectionList")
+                        each collection in userCollections
+                            if (collection.name !== "Most Recommended" && collection.name !== "Want to Watch")
+                                option(value=collection.name)
                 br
             if (userNotes && userNotes.watchedStatus === true)
                 fieldset
@@ -321,9 +320,6 @@ mixin displayMovies(movies, location)
                                     li(class="liked-by-li")
                                         a(href=`/directors/${director.id}`) #{director.name}
                             if ((!movie.likedByDirectors && !movie.likedByCritics) || (!movie.likedByDirectors.length && !movie.likedByCritics.length))
-                                //- ul(class="liked-by-ul")
-                                //-     li(class="liked-by-li")
-                                //-         a(href=`/movies/${movie.id}`) No Likes Yet
                                 span No Likes Yet
                         if (location === "moviesPage")
                             td
