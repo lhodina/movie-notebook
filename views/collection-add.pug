@@ -13,6 +13,6 @@ block content
             form(action="/collections/add" method="post")
                 input(type="hidden" name="_csrf" value=csrfToken)
                 +field("*Collection Name", "collectionName")
-                +addMovieFormFields()
+                +addMovieFormFields("collection-add")
                 +userNoteFields(userCollections, movieCollections, movieCollectionNames, location="addCollection")
                 button(type="submit") Add

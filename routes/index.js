@@ -1,8 +1,6 @@
 const express = require("express");
 const { requireAuth } = require("../auth");
 const { check, validationResult } = require("express-validator");
-const Sequelize = require('sequelize');
-const Op = Sequelize.Op;
 
 const { environment } = require("../config");
 const { User, Collection, Movie, MovieCollection, Director, Critic, UserNote } = require("../db/models");
@@ -154,52 +152,6 @@ router.get("/", csrfProtection, asyncHandler(async (req, res) => {
             csrfToken: req.csrfToken()
         });
     }
-}));
-
-
-router.get("/search/:value", asyncHandler(async (req, res) => {
-    let val = req.params.value.toLowerCase();
-    const { q } = req.query;
-
-    const movies = await Movie.findAll({ where: {
-        title: {
-            [Op.iLike]: "%" + val + "%"
-        }
-    }
-    });
-
-    const directors = await Director.findAll({ where: {
-        name: {
-            [Op.iLike]: "%" + val + "%"
-        }
-    }
-    });
-
-    const critics = await Critic.findAll({ where: {
-        name: {
-            [Op.iLike]: "%" + val + "%"
-        }
-    }
-    });
-
-    const collections = await Collection.findAll({ where: {
-        name: {
-            [Op.iLike]: "%" + val + "%"
-        }
-    }
-    });
-
-    const movieResults = movies.map(data => data.dataValues);
-    const directorResults = directors.map(data => data.dataValues);
-    const criticResults = critics.map(data => data.dataValues);
-    const collectionResults = collections.map(data => data.dataValues);
-
-    res.json({
-        movieResults,
-        directorResults,
-        criticResults,
-        collectionResults
-     });
 }));
 
 

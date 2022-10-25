@@ -15,6 +15,7 @@ const criticsRouter = require("./routes/critics");
 const collectionsRouter = require("./routes/collections");
 const favoriteDirectorsRouter = require("./routes/favorite-directors");
 const favoriteCriticsRouter = require("./routes/favorite-critics");
+const searchRouter = require("./routes/search");
 
 
 const app = express();
@@ -44,7 +45,7 @@ app.use("/critics", criticsRouter);
 app.use("/collections", collectionsRouter);
 app.use("/favorite-directors", favoriteDirectorsRouter);
 app.use("/favorite-critics", favoriteCriticsRouter);
-
+app.use("/search", searchRouter);
 
 app.use((req, res, next) => {
     const err = new Error("The Requested page could not be found");

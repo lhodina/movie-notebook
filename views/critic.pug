@@ -8,7 +8,7 @@ block content
     h3 Add or Select a New Favorite Movie
     form(action=`/critics/${critic.id}/favorites/add` method="post")
         input(type="hidden" name="_csrf" value=csrfToken)
-        +addMovieFormFields()
+        +addMovieFormFields("critic")
         button(type="submit") Add Favorite
 
     h3 #{critic.name}'s Favorite Movies

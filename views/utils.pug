@@ -72,14 +72,18 @@ mixin movieInfoFields(location)
 
 
 mixin addMovieFormFields(location)
-    div.search-movies
-        label(for="selectMovie") Search Movies:
-        br
-        select(name="selectMovie")
-            option(value="--Choose Movie--") --Choose Movie--
-            each movie in movies
-                option(value=movie.title)= movie.title
-        br
+    div(class="search-movies" id=location)
+        //- select(name="selectMovie")
+        //-     option(value="--Choose Movie--") --Choose Movie--
+        //-     each movie in movies
+        //-         option(value=movie.title)= movie.title
+        div(class="search-form-container")
+            form(action="/search" id="search-form-2")
+                img(id="search-icon" src="/images/search-icon.png" width="17px" height="17px")
+                input(type="search" id="search-bar-2" name="q-2" list="search-results-2")
+
+            div(id="search-results-container-2")
+                ul(class="search-results-list" id="search-results-list-2")
         br
         div(id="create-new-movie")
             text ...Or Enter New Movie
@@ -221,25 +225,18 @@ mixin displayMovies(movies, location)
     table
         thead
             tr
-                //- if (location === "recCollection")
-                //-     th Score
                 th
                 th Title
                 if (location !== "moviesDirected")
                     th Director
-                //- th Year Released
                 if (locals.authenticated)
-                    //- th Notes
                     th Rating
-                    //- th Status
                     th Liked By
                     th
 
         tbody
             each movie in movies
                 tr(id=`movie-container-${movie.id}`).movie-box
-                    //- if (location === "recCollection")
-                    //-     td= movie.recommendedScore
                     if movie.imageLink
                         td
                             img(src=`/images/eight-and-a-half.jpg` width=60 height=90)
@@ -250,18 +247,8 @@ mixin displayMovies(movies, location)
                         a(href=`/movies/${movie.id}`) #{movie.title}
                     td
                         a(href=`/directors/${movie.directorId}`)= movie.director
-                    //- if (movie.yearReleased !== 0)
-                    //-     td= movie.yearReleased
-                    //- else
-                    //-     td
 
                     if (locals.authenticated)
-                        //- if movie.review
-                        //-     td
-                        //-         a(href=`/movies/${movie.id}`) View
-                        //- else
-                        //-     td
-                        //-         a(href=`/movies/${movie.id}`) Add Notes
                         if movie.rating
                             td
                                 if (movie.rating === 5)
@@ -302,12 +289,6 @@ mixin displayMovies(movies, location)
                                 span.empty-star
                                 span.empty-star
 
-                        //- if movie.watchedStatus === true
-                        //-     td Watched
-                        //- else if movie.watchedStatus === false
-                        //-     td Want to Watch
-                        //- else
-                        //-     td
                         td
                             if (movie.likedByCritics && movie.likedByCritics.length)
                                 ul(class="liked-by-ul")

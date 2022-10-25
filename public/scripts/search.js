@@ -1,5 +1,57 @@
 console.log("Hello from the search.js script");
 
+const searchMovies = document.getElementsByClassName("search-movies");
+let location;
+if (searchMovies.length) {
+    location = searchMovies[0].id;
+    const searchFormTwo = document.getElementById("search-form-2");
+    const searchBarTwo = document.getElementById("search-bar-2");
+    const searchResultsContainerTwo = document.getElementById("search-results-container-2");
+    const searchResultsListTwo = document.getElementById("search-results-list-2");
+    searchResultsContainerTwo.style.display = "none";
+
+    searchBarTwo.addEventListener("input", async (event) => {
+        event.preventDefault();
+        const value = event.target.value.toLowerCase();
+
+        if (value) {
+            const res = await fetch(`/search/${value}/${location}`, {
+                method: "GET"
+            });
+
+            const results = await res.json();
+            const movieResults = results.movieResults;
+            const directorResults = results.directorResults;
+            const criticResults = results.criticResults;
+            const collectionResults = results.collectionResults;
+
+            searchResultsListTwo.innerHTML = "";
+
+            for (let result of movieResults) {
+                searchResultsListTwo.innerHTML += `<li><a href="/movies/${result.id}"}>${result.title}</a></li>`;
+            }
+
+            for (let result of directorResults) {
+                searchResultsListTwo.innerHTML += `<li><a href="/directors/${result.id}"}>${result.name}</a></li>`;
+            }
+
+            for (let result of criticResults) {
+                searchResultsListTwo.innerHTML += `<li><a href="/critics/${result.id}"}>${result.name}</a></li>`;
+            }
+
+            for (let result of collectionResults) {
+                searchResultsListTwo.innerHTML += `<li><a href="/collections/${result.id}"}>${result.name}</a></li>`;
+            }
+
+            searchResultsContainerTwo.style.display = "block";
+        } else {
+            searchResultsListTwo.innerHTML = "";
+            searchResultsContainerTwo.style.display = "none";
+        }
+    });
+}
+
+
 const searchForm = document.getElementById("search-form");
 const searchBar = document.getElementById("search-bar");
 const searchButton = document.getElementById("search-button");
