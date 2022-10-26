@@ -24,7 +24,7 @@ block content
     form(action=`/directors/${director.id}/favorites/add` id="add-favorite-form" method="post" hidden)
         input(type="hidden" name="_csrf" value=csrfToken)
         +addMovieFormFields("director")
-        button(type="submit") Add
+        button(type="submit") Submit
         a(href=`/directors/${director.id}`) Cancel
 
     form(action=`/directors/${director.id}/movies-directed/add` id="add-directed-form" method="post" hidden)
@@ -50,5 +50,5 @@ block content
         br
         button(type="submit") Save Note
         br
-        
+
     +links(links, `/directors/${director.id}/links`)

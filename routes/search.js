@@ -10,7 +10,7 @@ const { asyncHandler } = require("../utils");
 
 
 router.get("/:value", asyncHandler(async (req, res) => {
-    let val = req.params.value.toLowerCase();
+    const val = req.params.value.toLowerCase();
 
     const movies = await Movie.findAll({ where: {
         title: {
@@ -54,53 +54,21 @@ router.get("/:value", asyncHandler(async (req, res) => {
 }));
 
 
-router.get("/:value/:location", asyncHandler(async (req, res) => {
-    let val = req.params.value.toLowerCase();
-    const location = req.params.location;
-    console.log("val:", val);
-    console.log("location:", location);
+router.get("/movies/:value", asyncHandler(async (req, res) => {
+    const val = req.params.value.toLowerCase();
 
-    if (location === "collection") {
-        const movies = await Movie.findAll({ where: {
-            title: {
-                [Op.iLike]: "%" + val + "%"
-            }
+    const movies = await Movie.findAll({ where: {
+        title: {
+            [Op.iLike]: "%" + val + "%"
         }
-        });
-
-        const movieResults = movies.map(data => data.dataValues);
-
-        res.json({
-            movieResults
-        });
-    } else if (location === "director") {
-        const directors = await Director.findAll({ where: {
-            name: {
-                [Op.iLike]: "%" + val + "%"
-            }
-        }
-        });
-
-        const directorResults = directors.map(data => data.dataValues);
-
-        res.json({
-            directorResults
-        });
-
-    } else if (location === "critic") {
-        const critics = await Critic.findAll({ where: {
-            name: {
-                [Op.iLike]: "%" + val + "%"
-            }
-        }
-        });
-
-        const criticResults = critics.map(data => data.dataValues);
-
-        res.json({
-            criticResults
-        });
     }
+    });
+
+    const movieResults = movies.map(data => data.dataValues);
+
+    res.json({
+        movieResults
+    });
 }));
 
 

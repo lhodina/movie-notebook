@@ -78,12 +78,13 @@ mixin addMovieFormFields(location)
         //-     each movie in movies
         //-         option(value=movie.title)= movie.title
         div(class="search-form-container")
-            form(action="/search" id="search-form-2")
+            h3 Search Movies
+            form(action="/search" id="movie-search-form")
                 img(id="search-icon" src="/images/search-icon.png" width="17px" height="17px")
-                input(type="search" id="search-bar-2" name="q-2" list="search-results-2")
+                input(type="search" id="movie-search-bar" name="movie-q" list="movie-search-results")
 
-            div(id="search-results-container-2")
-                ul(class="search-results-list" id="search-results-list-2")
+            div(id="movie-search-results-container")
+                ul(class="search-results-list" id="movie-search-results-list")
         br
         div(id="create-new-movie")
             text ...Or Enter New Movie
