@@ -34,7 +34,6 @@ mixin links(links, formAction)
         br
 
 
-
 mixin movieInfoFields(location)
     if (movie)
         +field("*Title", "title", "text", movie.title)
@@ -72,7 +71,7 @@ mixin movieInfoFields(location)
 
 
 mixin addMovieFormFields(location)
-    div(class="search-movies" id=location)
+    div(class="search-movies")
         //- select(name="selectMovie")
         //-     option(value="--Choose Movie--") --Choose Movie--
         //-     each movie in movies
@@ -81,7 +80,8 @@ mixin addMovieFormFields(location)
             h3 Search Movies
             form(action="/search" id="movie-search-form")
                 img(id="search-icon" src="/images/search-icon.png" width="17px" height="17px")
-                input(type="search" id="movie-search-bar" name="movie-q" list="movie-search-results")
+                input(type="search" id="movie-search-bar" name="movieSearchRes" list="movie-search-results")
+                button(type="submit") Submit
 
             div(id="movie-search-results-container")
                 ul(class="search-results-list" id="movie-search-results-list")
@@ -157,7 +157,7 @@ mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, lo
                     ul
                         each collection in movieCollections
                             li
-                                if (collection.name !== "Most Recommended")
+                                if (collection.name !== "Short List")
                                     a(href=`/collections/${collection.id}`)= collection.name
                                 else
                                     a(href="/")= collection.name
@@ -167,7 +167,7 @@ mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, lo
                     input(name="collectionList" list="collectionList")
                     datalist(id="collectionList" name="collectionList")
                         each collection in userCollections
-                            if (collection.name !== "Most Recommended" && collection.name !== "Want to Watch")
+                            if (collection.name !== "Short List" && collection.name !== "Want to Watch")
                                 option(value=collection.name)
                 br
             if (userNotes && userNotes.watchedStatus === true)

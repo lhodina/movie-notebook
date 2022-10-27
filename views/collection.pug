@@ -12,7 +12,7 @@ block content
     h2= collection.name
     main
         div(class="form-container")
-            if collection.name !== "Most Recommended"
+            if collection.name !== "Short List"
                 form(action=`/collections/${collection.id}` method="post")
                     input(type="hidden" name="_csrf" value=csrfToken)
                     +addMovieFormFields("collection")

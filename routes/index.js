@@ -49,11 +49,11 @@ router.get("/", csrfProtection, asyncHandler(async (req, res) => {
             const sortedRecs = userMovies.sort((a, b) => b.recommendedScore - a.recommendedScore);
             const mostRecommended = sortedRecs.filter(rec => rec.recommendedScore > 1);
 
-            let recommendationsCollection = await Collection.findOne({ where: {name: "Most Recommended"} });
+            let recommendationsCollection = await Collection.findOne({ where: {name: "Short List"} });
 
             if (!recommendationsCollection) {
                 recommendationsCollection = await Collection.create({
-                    name: "Most Recommended",
+                    name: "Short List",
                     userId: user.id
                 });
             }
@@ -126,7 +126,7 @@ router.get("/", csrfProtection, asyncHandler(async (req, res) => {
             const movieList = getMovies(collection.Movies, user);
             let movies;
 
-            if (collectionName === "Most Recommended") {
+            if (collectionName === "Short List") {
                 const sortedRecs = movieList.sort((a, b) => b.recommendedScore - a.recommendedScore);
                 movies = sortedRecs.filter(rec => rec.recommendedScore > 0);
             } else {

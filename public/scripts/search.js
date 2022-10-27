@@ -1,5 +1,7 @@
 console.log("Hello from the search.js script");
 
+const createNewMovie = document.getElementById("create-new-movie");
+
 const searchBar = document.getElementById("search-bar");
 const searchResultsContainer = document.getElementById("search-results-container");
 const searchResultsList = document.getElementById("search-results-list");
@@ -39,7 +41,9 @@ searchBar.addEventListener("input", async (event) => {
             searchResultsList.innerHTML += `<li><a href="/collections/${result.id}"}>${result.name}</a></li>`;
         }
 
-        searchResultsContainer.style.display = "block";
+        if (searchResultsList.innerHTML) {
+            searchResultsContainer.style.display = "block";
+        }
     } else {
         searchResultsList.innerHTML = "";
         searchResultsContainer.style.display = "none";
@@ -65,15 +69,27 @@ movieSearchBar.addEventListener("input", async (event) => {
         const results = await res.json();
         const movieResults = results.movieResults;
 
-        searchResultsList.innerHTML = "";
+        movieSearchResultsList.innerHTML = "";
 
         for (let result of movieResults) {
-            searchResultsList.innerHTML += `<li><a href="/movies/${result.id}"}>${result.title}</a></li>`;
+            movieSearchResultsList.innerHTML += `<li class="search-result-item" id="result-${result.title}"}>${result.title}</li>`;
         }
 
-        searchResultsContainer.style.display = "block";
+        if (movieSearchResultsList.innerHTML) {
+            movieSearchResultsContainer.style.display = "block";
+        }
+
+        const movieSearchResults = document.getElementsByClassName("search-result-item");
+        console.log('movieSearchResults:', movieSearchResults)
+        for (let res of movieSearchResults) {
+            res.addEventListener("click", async (event) => {
+                movieSearchBar.value = res.innerHTML;
+                movieSearchResultsContainer.style.display = "none";
+                // createNewMovie.style.display = "none";
+            });
+        }
     } else {
-        searchResultsList.innerHTML = "";
-        searchResultsContainer.style.display = "none";
+        movieSearchResultsList.innerHTML = "";
+        movieSearchResultsContainer.style.display = "none";
     }
 });

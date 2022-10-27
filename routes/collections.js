@@ -19,8 +19,8 @@ const validateCollection = [
         check("title")
             .exists({ checkFalsy: true })
         ,
-        check("selectMovie")
-            .not().equals("--Choose Movie--")
+        check("movieSearchRes")
+            .exists({ checkFalsy: true })
     ], "Please include a movie")
 ];
 
@@ -62,7 +62,8 @@ router.post("/add", requireAuth, csrfProtection, validateCollection, asyncHandle
             userId
         });
 
-        const { selectMovie } = req.body;
+        // const { selectMovie } = req.body;
+        const { movieSearchRes } = req.body;
         const directorName = req.body.directorName;
 
         let director;
@@ -94,8 +95,8 @@ router.post("/add", requireAuth, csrfProtection, validateCollection, asyncHandle
 
         let movie;
 
-        if (selectMovie !== "--Choose Movie--") {
-            movie = await Movie.findOne({ where: { title: selectMovie } });
+        if (movieSearchRes) {
+            movie = await Movie.findOne({ where: { title: movieSearchRes } });
         } else {
             movie = await Movie.create({
                 title,
@@ -190,9 +191,11 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
 
 router.post("/:id", csrfProtection, asyncHandler(async (req, res) => {
+    console.log('req.body:', req.body)
     const { userId } = req.session.auth;
     const collectionId = parseInt(req.params.id, 10);
-    const { selectMovie } = req.body;
+    // const { selectMovie } = req.body;
+    const { movieSearchRes } = req.body;
 
     const directorName = req.body.directorName;
 
@@ -226,8 +229,8 @@ router.post("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
     let movie;
 
-    if (selectMovie !== "--Choose Movie--") {
-        movie = await Movie.findOne({ where: { title: selectMovie } });
+    if (movieSearchRes) {
+        movie = await Movie.findOne({ where: { title: movieSearchRes } });
     } else {
         movie = await Movie.create({
             title,
