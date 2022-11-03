@@ -26,6 +26,4 @@ if (displayCollection) {
             displayCollection.style.display = "block";
         });
     }
-} else {
-    console.log("Nothing added yet, let's get started!")
-}
+} 

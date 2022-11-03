@@ -8,16 +8,16 @@ block content
         div(class="form-container")
             form(action="/favorite-directors/add", method="post")
                 input(type="hidden" name="_csrf" value=csrfToken)
-                label(for="director") Choose or Add a Director
+                label(for="director") *Choose or Add a Director
                 br
                 input(name="directorName" list="directors")
                 datalist(id="directors" name="directors")
                     each director in directors
                         option(value=director.name)
                 br
-                label(for="notes") Notes
+                label(for="directorNotes") Notes
                 br
-                textarea(name="notes")
+                textarea(name="directorNotes")
                 br
                 +field("Link Text", "linkText")
                 +field("Link URL", "linkUrl")

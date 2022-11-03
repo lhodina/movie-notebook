@@ -1,13 +1,13 @@
-extends layout.pug
-block content
-    script(src="/scripts/directors.js" type="module")
-    h2 Directors
-    table
-        thead
-            th Name
-        tbody
-            each director in directors
-                tr(id=`director-container-${director.id}`).director-box
-                    td
-                        a(href=`/directors/${director.id}`)= director.name
-                        button(id=director.id).delete-btn Delete
+//- extends layout.pug
+//- block content
+//-     script(src="/scripts/directors.js" type="module")
+//-     h2 Directors
+//-     table
+//-         thead
+//-             th Name
+//-         tbody
+//-             each director in directors
+//-                 tr(id=`director-container-${director.id}`).director-box
+//-                     td
+//-                         a(href=`/directors/${director.id}`)= director.name
+//-                         button(id=director.id).delete-btn Delete

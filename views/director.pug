@@ -14,7 +14,7 @@ block content
         p No movies added yet
     button(id="add-directed-button") Add
 
-    h3 Movies Liked by #{director.name}
+    h3 #{director.name}'s Favorite Movies
     if (favoriteMovies.length)
         +displayMovies(favoriteMovies, "moviesLiked")
     else
@@ -40,15 +40,12 @@ block content
         button(type="submit") Add
         a(href=`/directors/${director.id}`) Cancel
 
-    h3 Notes
+    h3 Notes on #{director.name}
     form(action=`/directors/${director.id}/notes` method="post")
         input(type="hidden" name="_csrf" value=csrfToken)
         if (favoriteDirector && favoriteDirector.notes)
-            textarea(name="notes")= favoriteDirector.notes
+            textarea(name="directorNotes")= favoriteDirector.notes
         else
-            textarea(name="notes" ) Add a note
+            textarea(name="directorNotes" ) Add a note
         br
         button(type="submit") Save Note
-        br
-
-    +links(links, `/directors/${director.id}/links`)

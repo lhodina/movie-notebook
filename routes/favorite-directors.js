@@ -36,7 +36,7 @@ router.post("/add", csrfProtection, validateFavoriteDirector, asyncHandler(async
         });
     } else {
         const { userId } = req.session.auth;
-        const { directorName, notes } = req.body;
+        const { directorName, directorNotes } = req.body;
         const favoriteDirectorsData = await FavoriteDirector.findAll({ where: userId });
         const favoriteDirectorIds = favoriteDirectorsData.map(director => director.dataValues.directorId);
 
@@ -51,7 +51,7 @@ router.post("/add", csrfProtection, validateFavoriteDirector, asyncHandler(async
             await FavoriteDirector.create({
                 userId,
                 directorId: director.id,
-                notes
+                notes: directorNotes
             });
 
             if (linkText && linkUrl) {

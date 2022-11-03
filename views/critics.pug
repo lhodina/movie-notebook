@@ -1,8 +1,8 @@
-extends layout.pug
-block content
-    script(src="/scripts/critics.js" type="module")
-    h2 Critics
-    each critic in critics
-        div(id=`critic-container-${critic.id}`).critic-box
-            a(href=`/critics/${critic.id}`)= critic.name
-            button(id=critic.id).delete-btn Delete
+//- extends layout.pug
+//- block content
+//-     script(src="/scripts/critics.js" type="module")
+//-     h2 Critics
+//-     each critic in critics
+//-         div(id=`critic-container-${critic.id}`).critic-box
+//-             a(href=`/critics/${critic.id}`)= critic.name
+//-             button(id=critic.id).delete-btn Delete

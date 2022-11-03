@@ -16,22 +16,18 @@ mixin field(labelText, fieldName, fieldType='text', fieldValue='', placeholder=n
             input(type=fieldType id=fieldName name=fieldName value=fieldValue placeholder=placeholder)
 
 
-mixin links(links, formAction)
+mixin links(links)
     div(id="links")
-        if (links)
-            span Links
+        h4 Add a Link
+        +field("Link Text", "linkText")
+        +field("Link URL", "linkUrl")
+        br
+        if (links && links.length)
+            h3 Links
             ul
                 each link in links
                     li
-                        a(href=`${link.linkUrl}`)= link.linkText
-        br
-        span Add a Link
-        form(id="add-link-form" action=formAction method="post")
-            input(type="hidden" name="_csrf" value=csrfToken)
-            +field("Link Text", "linkText")
-            +field("Link URL", "linkUrl")
-            button(type="submit" id="add-link-button") Add Link
-        br
+                        a(href=`${link.linkUrl}` target="_blank")= link.linkText
 
 
 mixin movieInfoFields(location)
@@ -71,28 +67,14 @@ mixin movieInfoFields(location)
 
 
 mixin addMovieFormFields(location)
-    div(class="search-movies")
-        //- select(name="selectMovie")
-        //-     option(value="--Choose Movie--") --Choose Movie--
-        //-     each movie in movies
-        //-         option(value=movie.title)= movie.title
-        div(class="search-form-container")
-            h3 Search Movies
-            form(action="/search" id="movie-search-form")
-                img(id="search-icon" src="/images/search-icon.png" width="17px" height="17px")
-                input(type="search" id="movie-search-bar" name="movieSearchRes" list="movie-search-results")
-                button(type="submit") Submit
-
-            div(id="movie-search-results-container")
-                ul(class="search-results-list" id="movie-search-results-list")
-        br
-        div(id="create-new-movie")
-            text ...Or Enter New Movie
-            button(id="dropdown-button")
-                img(id="dropdown-icon" src="/images/dropdown.png")
-        br
-    div.add-new-movie
+    div(id="create-new-movie")
+        h3 Enter New Movie
+        button(id="dropdown-button")
+            img(id="dropdown-icon" src="/images/dropdown.png")
+    br
+    div(class="add-new-movie")
         +movieInfoFields(location)
+
 
 
 mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, location)
@@ -166,9 +148,10 @@ mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, lo
                     label(for="collectionList") Add to Collection
                     input(name="collectionList" list="collectionList")
                     datalist(id="collectionList" name="collectionList")
-                        each collection in userCollections
-                            if (collection.name !== "Short List" && collection.name !== "Want to Watch")
-                                option(value=collection.name)
+                        if (userCollections)
+                            each collection in userCollections
+                                if (collection.name !== "Short List" && collection.name !== "Want to Watch")
+                                    option(value=collection.name)
                 br
             if (userNotes && userNotes.watchedStatus === true)
                 fieldset
@@ -195,6 +178,8 @@ mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, lo
                     div
                         input(type="radio" id="wantToWatch" name="watchedStatus" value="0")
                         label(for="wantToWatch") Want To Watch
+            +field("Link Text", "linkText")
+            +field("Link URL", "linkUrl")
 
 
 mixin displayMovie(movie)
@@ -240,7 +225,7 @@ mixin displayMovies(movies, location)
                 tr(id=`movie-container-${movie.id}`).movie-box
                     if movie.imageLink
                         td
-                            img(src=`/images/eight-and-a-half.jpg` width=60 height=90)
+                            img(src=`${movie.imageLink}` width=60 height=90)
                     else
                         td
                             div.poster-placeholder

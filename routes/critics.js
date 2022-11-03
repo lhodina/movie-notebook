@@ -18,14 +18,14 @@ const validateFavoriteMovie = [
     oneOf([
         check("title")
             .exists({ checkFalsy: true }),
-        check("selectMovie")
+        check("movieSearchRes")
             .exists({ checkFalsy: true })
     ], "Please enter a movie title")
     ,
     oneOf([
         check("director")
             .exists({ checkFalsy: true }),
-        check("selectMovie")
+        check("movieSearchRes")
             .exists({ checkFalsy: true })
     ], "Please enter a director")
 ];
@@ -81,13 +81,13 @@ router.post("/:id/favorites/add", validateFavoriteMovie, csrfProtection, asyncHa
 
         let {
             title,
-            selectMovie,
+            movieSearchRes,
             yearReleased,
             imageLink
         } = req.body;
 
-        if (selectMovie !== "--Choose Movie--") {
-            movie = await Movie.findOne({ where: { title: selectMovie } });
+        if (movieSearchRes) {
+            movie = await Movie.findOne({ where: { title: movieSearchRes } });
         } else {
             const directorName = req.body.directorName;
 
@@ -124,10 +124,14 @@ router.post("/:id/favorites/add", validateFavoriteMovie, csrfProtection, asyncHa
 
 router.post("/:id/notes", csrfProtection, asyncHandler(async (req, res, next) => {
     const { userId } = req.session.auth;
-    let { notes } = req.body;
+    let { criticNotes } = req.body;
     const criticId = parseInt(req.params.id, 10);
     const favoriteCritic = await FavoriteCritic.findOne({ where: { userId, criticId }});
-    await favoriteCritic.update({ userId, criticId, notes });
+    await favoriteCritic.update({
+        userId,
+        criticId,
+        notes: criticNotes
+    });
     res.redirect("/");
 }));
 

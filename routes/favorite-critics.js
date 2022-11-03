@@ -36,7 +36,7 @@ router.post("/add", csrfProtection, validateFavoriteCritic, asyncHandler(async (
         });
     } else {
         const { userId } = req.session.auth;
-        const { name, notes, linkText, linkUrl } = req.body;
+        const { name, criticNotes, linkText, linkUrl } = req.body;
         const favoriteCriticsData = await FavoriteCritic.findAll({ where: userId });
         const favoriteCriticIds = favoriteCriticsData.map(critic => critic.dataValues.criticId);
 
@@ -51,7 +51,7 @@ router.post("/add", csrfProtection, validateFavoriteCritic, asyncHandler(async (
             await FavoriteCritic.create({
                 userId,
                 criticId: critic.id,
-                notes
+                criticNotes
             });
 
             if (linkText && linkUrl) {

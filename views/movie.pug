@@ -13,4 +13,15 @@ block content
                 +userNoteFields(userCollections, movieCollections, movieCollectionNames)
                 br
                 button(type="submit") Update
-            +links(links, `/movies/${movie.id}/links`)
+
+            if (movie.favoritedByDirectors.length || movie.Critics.length)
+                h3 Liked By
+                ul
+                    if (movie.favoritedByDirectors.length)
+                        each director in movie.favoritedByDirectors
+                            li
+                                a(href=`/directors/${director.id}`) #{director.name}
+                    if (movie.Critics.length)
+                        each critic in movie.Critics
+                            li
+                                a(href=`/critics/${critic.id}`) #{critic.name}

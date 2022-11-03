@@ -166,8 +166,6 @@ router.post("/add", csrfProtection, validateMovie, asyncHandler(async (req, res)
                     });
                 }
 
-                console.log('collectionList:', collectionList)
-
                 await MovieCollection.create({
                     movieId: movie.id,
                     collectionId: collection.id
@@ -182,7 +180,7 @@ router.post("/add", csrfProtection, validateMovie, asyncHandler(async (req, res)
 
 router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
     const movieId = parseInt(req.params.id, 10);
-    const movie = await Movie.findByPk(movieId, { include: ['movieDirector', Collection] });
+    const movie = await Movie.findByPk(movieId, { include: ['movieDirector', 'favoritedByDirectors', Critic, Collection] });
     const directors = await Director.findAll();
     const director = movie.dataValues.movieDirector;
 

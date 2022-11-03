@@ -37,110 +37,109 @@ router.get("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) =>
 }));
 
 
-router.post("/add", requireAuth, csrfProtection, validateCollection, asyncHandler(async (req, res) => {
+router.post("/add", requireAuth, csrfProtection, asyncHandler(async (req, res) => {
     const { userId } = req.session.auth;
     const { collectionName } = req.body;
 
     const movies = await Movie.findAll({ include: UserNote });
     const directors = await Director.findAll();
 
-    const validatorErrors = validationResult(req);
+    // const validatorErrors = validationResult(req);
 
-    if (!validatorErrors.isEmpty()) {
-        const errors = validatorErrors.array().map((error) => error.msg);
+    // if (!validatorErrors.isEmpty()) {
+    //     const errors = validatorErrors.array().map((error) => error.msg);
+    // }
 
-        res.render("collection-add", {
-            movies,
-            directors,
-            years,
-            errors,
-            csrfToken: req.csrfToken()
-        });
-    } else {
-        const collection = await Collection.create({
-            name: collectionName,
-            userId
-        });
+    res.render("collection-add", {
+        movies,
+        directors,
+        years,
+        // errors,
+        csrfToken: req.csrfToken()
+    });
 
-        // const { selectMovie } = req.body;
-        const { movieSearchRes } = req.body;
-        const directorName = req.body.directorName;
+    const collection = await Collection.create({
+        name: collectionName,
+        userId
+    });
 
-        let director;
+    const { movieSearchRes } = req.body;
+    const directorName = req.body.directorName;
 
-        if (directorName) {
-            director = await Director.findOne({ where: { name: directorName } });
-            if (!director) {
-                director = await Director.create({
-                    name: directorName
-                });
-            }
-        }
+    let director;
 
-        let {
-            title,
-            yearReleased,
-            imageLink,
-            starRating,
-            review,
-            watchedStatus
-        } = req.body;
-
-        if (yearReleased === "--Year--") yearReleased = 0;
-
-        let rating;
-        if (starRating) {
-            rating = parseInt(starRating, 10);
-        }
-
-        let movie;
-
-        if (movieSearchRes) {
-            movie = await Movie.findOne({ where: { title: movieSearchRes } });
-        } else {
-            movie = await Movie.create({
-                title,
-                directorId: director.id,
-                yearReleased,
-                imageLink
+    if (directorName) {
+        director = await Director.findOne({ where: { name: directorName } });
+        if (!director) {
+            director = await Director.create({
+                name: directorName
             });
         }
-
-        if (movie) {
-            await MovieCollection.create({
-                movieId: movie.id,
-                collectionId: collection.id
-            });
-        }
-
-        let userNote = await UserNote.findOne({ where: {
-            [Op.and]: [
-                { userId },
-                { movieId: movie.id }
-            ]
-        } });
-
-
-        if (!userNote && (review || rating || watchedStatus !== undefined)) {
-            userNote = await UserNote.create({
-                userId,
-                movieId: movie.id,
-                review,
-                rating,
-                watchedStatus
-            });
-        } else if (userNote) {
-            await userNote.update({
-                userId,
-                movieId: movie.id,
-                review,
-                rating,
-                watchedStatus
-            });
-        }
-
-        res.redirect("/");
     }
+
+    let {
+        title,
+        yearReleased,
+        imageLink,
+        starRating,
+        review,
+        watchedStatus
+    } = req.body;
+
+    if (yearReleased === "--Year--") yearReleased = 0;
+
+    let rating;
+    if (starRating) {
+        rating = parseInt(starRating, 10);
+    }
+
+    let movie;
+
+    if (movieSearchRes) {
+        movie = await Movie.findOne({ where: { title: movieSearchRes } });
+    } else {
+        movie = await Movie.create({
+            title,
+            directorId: director.id,
+            yearReleased,
+            imageLink
+        });
+    }
+
+    if (movie) {
+        await MovieCollection.create({
+            movieId: movie.id,
+            collectionId: collection.id
+        });
+    }
+
+    let userNote = await UserNote.findOne({ where: {
+        [Op.and]: [
+            { userId },
+            { movieId: movie.id }
+        ]
+    } });
+
+
+    if (!userNote && (review || rating || watchedStatus !== undefined)) {
+        userNote = await UserNote.create({
+            userId,
+            movieId: movie.id,
+            review,
+            rating,
+            watchedStatus
+        });
+    } else if (userNote) {
+        await userNote.update({
+            userId,
+            movieId: movie.id,
+            review,
+            rating,
+            watchedStatus
+        });
+    }
+
+    res.redirect("/");
 }));
 
 
@@ -191,11 +190,11 @@ router.get("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
 
 router.post("/:id", csrfProtection, asyncHandler(async (req, res) => {
-    console.log('req.body:', req.body)
     const { userId } = req.session.auth;
     const collectionId = parseInt(req.params.id, 10);
-    // const { selectMovie } = req.body;
-    const { movieSearchRes } = req.body;
+
+    console.log('req.body:', req.body)
+    const { secondSearchRes } = req.body;
 
     const directorName = req.body.directorName;
 
@@ -229,8 +228,8 @@ router.post("/:id", csrfProtection, asyncHandler(async (req, res) => {
 
     let movie;
 
-    if (movieSearchRes) {
-        movie = await Movie.findOne({ where: { title: movieSearchRes } });
+    if (secondSearchRes) {
+        movie = await Movie.findOne({ where: { title: secondSearchRes } });
     } else {
         movie = await Movie.create({
             title,
