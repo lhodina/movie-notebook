@@ -36,7 +36,7 @@ router.post("/add", csrfProtection, validateFavoriteCritic, asyncHandler(async (
         });
     } else {
         const { userId } = req.session.auth;
-        const { name, criticNotes, linkText, linkUrl } = req.body;
+        const { name, criticNotes } = req.body;
         const favoriteCriticsData = await FavoriteCritic.findAll({ where: userId });
         const favoriteCriticIds = favoriteCriticsData.map(critic => critic.dataValues.criticId);
 
@@ -53,16 +53,6 @@ router.post("/add", csrfProtection, validateFavoriteCritic, asyncHandler(async (
                 criticId: critic.id,
                 criticNotes
             });
-
-            if (linkText && linkUrl) {
-                await Link.create({
-                    userId,
-                    table: "Critic",
-                    tableItemId: critic.id,
-                    linkText,
-                    linkUrl
-                });
-            }
         } else {
             const critics = await Critic.findAll();
             const errors = [`${name} is already one of your favorite critics!`];

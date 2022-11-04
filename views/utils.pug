@@ -16,18 +16,19 @@ mixin field(labelText, fieldName, fieldType='text', fieldValue='', placeholder=n
             input(type=fieldType id=fieldName name=fieldName value=fieldValue placeholder=placeholder)
 
 
-mixin links(links)
-    div(id="links")
+mixin linksForm(links, locationId)
+    if (links && links.length)
+        h3 Links
+        ul
+            each link in links
+                li
+                    a(href=`${link.linkUrl}` target="_blank")= link.linkText
+    br
+    form(id=`links-form-${locationId}` class="links-form" method="post")
         h4 Add a Link
         +field("Link Text", "linkText")
         +field("Link URL", "linkUrl")
-        br
-        if (links && links.length)
-            h3 Links
-            ul
-                each link in links
-                    li
-                        a(href=`${link.linkUrl}` target="_blank")= link.linkText
+        button(type="submit" id="add-link-button") Add Link
 
 
 mixin movieInfoFields(location)
@@ -74,7 +75,6 @@ mixin addMovieFormFields(location)
     br
     div(class="add-new-movie")
         +movieInfoFields(location)
-
 
 
 mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, location)
@@ -178,8 +178,6 @@ mixin userNoteFields(userCollections, movieCollections, movieCollectionNames, lo
                     div
                         input(type="radio" id="wantToWatch" name="watchedStatus" value="0")
                         label(for="wantToWatch") Want To Watch
-            +field("Link Text", "linkText")
-            +field("Link URL", "linkUrl")
 
 
 mixin displayMovie(movie)

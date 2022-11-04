@@ -104,9 +104,7 @@ router.post("/add", csrfProtection, validateMovie, asyncHandler(async (req, res)
             starRating,
             review,
             collectionList,
-            watchedStatus,
-            linkText,
-            linkUrl
+            watchedStatus
         } = req.body;
 
         let director;
@@ -135,16 +133,6 @@ router.post("/add", csrfProtection, validateMovie, asyncHandler(async (req, res)
                 yearReleased,
                 imageLink
             });
-
-            if (linkText && linkUrl) {
-                await Link.create({
-                    userId,
-                    table: "Movie",
-                    tableItemId: movie.id,
-                    linkText,
-                    linkUrl
-                });
-            }
 
             if (rating || review || watchedStatus !== undefined) {
                 await UserNote.create({
@@ -257,20 +245,7 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
         review,
         collectionList,
         watchedStatus,
-        linkText,
-        linkUrl
     } = req.body;
-
-
-    if (linkText && linkUrl) {
-        await Link.create({
-            userId,
-            table: "Movie",
-            tableItemId: movieId,
-            linkText,
-            linkUrl
-        });
-    }
 
     if (yearReleased === "--Year--") yearReleased = 0;
     let rating;
@@ -345,7 +320,8 @@ router.put("/:id", asyncHandler(async (req, res, next) => {
 }));
 
 
-router.post("/:id/links", csrfProtection, asyncHandler(async (req, res, next) => {
+router.post("/:id/links", asyncHandler(async (req, res, next) => {
+    console.log("req.body:", req.body)
     const { userId } = req.session.auth;
     let { linkText, linkUrl } = req.body;
     const movieId = parseInt(req.params.id, 10);
@@ -357,8 +333,6 @@ router.post("/:id/links", csrfProtection, asyncHandler(async (req, res, next) =>
         linkText,
         linkUrl
     });
-
-    res.redirect(`/movies/${movieId}`);
 }));
 
 

@@ -215,9 +215,7 @@ router.post("/:id", csrfProtection, asyncHandler(async (req, res) => {
         imageLink,
         starRating,
         review,
-        watchedStatus,
-        linkText,
-        linkUrl
+        watchedStatus
     } = req.body;
 
     if (yearReleased === "--Year--") yearReleased = 0;
@@ -253,17 +251,6 @@ router.post("/:id", csrfProtection, asyncHandler(async (req, res) => {
         movieId: movie.id,
         collectionId
     });
-
-    if (linkText && linkUrl) {
-        await Link.create({
-            userId,
-            table: "Movie",
-            tableItemId: movie.id,
-            linkText,
-            linkUrl
-        });
-    }
-
     res.redirect(`/`);
 }));
 

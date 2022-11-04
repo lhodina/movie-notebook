@@ -1,13 +1,13 @@
 
 const form = document.getElementsByClassName("movie-edit-form")[0];
-const movieId = form.id;
+const linksForm = document.getElementsByClassName("links-form")[0];
+console.log('linksForm:', linksForm)
 
+let movieId;
+if (form) movieId = form.id;
+if (linksForm) movieId = linksForm.id.split("-")[2];
 
-// const addLinkButton = document.getElementById("add-link-button");
-
-// addLinkButton.addEventListener("click", async (event) => {
-//     window.location.reload();
-// });
+console.log("movieId:", movieId);
 
 
 form.addEventListener("submit", async (event) => {
@@ -28,9 +28,7 @@ form.addEventListener("submit", async (event) => {
         starRating: data.starRating,
         review: data.review,
         collectionList: data.collectionList,
-        watchedStatus: data.watchedStatus,
-        linkUrl: data.linkUrl,
-        linkText: data.linkText
+        watchedStatus: data.watchedStatus
     };
 
     const res = await fetch(`http://localhost:8080/movies/${movieId}`, {
@@ -42,4 +40,37 @@ form.addEventListener("submit", async (event) => {
     });
 
     window.location = "/";
+});
+
+
+
+linksForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    console.log("Inside the submit event listener...")
+    const formData = new FormData(linksForm);
+    const entries = formData.entries();
+
+    const data = {};
+    for (let entry of entries) {
+        data[entry[0]] = entry[1];
+    }
+
+    const body = {
+        linkUrl: data.linkUrl,
+        linkText: data.linkText
+    };
+
+    console.log('body:', body)
+
+    await fetch(`http://localhost:8080/movies/${movieId}/links`, {
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: {
+            "Content-Type": "application/json",
+        }
+    });
+
+    await fetch(`http://localhost:8080/movies/${movieId}`, {
+        method: "GET"
+    });
 });

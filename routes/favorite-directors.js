@@ -53,17 +53,6 @@ router.post("/add", csrfProtection, validateFavoriteDirector, asyncHandler(async
                 directorId: director.id,
                 notes: directorNotes
             });
-
-            if (linkText && linkUrl) {
-                await Link.create({
-                    userId,
-                    table: "Director",
-                    tableItemId: director.id,
-                    linkText,
-                    linkUrl
-                });
-            }
-
             res.redirect("/");
         } else {
             const directors = await Director.findAll();
