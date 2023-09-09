@@ -1,8 +1,43 @@
-
+import requests
 from flask import redirect, request
 
 from flask_app import app
 from flask_app.models import movie
+
+
+@app.route("/movie_api")
+def test_movie_api():
+    url_base = "https://image.tmdb.org/t/p/w500"
+    url = "https://api.themoviedb.org/3/search/movie?query=la+dolce+vita"
+    headers = {
+        "accept": "application/json",
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZTIxNjdiZTgwYzYxYjZhMzVkNjhiMjY2NmE0YWUzMyIsInN1YiI6IjYzMmRkMzZkNTU5MzdiMDA3YzA5MTZlMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qlMgNrzDMM2eqPUGxDRpWsACr9o-xb94MKMpdta7K7c"
+    }
+    response = requests.get(url, headers=headers).json()
+    poster_path = response["results"][0]["poster_path"]
+    movie_poster = url_base + poster_path
+    print("movie_poster: ", movie_poster)
+
+    year = response["results"][0]["release_date"][:4]
+    print("year ", year)
+    return response
+
+
+@app.route("/director_api")
+def test_person_api():
+    image_url_base = "https://image.tmdb.org/t/p/w500"
+    url = "https://api.themoviedb.org/3/search/person?query=federico+fellini"
+    headers = {
+        "accept": "application/json",
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZTIxNjdiZTgwYzYxYjZhMzVkNjhiMjY2NmE0YWUzMyIsInN1YiI6IjYzMmRkMzZkNTU5MzdiMDA3YzA5MTZlMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qlMgNrzDMM2eqPUGxDRpWsACr9o-xb94MKMpdta7K7c"
+    }
+    response = requests.get(url, headers=headers).json()
+    print(response)
+    profile_path = response["results"][0]["profile_path"]
+    profile_pic = image_url_base + profile_path
+    print("profile_pic: ", profile_pic)
+    return response
+
 
 
 @app.route("/movies", methods=["POST"])
