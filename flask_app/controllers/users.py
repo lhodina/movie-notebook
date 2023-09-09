@@ -32,6 +32,12 @@ def register_user():
 
 @app.route("/dashboard")
 def dashboard():
+    data = {"id": 1}
+    current_user = user.User.get_one(data)
     return {
-        "welcome": "to da dashboard"
+        "first_name": current_user.first_name,
+        "last_name": current_user.last_name,
+        "email": current_user.email,
+        "password": current_user.password,
+        "collections": current_user.collections
     }

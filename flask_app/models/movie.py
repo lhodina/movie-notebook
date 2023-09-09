@@ -1,4 +1,5 @@
 from flask_app.config.mysqlconnection import connectToMySQL
+from flask_app.models import director
 
 class Movie:
     DB = "movie_notebook"
@@ -10,6 +11,7 @@ class Movie:
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
         self.directed_by_id = data['directed_by_id']
+        self.director = None
 
 
     @classmethod
@@ -37,9 +39,11 @@ class Movie:
     def get_one(cls, data):
         query = """
         SELECT * FROM movies
+        JOIN directors ON directors.id = movies.directed_by_id
         WHERE movies.id = %(id)s;
         """
         result = connectToMySQL(cls.DB).query_db(query, data)[0]
+
         current_movie_data = {
             "id": result["id"],
             "title": result["title"],
@@ -51,6 +55,17 @@ class Movie:
         }
 
         current_movie = cls(current_movie_data)
+
+        current_director_data = {
+            "id": result["directors.id"],
+            "name": result["name"],
+            "image_url": result["directors.image_url"],
+            "created_at": result["directors.created_at"],
+            "updated_at": result["directors.updated_at"],
+        }
+        current_director = director.Director(current_director_data)
+        current_movie.director = current_director
+
         return current_movie
 
 

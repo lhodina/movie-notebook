@@ -3,6 +3,7 @@ from flask import redirect, request
 from flask_app import app
 from flask_app.models import director
 
+
 @app.route("/directors", methods=["POST"])
 def add_director():
     data = {
@@ -20,7 +21,6 @@ def get_all_directors():
     res = {"directors": []}
     for each_director in all_directors:
         res['directors'].append(each_director)
-
     return res
 
 
@@ -31,10 +31,14 @@ def get_director(director_id):
     }
 
     current_director = director.Director.get_one(data)
+    favorites = director.Director.get_favorites(data)
 
     return {
+        "id": current_director.id,
         "name": current_director.name,
-        "image_url": current_director.image_url
+        "image_url": current_director.image_url,
+        "movies_directed": current_director.movies_directed,
+        "favorites": favorites
     }
 
 
@@ -54,4 +58,26 @@ def update_director():
 def delete_director(director_id):
     data = { "id": director_id }
     director.Director.delete(data)
+    return redirect("/dashboard")
+
+
+@app.route("/directors/<int:director_id>/add_favorite", methods=["POST"])
+def add_favorite(director_id):
+    data = {
+        "movie_id": request.form["movie_id"],
+        "director_id": director_id
+    }
+
+    director.Director.add_favorite(data)
+    return redirect("/dashboard")
+
+
+@app.route("/directors/<int:director_id>/remove_favorite")
+def remove_favorite(director_id):
+    data = {
+        "movie_id": request.form["movie_id"],
+        "director_id": director_id
+    }
+
+    director.Director.remove_favorite(data)
     return redirect("/dashboard")

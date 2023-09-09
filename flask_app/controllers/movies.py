@@ -24,7 +24,6 @@ def get_all_movies():
     res = {"movies": []}
     for each_movie in all_movies:
         res['movies'].append(each_movie)
-
     return res
 
 
@@ -34,12 +33,12 @@ def get_movie(movie_id):
         "id": movie_id
     }
     current_movie = movie.Movie.get_one(data)
-    print("current_movie.title: ", current_movie.title)
     return {
         "title": current_movie.title,
         "year": current_movie.year,
         "image_url": current_movie.image_url,
-        "directed_by_id": current_movie.directed_by_id
+        "directed_by_id": current_movie.directed_by_id,
+        "director_name": current_movie.director.name
     }
 
 

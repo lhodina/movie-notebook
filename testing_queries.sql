@@ -1,6 +1,7 @@
-SELECT * FROM movies JOIN directors ON directors.id = movies.directed_by_id
+        SELECT * FROM movies
+        JOIN directors ON directors.id = movies.directed_by_id
 
--- -- INSERT SOME USERS:
+
 -- INSERT INTO users (first_name, last_name, email, password)
 -- VALUES
 -- ('Miss', 'Piggy', 'misspiggy@gmail.com', 'abcd1234'),
@@ -8,7 +9,7 @@ SELECT * FROM movies JOIN directors ON directors.id = movies.directed_by_id
 -- ('Beaker', 'Muppet', 'bmupps@gmail.com', 'b3ak3rb3tt3r'),
 -- ('Fozzy', 'Bear', 'foz@aol.com', 'w0kkaw0kka');
 
--- INSERT SOME DIRECTORS:
+
 -- INSERT INTO directors (name, image_url)
 -- VALUES
 -- ('Michael Curtiz', 'www.greatdirectors.com/asdfoiasdf'),
@@ -18,7 +19,6 @@ SELECT * FROM movies JOIN directors ON directors.id = movies.directed_by_id
 -- ('Ernst Lubitsch', 'www.greatdirectors.com/werqwqesdf');
 
 
--- INSERT SOME MOVIES: 
 -- INSERT INTO movies (title, image_url, year, directed_by_id)
 -- VALUES
 -- ('Casablanca', 'www.coolpic.com/cbssadflkjsdaf', 1946, 1),
@@ -29,7 +29,6 @@ SELECT * FROM movies JOIN directors ON directors.id = movies.directed_by_id
 -- ('To Be Or Not To Be', 'www.coolpic.com/cbsshddsadsssjsdaf', 1947, 5);
 
 
--- INSERT SOME CRITICS:
 -- INSERT INTO critics (name, image_url)
 -- VALUES
 -- ('Roger Ebert', 'www.coolpic.com/cbsshddsadsssjsdaf'),

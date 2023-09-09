@@ -19,6 +19,7 @@ class User:
         self.password = data['password']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
+        self.collections = []
 
     @classmethod
     def save(cls, data):
@@ -38,10 +39,32 @@ class User:
         return all_users
 
     @classmethod
-    def get_one(cls, user_id):
-        query = "SELECT * FROM users WHERE id = %(id)s"
-        data = { "id": user_id }
-        return connectToMySQL(cls.DB).query_db(query, data)
+    def get_one(cls, data):
+        query = """
+        SELECT * FROM users
+        LEFT JOIN collections ON collections.user_id = users.id
+        WHERE users.id = %(id)s;
+        """
+        result = connectToMySQL(cls.DB).query_db(query, data)
+        current_user_data = {
+            "id": result[0]["id"],
+            "first_name": result[0]["first_name"],
+            "last_name": result[0]["last_name"],
+            "email": result[0]["email"],
+            "password": result[0]["password"],
+            "created_at": result[0]["created_at"],
+            "updated_at": result[0]["updated_at"],
+        }
+
+        current_user = cls(current_user_data)
+
+        for item in result:
+            current_collection = {
+                "id": item["collections.id"],
+                "name": item["name"],
+            }
+            current_user.collections.append(current_collection)
+        return current_user
 
     @classmethod
     def get_by_email(cls, user_email):

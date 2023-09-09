@@ -1,6 +1,6 @@
 from flask_app.config.mysqlconnection import connectToMySQL
 
-class Director:
+class Critic:
     DB = "movie_notebook"
     def __init__(self, data):
         self.id = data['id']
@@ -8,86 +8,68 @@ class Director:
         self.image_url = data['image_url']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
-        self.movies_directed = []
+        self.favorite_movies = []
+
 
     @classmethod
     def save(cls, data):
         query = """
-        INSERT INTO directors (name, image_url)
+        INSERT INTO critics (name, image_url)
         VALUES ( %(name)s, %(image_url)s )
         """
         return connectToMySQL(cls.DB).query_db(query, data)
 
 
     @classmethod
-    def get_all_directors(cls):
-        all_directors = []
+    def get_all_critics(cls):
+        all_critics = []
         query = """
-        SELECT * FROM directors;
+        SELECT * FROM critics;
         """
         results = connectToMySQL(cls.DB).query_db(query)
         for result in results:
-            all_directors.append(result)
-        return all_directors
+            all_critics.append(result)
+        return all_critics
 
 
     @classmethod
     def get_one(cls, data):
         query = """
-        SELECT * FROM directors
-        LEFT JOIN movies ON movies.directed_by_id = directors.id
-        WHERE directors.id = %(id)s;
+        SELECT * FROM critics
+        LEFT JOIN critic_favorite_movies ON critic_favorite_movies.critic_id = critics.id
+        LEFT JOIN movies ON movies.id = critic_favorite_movies.movie_id
+        LEFT JOIN directors ON directors.id = movies.directed_by_id
+        WHERE critics.id = %(id)s;
         """
         result = connectToMySQL(cls.DB).query_db(query, data)
-
-        current_director_data = {
+        current_critic_data = {
             "id": result[0]["id"],
             "name": result[0]["name"],
             "image_url": result[0]["image_url"],
             "created_at": result[0]["created_at"],
             "updated_at": result[0]["updated_at"]
         }
-        current_director = cls(current_director_data)
+
+        current_critic = cls(current_critic_data)
 
         for item in result:
-            current_movie_data = {
+            favorite_movie = {
                 "id": item["movies.id"],
                 "title": item["title"],
                 "year": item["year"],
-                "image_url": item["movies.image_url"]
-            }
-            current_director.movies_directed.append(current_movie_data)
-        return current_director
-
-
-    @classmethod
-    def get_favorites(cls, data):
-        query = """
-        SELECT * FROM movies
-        JOIN director_favorite_movies ON director_favorite_movies.movie_id = movies.id
-        JOIN directors ON directors.id = movies.directed_by_id
-        WHERE director_favorite_movies.director_id = %(id)s;
-        """
-        result = connectToMySQL(cls.DB).query_db(query, data)
-        favs = []
-        for item in result:
-            fav = {
-                "id": item["id"],
-                "title": item["title"],
-                "image_url": item["image_url"],
-                "year": item["year"],
+                "image_url": item["movies.image_url"],
                 "directed_by_id": item["directed_by_id"],
-                "name": item["name"]
+                "director_name": item["directors.name"]
             }
-            favs.append(fav)
+            current_critic.favorite_movies.append(favorite_movie)
 
-        return favs
+        return current_critic
 
 
     @classmethod
     def update(cls, data):
         query = """
-        UPDATE directors
+        UPDATE critics
         SET
         name=%(name)s,
         image_url=%(image_url)s
@@ -98,15 +80,15 @@ class Director:
 
     @classmethod
     def delete(cls, data):
-        query = "DELETE FROM directors WHERE id = %(id)s;"
+        query = "DELETE FROM critics WHERE id = %(id)s;"
         return connectToMySQL(cls.DB).query_db(query, data)
 
 
     @classmethod
     def add_favorite(cls, data):
         query = """
-        INSERT INTO director_favorite_movies(director_id, movie_id)
-        VALUES(%(director_id)s, %(movie_id)s);
+        INSERT INTO critic_favorite_movies(critic_id, movie_id)
+        VALUES(%(critic_id)s, %(movie_id)s);
         """
         return connectToMySQL(cls.DB).query_db(query, data)
 
@@ -114,7 +96,7 @@ class Director:
     @classmethod
     def remove_favorite(cls, data):
         query = """
-        DELETE FROM director_favorite_movies
-        WHERE movie_id = %(movie_id)s AND director_id = %(director_id)s;
+        DELETE FROM critic_favorite_movies
+        WHERE movie_id = %(movie_id)s AND critic_id = %(critic_id)s;
         """
         return connectToMySQL(cls.DB).query_db(query, data)
