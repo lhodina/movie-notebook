@@ -62,6 +62,15 @@ class Director:
 
 
     @classmethod
+    def find_by_name(cls, data):
+        query = """
+        SELECT * FROM directors
+        WHERE directors.name = %(name)s;
+        """
+        return connectToMySQL(cls.DB).query_db(query, data)
+
+
+    @classmethod
     def get_favorites(cls, data):
         query = """
         SELECT * FROM movies

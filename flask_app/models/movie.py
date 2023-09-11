@@ -70,6 +70,15 @@ class Movie:
 
 
     @classmethod
+    def find_by_title(cls, data):
+        query = """
+        SELECT * FROM movies
+        WHERE movies.title = %(title)s;
+        """
+        return connectToMySQL(cls.DB).query_db(query, data)
+
+
+    @classmethod
     def get_liked_by_directors(cls, data):
         query = """
         SELECT * FROM director_favorite_movies
@@ -77,10 +86,10 @@ class Movie:
         WHERE director_favorite_movies.movie_id = = %(id)s;
         """
         result = connectToMySQL(cls.DB).query_db(query, data)
-        print("***** RESULT get_liked_by_directors: ", result)
+        # print("***** RESULT get_liked_by_directors: ", result)
         liked_by_directors = []
-        for item in result:
-            print("liked by: ", item)
+        # for item in result:
+            # print("liked by: ", item)
         # current_movie_data = {
         #     "id": result["id"],
         #     "title": result["title"],

@@ -119,12 +119,12 @@ class User:
         WHERE reviews.user_id = %(id)s;
         """
         result = connectToMySQL(cls.DB).query_db(query, data)
-        print("RESULT: ", result)
+        # print("RESULT: ", result)
         reviews = []
         for item in result:
-            print()
-            print("***** ITEM: ", item)
-            print()
+            # print()
+            # print("***** ITEM: ", item)
+            # print()
             review = {
                 "id": item["reviews.id"],
                 "title": item["title"],

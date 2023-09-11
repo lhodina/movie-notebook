@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 
 // Star rating functionality from Albert Devshot
@@ -26,6 +26,7 @@ const ReviewForm = (props) => {
     const [ rating, setRating ] = useState(0);
     const [ watched, setWatched ] = useState("");
     const [ notes, setNotes ] = useState("");
+    const [imageUrl, setImageUrl] = useState("");
     const [errors, setErrors] = useState([]);
     const [hoverValue, setHoverValue] = React.useState(undefined);
 
@@ -39,7 +40,8 @@ const ReviewForm = (props) => {
             year,
             rating,
             watched,
-            notes
+            notes,
+            imageUrl
         })
             .then( res => {
                 navigate("/dashboard");
@@ -71,15 +73,17 @@ const ReviewForm = (props) => {
     }
 
     return (
-        <div style={styles.container} >
+        <div>
             <div className="header">
                 <h1>Review a Movie</h1>
                 <Link to={ "/dashboard" } >back to dashboard</Link>
             </div>
+            <p>Testing: </p>
             <form onSubmit={ onSubmitHandler }>
                 {errors.map((err, index) => (
                     <p className="error-message" key="{index}">{err}</p>
                 ))}
+
                 <p>
                     <label>Title</label>
                     <br />

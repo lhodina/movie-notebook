@@ -85,20 +85,6 @@ const Dashboard = () => {
                 </ul>
             </div>
 
-            <div className="reviews">
-                <h3>Your Movies</h3>
-                {
-                    reviews.map( (review, index) => {
-                        return (
-                            <div className="review" key={index}>
-                                <Link to={ "/reviews/" + review.id }>{ review.title }</Link>
-                            </div>
-                        )
-                    })
-                }
-                <Link to={"/reviews/add"}>add a movie</Link>
-            </div>
-
             <div>
                 <h2>Your Movies</h2>
                 <Table>
