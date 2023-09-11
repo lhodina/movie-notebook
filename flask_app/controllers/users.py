@@ -1,17 +1,16 @@
-from flask import  redirect, request
+from flask import  redirect, request, jsonify
 from flask_bcrypt import Bcrypt
 
 from flask_app import app
-from flask_app.models import user
+from flask_app.models import user, movie
 
 bcrypt = Bcrypt(app)
 
-@app.route("/login")
-def login_and_registration():
-    return {
-        "login": "comin' soon",
-        "registration": "you bet"
-    }
+# @app.route("/login")
+# def login_and_registration():
+#     return {
+#         "message": "loggin' on in, friend!"
+#     }
 
 
 @app.route("/register", methods=["POST"])
@@ -34,10 +33,28 @@ def register_user():
 def dashboard():
     data = {"id": 1}
     current_user = user.User.get_one(data)
-    return {
+    favorite_directors = user.User.get_favorite_directors(data)
+    favorite_critics = user.User.get_favorite_critics(data)
+    reviews = user.User.get_reviews(data)
+    # You'll probably need to use nested arrays instead of objects, i.e. [[8, 'Greta Gerwig'], [9, 'Federico Fellini']]
+    for each_movie in reviews:
+        data = {"id" : each_movie['movie_id'] }
+        liked_by_directors = movie.Movie.get_liked_by_directors(data)
+        print()
+        print("liked_by_directors: ", liked_by_directors)
+        # liked_by_critics = movie.Movie.get_liked_by_critics(data)
+
+    userJSON = {
         "first_name": current_user.first_name,
         "last_name": current_user.last_name,
         "email": current_user.email,
         "password": current_user.password,
-        "collections": current_user.collections
+        "collections": current_user.collections,
+        "favorite_directors": favorite_directors,
+        "favorite_critics": favorite_critics,
+        "reviews": reviews,
+        # "liked_by_directors": liked_by_directors,
+        # "liked_by_critics": liked_by_critics
     }
+    # print("userJSON: ", userJSON)
+    return userJSON

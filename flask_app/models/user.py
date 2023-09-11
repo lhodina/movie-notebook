@@ -21,6 +21,7 @@ class User:
         self.updated_at = data['updated_at']
         self.collections = []
 
+
     @classmethod
     def save(cls, data):
         query = """
@@ -28,6 +29,7 @@ class User:
         VALUES ( %(first_name)s, %(last_name)s, %(email)s, %(password)s )
         """
         return connectToMySQL(cls.DB).query_db(query, data)
+
 
     @classmethod
     def get_all(cls):
@@ -37,6 +39,7 @@ class User:
         for user in users:
             all_users.append(cls(user))
         return all_users
+
 
     @classmethod
     def get_one(cls, data):
@@ -66,10 +69,81 @@ class User:
             current_user.collections.append(current_collection)
         return current_user
 
+
+    @classmethod
+    def get_favorite_directors(cls, data):
+        query = """
+        SELECT * FROM directors
+        JOIN user_favorite_directors ON user_favorite_directors.director_id = directors.id
+        WHERE user_favorite_directors.user_id = %(id)s;
+        """
+        result = connectToMySQL(cls.DB).query_db(query, data)
+        favs = []
+        for item in result:
+            fav = {
+                "id": item["id"],
+                "name": item["name"],
+                "image_url": item["image_url"],
+                "notes": item["notes"]
+            }
+            favs.append(fav)
+        return favs
+
+
+    @classmethod
+    def get_favorite_critics(cls, data):
+        query = """
+        SELECT * FROM critics
+        JOIN user_favorite_critics ON user_favorite_critics.critic_id = critics.id
+        WHERE user_favorite_critics.user_id = %(id)s;
+        """
+        result = connectToMySQL(cls.DB).query_db(query, data)
+        favs = []
+        for item in result:
+            fav = {
+                "id": item["id"],
+                "name": item["name"],
+                "image_url": item["image_url"],
+                "notes": item["notes"]
+            }
+            favs.append(fav)
+        return favs
+
+
+    @classmethod
+    def get_reviews(cls, data):
+        query = """
+        SELECT * FROM movies
+        JOIN reviews ON reviews.movie_id = movies.id
+        JOIN directors ON directors.id = movies.directed_by_id
+        WHERE reviews.user_id = %(id)s;
+        """
+        result = connectToMySQL(cls.DB).query_db(query, data)
+        print("RESULT: ", result)
+        reviews = []
+        for item in result:
+            print()
+            print("***** ITEM: ", item)
+            print()
+            review = {
+                "id": item["reviews.id"],
+                "title": item["title"],
+                "image_url": item["image_url"],
+                "year": item["year"],
+                "directed_by_id": item["directed_by_id"],
+                "movie_id": item["id"],
+                "watched": item["watched"],
+                "director_name": item["name"]
+            }
+            reviews.append(review)
+        return reviews
+
+
     @classmethod
     def get_by_email(cls, user_email):
         query = "SELECT * FROM users WHERE email = %(email)s;"
         return connectToMySQL(cls.DB).query_db(query, user_email)
+
 
     @staticmethod
     def validate_user(user):

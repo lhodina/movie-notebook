@@ -70,6 +70,31 @@ class Movie:
 
 
     @classmethod
+    def get_liked_by_directors(cls, data):
+        query = """
+        SELECT * FROM director_favorite_movies
+        JOIN directors ON directors.id = director_favorite_movies.director_id
+        WHERE director_favorite_movies.movie_id = = %(id)s;
+        """
+        result = connectToMySQL(cls.DB).query_db(query, data)
+        print("***** RESULT get_liked_by_directors: ", result)
+        liked_by_directors = []
+        for item in result:
+            print("liked by: ", item)
+        # current_movie_data = {
+        #     "id": result["id"],
+        #     "title": result["title"],
+        #     "year": result["year"],
+        #     "image_url": result["image_url"],
+        #     "created_at": result["created_at"],
+        #     "updated_at": result["updated_at"],
+        #     "directed_by_id": result["directed_by_id"]
+        # }
+
+        return liked_by_directors
+
+
+    @classmethod
     def update(cls, data):
         query = """
         UPDATE movies
