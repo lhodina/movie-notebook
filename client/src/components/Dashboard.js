@@ -71,6 +71,19 @@ const Dashboard = () => {
                 }
                 <Link to={"/collections/add"}>add a collection</Link>
             </div>
+            <div>
+                <ul className="nav nav-tabs">
+                    <li className="nav-item">
+                        <a className="nav-link active" aria-current="page" href="#">Movies</a>
+                    </li>
+                    <li className="nav-item">
+                        <a className="nav-link" href="#">Directors</a>
+                    </li>
+                    <li className="nav-item">
+                        <a className="nav-link" href="#">Critics</a>
+                    </li>
+                </ul>
+            </div>
 
             <div className="reviews">
                 <h3>Your Movies</h3>
@@ -87,47 +100,36 @@ const Dashboard = () => {
             </div>
 
             <div>
-                <ul className="nav nav-tabs">
-                    <li className="nav-item">
-                        <a className="nav-link active" aria-current="page" href="#">Movies</a>
-                    </li>
-                    <li className="nav-item">
-                        <a className="nav-link" href="#">Directors</a>
-                    </li>
-                    <li className="nav-item">
-                        <a className="nav-link" href="#">Critics</a>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <h2>Picks For You</h2>
+                <h2>Your Movies</h2>
                 <Table>
                     <thead>
                         <tr>
+                            <th></th>
                             <th>Title</th>
                             <th>Director</th>
-                            <th>Liked By</th>
+                            <th>Year</th>
+                            <th>Watched</th>
+                            <th>Rating</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>La Dolce Vita</td>
-                            <td>Federico Fellini</td>
-                            <td>
-                                <p>Greta Gerwig</p>
-                                <p>Noah Baumbach</p>
-                                <p>A.O. Scott</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>The Goodfellah</td>
-                            <td>Francis Ford Scorcese</td>
-                            <td>
-                                <p>Roger Ebert</p>
-                            </td>
-                        </tr>
+                        {
+                            reviews.map( (review, index) => {
+                                return (
+                                    <tr className="review" key={index}>
+                                        <td>{review.image_url}</td>
+                                        <td><Link to={ "/reviews/" + review.id }>{ review.title }</Link></td>
+                                        <td>{ review.director_name}</td>
+                                        <td>{ review.year }</td>
+                                        <td>{ review.watched}</td>
+                                        <td>{ review.rating}</td>
+                                    </tr>
+                                )
+                            })
+                        }
                     </tbody>
                 </Table>
+                <Link to={"/reviews/add"}>review a movie</Link>
             </div>
         </>
     )

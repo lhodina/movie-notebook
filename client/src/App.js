@@ -1,6 +1,8 @@
 import React from 'react';
-import Dashboard from './components/Dashboard';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import Dashboard from './components/Dashboard';
+import ReviewForm from './components/ReviewForm';
 
 function App() {
   return (
@@ -8,6 +10,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route element={ <Dashboard /> } path="/dashboard" />
+          <Route element={ <ReviewForm /> } path="/reviews/add" />
         </Routes>
       </BrowserRouter>
     </div>

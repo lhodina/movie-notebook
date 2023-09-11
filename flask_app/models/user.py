@@ -133,6 +133,7 @@ class User:
                 "directed_by_id": item["directed_by_id"],
                 "movie_id": item["id"],
                 "watched": item["watched"],
+                "rating": item["rating"],
                 "director_name": item["name"]
             }
             reviews.append(review)

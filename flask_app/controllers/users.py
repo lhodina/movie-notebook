@@ -36,13 +36,6 @@ def dashboard():
     favorite_directors = user.User.get_favorite_directors(data)
     favorite_critics = user.User.get_favorite_critics(data)
     reviews = user.User.get_reviews(data)
-    # You'll probably need to use nested arrays instead of objects, i.e. [[8, 'Greta Gerwig'], [9, 'Federico Fellini']]
-    for each_movie in reviews:
-        data = {"id" : each_movie['movie_id'] }
-        liked_by_directors = movie.Movie.get_liked_by_directors(data)
-        print()
-        print("liked_by_directors: ", liked_by_directors)
-        # liked_by_critics = movie.Movie.get_liked_by_critics(data)
 
     userJSON = {
         "first_name": current_user.first_name,
@@ -52,9 +45,7 @@ def dashboard():
         "collections": current_user.collections,
         "favorite_directors": favorite_directors,
         "favorite_critics": favorite_critics,
-        "reviews": reviews,
-        # "liked_by_directors": liked_by_directors,
-        # "liked_by_critics": liked_by_critics
+        "reviews": reviews
     }
-    # print("userJSON: ", userJSON)
+    
     return userJSON
