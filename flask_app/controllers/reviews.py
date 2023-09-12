@@ -15,11 +15,7 @@ def add_review():
         "user_id": 1
     }
 
-    if (review_data['watched'] == 'on'):
-        review_data['watched'] = 1
-    else:
-        review_data['watched'] = 0
-    print("review_data['watched']", review_data['watched'])
+    print("TESTING watched: ", review_data['watched'])
 
     director_data = {
         "name": request.json["directorName"],
@@ -113,16 +109,19 @@ def get_review(review_id):
     }
 
 
-@app.route("/update_review", methods=["POST"])
-def update_review():
+@app.route("/reviews/<int:id>", methods=["POST"])
+def update_review(id):
+    # UPDATE HARDCODED USER ID
     data = {
-        "id": request.form["review_id"],
-        "rating": request.form["rating"],
-        "notes": request.form["notes"],
-        "watched": request.form["watched"],
-        "user_id": request.form["user_id"],
-        "movie_id": request.form["movie_id"]
+        "id": id,
+        "rating": request.json['rating'],
+        "notes": request.json["notes"],
+        "watched": request.json["watched"],
+        "user_id": 1,
+        "movie_id": request.json["movieId"]
     }
+
+    print("data: ", data['watched'])
 
     review.Review.update(data)
     return redirect("/dashboard")

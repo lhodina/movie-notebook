@@ -76,7 +76,6 @@ const ReviewForm = (props) => {
                 <h1>Review a Movie</h1>
                 <Link to={ "/dashboard" } >back to dashboard</Link>
             </div>
-            <p>Testing: </p>
             <form onSubmit={ onSubmitHandler }>
                 {errors.map((err, index) => (
                     <p className="error-message" key="{index}">{err}</p>
@@ -114,9 +113,9 @@ const ReviewForm = (props) => {
                 <p>
                     <label>Watched Status</label>
                     <br />
-                    <input className="form-input" type="radio" name="watched" id="radio-watched" onChange = { (e) => setWatched(e.target.value) } />
+                    <input className="form-input" type="radio" name="watched" value="1" checked id="radio-watched" onChange = { (e) => setWatched(e.target.value) } />
                     <label>Watched</label>
-                    <input className="form-input" type="radio" name="watched" id="radio-unwatched" onChange = { (e) => setWatched(e.target.value) } />
+                    <input className="form-input" type="radio" name="watched" value="0" id="radio-unwatched" onChange = { (e) => setWatched(e.target.value) } />
                     <label>Unwatched</label>
 
                 </p>

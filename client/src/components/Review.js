@@ -34,6 +34,7 @@ const Review = (props) => {
             <p>"{review.notes}"</p>
             <p>Watched status: {review.watched}</p>
             <p>My rating: {review.rating}</p>
+            <Link to={ "/reviews/" + id + "/update" }>edit</Link>
         </div>
     )
 

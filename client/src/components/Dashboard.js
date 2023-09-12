@@ -121,7 +121,7 @@ const Dashboard = () => {
                                         <td>{ review.year }</td>
                                         <td>{ review.watched}</td>
                                         <td>{ review.rating}</td>
-                                        <td><button class="btn btn-danger" onClick = { (e) => {deleteReview(review.id)} }>Delete</button></td>
+                                        <td><button className="btn btn-danger" onClick = { (e) => {deleteReview(review.id)} }>Delete</button></td>
                                     </tr>
                                 )
                             })
