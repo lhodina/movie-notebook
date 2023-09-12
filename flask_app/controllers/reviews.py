@@ -1,3 +1,4 @@
+import requests
 from flask import redirect, request
 
 from flask_app import app
@@ -28,7 +29,6 @@ def add_review():
     # # This can eventually come from API
     movie_data = {
         "title": request.json["title"],
-        "year": request.json["year"],
         "image_url": request.json["imageUrl"]
     }
 
@@ -52,6 +52,26 @@ def add_review():
     if not (movie_exists):
         print("MOVIE DOES NOT EXIST")
         movie_data["directed_by_id"] = directed_by_id
+
+        image_url_base = "https://image.tmdb.org/t/p/w500"
+        movie_url_base = "https://api.themoviedb.org/3/search/movie?query="
+
+        movie_title_query = movie_data["title"].lower().replace(" ", "+")
+        print("movie_title_query: ", movie_title_query)
+        movie_url = movie_url_base + movie_title_query
+        headers = {
+            "accept": "application/json",
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZTIxNjdiZTgwYzYxYjZhMzVkNjhiMjY2NmE0YWUzMyIsInN1YiI6IjYzMmRkMzZkNTU5MzdiMDA3YzA5MTZlMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qlMgNrzDMM2eqPUGxDRpWsACr9o-xb94MKMpdta7K7c"
+        }
+        response = requests.get(movie_url, headers=headers).json()
+        poster_path = response["results"][0]["poster_path"]
+        movie_poster = image_url_base + poster_path
+        print("movie_poster: ", movie_poster)
+
+        api_year = response["results"][0]["release_date"][:4]
+        print("api_year ", api_year)
+        movie_data['image_url'] = movie_poster
+        movie_data['year'] = api_year
         movie_id = movie.Movie.save(movie_data)
     else:
         print("MOVIE EXISTS")
@@ -108,7 +128,7 @@ def update_review():
     return redirect("/dashboard")
 
 
-@app.route("/reviews/delete/<int:review_id>")
+@app.route("/reviews/delete/<int:review_id>", methods=["DELETE"])
 def delete_review(review_id):
     data = { "id": review_id }
     review.Review.delete(data)

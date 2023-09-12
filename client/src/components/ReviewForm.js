@@ -22,7 +22,6 @@ const colors = {
 const ReviewForm = (props) => {
     const [ title, setTitle ] = useState("");
     const [ directorName, setDirectorName ] = useState("");
-    const [ year, setYear] = useState("");
     const [ rating, setRating ] = useState(0);
     const [ watched, setWatched ] = useState("");
     const [ notes, setNotes ] = useState("");
@@ -37,7 +36,6 @@ const ReviewForm = (props) => {
         axios.post("http://localhost:5000/reviews", {
             title,
             directorName,
-            year,
             rating,
             watched,
             notes,
@@ -93,11 +91,6 @@ const ReviewForm = (props) => {
                     <label>Director</label>
                     <br />
                     <input className="form-input" type="text" onChange = { (e) => setDirectorName(e.target.value) } />
-                </p>
-                <p>
-                    <label>Year</label>
-                    <br />
-                    <input className="form-input" type="text" onChange = { (e) => setYear(e.target.value) } />
                 </p>
                 <p>
                     <label>Rating</label>

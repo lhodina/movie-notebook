@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
@@ -11,6 +11,18 @@ const Dashboard = () => {
     const [favoriteCritics, setFavoriteCritics] = useState([]);
     const [collections, setCollections] = useState([]);
     const [reviews, setReviews] = useState([]);
+
+    const removeFromDom = reviewId => {
+        setReviews(reviews.filter(review => review.id !== reviewId));
+    }
+
+    const deleteReview = reviewId => {
+        axios.delete("http://localhost:5000/reviews/delete/" + reviewId)
+            .then(res => {
+                removeFromDom(reviewId)
+            })
+            .catch(err => console.log(err));
+    }
 
     useEffect(() => {
         axios.get("http://localhost:5000/dashboard")
@@ -103,12 +115,13 @@ const Dashboard = () => {
                             reviews.map( (review, index) => {
                                 return (
                                     <tr className="review" key={index}>
-                                        <td>{review.image_url}</td>
+                                        <td><img src={review.image_url} alt=""height="75px" width="50px"/></td>
                                         <td><Link to={ "/reviews/" + review.id }>{ review.title }</Link></td>
                                         <td>{ review.director_name}</td>
                                         <td>{ review.year }</td>
                                         <td>{ review.watched}</td>
                                         <td>{ review.rating}</td>
+                                        <td><button class="btn btn-danger" onClick = { (e) => {deleteReview(review.id)} }>Delete</button></td>
                                     </tr>
                                 )
                             })
