@@ -127,7 +127,7 @@ def update_review(id):
     return redirect("/dashboard")
 
 
-@app.route("/reviews/delete/<int:review_id>", methods=["DELETE"])
+@app.route("/reviews/delete/<int:review_id>")
 def delete_review(review_id):
     data = { "id": review_id }
     review.Review.delete(data)

@@ -5,7 +5,6 @@ import { FaStar } from "react-icons/fa";
 
 
 const Review = (props) => {
-    const [user, setUser] = useState("");
     const [review, setReview] = useState({});
     const { id } = useParams();
 

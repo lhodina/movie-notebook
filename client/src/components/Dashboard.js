@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import '../App.css';
 
@@ -17,7 +16,7 @@ const Dashboard = () => {
     }
 
     const deleteReview = reviewId => {
-        axios.delete("http://localhost:5000/reviews/delete/" + reviewId)
+        axios.get("http://localhost:5000/reviews/delete/" + reviewId)
             .then(res => {
                 removeFromDom(reviewId)
             })
@@ -41,9 +40,8 @@ const Dashboard = () => {
             <h1>Welcome, {user.first_name}</h1>
             <Link to={ "/logout" }>log out</Link>
 
-            <h2>Your Stuff</h2>
             <div className="favoritedirectors">
-                <h3>Favorite Directors</h3>
+                <h2>Favorite Directors</h2>
                 {
                     favoriteDirectors.map( (director, index) => {
                         return (
@@ -120,7 +118,7 @@ const Dashboard = () => {
                                         <td>{ review.director_name}</td>
                                         <td>{ review.year }</td>
                                         <td>{ review.watched}</td>
-                                        <td>{ review.rating}</td>
+                                        <td>{ review.rating} / 5</td>
                                         <td><button className="btn btn-danger" onClick = { (e) => {deleteReview(review.id)} }>Delete</button></td>
                                     </tr>
                                 )

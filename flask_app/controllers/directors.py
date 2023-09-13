@@ -38,7 +38,7 @@ def get_director(director_id):
         "name": current_director.name,
         "image_url": current_director.image_url,
         "movies_directed": current_director.movies_directed,
-        "favorites": favorites
+        "favorite_movies": favorites
     }
 
 

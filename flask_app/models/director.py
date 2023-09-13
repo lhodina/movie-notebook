@@ -87,7 +87,7 @@ class Director:
                 "image_url": item["image_url"],
                 "year": item["year"],
                 "directed_by_id": item["directed_by_id"],
-                "name": item["name"]
+                "director_name": item["name"]
             }
             favs.append(fav)
 

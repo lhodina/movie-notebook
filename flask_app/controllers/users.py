@@ -1,4 +1,4 @@
-from flask import  redirect, request, jsonify
+from flask import  redirect, request
 from flask_bcrypt import Bcrypt
 
 from flask_app import app
@@ -16,16 +16,20 @@ bcrypt = Bcrypt(app)
 @app.route("/register", methods=["POST"])
 def register_user():
     data = {
-        "first_name": request.form["first_name"],
-        "last_name": request.form["last_name"],
-        "email": request.form["email"],
-        "password": request.form["password"]
+        "first_name": request.json["first_name"],
+        "last_name": request.json["last_name"],
+        "email": request.json["email"],
+        "password": request.json["password"],
+        "confirm_password": request.json["confirm_password"]
     }
 
-    pw_hash = bcrypt.generate_password_hash(request.form['password'])
-    data["password"] = pw_hash
-    user.User.save(data)
+    if not user.User.validate_user(data):
+        return redirect("/")
 
+    pw_hash = bcrypt.generate_password_hash(request.json['password'])
+    data["password"] = pw_hash
+    user_id = user.User.save(data)
+    current_user = user.User.get_one(user_id)[0]
     return redirect("/dashboard")
 
 
@@ -47,5 +51,5 @@ def dashboard():
         "favorite_critics": favorite_critics,
         "reviews": reviews
     }
-    
+
     return userJSON
