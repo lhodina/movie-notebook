@@ -3,6 +3,11 @@
 ## Description
 This app lets you easily keep track of your favorite directors and critics in one place, and the movies they like best. The app also lets you keep track of any interesting links and notes you might have related to each movie, director, and critic. It becomes more useful the more it’s used.
 
+## Technologies Used
+Python
+Flask
+React
+
 ## Features
 Add your favorite movies
 Add your favorite directors
@@ -22,3 +27,4 @@ Use API to get movie details, poster image, director, director image, director d
 Generate To Watch queue of movies that have not been marked “Watched,” based on sorted best matches (calculated by how many of your favorite directors and critics like a movie)
 
 You can re-order your list of favorite movies/directors/critics and recommendations will be updated accordingly
+
