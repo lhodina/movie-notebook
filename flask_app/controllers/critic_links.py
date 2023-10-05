@@ -5,7 +5,7 @@ from flask_app.models import critic_link
 
 @app.route("/critics/<int:critic_id>/links", methods=["POST"])
 def add_critic_link(critic_id):
-     # REPLACE HARDCODED user_id WITH CURRENT USER ID SESSION
+     # REPLACE HARDCODED user_id
     data = {
         "text": request.form["text"],
         "url": request.form["url"],

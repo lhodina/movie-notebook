@@ -18,7 +18,7 @@ def add_favorite_director():
 
 @app.route("/favorite_directors/remove/<int:director_id>")
 def remove_favorite_director(director_id):
-    # UPDATE USER ID TO USE SESSION
+    # UPDATE USER ID
     data = {
         "director_id": director_id,
         "user_id": 1

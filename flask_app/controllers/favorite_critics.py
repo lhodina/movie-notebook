@@ -18,7 +18,7 @@ def add_favorite_critic():
 
 @app.route("/favorite_critics/remove/<int:critic_id>")
 def remove_favorite_critic(critic_id):
-    # UPDATE USER ID TO USE SESSION
+    # UPDATE USER ID
     data = {
         "critic_id": critic_id,
         "user_id": 1

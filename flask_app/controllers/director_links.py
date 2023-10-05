@@ -5,7 +5,7 @@ from flask_app.models import director_link
 
 @app.route("/directors/<int:director_id>/links", methods=["POST"])
 def add_director_link(director_id):
-     # REPLACE HARDCODED user_id WITH CURRENT USER ID SESSION
+     # REPLACE HARDCODED user_id
     data = {
         "text": request.form["text"],
         "url": request.form["url"],

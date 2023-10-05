@@ -13,7 +13,8 @@ class Review:
         self.user_id = data['user_id']
         self.movie_id = data['movie_id']
         self.movie = None
-
+        self.critic_fans = []
+        self.director_fans = []
 
     @classmethod
     def save(cls, data):
@@ -46,6 +47,12 @@ class Review:
         }
 
         current_review = cls(current_review_data)
+        # print("CURRENT REVIEW MOVIE ID: ", current_review.movie_id)
+        current_review.critic_fans = current_review.get_critic_fans({"id": current_review.movie_id})
+        # print("CURRENT REVIEW CRITIC FANS:", current_review.critic_fans)
+
+        current_review.director_fans = current_review.get_director_fans({"id": current_review.movie_id})
+        # print("CURRENT REVIEW DIRECTOR FANS:", current_review.director_fans)
 
         movie_data = {
             "id": result["movie_id"],
@@ -93,3 +100,28 @@ class Review:
     def delete(cls, data):
         query = "DELETE FROM reviews WHERE id = %(id)s;"
         return connectToMySQL(cls.DB).query_db(query, data)
+
+
+    @classmethod
+    def get_critic_fans(cls, data):
+        query = """
+        SELECT * FROM critics
+        JOIN critic_favorite_movies ON critic_favorite_movies.critic_id = critics.id
+        JOIN user_favorite_critics ON user_favorite_critics.critic_id = critics.id
+        WHERE critic_favorite_movies.movie_id = %(id)s AND user_favorite_critics.user_id = 1;
+        """
+        result = connectToMySQL(cls.DB).query_db(query, data)
+        # print("* * * * * GET CRITIC FANS REVIEW METHOD RESULT: ", result)
+        return result
+
+    @classmethod
+    def get_director_fans(cls, data):
+        query = """
+        SELECT * FROM directors
+        JOIN director_favorite_movies ON director_favorite_movies.director_id = directors.id
+        JOIN user_favorite_directors ON user_favorite_directors.director_id = directors.id
+        WHERE director_favorite_movies.movie_id = %(id)s AND user_favorite_directors.user_id = 1;
+        """
+        result = connectToMySQL(cls.DB).query_db(query, data)
+        # print("* * * * * GET DIRECTOR FANS REVIEW METHOD RESULT: ", result)
+        return result

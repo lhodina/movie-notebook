@@ -1,9 +1,11 @@
+from flask_app import app
 from flask_app.config.mysqlconnection import connectToMySQL
 from flask import flash
 from flask_bcrypt import Bcrypt
+from flask_app.models import review
 import re
 
-from flask_app import app
+
 bcrypt = Bcrypt(app)
 
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
@@ -119,24 +121,38 @@ class User:
         WHERE reviews.user_id = %(id)s;
         """
         result = connectToMySQL(cls.DB).query_db(query, data)
-        # print("RESULT: ", result)
+        # print("RESULT IN User.get_reviews: ", result)
         reviews = []
         for item in result:
-            # print()
-            # print("***** ITEM: ", item)
-            # print()
-            review = {
+            print()
+            print("***** RESULT DATA FOR get_reviews in user model: ", item)
+            print()
+
+            review_data = {
                 "id": item["reviews.id"],
+                "movie_id": item["id"],
+                "user_id": item["user_id"],
+                "watched": item["watched"],
+                "rating": item["rating"],
+                "notes": item["notes"],
+                "created_at": item["reviews.created_at"],
+                "updated_at": item["reviews.updated_at"]
+            }
+
+            current_review = review.Review(review_data)
+            print("current_review.notes: ", current_review.notes)
+            critic_fans = current_review.get_critic_fans(item["id"])
+            print("critic_fans: ", critic_fans)
+
+            movie_data = {
                 "title": item["title"],
                 "image_url": item["image_url"],
                 "year": item["year"],
                 "directed_by_id": item["directed_by_id"],
-                "movie_id": item["id"],
-                "watched": item["watched"],
-                "rating": item["rating"],
                 "director_name": item["name"]
             }
-            reviews.append(review)
+
+            reviews.append(review_data)
         return reviews
 
 

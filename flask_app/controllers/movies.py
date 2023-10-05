@@ -16,10 +16,10 @@ def test_movie_api():
     response = requests.get(url, headers=headers).json()
     poster_path = response["results"][0]["poster_path"]
     movie_poster = url_base + poster_path
-    print("movie_poster: ", movie_poster)
+    # print("movie_poster: ", movie_poster)
 
     year = response["results"][0]["release_date"][:4]
-    print("year ", year)
+    # print("year ", year)
     return response
 
 
@@ -32,10 +32,10 @@ def test_person_api():
         "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZTIxNjdiZTgwYzYxYjZhMzVkNjhiMjY2NmE0YWUzMyIsInN1YiI6IjYzMmRkMzZkNTU5MzdiMDA3YzA5MTZlMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qlMgNrzDMM2eqPUGxDRpWsACr9o-xb94MKMpdta7K7c"
     }
     response = requests.get(url, headers=headers).json()
-    print(response)
+    # print(response)
     profile_path = response["results"][0]["profile_path"]
     profile_pic = image_url_base + profile_path
-    print("profile_pic: ", profile_pic)
+    # print("profile_pic: ", profile_pic)
     return response
 
 

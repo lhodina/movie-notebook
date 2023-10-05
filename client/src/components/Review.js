@@ -6,14 +6,17 @@ import { FaStar } from "react-icons/fa";
 
 const Review = (props) => {
     const [review, setReview] = useState({});
+    const [criticFans, setCriticFans] = useState([]);
+    const [directorFans, setDirectorFans] = useState([]);
     const { id } = useParams();
 
 
     useEffect( () => {
         axios.get("http://localhost:5000/reviews/" + id)
             .then( (res) => {
-                console.log(res.data);
                 setReview(res.data);
+                setCriticFans(res.data.critic_fans);
+                setDirectorFans(res.data.director_fans);
             })
             .catch(err => {
                 console.log(err);
@@ -33,6 +36,18 @@ const Review = (props) => {
             <p>"{review.notes}"</p>
             <p>Watched status: {review.watched}</p>
             <p>My rating: {review.rating}</p>
+            <p>Liked by:</p>
+            <ul>
+            { criticFans.map( (fan, index) => (
+                <li key={ index }>{fan.name }</li>
+            )) }
+            { directorFans.map( (fan, index) => (
+                <li key={ index }>{fan.name }</li>
+            )) }
+            </ul>
+
+
+
             <Link to={ "/reviews/" + id + "/update" }>edit</Link>
         </div>
     )
