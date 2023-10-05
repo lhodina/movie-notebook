@@ -32,7 +32,7 @@ def add_review():
     print("director_data: ", director_data)
     print("movie_data: ", movie_data)
     print("review_data: ", review_data)
-    # Search our DB fro existing director by name -- if none, create new director entry, then go on to movie
+    # Search our DB for existing director by name -- if none, create new director entry, then go on to movie
     director_exists = director.Director.find_by_name(director_data)
     directed_by_id = 0
     print("director_exists: ", director_exists)
@@ -60,6 +60,7 @@ def add_review():
             "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZTIxNjdiZTgwYzYxYjZhMzVkNjhiMjY2NmE0YWUzMyIsInN1YiI6IjYzMmRkMzZkNTU5MzdiMDA3YzA5MTZlMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qlMgNrzDMM2eqPUGxDRpWsACr9o-xb94MKMpdta7K7c"
         }
         response = requests.get(movie_url, headers=headers).json()
+
         poster_path = response["results"][0]["poster_path"]
         movie_poster = image_url_base + poster_path
         print("movie_poster: ", movie_poster)
