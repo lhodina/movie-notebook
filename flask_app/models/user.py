@@ -124,9 +124,9 @@ class User:
         # print("RESULT IN User.get_reviews: ", result)
         reviews = []
         for item in result:
-            print()
-            print("***** RESULT DATA FOR get_reviews in user model: ", item)
-            print()
+        #     print()
+        #     print("***** ITEM IN RESULT DATA FOR get_reviews IN USER MODEL: ", item)
+        #     print()
 
             review_data = {
                 "id": item["reviews.id"],
@@ -141,8 +141,10 @@ class User:
 
             current_review = review.Review(review_data)
             print("current_review.notes: ", current_review.notes)
-            critic_fans = current_review.get_critic_fans(item["id"])
-            print("critic_fans: ", critic_fans)
+            current_review.critic_fans = current_review.get_critic_fans({ "id": current_review.movie_id })
+            # print("current_review.critic_fans: ", current_review.critic_fans)
+            current_review.director_fans = current_review.get_director_fans({ "id": current_review.movie_id })
+            # print("current_review.director_fans: ", current_review.director_fans)
 
             movie_data = {
                 "title": item["title"],
@@ -152,7 +154,25 @@ class User:
                 "director_name": item["name"]
             }
 
-            reviews.append(review_data)
+            full_review = {
+                "id": current_review.id,
+                "movie_id": current_review.movie_id,
+                "user_id": current_review.user_id,
+                "watched": current_review.watched,
+                "rating": current_review.rating,
+                "notes": current_review.notes,
+                "critic_fans": current_review.critic_fans,
+                "director_fans": current_review.director_fans,
+                **movie_data
+            }
+
+            # print()
+            # print("full_review: ", full_review)
+            # print()
+            # for item in full_review:
+            #     print(f"FULL REVIEW ITEM -- {item}: {full_review[item]}")
+            # print()
+            reviews.append(full_review)
         return reviews
 
 

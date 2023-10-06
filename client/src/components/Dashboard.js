@@ -106,6 +106,7 @@ const Dashboard = () => {
                             <th>Year</th>
                             <th>Watched</th>
                             <th>Rating</th>
+                            <th>Liked By</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -119,6 +120,17 @@ const Dashboard = () => {
                                         <td>{ review.year }</td>
                                         <td>{ review.watched}</td>
                                         <td>{ review.rating} / 5</td>
+                                        <td>{
+                                            review.critic_fans.map((fan, index) => (
+                                                <p key={ index }>{fan.name}</p>
+                                            ))
+                                            }
+                                            {
+                                            review.director_fans.map((fan, index) => (
+                                                <p key={ index }>{fan.name}</p>
+                                            ))
+                                            }
+                                        </td>
                                         <td><button className="btn btn-danger" onClick = { (e) => {deleteReview(review.id)} }>Delete</button></td>
                                     </tr>
                                 )
