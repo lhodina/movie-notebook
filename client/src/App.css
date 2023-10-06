@@ -1,5 +1,42 @@
+
+/* Use Pascal case for all class names */
+
 .App {
   text-align: center;
+}
+
+.Container {
+  margin: 0 auto;
+  padding: 30px;
+}
+
+.Header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.SearchInput {
+  width: 200px;
+}
+
+.Main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.CoreMovie {
+  display: flex;
+  width: 350px;
+  margin: 15px;
+  padding: 5px;
+  border: 1px solid black;
+}
+
+.CoreMovieBody {
+  margin-left: 15px;
+  text-align: left;
 }
 
 h1, h2, h3, .btn, th {

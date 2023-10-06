@@ -154,6 +154,9 @@ class User:
                 "director_name": item["name"]
             }
 
+            likes_count = len(current_review.critic_fans) + len(current_review.director_fans)
+            # print("LIKES COUNT: ", likes_count)
+
             full_review = {
                 "id": current_review.id,
                 "movie_id": current_review.movie_id,
@@ -163,7 +166,8 @@ class User:
                 "notes": current_review.notes,
                 "critic_fans": current_review.critic_fans,
                 "director_fans": current_review.director_fans,
-                **movie_data
+                **movie_data,
+                "likes_count": likes_count
             }
 
             # print()
@@ -173,6 +177,7 @@ class User:
             #     print(f"FULL REVIEW ITEM -- {item}: {full_review[item]}")
             # print()
             reviews.append(full_review)
+            reviews.sort(key=lambda x: x['likes_count'], reverse=True)
         return reviews
 
 

@@ -36,111 +36,48 @@ const Dashboard = () => {
     }, []);
 
     return (
-        <>
-            <h1>Welcome, {user.first_name}</h1>
-            <Link to={ "/logout" }>log out</Link>
+        <div className="Container">
+            <div className="Header">
+                <h4>Welcome, {user.first_name}</h4>
+                <h5>Favorite Directors</h5>
+                <h5>Favorite Critics</h5>
+                <h5>Collections</h5>
+                <Link to={"/reviews/add"}><button>+ Review a Movie</button></Link>
+                <form className="SearchBar">
+                    <input className="SearchInput" type="text" value="search movies and people"></input>
+                </form>
+                <Link to={ "/logout" }>log out</Link>
+            </div>
 
-            <div className="favoritedirectors">
-                <h2>Favorite Directors</h2>
-                {
-                    favoriteDirectors.map( (director, index) => {
-                        return (
-                            <div className="favoritedirector" key={index}>
-                                <Link to={ "/directors/" + director.id }>{ director.name }</Link>
+            <h2>Core Movies</h2>
+            <div className="Main">
+            {
+                reviews.map( (review, index) => {
+                    return (
+                        <div className="CoreMovie" key={index}>
+                            <img src={review.image_url} alt="" height="200px"/>
+                            <div className="CoreMovieBody">
+                                <Link to={ "/reviews/" + review.id }><h5>{ review.title }</h5></Link>
+                                <div className="LikedBy">
+                                    <h6>Liked By</h6>
+                                    {
+                                    review.critic_fans.map((fan, index) => (
+                                        <p key={ index }>{fan.name}</p>
+                                    ))
+                                    }
+                                    {
+                                    review.director_fans.map((fan, index) => (
+                                        <p key={ index }>{fan.name}</p>
+                                    ))
+                                    }
+                                </div>
                             </div>
-                        )
-                    })
-                }
-                <Link to={"/favoritedirectors/add"}>add a director</Link>
+                        </div>
+                    )
+                })
+            }
             </div>
-
-            <div className="favoritecritics">
-                <h3>Favorite Critics</h3>
-                {
-                    favoriteCritics.map( (critic, index) => {
-                        return (
-                            <div className="favoritecritic" key={index}>
-                                <Link to={ "/critics/" + critic.id }>{ critic.name }</Link>
-                            </div>
-                        )
-                    })
-                }
-                <Link to={"/favoritecritics/add"}>add a critic</Link>
-            </div>
-
-            <div className="collections">
-                <h3>Your Collections</h3>
-                {
-                    collections.map( (collection, index) => {
-                        return (
-                            <div className="collection" key={index}>
-                                <Link to={ "/collections/" + collection.id }>{ collection.name }</Link>
-                            </div>
-                        )
-                    })
-                }
-                <Link to={"/collections/add"}>add a collection</Link>
-            </div>
-            <div>
-                <ul className="nav nav-tabs">
-                    <li className="nav-item">
-                        <a className="nav-link active" aria-current="page" href="#">Movies</a>
-                    </li>
-                    <li className="nav-item">
-                        <a className="nav-link" href="#">Directors</a>
-                    </li>
-                    <li className="nav-item">
-                        <a className="nav-link" href="#">Critics</a>
-                    </li>
-                </ul>
-            </div>
-
-            <div>
-                <h2>Your Movies</h2>
-                <Table>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Title</th>
-                            <th>Director</th>
-                            <th>Year</th>
-                            <th>Watched</th>
-                            <th>Rating</th>
-                            <th>Liked By</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            reviews.map( (review, index) => {
-                                return (
-                                    <tr className="review" key={index}>
-                                        <td><img src={review.image_url} alt=""height="75px" width="50px"/></td>
-                                        <td><Link to={ "/reviews/" + review.id }>{ review.title }</Link></td>
-                                        <td>{ review.director_name}</td>
-                                        <td>{ review.year }</td>
-                                        <td>{ review.watched}</td>
-                                        <td>{ review.rating} / 5</td>
-                                        <td>{
-                                            review.critic_fans.map((fan, index) => (
-                                                <p key={ index }>{fan.name}</p>
-                                            ))
-                                            }
-                                            {
-                                            review.director_fans.map((fan, index) => (
-                                                <p key={ index }>{fan.name}</p>
-                                            ))
-                                            }
-                                        </td>
-                                        <td><button className="btn btn-danger" onClick = { (e) => {deleteReview(review.id)} }>Delete</button></td>
-                                    </tr>
-                                )
-                            })
-                        }
-                    </tbody>
-                </Table>
-                <Link to={"/reviews/add"}>review a movie</Link>
-            </div>
-        </>
+        </div>
     )
 }
 
