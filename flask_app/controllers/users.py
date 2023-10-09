@@ -41,7 +41,7 @@ def dashboard():
     favorite_critics = user.User.get_favorite_critics(data)
     reviews = user.User.get_reviews(data)
     # For each movie review, get all the directors and critics who like it
-    
+
     userJSON = {
         "first_name": current_user.first_name,
         "last_name": current_user.last_name,

@@ -21,11 +21,9 @@ const colors = {
 
 const ReviewForm = (props) => {
     const [ title, setTitle ] = useState("");
-    const [ directorName, setDirectorName ] = useState("");
     const [ rating, setRating ] = useState(0);
     const [ watched, setWatched ] = useState("");
     const [ notes, setNotes ] = useState("");
-    const [imageUrl, setImageUrl] = useState("");
     const [errors, setErrors] = useState([]);
     const [hoverValue, setHoverValue] = React.useState(undefined);
 
@@ -35,11 +33,9 @@ const ReviewForm = (props) => {
         e.preventDefault();
         axios.post("http://localhost:5000/reviews", {
             title,
-            directorName,
             rating,
             watched,
-            notes,
-            imageUrl
+            notes
         })
             .then( res => {
                 navigate("/dashboard");
@@ -55,8 +51,8 @@ const ReviewForm = (props) => {
             })
     }
 
+    // Star rating logic
     const stars = Array(5).fill(0);
-
 
     const handleClick = value => {
         setRating(value)
@@ -78,18 +74,13 @@ const ReviewForm = (props) => {
             </div>
             <form onSubmit={ onSubmitHandler }>
                 {errors.map((err, index) => (
-                    <p className="error-message" key="{index}">{err}</p>
+                    <p className="error-message" key={index}>{err}</p>
                 ))}
 
                 <p>
                     <label>Title</label>
                     <br />
                     <input className="form-input" type="text" onChange = { (e) => setTitle(e.target.value) } />
-                </p>
-                <p>
-                    <label>Director</label>
-                    <br />
-                    <input className="form-input" type="text" onChange = { (e) => setDirectorName(e.target.value) } />
                 </p>
                 <p>
                     <label>Rating</label>

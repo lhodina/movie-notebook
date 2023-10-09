@@ -15,63 +15,62 @@ def add_review():
         "user_id": 1
     }
 
-    # print("TESTING watched: ", review_data['watched'])
-
-    director_data = {
-        "name": request.json["directorName"],
+    movie_data = {
+        "title": request.json["title"],
         "image_url": ""
     }
 
-    # # This can eventually come from API
-    movie_data = {
-        "title": request.json["title"],
-        "image_url": request.json["imageUrl"]
-    }
-
-    # print("ROUTE:")
-    # print("director_data: ", director_data)
-    # print("movie_data: ", movie_data)
-    # print("review_data: ", review_data)
-    # Search our DB for existing director by name -- if none, create new director entry, then go on to movie
-    director_exists = director.Director.find_by_name(director_data)
-    directed_by_id = 0
-    # print("director_exists: ", director_exists)
-    if (director_exists):
-        # print("DIRECTOR EXISTS")
-        directed_by_id = director_exists[0]['id']
-    else:
-        # print("DIRECTOR DOES NOT EXIST")
-        directed_by_id = director.Director.save(director_data)
     # Search our DB for existing movie by title -- if none, create new movie entry, then create new review entry
     movie_exists = movie.Movie.find_by_title(movie_data)
     movie_id = 0
     if not (movie_exists):
-        # print("MOVIE DOES NOT EXIST")
-        movie_data["directed_by_id"] = directed_by_id
-
         image_url_base = "https://image.tmdb.org/t/p/w500"
         movie_url_base = "https://api.themoviedb.org/3/search/movie?query="
 
         movie_title_query = movie_data["title"].lower().replace(" ", "+")
-        # print("movie_title_query: ", movie_title_query)
         movie_url = movie_url_base + movie_title_query
         headers = {
             "accept": "application/json",
             "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZTIxNjdiZTgwYzYxYjZhMzVkNjhiMjY2NmE0YWUzMyIsInN1YiI6IjYzMmRkMzZkNTU5MzdiMDA3YzA5MTZlMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qlMgNrzDMM2eqPUGxDRpWsACr9o-xb94MKMpdta7K7c"
         }
         response = requests.get(movie_url, headers=headers).json()
-
+        print("API RESPONSE: ", response)
+        if len(response["results"]) < 1:
+            print("Need to handle error if there's no return data")
+            return redirect("/reviews/add")
         poster_path = response["results"][0]["poster_path"]
         movie_poster = image_url_base + poster_path
-        # print("movie_poster: ", movie_poster)
 
         api_year = response["results"][0]["release_date"][:4]
-        # print("api_year ", api_year)
+
+        api_movie_id = response["results"][0]["id"]
+        # print("api_movie_id: ", api_movie_id)
+        api_crew = requests.get(f"https://api.themoviedb.org/3/movie/{api_movie_id}/credits", headers=headers).json()["crew"]
+        # print("API CREW: ", api_crew)
+        api_director = [x for x in api_crew if x["job"] == "Director"][0]
+        # print("api_director:", api_director)
+        api_director_name = api_director["name"]
+        # print("api_director_name:", api_director_name)
+        api_director_image_url = image_url_base + api_director["profile_path"]
+        # print("api_director_image_url: ", api_director_image_url)
+
+        # Search our DB for existing director by name -- if none, create new director entry, then go on to movie
+        director_exists = director.Director.find_by_name(api_director_name)
+        directed_by_id = 0
+        if (director_exists):
+            directed_by_id = director_exists[0]['id']
+        else:
+            director_data = {
+                "name": api_director_name,
+                "image_url": api_director_image_url
+            }
+            directed_by_id = director.Director.save(director_data)
+        movie_data["directed_by_id"] = directed_by_id
         movie_data['image_url'] = movie_poster
         movie_data['year'] = api_year
+        movie_data['title'] = response["results"][0]["title"]
         movie_id = movie.Movie.save(movie_data)
     else:
-        # print("MOVIE EXISTS")
         movie_id = movie_exists[0]['id']
     review_data["movie_id"] = movie_id
     review.Review.save(review_data)
@@ -85,16 +84,12 @@ def get_review(review_id):
     }
 
     current_review = review.Review.get_one(data)
-    # print(" CONTROLLER current_review.critic_fans: ", current_review.critic_fans)
     # REPLACE HARDCODED user_id
-    # MIGHT NEED TO UPDATE HOW YOU GET movie_id
     link_data = {
         "movie_id": current_review.movie_id,
         "user_id": 1
     }
     movie_links = movie_link.MovieLink.get_all(link_data)
-    # for item in movie_links:
-        # print("ITEM: ", item)
 
     return {
         "rating": current_review.rating,

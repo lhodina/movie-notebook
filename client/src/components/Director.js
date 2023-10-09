@@ -30,10 +30,7 @@ const Director = (props) => {
                 <h1>{director.name}</h1>
                 <Link to={ "/dashboard" } >back to dashboard</Link>
             </div>
-            {/* Need to add API call for this */}
-            {/* <img src={director.image_url} height="300px" alt="" /> */}
-            {/* Get from favorite_directors joined to query */}
-            {/* <p>{director.notes}</p> */}
+            <img src={director.image_url} height="300px" alt="" />
 
             <h2>Movies Directed by {director.name}</h2>
             <Table>
@@ -75,7 +72,7 @@ const Director = (props) => {
                         return (
                             <tr key={ index }>
                                 <td><img src={movie.image_url} alt="" /></td>
-                                
+
                                 <td>{ movie.title }</td>
                                 <td>{ movie.director_name}</td>
                                 <td>{movie.year}</td>

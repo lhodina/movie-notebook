@@ -121,13 +121,8 @@ class User:
         WHERE reviews.user_id = %(id)s;
         """
         result = connectToMySQL(cls.DB).query_db(query, data)
-        # print("RESULT IN User.get_reviews: ", result)
         reviews = []
         for item in result:
-        #     print()
-        #     print("***** ITEM IN RESULT DATA FOR get_reviews IN USER MODEL: ", item)
-        #     print()
-
             review_data = {
                 "id": item["reviews.id"],
                 "movie_id": item["id"],
@@ -140,11 +135,8 @@ class User:
             }
 
             current_review = review.Review(review_data)
-            print("current_review.notes: ", current_review.notes)
             current_review.critic_fans = current_review.get_critic_fans({ "id": current_review.movie_id })
-            # print("current_review.critic_fans: ", current_review.critic_fans)
             current_review.director_fans = current_review.get_director_fans({ "id": current_review.movie_id })
-            # print("current_review.director_fans: ", current_review.director_fans)
 
             movie_data = {
                 "title": item["title"],
@@ -155,7 +147,6 @@ class User:
             }
 
             likes_count = len(current_review.critic_fans) + len(current_review.director_fans)
-            # print("LIKES COUNT: ", likes_count)
 
             full_review = {
                 "id": current_review.id,
@@ -170,12 +161,6 @@ class User:
                 "likes_count": likes_count
             }
 
-            # print()
-            # print("full_review: ", full_review)
-            # print()
-            # for item in full_review:
-            #     print(f"FULL REVIEW ITEM -- {item}: {full_review[item]}")
-            # print()
             reviews.append(full_review)
             reviews.sort(key=lambda x: x['likes_count'], reverse=True)
         return reviews

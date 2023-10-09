@@ -1,5 +1,7 @@
-        SELECT * FROM movies
-        JOIN directors ON directors.id = movies.directed_by_id
+-- INSERT INTO user_favorite_directors (notes, user_id, director_id)
+-- VALUES
+-- ('Who is this? I do not know who this is', 1, 4),
+-- ('', 1, 5);
 
 
 -- INSERT INTO users (first_name, last_name, email, password)

@@ -47,12 +47,8 @@ class Review:
         }
 
         current_review = cls(current_review_data)
-        # print("CURRENT REVIEW MOVIE ID: ", current_review.movie_id)
         current_review.critic_fans = current_review.get_critic_fans({"id": current_review.movie_id})
-        # print("CURRENT REVIEW CRITIC FANS:", current_review.critic_fans)
-
         current_review.director_fans = current_review.get_director_fans({"id": current_review.movie_id})
-        # print("CURRENT REVIEW DIRECTOR FANS:", current_review.director_fans)
 
         movie_data = {
             "id": result["movie_id"],
@@ -111,7 +107,6 @@ class Review:
         WHERE critic_favorite_movies.movie_id = %(id)s AND user_favorite_critics.user_id = 1;
         """
         result = connectToMySQL(cls.DB).query_db(query, data)
-        # print("* * * * * GET CRITIC FANS REVIEW METHOD RESULT: ", result)
         return result
 
     @classmethod
@@ -123,5 +118,4 @@ class Review:
         WHERE director_favorite_movies.movie_id = %(id)s AND user_favorite_directors.user_id = 1;
         """
         result = connectToMySQL(cls.DB).query_db(query, data)
-        # print("* * * * * GET DIRECTOR FANS REVIEW METHOD RESULT: ", result)
         return result

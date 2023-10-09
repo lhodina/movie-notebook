@@ -13,6 +13,7 @@
 .Header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
 }
 
@@ -31,7 +32,7 @@
   width: 350px;
   margin: 15px;
   padding: 5px;
-  border: 1px solid black;
+  border: 1px solid lightgray;
 }
 
 .CoreMovieBody {
@@ -39,9 +40,35 @@
   text-align: left;
 }
 
-h1, h2, h3, .btn, th {
+.LikedBy p {
+  margin: 0;
+}
+
+h1, h2, h3, .btn {
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
+}
+
+.FavoriteDirectors {
+  cursor: pointer;
+}
+
+.FavoriteDirectors:hover {
+  color: red;
+}
+
+.DirectorsList {
+  position: absolute;
+  border: 1px solid black;
+  background-color: white;
+  padding: 15px;
+  text-align: left;
+
+}
+
+.DirectorsListUL {
+  list-style-type: none;
+  border-bottom: 1px solid lightgray;
 }
 
 .App-logo {
