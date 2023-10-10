@@ -115,7 +115,7 @@ const Dashboard = () => {
                 <Link to={ "/logout" }>log out</Link>
             </div>
 
-            <h2>Core Movies</h2>
+            <h1>CORE MOVIES</h1>
             <div className="Main">
             {
                 reviews.map( (review, index) => {

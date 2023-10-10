@@ -1,7 +1,7 @@
 from flask import redirect, request
 
 from flask_app import app
-from flask_app.models import director
+from flask_app.models import user, director
 
 
 @app.route("/directors", methods=["POST"])
@@ -33,12 +33,16 @@ def get_director(director_id):
     current_director = director.Director.get_one(data)
     favorites = director.Director.get_favorites(data)
 
+    current_user = user.User.get_one({"id": 1})
+
     return {
         "id": current_director.id,
         "name": current_director.name,
         "image_url": current_director.image_url,
         "movies_directed": current_director.movies_directed,
-        "favorite_movies": favorites
+        "favorite_movies": favorites,
+        "user_first_name": current_user.first_name,
+        "user_last_name": current_user.last_name
     }
 
 
