@@ -9,7 +9,9 @@ const Dashboard = () => {
     const [favoriteCritics, setFavoriteCritics] = useState([]);
     const [collections, setCollections] = useState([]);
     const [reviews, setReviews] = useState([]);
-    const [directorsOpen, setDirectorsOpen] = useState(false)
+    const [directorsOpen, setDirectorsOpen] = useState(false);
+    const [criticsOpen, setCriticsOpen] = useState(false);
+    const [collectionsOpen, setCollectionsOpen] = useState(false);
 
     const removeFromDom = reviewId => {
         setReviews(reviews.filter(review => review.id !== reviewId));
@@ -36,6 +38,14 @@ const Dashboard = () => {
         setDirectorsOpen(!directorsOpen);
     }
 
+    const toggleCritics = () => {
+        setCriticsOpen(!criticsOpen);
+    }
+
+    const toggleCollections = () => {
+        setCollectionsOpen(!collectionsOpen);
+    }
+
     useEffect(() => {
         axios.get("http://localhost:5000/dashboard")
             .then(res => {
@@ -52,14 +62,14 @@ const Dashboard = () => {
         <div className="Container">
             <div className="Header">
                 <h4>Welcome, {user.first_name}</h4>
-                <div className="FavoriteDirectors">
-                    <h5 onClick={ toggleDirectors }>Favorite Directors</h5>
+                <div className="NavMenuItem" onMouseEnter={ toggleDirectors } onMouseLeave={ toggleDirectors } >
+                    <h5>Favorite Directors</h5>
                     { directorsOpen && (
-                        <div className="DirectorsList">
-                            <ul className="DirectorsListUL" >
+                        <div className="NavDropdown">
+                            <ul className="NavDropdownList" >
                             {
                                 favoriteDirectors.map( (director, index) => (
-                                    <Link to={ "/directors/" + director.id } className="DirectorsListItem"><li key={index}>{director.name}</li></Link>
+                                    <Link to={ "/directors/" + director.id } className="NavDropdownListItem"><li key={index}>{director.name}</li></Link>
                                 ))
                             }
                             </ul>
@@ -67,9 +77,37 @@ const Dashboard = () => {
                         </div>
                     )}
                 </div>
+                <div className="NavMenuItem" onMouseEnter={ toggleCritics } onMouseLeave={ toggleCritics }>
+                    <h5>Favorite Critics</h5>
+                    { criticsOpen && (
+                        <div className="NavDropdown">
+                            <ul className="NavDropdownList" >
+                            {
+                                favoriteCritics.map( (critic, index) => (
+                                    <Link to={ "/critics/" + critic.id } className="NavDropdownListItem"><li key={index}>{critic.name}</li></Link>
+                                ))
+                            }
+                            </ul>
+                            <Link to={"/favorite_critics/add"}> + Add Favorite Critic</Link>
+                        </div>
+                    )}
+                </div>
+                <div className="NavMenuItem" onMouseEnter={ toggleCollections } onMouseLeave={ toggleCollections }>
+                    <h5>Collections</h5>
+                    { collectionsOpen && (
+                        <div className="NavDropdown">
+                            <ul className="NavDropdownList" >
+                            {
+                                collections.map( (collection, index) => (
+                                    <Link to={ "/collections/" + collection.id } className="NavDropdownListItem"><li key={index}>{collection.name}</li></Link>
+                                ))
+                            }
+                            </ul>
+                            <Link to={"/collections/add"}> + Add Collection</Link>
+                        </div>
+                    )}
+                </div>
 
-                <h5>Favorite Critics</h5>
-                <h5>Collections</h5>
                 <Link to={"/reviews/add"}><button>+ Review a Movie</button></Link>
                 <form className="SearchBar">
                     <input className="SearchInput" type="text" value="search movies and people"></input>
