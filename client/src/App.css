@@ -105,6 +105,7 @@ h1, h2, h3, .btn {
 
 .UserContent {
   width: 30%;
+  padding: 30px;
 }
 
 .DirectorNotes , .DirectorLinks {
@@ -114,4 +115,26 @@ h1, h2, h3, .btn {
 
 .DirectorLinks ul {
   list-style-type: none;
+}
+
+.DirectorMain {
+  display: flex;
+}
+
+.DirectorDisplayContainer {
+  width: 70%;
+}
+
+.DisplayDirectorMovies {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.Pressed {
+  background-color: black;
+  color: white;
+}
+
+.btn-outline-danger:hover {
+  /* find another style */
 }

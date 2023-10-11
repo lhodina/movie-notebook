@@ -27,7 +27,7 @@ const Review = (props) => {
         <div>
             <div className="header">
                 <h1>{review.title}</h1>
-                <Link to={ "/dashboard" } >back to dashboard</Link>
+                <Link to={ "/dashboard" }>back to dashboard</Link>
             </div>
             <p> { review.year } </p>
             <img src={review.image_url} height="300px" alt="" />
