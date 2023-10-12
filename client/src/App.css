@@ -1,6 +1,4 @@
 
-/* Use Pascal case for all class names */
-
 .App {
   text-align: center;
 }
@@ -46,6 +44,7 @@ button:hover {
   margin: 15px;
   padding: 5px;
   border: 1px solid lightgray;
+  box-sizing: border-box;
 }
 
 .CoreMovieBody {
@@ -104,13 +103,18 @@ h1, h2, h3, .btn {
 }
 
 .UserContent {
-  width: 30%;
+  width: 35%;
   padding: 30px;
 }
 
-.DirectorNotes , .DirectorLinks {
+.DirectorNotes, .DirectorLinks {
   text-align: left;
   margin-bottom: 30px;
+}
+
+.DirectorNotes {
+  /* position: fixed; */
+  z-index: 2;
 }
 
 .DirectorLinks ul {
@@ -119,15 +123,17 @@ h1, h2, h3, .btn {
 
 .DirectorMain {
   display: flex;
+  justify-content: space-between;
 }
 
 .DirectorDisplayContainer {
-  width: 70%;
+  width: 100%;
 }
 
 .DisplayDirectorMovies {
   display: flex;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .Pressed {
@@ -136,5 +142,18 @@ h1, h2, h3, .btn {
 }
 
 .btn-outline-danger:hover {
-  /* find another style */
+  background-color: black;
+  border: 1px solid black;
+}
+
+.Grayout {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  opacity: 0.5;
+  filter: grayscale(80%);
+  z-index: 1;
 }

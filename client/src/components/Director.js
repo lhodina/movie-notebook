@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, Link, useParams } from "react-router-dom";
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import ToggleButton from 'react-bootstrap/ToggleButton';
-
 
 const Director = (props) => {
     const [userFirstName, setUserFirstName] = useState("");
@@ -69,10 +66,10 @@ const Director = (props) => {
                 <div className="UserContent">
                     <div className="DirectorNotes">
                         <h3>My Notes</h3>
-                        <p>Joel and Ethan Coen, more than any living directors, know how to make Steve Buscemi's face sing sad sad songs to make us laugh til we cry til we die (laughing). They know how to make John Goodman roll over us on the floor laughing til all our bones are crushed and also our souls under the weight of despair. And they know how to get George Clooney to show the world how dumb he really is. If I ever kill myself while watching a movie, it will be a Coen brothers movie.</p><Link>(edit)</Link>
+                        <p>Joel and Ethan Coen, more than any living directors, know how to make Steve Buscemi's face sing sad sad songs. If I ever kill myself while watching a movie, it will be a Coen brothers movie... <Link>more</Link></p>
                     </div>
                     <div className="DirectorLinks">
-                        <h3>Articles and Videos</h3>
+                        <h3>Articles + Videos</h3>
                         <ul>
                             <Link><li>Cannes Interview</li></Link>
                             <Link><li>Article in Cahiers du Cinema</li></Link>

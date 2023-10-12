@@ -108,7 +108,7 @@ const Dashboard = () => {
                     )}
                 </div>
 
-                <Link to={"/reviews/add"}><button>+ Review a Movie</button></Link>
+                <Link to={"/reviews/add"}><button className="btn btn-danger">+ Review a Movie</button></Link>
                 <form className="SearchBar">
                     <input className="SearchInput" type="text" value="search movies and people"></input>
                 </form>
