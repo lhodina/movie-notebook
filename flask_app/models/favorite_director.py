@@ -19,6 +19,22 @@ class FavoriteDirector:
         """
         return connectToMySQL(cls.DB).query_db(query, data)
 
+    @classmethod
+    def get_one(cls, data):
+        query = """
+        SELECT * FROM user_favorite_directors WHERE director_id = %(id)s;
+        """
+        return connectToMySQL(cls.DB).query_db(query, data)[0]
+
+    @classmethod
+    def update(cls, data):
+        query = """
+        UPDATE user_favorite_directors
+        SET notes = %(notes)s
+        WHERE director_id = %(id)s
+        """
+        return connectToMySQL(cls.DB).query_db(query, data)
+
 
     @classmethod
     def remove(cls, data):

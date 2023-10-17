@@ -16,6 +16,15 @@ def add_favorite_director():
     return redirect("/dashboard")
 
 
+@app.route("/favorite_directors/<int:id>/update", methods=["POST"])
+def updateNotes(id):
+    data = {
+        "notes": request.json["notes"],
+        "id": id
+    }
+    return favorite_director.FavoriteDirector.update(data)
+
+
 @app.route("/favorite_directors/remove/<int:director_id>")
 def remove_favorite_director(director_id):
     # UPDATE USER ID
