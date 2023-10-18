@@ -6,8 +6,8 @@ from flask_app.models import critic
 @app.route("/critics", methods=["POST"])
 def add_critic():
     data = {
-        "name": request.form["name"],
-        "image_url": request.form["image_url"]
+        "name": request.json["name"],
+        "image_url": request.json["image_url"]
     }
 
     critic.Critic.save(data)
@@ -42,9 +42,9 @@ def get_critic(critic_id):
 @app.route("/update_critic", methods=["POST"])
 def update_critic():
     data = {
-        "id": request.form["critic_id"],
-        "name": request.form["name"],
-        "image_url": request.form["image_url"]
+        "id": request.json["critic_id"],
+        "name": request.json["name"],
+        "image_url": request.json["image_url"]
     }
 
     critic.Critic.update(data)
@@ -61,7 +61,7 @@ def delete_critic(critic_id):
 @app.route("/critics/<int:critic_id>/add_favorite", methods=["POST"])
 def add_favorite_movie(critic_id):
     data = {
-        "movie_id": request.form["movie_id"],
+        "movie_id": request.json["movie_id"],
         "critic_id": critic_id
     }
 
@@ -72,7 +72,7 @@ def add_favorite_movie(critic_id):
 @app.route("/critics/<int:critic_id>/remove_favorite")
 def remove_favorite_movie(critic_id):
     data = {
-        "movie_id": request.form["movie_id"],
+        "movie_id": request.json["movie_id"],
         "critic_id": critic_id
     }
 

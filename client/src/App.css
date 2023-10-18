@@ -195,3 +195,17 @@ h1, h2, h3, .btn {
   margin-right: 10px;
 }
 
+.LinkForm {
+  margin: 10px;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.LinkForm button, .LinkForm input {
+  margin: 10px;
+}
+
+.LinkForm input {
+  width: 250px;
+}
+

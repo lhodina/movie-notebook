@@ -10,31 +10,15 @@ const Director = (props) => {
     const [moviesDirected, setMoviesDirected] = useState([]);
     const [favoriteMovies, setFavoriteMovies] = useState([]);
     const [notes, setNotes] = useState("");
+    const [editNotes, setEditNotes] = useState("");
     const [favoritesOpen, setFavoritesOpen] = useState(true);
     const [directedByOpen, setDirectedByOpen] = useState(false);
     const [notesExpanded, setNotesExpanded] = useState(false);
     const [editFormExpanded, setEditFormExpanded] = useState(false);
-
-
-    const showFavorites = () => {
-        setFavoritesOpen(true);
-        setDirectedByOpen(false);
-
-    }
-
-    const showDirectedBy = () => {
-        setDirectedByOpen(true);
-        setFavoritesOpen(false);
-    }
-
-    const toggleNotesExpanded = () => {
-        setNotesExpanded(!notesExpanded)
-    }
-
-    const toggleEditFormExpanded = () => {
-        setEditFormExpanded(!editFormExpanded)
-        setNotesExpanded(false);
-    }
+    const [userLinks, setUserLinks] = useState([]);
+    const [linkFormExpanded, setLinkFormExpanded] = useState(false);
+    const [newLinkText, setNewLinkText] = useState("");
+    const [newLinkURL, setNewLinkURL] = useState("");
 
     const { id } = useParams();
 
@@ -50,16 +34,6 @@ const Director = (props) => {
         }
     }
 
-    const updateNotes = e => {
-        e.preventDefault();
-        toggleEditFormExpanded();
-        axios.post('http://localhost:5000/favorite_directors/' + id + '/update', { "notes": notes })
-        .then(res => {
-            console.log(res);
-        })
-        .catch(err => console.log(err))
-    }
-
     useEffect( () => {
         axios.get("http://localhost:5000/directors/" + id)
             .then( (res) => {
@@ -69,11 +43,70 @@ const Director = (props) => {
                 setMoviesDirected(res.data.movies_directed);
                 setFavoriteMovies(res.data.favorite_movies);
                 setNotes(res.data.notes);
+                setEditNotes(res.data.notes);
+                setUserLinks(res.data.links);
             })
             .catch(err => {
                 console.log(err);
             })
     }, [])
+
+    const showFavorites = () => {
+        setFavoritesOpen(true);
+        setDirectedByOpen(false);
+
+    }
+
+    const showDirectedBy = () => {
+        setDirectedByOpen(true);
+        setFavoritesOpen(false);
+    }
+
+    const toggleNotesExpanded = () => {
+        setNotesExpanded(!notesExpanded);
+    }
+
+    const toggleEditFormExpanded = () => {
+        setEditFormExpanded(!editFormExpanded);
+        setNotesExpanded(false);
+    }
+
+    const toggleLinkFormExpanded = () => {
+        setLinkFormExpanded(!linkFormExpanded);
+    }
+
+    const updateNotes = e => {
+        e.preventDefault();
+        toggleEditFormExpanded();
+        setNotes(editNotes);
+        axios.post('http://localhost:5000/favorite_directors/' + id + '/update', { "notes": editNotes })
+        .then(res => {
+            console.log(res);
+        })
+        .catch(err => console.log(err))
+    }
+
+    // Replace hardcoded user id
+    const addLink = e => {
+        e.preventDefault();
+        axios.post('http://localhost:5000/directors/' + id + '/links', {
+            "text": newLinkText,
+            "url": newLinkURL,
+            "user_id": 1,
+            "director_id": id
+        }).then((res) => {
+            setUserLinks([...userLinks, {
+                "text": newLinkText,
+                "url": newLinkURL,
+                "user_id": 1,
+                "director_id": id
+            }])
+        })
+
+        setNewLinkText("")
+        setNewLinkURL("")
+        toggleLinkFormExpanded();
+    }
 
     return (
         <div className="Container">
@@ -113,11 +146,11 @@ const Director = (props) => {
                         <h3>My Notes</h3>
                             { editFormExpanded && (
                                 <form onSubmit={ updateNotes } className="UpdateNotesForm">
-                                    <textarea value={notes} onChange={ (e) => { setNotes(e.target.value)} } />
+                                    <textarea value={editNotes} onChange={ (e) => { setEditNotes(e.target.value)} } />
                                     <br />
-                                    <button className="CancelButton" onClick={ toggleEditFormExpanded }>cancel</button>
                                     <input type="submit" value="Save" />
-                            </form>
+                                    <button className="CancelButton" onClick={ toggleEditFormExpanded }>cancel</button>
+                                </form>
                             )}
 
                         <div className={notesExpanded ? "NotesExpanded" : "NotesCollapsed"}>
@@ -130,13 +163,27 @@ const Director = (props) => {
                     <div className="DirectorLinks">
                         <h3>Articles + Videos</h3>
                         <ul>
-                            <Link><li>Cannes Interview</li></Link>
-                            <Link><li>Article in Cahiers du Cinema</li></Link>
-                            <Link><li>Charlie Rose Interview</li></Link>
-                            <Link><li>Roger Ebert's Review of Fargo</li></Link>
-                            <Link><li>92Y Conversation with Frances McDormand</li></Link>
+                            { userLinks.map( (link, index) => {
+                                return (
+                                    <a href={link.url} target="_blank" rel="noreferrer" key={index}><li>{link.text}</li></a>
+                                )
+                            })
+                            }
                         </ul>
-                        <Link>+ Add link</Link>
+                        <button onClick={ toggleLinkFormExpanded }>Add Link</button>
+                        { linkFormExpanded && (
+                            <form className={"LinkForm" } onSubmit={ addLink }>
+                            <label htmlFor="text">Text</label>
+                            <input name="text" value={newLinkText} onChange={ (e) => setNewLinkText(e.target.value) } />
+                            <br />
+                            <label htmlFor="url">URL</label>
+                            <input name="url" value={newLinkURL} onChange={ (e) => setNewLinkURL(e.target.value) } />
+                            <br />
+                            <input type="submit" value="Add Link" />
+                            <button className="CancelButton" onClick={toggleLinkFormExpanded}>cancel</button>
+                        </form>
+                        )}
+
                     </div>
                 </div>
                 <div className="DirectorDisplayContainer">

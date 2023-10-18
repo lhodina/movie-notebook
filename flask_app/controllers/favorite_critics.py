@@ -7,9 +7,9 @@ from flask_app.models import favorite_critic
 @app.route("/favorite_critics", methods=["POST"])
 def add_favorite_critic():
     data = {
-        "notes": request.form["notes"],
-        "critic_id": request.form["critic_id"],
-        "user_id": request.form["user_id"]
+        "notes": request.json["notes"],
+        "critic_id": request.json["critic_id"],
+        "user_id": request.json["user_id"]
     }
 
     favorite_critic.FavoriteCritic.save(data)

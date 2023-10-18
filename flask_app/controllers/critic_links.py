@@ -7,8 +7,8 @@ from flask_app.models import critic_link
 def add_critic_link(critic_id):
      # REPLACE HARDCODED user_id
     data = {
-        "text": request.form["text"],
-        "url": request.form["url"],
+        "text": request.json["text"],
+        "url": request.json["url"],
         "user_id": 1,
         "critic_id": critic_id
     }

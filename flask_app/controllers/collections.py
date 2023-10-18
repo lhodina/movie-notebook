@@ -6,8 +6,8 @@ from flask_app.models import collection
 @app.route("/collections", methods=["POST"])
 def add_collection():
     data = {
-        "name": request.form["name"],
-        "user_id": request.form["user_id"]
+        "name": request.json["name"],
+        "user_id": request.json["user_id"]
     }
 
     collection.Collection.save(data)
@@ -30,9 +30,9 @@ def get_collection(collection_id):
 @app.route("/update_collection", methods=["POST"])
 def update_collection():
     data = {
-        "id": request.form["collection_id"],
-        "name": request.form["name"],
-        "user_id": request.form["user_id"]
+        "id": request.json["collection_id"],
+        "name": request.json["name"],
+        "user_id": request.json["user_id"]
     }
 
     collection.Collection.update(data)
@@ -50,7 +50,7 @@ def delete_collection(collection_id):
 def add_movie_to_collection(collection_id):
     data = {
         "collection_id": collection_id,
-        "movie_id": request.form["movie_id"]
+        "movie_id": request.json["movie_id"]
     }
     collection.Collection.add_movie(data)
     return redirect("/dashboard")

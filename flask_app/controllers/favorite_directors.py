@@ -7,9 +7,9 @@ from flask_app.models import favorite_director
 @app.route("/favorite_directors", methods=["POST"])
 def add_favorite_director():
     data = {
-        "notes": request.form["notes"],
-        "director_id": request.form["director_id"],
-        "user_id": request.form["user_id"]
+        "notes": request.json["notes"],
+        "director_id": request.json["director_id"],
+        "user_id": request.json["user_id"]
     }
 
     favorite_director.FavoriteDirector.save(data)

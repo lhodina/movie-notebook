@@ -39,10 +39,10 @@ def test_person_api():
 @app.route("/movies", methods=["POST"])
 def add_movie():
     data = {
-        "title": request.form["title"],
-        "year": request.form["year"],
-        "image_url": request.form["image_url"],
-        "directed_by_id": request.form["directed_by_id"]
+        "title": request.json["title"],
+        "year": request.json["year"],
+        "image_url": request.json["image_url"],
+        "directed_by_id": request.json["directed_by_id"]
     }
 
     movie.Movie.save(data)
@@ -76,11 +76,11 @@ def get_movie(movie_id):
 @app.route("/update_movie", methods=["POST"])
 def update_movie():
     data = {
-        "id": request.form["movie_id"],
-        "title": request.form["title"],
-        "year": request.form["year"],
-        "image_url": request.form["image_url"],
-        "directed_by_id": request.form["directed_by_id"]
+        "id": request.json["movie_id"],
+        "title": request.json["title"],
+        "year": request.json["year"],
+        "image_url": request.json["image_url"],
+        "directed_by_id": request.json["directed_by_id"]
     }
 
     movie.Movie.update(data)

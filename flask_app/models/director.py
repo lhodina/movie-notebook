@@ -128,3 +128,18 @@ class Director:
         WHERE movie_id = %(movie_id)s AND director_id = %(director_id)s;
         """
         return connectToMySQL(cls.DB).query_db(query, data)
+
+    @classmethod
+    def get_links(cls, data):
+        query = """
+        SELECT * FROM director_links WHERE director_id = %(id)s;
+        """
+        return connectToMySQL(cls.DB).query_db(query, data)
+
+    @classmethod
+    def add_link(cls, data):
+        query = """
+        INSERT INTO director_links(user_id, director_id, text, url)
+        VALUES(%(user_id)s, %(director_id)s, %(text)s, %(url)s);
+        """
+        return connectToMySQL(cls.DB).query_db(query, data)

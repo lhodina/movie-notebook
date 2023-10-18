@@ -7,8 +7,8 @@ from flask_app.models import director_link
 def add_director_link(director_id):
      # REPLACE HARDCODED user_id
     data = {
-        "text": request.form["text"],
-        "url": request.form["url"],
+        "text": request.json["text"],
+        "url": request.json["url"],
         "user_id": 1,
         "director_id": director_id
     }
