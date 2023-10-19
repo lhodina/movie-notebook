@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, Link, useParams } from "react-router-dom";
 import expandIcon from "../assets/expand-icon-small.png";
+import ReviewForm from './ReviewForm';
 
 const Director = (props) => {
     const [userFirstName, setUserFirstName] = useState("");
@@ -19,6 +20,8 @@ const Director = (props) => {
     const [linkFormExpanded, setLinkFormExpanded] = useState(false);
     const [newLinkText, setNewLinkText] = useState("");
     const [newLinkURL, setNewLinkURL] = useState("");
+    const [movieDirectedFormOpen, setMovieDirectedFormOpen] = useState(false);
+    const [favoriteMovieFormOpen, setFavoriteMovieFormOpen] = useState(false);
 
     const { id } = useParams();
 
@@ -75,6 +78,14 @@ const Director = (props) => {
         setLinkFormExpanded(!linkFormExpanded);
     }
 
+    const toggleMovieDirectedForm = () => {
+        setMovieDirectedFormOpen(!movieDirectedFormOpen);
+    }
+
+    const toggleFavoriteMovieForm = () => {
+        setFavoriteMovieFormOpen(!favoriteMovieFormOpen);
+    }
+
     const updateNotes = e => {
         e.preventDefault();
         toggleEditFormExpanded();
@@ -121,6 +132,16 @@ const Director = (props) => {
                 </div>
             </div>
             <div className="DirectorProfile">
+                { movieDirectedFormOpen && (
+                    <div className="DirectedByForm">
+                        <ReviewForm location="movieDirected" director={director} toggleForm={toggleMovieDirectedForm} />
+                    </div>
+                )}
+                { favoriteMovieFormOpen && (
+                <div className="FavoriteMovieForm">
+                    <ReviewForm location="addFavorite" director={director} toggleForm={toggleFavoriteMovieForm} />
+                </div>
+                )}
                 <img src={director.image_url} height="200px" alt="" />
                 <div className="ProfileContent">
                     <h1>{ director.name }</h1>
@@ -130,12 +151,12 @@ const Director = (props) => {
                     </div>
                 { directedByOpen && (
                     <div>
-                        <button type="button" className="AddDirectedButton">Add Movie</button>
+                        <button type="button" className="AddDirectedButton" onClick={toggleMovieDirectedForm}>Add Movie</button>
                     </div>
                 )}
                 { favoritesOpen && (
                     <div>
-                        <button type="button" className="AddFavoriteButton">Add Favorite</button>
+                        <button type="button" className="AddFavoriteButton" onClick={toggleFavoriteMovieForm}>Add Favorite</button>
                     </div>
                 )}
                 </div>
@@ -227,11 +248,9 @@ const Director = (props) => {
                         </div>
                     )}
                 </div>
-
             </div>
         </div>
     )
-
 }
 
 export default Director

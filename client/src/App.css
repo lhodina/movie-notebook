@@ -209,3 +209,19 @@ h1, h2, h3, .btn {
   width: 250px;
 }
 
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.DirectedByForm, .FavoriteMovieForm {
+  position: absolute;
+  border: 1px solid black;
+  padding: 20px;
+  background-color: white;
+  height: 500px;
+  width: 400px;
+  margin: auto;
+  top: 10%;
+  z-index: 2;
+}

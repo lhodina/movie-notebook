@@ -20,6 +20,7 @@ const colors = {
   }
 
 const ReviewForm = (props) => {
+    const { location, director, toggleForm } = props;
     const [ title, setTitle ] = useState("");
     const [ rating, setRating ] = useState(0);
     const [ watched, setWatched ] = useState("");
@@ -38,7 +39,10 @@ const ReviewForm = (props) => {
             notes
         })
             .then( res => {
-                navigate("/dashboard");
+                if (location === "newReview") {
+                    navigate("/dashboard");
+                }
+
             })
             .catch( err => {
                 const errorResponse = err.response.data.errors;
@@ -69,8 +73,19 @@ const ReviewForm = (props) => {
     return (
         <div>
             <div className="header">
-                <h1>Review a Movie</h1>
-                <Link to={ "/dashboard" } >back to dashboard</Link>
+
+                { location === "movieDirected" && <h2>Add movie directed by {director.name}</h2>}
+
+                { location === "addFavorite" && <h2>Add a favorite movie of {director.name}'s</h2>
+                }
+                { location === "addReview" && (
+                    <>
+                        <h1>Review a movie</h1>
+                        <Link to={ "/dashboard" } >back to dashboard</Link>
+                    </>
+
+                )}
+
             </div>
             <form onSubmit={ onSubmitHandler }>
                 {errors.map((err, index) => (
@@ -116,6 +131,10 @@ const ReviewForm = (props) => {
                     <textarea className="form-input" type="text" onChange = { (e) => setNotes(e.target.value) } />
                 </p>
                 <input type="submit" value="Save" />
+                {location !== "addReview" && (
+                    <button type="button" onClick={toggleForm}>cancel</button>
+                )}
+
             </form>
         </div>
     )
