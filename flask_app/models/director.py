@@ -116,7 +116,7 @@ class Director:
     def add_favorite(cls, data):
         query = """
         INSERT INTO director_favorite_movies(director_id, movie_id)
-        VALUES(%(director_id)s, %(movie_id)s;
+        VALUES(%(director_id)s, %(movie_id)s);
         """
         return connectToMySQL(cls.DB).query_db(query, data)
 

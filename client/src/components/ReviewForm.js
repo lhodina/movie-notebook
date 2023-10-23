@@ -20,7 +20,7 @@ const colors = {
   }
 
 const ReviewForm = (props) => {
-    const { location, director, toggleForm } = props;
+    const { location, director, toggleForm, moviesDirected, setMoviesDirected, favoriteMovies, setFavoriteMovies } = props;
     const [ title, setTitle ] = useState("");
     const [ rating, setRating ] = useState(0);
     const [ watched, setWatched ] = useState("");
@@ -36,13 +36,20 @@ const ReviewForm = (props) => {
             title,
             rating,
             watched,
-            notes
+            notes,
+            director_id: director.id,
+            location
         })
             .then( res => {
                 if (location === "newReview") {
                     navigate("/dashboard");
+                } else if (location === "movieDirected") {
+                    setMoviesDirected([...moviesDirected, res.data]);
+                    toggleForm();
+                } else if (location === "favoriteMovies") {
+                    setFavoriteMovies([...favoriteMovies, res.data]);
+                    toggleForm();
                 }
-
             })
             .catch( err => {
                 const errorResponse = err.response.data.errors;
@@ -76,9 +83,9 @@ const ReviewForm = (props) => {
 
                 { location === "movieDirected" && <h2>Add movie directed by {director.name}</h2>}
 
-                { location === "addFavorite" && <h2>Add a favorite movie of {director.name}'s</h2>
+                { location === "favoriteMovies" && <h2>Add a favorite movie of {director.name}'s</h2>
                 }
-                { location === "addReview" && (
+                { location === "newReview" && (
                     <>
                         <h1>Review a movie</h1>
                         <Link to={ "/dashboard" } >back to dashboard</Link>

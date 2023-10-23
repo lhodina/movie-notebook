@@ -69,7 +69,7 @@ def delete_director(director_id):
 
 
 @app.route("/directors/<int:director_id>/add_favorite", methods=["POST"])
-def add_favorite(director_id):
+def add_director_favorite_movie(director_id):
     data = {
         "movie_id": request.json["movie_id"],
         "director_id": director_id

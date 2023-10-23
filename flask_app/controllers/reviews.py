@@ -75,7 +75,16 @@ def add_review():
         movie_id = movie_exists[0]['id']
     review_data["movie_id"] = movie_id
     review.Review.save(review_data)
-    return redirect("/dashboard")
+
+    location = request.json["location"]
+    if (location == "favoriteMovies"):
+        data = {
+            "director_id": request.json["director_id"],
+            "movie_id": movie_id
+        }
+        saved_favorite = director.Director.add_favorite(data)
+    res = {**review_data, ** movie_data}
+    return res
 
 
 @app.route("/reviews/<int:review_id>")

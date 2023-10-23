@@ -22,6 +22,7 @@ const Director = (props) => {
     const [newLinkURL, setNewLinkURL] = useState("");
     const [movieDirectedFormOpen, setMovieDirectedFormOpen] = useState(false);
     const [favoriteMovieFormOpen, setFavoriteMovieFormOpen] = useState(false);
+    const [grayout, setGrayout] = useState(false);
 
     const { id } = useParams();
 
@@ -65,25 +66,29 @@ const Director = (props) => {
         setFavoritesOpen(false);
     }
 
-    const toggleNotesExpanded = () => {
-        setNotesExpanded(!notesExpanded);
-    }
-
     const toggleEditFormExpanded = () => {
         setEditFormExpanded(!editFormExpanded);
         setNotesExpanded(false);
+        toggleGrayout();
     }
 
     const toggleLinkFormExpanded = () => {
         setLinkFormExpanded(!linkFormExpanded);
+        toggleGrayout();
     }
 
     const toggleMovieDirectedForm = () => {
         setMovieDirectedFormOpen(!movieDirectedFormOpen);
+        toggleGrayout();
     }
 
     const toggleFavoriteMovieForm = () => {
         setFavoriteMovieFormOpen(!favoriteMovieFormOpen);
+        toggleGrayout();
+    }
+
+    const toggleGrayout = () => {
+        setGrayout(!grayout);
     }
 
     const updateNotes = e => {
@@ -121,6 +126,9 @@ const Director = (props) => {
 
     return (
         <div className="Container">
+            { grayout && (
+                <div className="Grayout"></div>
+            )}
             <div className="Header">
                 <Link to={ "/dashboard" } >back to dashboard</Link>
                 <form className="SearchBar">
@@ -134,13 +142,13 @@ const Director = (props) => {
             <div className="DirectorProfile">
                 { movieDirectedFormOpen && (
                     <div className="DirectedByForm">
-                        <ReviewForm location="movieDirected" director={director} toggleForm={toggleMovieDirectedForm} />
+                        <ReviewForm location="movieDirected" director={director} moviesDirected={moviesDirected} setMoviesDirected={setMoviesDirected} toggleForm={toggleMovieDirectedForm} />
                     </div>
                 )}
                 { favoriteMovieFormOpen && (
-                <div className="FavoriteMovieForm">
-                    <ReviewForm location="addFavorite" director={director} toggleForm={toggleFavoriteMovieForm} />
-                </div>
+                    <div className="FavoriteMovieForm">
+                        <ReviewForm location="favoriteMovies" director={director} favoriteMovies={favoriteMovies} setFavoriteMovies={setFavoriteMovies} toggleForm={toggleFavoriteMovieForm} />
+                    </div>
                 )}
                 <img src={director.image_url} height="200px" alt="" />
                 <div className="ProfileContent">
@@ -173,12 +181,10 @@ const Director = (props) => {
                                     <button className="CancelButton" onClick={ toggleEditFormExpanded }>cancel</button>
                                 </form>
                             )}
-
                         <div className={notesExpanded ? "NotesExpanded" : "NotesCollapsed"}>
                             <div className="CollapsedParagraph">
-                                <p>{ previewNotes() } <img onClick={ toggleNotesExpanded } src={expandIcon} alt="expand icon"/></p>
+                                <p>{ previewNotes() } <img className="ExpandIcon" onClick={ toggleEditFormExpanded } src={expandIcon} alt="expand icon"/></p>
                             </div>
-                            <button onClick={ toggleEditFormExpanded }>edit</button>
                         </div>
                     </div>
                     <div className="DirectorLinks">
@@ -194,17 +200,16 @@ const Director = (props) => {
                         <button onClick={ toggleLinkFormExpanded }>Add Link</button>
                         { linkFormExpanded && (
                             <form className={"LinkForm" } onSubmit={ addLink }>
-                            <label htmlFor="text">Text</label>
-                            <input name="text" value={newLinkText} onChange={ (e) => setNewLinkText(e.target.value) } />
-                            <br />
-                            <label htmlFor="url">URL</label>
-                            <input name="url" value={newLinkURL} onChange={ (e) => setNewLinkURL(e.target.value) } />
-                            <br />
-                            <input type="submit" value="Add Link" />
-                            <button className="CancelButton" onClick={toggleLinkFormExpanded}>cancel</button>
-                        </form>
+                                <label htmlFor="text">Text</label>
+                                <input name="text" value={newLinkText} onChange={ (e) => setNewLinkText(e.target.value) } />
+                                <br />
+                                <label htmlFor="url">URL</label>
+                                <input name="url" value={newLinkURL} onChange={ (e) => setNewLinkURL(e.target.value) } />
+                                <br />
+                                <input type="submit" value="Add Link" />
+                                <button className="CancelButton" onClick={toggleLinkFormExpanded}>cancel</button>
+                            </form>
                         )}
-
                     </div>
                 </div>
                 <div className="DirectorDisplayContainer">

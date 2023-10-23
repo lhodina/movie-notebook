@@ -14,7 +14,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route element={ <Dashboard /> } path="/dashboard" />
-          <Route element={ <ReviewForm location="addReview" /> } path="/reviews/add" />
+          <Route element={ <ReviewForm location="newReview" /> } path="/reviews/add" />
           <Route element={ <Review /> } path="/reviews/:id" />
           <Route element={ <UpdateReview /> } path="/reviews/:id/update" />
           <Route element={ <Director /> } path="/directors/:id" />

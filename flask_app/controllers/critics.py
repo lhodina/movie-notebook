@@ -59,7 +59,7 @@ def delete_critic(critic_id):
 
 
 @app.route("/critics/<int:critic_id>/add_favorite", methods=["POST"])
-def add_favorite_movie(critic_id):
+def add_critic_favorite_movie(critic_id):
     data = {
         "movie_id": request.json["movie_id"],
         "critic_id": critic_id
