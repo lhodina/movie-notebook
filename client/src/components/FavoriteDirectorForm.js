@@ -4,17 +4,14 @@ import { useNavigate, Link } from "react-router-dom";
 
 const FavoriteDirectorForm = (props) => {
     const [ name, setName ] = useState("");
-    const [imageUrl, setImageUrl] = useState("");
     const [errors, setErrors] = useState([]);
-
 
     const navigate = useNavigate();
 
     const onSubmitHandler = e => {
         e.preventDefault();
-        axios.post("http://localhost:5000/", {
-            name,
-            imageUrl
+        axios.post("http://localhost:5000/favorite_directors", {
+            name
         })
             .then( res => {
                 navigate("/dashboard");
@@ -45,6 +42,7 @@ const FavoriteDirectorForm = (props) => {
                     <br />
                     <input className="form-input" type="text" onChange = { (e) => setName(e.target.value) } />
                 </div>
+                <input type="submit" value="Submit" />
             </form>
         </div>
     )

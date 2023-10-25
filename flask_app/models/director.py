@@ -65,7 +65,7 @@ class Director:
     def find_by_name(cls, data):
         query = """
         SELECT * FROM directors
-        WHERE directors.name = %(name)s;
+        WHERE name = %(name)s;
         """
         return connectToMySQL(cls.DB).query_db(query, data)
 

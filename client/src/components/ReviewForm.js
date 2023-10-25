@@ -32,12 +32,16 @@ const ReviewForm = (props) => {
 
     const onSubmitHandler = e => {
         e.preventDefault();
+        let director_id;
+        if (director) {
+            director_id = director.id
+        }
         axios.post("http://localhost:5000/reviews", {
             title,
             rating,
             watched,
             notes,
-            director_id: director.id,
+            director_id,
             location
         })
             .then( res => {

@@ -76,6 +76,13 @@ class Review:
 
         return current_review
 
+    @classmethod
+    def get_by_movie_id(cls, data):
+        query = """
+        SELECT * FROM reviews
+        WHERE movie_id = %(movie_id)s AND user_id = %(user_id)s;
+        """
+        return connectToMySQL(cls.DB).query_db(query, data)
 
     @classmethod
     def update(cls, data):

@@ -8,11 +8,12 @@ from flask_app.models import review, movie_link, director, movie
 @app.route("/reviews", methods=["POST"])
 def add_review():
     # REPLACE HARDCODED user_id
+    user_id = 1
     review_data = {
         "rating": request.json['rating'],
         "notes": request.json['notes'],
         "watched": request.json['watched'],
-        "user_id": 1
+        "user_id": user_id
     }
 
     movie_data = {
@@ -74,7 +75,13 @@ def add_review():
     else:
         movie_id = movie_exists[0]['id']
     review_data["movie_id"] = movie_id
-    review.Review.save(review_data)
+    review_exists = review.Review.get_by_movie_id({"movie_id": movie_id, "user_id": user_id})
+    # print("review_exists: ", review_exists)
+    if not review_exists:
+        review.Review.save(review_data)
+        print("new review created")
+    else:
+        print("no review created")
 
     location = request.json["location"]
     if (location == "favoriteMovies"):
