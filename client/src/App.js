@@ -6,7 +6,9 @@ import ReviewForm from './components/ReviewForm';
 import Review from './components/Review';
 import UpdateReview from './components/UpdateReview';
 import Director from './components/Director';
+import Critic from './components/Critic';
 import FavoriteDirectorForm from './components/FavoriteDirectorForm';
+import FavoriteCriticForm from './components/FavoriteCriticForm';
 
 function App() {
   return (
@@ -18,7 +20,10 @@ function App() {
           <Route element={ <Review /> } path="/reviews/:id" />
           <Route element={ <UpdateReview /> } path="/reviews/:id/update" />
           <Route element={ <Director /> } path="/directors/:id" />
+          <Route element={ <Critic /> } path="/critics/:id" />
           <Route element={ <FavoriteDirectorForm /> } path="/favorite_directors/add" />
+          <Route element={ <FavoriteCriticForm /> } path="/favorite_critics/add" />
+
         </Routes>
       </BrowserRouter>
     </div>

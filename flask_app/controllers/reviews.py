@@ -2,7 +2,7 @@ import requests
 from flask import redirect, request
 
 from flask_app import app
-from flask_app.models import review, movie_link, director, movie
+from flask_app.models import review, movie_link, director, critic, movie
 
 
 @app.route("/reviews", methods=["POST"])
@@ -35,7 +35,7 @@ def add_review():
             "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZTIxNjdiZTgwYzYxYjZhMzVkNjhiMjY2NmE0YWUzMyIsInN1YiI6IjYzMmRkMzZkNTU5MzdiMDA3YzA5MTZlMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qlMgNrzDMM2eqPUGxDRpWsACr9o-xb94MKMpdta7K7c"
         }
         response = requests.get(movie_url, headers=headers).json()
-        # print("API RESPONSE: ", response)
+        # ("API RESPONSE: ", response)
         if len(response["results"]) < 1:
             print("Need to handle error if there's no return data")
             return redirect("/reviews/add")
@@ -79,17 +79,32 @@ def add_review():
     # print("review_exists: ", review_exists)
     if not review_exists:
         review.Review.save(review_data)
-        print("new review created")
-    else:
-        print("no review created")
+    #     print("new review created")
+    # else:
+    #     print("no review created")
 
     location = request.json["location"]
-    if (location == "favoriteMovies"):
+    director_id = 0
+    critic_id = 0
+
+    if ("director_id" in request.json):
+        director_id = request.json["director_id"]
+
+    if ("critic_id" in request.json):
+        critic_id = request.json["critic_id"]
+
+    if (director_id != 0 and location == "favoriteMovies"):
         data = {
-            "director_id": request.json["director_id"],
+            "director_id": director_id,
             "movie_id": movie_id
         }
-        saved_favorite = director.Director.add_favorite(data)
+        director.Director.add_favorite(data)
+    elif (critic_id != 0 and location == "favoriteMovies"):
+        data = {
+            "critic_id": critic_id,
+            "movie_id": movie_id
+        }
+        critic.Critic.add_favorite(data)
     res = {**review_data, ** movie_data}
     return res
 

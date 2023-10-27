@@ -121,7 +121,7 @@ const Dashboard = () => {
                 reviews.map( (review, index) => {
                     return (
                         <div className="CoreMovie" key={index}>
-                            <img src={review.image_url} alt="" height="200px"/>
+                            <Link to={ "/reviews/" + review.id }><img src={review.image_url} alt="" height="200px"/></Link>
                             <div className="CoreMovieBody">
                                 <Link to={ "/reviews/" + review.id }><h5>{ review.title }</h5></Link>
                                 <div className="LikedBy">

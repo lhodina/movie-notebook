@@ -120,16 +120,16 @@ h1, h2, h3, .btn {
   list-style-type: none;
 }
 
-.DirectorMain {
+.DirectorMain, .CriticMain {
   display: flex;
   justify-content: space-between;
 }
 
-.DirectorDisplayContainer {
+.DirectorDisplayContainer, .CriticDisplayContainer {
   width: 100%;
 }
 
-.DisplayDirectorMovies {
+.DisplayDirectorMovies, .DisplayCriticMovies {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
@@ -231,13 +231,10 @@ ul {
   background-color: white;
   height: 500px;
   width: 400px;
-  /* margin: auto;
-  top: 10%; */
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 2;
   z-index: 2;
 }
 

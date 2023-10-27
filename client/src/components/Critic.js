@@ -4,23 +4,19 @@ import { Link, useParams } from "react-router-dom";
 import expandIcon from "../assets/expand-icon-small.png";
 import ReviewForm from './ReviewForm';
 
-const Director = (props) => {
+const Critic = (props) => {
     const [userFirstName, setUserFirstName] = useState("");
     const [userLastName, setUserLastName] = useState("");
-    const [currentDirector, setCurrentDirector] = useState({});
-    const [moviesDirected, setMoviesDirected] = useState([]);
+    const [currentCritic, setCurrentCritic] = useState({});
     const [favoriteMovies, setFavoriteMovies] = useState([]);
     const [notes, setNotes] = useState("");
     const [editNotes, setEditNotes] = useState("");
-    const [favoritesOpen, setFavoritesOpen] = useState(true);
-    const [directedByOpen, setDirectedByOpen] = useState(false);
     const [notesExpanded, setNotesExpanded] = useState(false);
     const [editFormExpanded, setEditFormExpanded] = useState(false);
     const [userLinks, setUserLinks] = useState([]);
     const [linkFormExpanded, setLinkFormExpanded] = useState(false);
     const [newLinkText, setNewLinkText] = useState("");
     const [newLinkURL, setNewLinkURL] = useState("");
-    const [movieDirectedFormOpen, setMovieDirectedFormOpen] = useState(false);
     const [favoriteMovieFormOpen, setFavoriteMovieFormOpen] = useState(false);
     const [grayout, setGrayout] = useState(false);
 
@@ -39,12 +35,11 @@ const Director = (props) => {
     }
 
     useEffect( () => {
-        axios.get("http://localhost:5000/directors/" + id)
+        axios.get("http://localhost:5000/critics/" + id)
             .then( (res) => {
                 setUserFirstName(res.data.user_first_name);
                 setUserLastName(res.data.user_last_name);
-                setCurrentDirector(res.data);
-                setMoviesDirected(res.data.movies_directed);
+                setCurrentCritic(res.data);
                 setFavoriteMovies(res.data.favorite_movies);
                 setNotes(res.data.notes);
                 setEditNotes(res.data.notes);
@@ -54,17 +49,6 @@ const Director = (props) => {
                 console.log(err);
             })
     }, [])
-
-    const showFavorites = () => {
-        setFavoritesOpen(true);
-        setDirectedByOpen(false);
-
-    }
-
-    const showDirectedBy = () => {
-        setDirectedByOpen(true);
-        setFavoritesOpen(false);
-    }
 
     const toggleEditFormExpanded = () => {
         setEditFormExpanded(!editFormExpanded);
@@ -77,11 +61,6 @@ const Director = (props) => {
         toggleGrayout();
     }
 
-    const toggleMovieDirectedForm = () => {
-        setMovieDirectedFormOpen(!movieDirectedFormOpen);
-        toggleGrayout();
-    }
-
     const toggleFavoriteMovieForm = () => {
         setFavoriteMovieFormOpen(!favoriteMovieFormOpen);
         toggleGrayout();
@@ -91,11 +70,11 @@ const Director = (props) => {
         setGrayout(!grayout);
     }
 
-    const updateNotes = e => {
+    const updateCriticNotes = e => {
         e.preventDefault();
         toggleEditFormExpanded();
         setNotes(editNotes);
-        axios.post('http://localhost:5000/favorite_directors/' + id + '/update', { "notes": editNotes })
+        axios.post('http://localhost:5000/favorite_critics/' + id + '/update', { "notes": editNotes })
         .then(res => {
             console.log(res);
         })
@@ -103,19 +82,19 @@ const Director = (props) => {
     }
 
     // Replace hardcoded user id
-    const addLink = e => {
+    const addCriticLink = e => {
         e.preventDefault();
-        axios.post('http://localhost:5000/directors/' + id + '/links', {
+        axios.post('http://localhost:5000/critics/' + id + '/links', {
             "text": newLinkText,
             "url": newLinkURL,
             "user_id": 1,
-            "director_id": id
+            "critic_id": id
         }).then((res) => {
             setUserLinks([...userLinks, {
                 "text": newLinkText,
                 "url": newLinkURL,
                 "user_id": 1,
-                "director_id": id
+                "critic_id": id
             }])
         })
 
@@ -139,42 +118,27 @@ const Director = (props) => {
                     <Link to={ "/logout" }>log out</Link>
                 </div>
             </div>
-            <div className="DirectorProfile">
-                { movieDirectedFormOpen && (
-                    <div className="DirectedByForm">
-                        <ReviewForm location="movieDirected" currentDirector={currentDirector} moviesDirected={moviesDirected} setMoviesDirected={setMoviesDirected} toggleForm={toggleMovieDirectedForm} />
-                    </div>
-                )}
+            <div className="CriticProfile">
                 { favoriteMovieFormOpen && (
                     <div className="FavoriteMovieForm">
-                        <ReviewForm location="favoriteMovies" currentDirector={currentDirector} favoriteMovies={favoriteMovies} setFavoriteMovies={setFavoriteMovies} toggleForm={toggleFavoriteMovieForm} />
+                        <ReviewForm location="favoriteMovies" currentCritic={currentCritic} favoriteMovies={favoriteMovies} setFavoriteMovies={setFavoriteMovies} toggleForm={toggleFavoriteMovieForm} />
                     </div>
                 )}
-                <img src={currentDirector.image_url} height="200px" alt="" />
+
+                <img src={currentCritic.image_url} height="200px" alt="" />
                 <div className="ProfileContent">
-                    <h1>{ currentDirector.name }</h1>
-                    <div className="btn-group" role="group">
-                        <button type="button" className={ favoritesOpen ? "active btn btn-outline-danger" : "btn btn-outline-danger"} onClick={ showFavorites }>{currentDirector.name}'s Favorite Movies</button>
-                        <button type="button" className={ directedByOpen ? "active btn btn-outline-danger" : "btn btn-outline-danger"} onClick={ showDirectedBy }>Movies Directed by {currentDirector.name}</button>
-                    </div>
-                { directedByOpen && (
-                    <div>
-                        <button type="button" className="AddDirectedButton" onClick={toggleMovieDirectedForm}>Add Movie</button>
-                    </div>
-                )}
-                { favoritesOpen && (
+                    <h1>{ currentCritic.name }</h1>
                     <div>
                         <button type="button" className="AddFavoriteButton" onClick={toggleFavoriteMovieForm}>Add Favorite</button>
                     </div>
-                )}
                 </div>
             </div>
-            <div className="DirectorMain">
+            <div className="CriticMain">
                 <div className="UserContent">
-                    <div className="DirectorNotes">
+                    <div className="CriticNotes">
                         <h3>My Notes</h3>
                             { editFormExpanded && (
-                                <form onSubmit={ updateNotes } className="UpdateNotesForm">
+                                <form onSubmit={ updateCriticNotes } className="UpdateNotesForm">
                                     <textarea value={editNotes} onChange={ (e) => { setEditNotes(e.target.value)} } />
                                     <br />
                                     <input type="submit" value="Save" />
@@ -187,7 +151,7 @@ const Director = (props) => {
                             </div>
                         </div>
                     </div>
-                    <div className="DirectorLinks">
+                    <div className="CriticLinks">
                         <h3>Articles + Videos</h3>
                         <ul>
                             { userLinks.map( (link, index) => {
@@ -199,7 +163,7 @@ const Director = (props) => {
                         </ul>
                         <button onClick={ toggleLinkFormExpanded }>Add Link</button>
                         { linkFormExpanded && (
-                            <form className={"LinkForm" } onSubmit={ addLink }>
+                            <form className={"LinkForm" } onSubmit={ addCriticLink }>
                                 <label htmlFor="text">Text</label>
                                 <input name="text" value={newLinkText} onChange={ (e) => setNewLinkText(e.target.value) } />
                                 <br />
@@ -212,29 +176,8 @@ const Director = (props) => {
                         )}
                     </div>
                 </div>
-                <div className="DirectorDisplayContainer">
-                    { directedByOpen && (
-                        <div className="DisplayDirectorMovies">
-                            {
-                                moviesDirected.map( (movie, index) => {
-                                    return (
-                                        <div className="CoreMovie" key={index}>
-                                            <img src={movie.image_url} alt="" height="200px"/>
-                                            <div className="CoreMovieBody">
-                                                <Link><h5>{ movie.title }</h5></Link>
-                                                <div className="LikedBy">
-                                                    <h6>Liked By:</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-                    )}
-
-                    { favoritesOpen && (
-                        <div className="DisplayDirectorMovies">
+                <div className="CriticDisplayContainer">
+                    <div className="DisplayCriticMovies">
                         {
                             favoriteMovies.map( (movie, index) => {
                                 return (
@@ -250,12 +193,11 @@ const Director = (props) => {
                                 )
                             })
                         }
-                        </div>
-                    )}
+                    </div>
                 </div>
             </div>
         </div>
     )
 }
 
-export default Director
+export default Critic

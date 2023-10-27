@@ -67,6 +67,15 @@ class Critic:
 
 
     @classmethod
+    def find_by_name(cls, data):
+        query = """
+        SELECT * FROM critics
+        WHERE name = %(name)s;
+        """
+        return connectToMySQL(cls.DB).query_db(query, data)
+
+
+    @classmethod
     def update(cls, data):
         query = """
         UPDATE critics
@@ -94,9 +103,48 @@ class Critic:
 
 
     @classmethod
+    def get_favorites(cls, data):
+        query = """
+        SELECT * FROM movies
+        JOIN critic_favorite_movies ON critic_favorite_movies.movie_id = movies.id
+        JOIN directors ON directors.id = movies.directed_by_id
+        WHERE critic_favorite_movies.critic_id = %(id)s;
+        """
+        result = connectToMySQL(cls.DB).query_db(query, data)
+        favs = []
+        for item in result:
+            fav = {
+                "id": item["id"],
+                "title": item["title"],
+                "image_url": item["image_url"],
+                "year": item["year"],
+                "directed_by_id": item["directed_by_id"],
+                "director_name": item["name"]
+            }
+            favs.append(fav)
+
+        return favs
+
+
+    @classmethod
     def remove_favorite(cls, data):
         query = """
         DELETE FROM critic_favorite_movies
         WHERE movie_id = %(movie_id)s AND critic_id = %(critic_id)s;
+        """
+        return connectToMySQL(cls.DB).query_db(query, data)
+
+    @classmethod
+    def get_links(cls, data):
+        query = """
+        SELECT * FROM critic_links WHERE critic_id = %(id)s;
+        """
+        return connectToMySQL(cls.DB).query_db(query, data)
+
+    @classmethod
+    def add_link(cls, data):
+        query = """
+        INSERT INTO critic_links(user_id, critic_id, text, url)
+        VALUES(%(user_id)s, %(critic_id)s, %(text)s, %(url)s);
         """
         return connectToMySQL(cls.DB).query_db(query, data)

@@ -20,7 +20,7 @@ const colors = {
   }
 
 const ReviewForm = (props) => {
-    const { location, director, toggleForm, moviesDirected, setMoviesDirected, favoriteMovies, setFavoriteMovies } = props;
+    const { location, currentDirector, currentCritic, toggleForm, moviesDirected, setMoviesDirected, favoriteMovies, setFavoriteMovies } = props;
     const [ title, setTitle ] = useState("");
     const [ rating, setRating ] = useState(0);
     const [ watched, setWatched ] = useState("");
@@ -33,15 +33,23 @@ const ReviewForm = (props) => {
     const onSubmitHandler = e => {
         e.preventDefault();
         let director_id;
-        if (director) {
-            director_id = director.id
+        let critic_id;
+        if (currentDirector) {
+            director_id = currentDirector.id;
         }
+        if (currentCritic) {
+            critic_id = currentCritic.id;
+        }
+        console.log("director_id in the onSubmitHandler: ", director_id);
+        console.log("critic_id in the onSubmitHandler: ", critic_id);
+
         axios.post("http://localhost:5000/reviews", {
             title,
             rating,
             watched,
             notes,
             director_id,
+            critic_id,
             location
         })
             .then( res => {
@@ -54,7 +62,7 @@ const ReviewForm = (props) => {
                     setFavoriteMovies([...favoriteMovies, res.data]);
                     toggleForm();
                 }
-            })
+        })
             .catch( err => {
                 const errorResponse = err.response.data.errors;
 
@@ -84,11 +92,7 @@ const ReviewForm = (props) => {
     return (
         <div>
             <div className="header">
-
-                { location === "movieDirected" && <h2>Add movie directed by {director.name}</h2>}
-
-                { location === "favoriteMovies" && <h2>Add a favorite movie of {director.name}'s</h2>
-                }
+                <h2>Add Movie</h2>
                 { location === "newReview" && (
                     <>
                         <h1>Review a movie</h1>
@@ -145,7 +149,6 @@ const ReviewForm = (props) => {
                 {location !== "addReview" && (
                     <button type="button" onClick={toggleForm}>cancel</button>
                 )}
-
             </form>
         </div>
     )

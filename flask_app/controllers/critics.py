@@ -1,7 +1,7 @@
 from flask import redirect, request
 
 from flask_app import app
-from flask_app.models import critic
+from flask_app.models import user, critic, favorite_critic
 
 @app.route("/critics", methods=["POST"])
 def add_critic():
@@ -32,10 +32,20 @@ def get_critic(critic_id):
 
     current_critic = critic.Critic.get_one(data)
 
+    favorites = critic.Critic.get_favorites(data)
+    current_user = user.User.get_one({"id": 1})
+    favorite = favorite_critic.FavoriteCritic.get_one(data)
+    links = critic.Critic.get_links(data)
+
     return {
+        "id": current_critic.id,
         "name": current_critic.name,
         "image_url": current_critic.image_url,
-        "favorite_movies": current_critic.favorite_movies
+        "favorite_movies": favorites,
+        "user_first_name": current_user.first_name,
+        "user_last_name": current_user.last_name,
+        "notes": favorite["notes"],
+        "links": links
     }
 
 
@@ -78,3 +88,16 @@ def remove_favorite_movie(critic_id):
 
     critic.Critic.remove_favorite(data)
     return redirect("/dashboard")
+
+
+@app.route("/critics/<int:critic_id>/links", methods=["POST"])
+def add_critic_link(critic_id):
+    data = {
+        "user_id": request.json["user_id"],
+        "critic_id": critic_id,
+        "text": request.json["text"],
+        "url": request.json["url"]
+    }
+
+    critic.Critic.add_link(data)
+    return redirect(f"/critics/{critic_id}")
