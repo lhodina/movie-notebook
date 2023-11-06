@@ -123,6 +123,8 @@ def get_review(review_id):
     }
     movie_links = movie_link.MovieLink.get_all(link_data)
 
+    likes_count = len(current_review.critic_fans) + len(current_review.director_fans)
+
     return {
         "rating": current_review.rating,
         "notes": current_review.notes,
@@ -136,7 +138,8 @@ def get_review(review_id):
         "director_name": current_review.movie.director.name,
         "movie_links": movie_links,
         "critic_fans": current_review.critic_fans,
-        "director_fans": current_review.director_fans
+        "director_fans": current_review.director_fans,
+        "likes_count": likes_count
     }
 
 

@@ -241,3 +241,21 @@ ul {
 .ExpandIcon:hover {
   cursor: pointer;
 }
+
+.ReviewContent {
+  display: flex;
+  justify-content: center;
+}
+
+.ReviewContent img {
+  margin: 10px;
+}
+
+.ReviewDetails {
+  text-align: left;
+  margin: 10px;
+}
+
+.Rating {
+  margin-right: 10px;
+}

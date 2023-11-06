@@ -46,7 +46,7 @@ const UpdateReview = (props) => {
             notes,
             movieId
         })
-        .then( res => navigate("/dashboard"))
+        .then( res => navigate("/reviews/" + id))
         .catch( err => console.log(err))
     }
 
@@ -83,43 +83,46 @@ const UpdateReview = (props) => {
 
     return (
         <div>
-            <Link to={ "/dashboard" } >back to dashboard</Link>
-            <form onSubmit={ updateReview }>
-                {errors.map((err, index) => (
-                    <p className="error-message" key="{index}">{err}</p>
-                ))}
-                <p>
-                    <label>Rating</label>
-                    <br />
-                    <div style={styles.stars}>
-                        {stars.map((_, index) => {
-                            return (
-                                <FaStar key={index} size={14} style={{
-                                    marginRight: 10,
-                                    cursor: "pointer"
-                                }}
-                                color={ (hoverValue || rating) > index ? colors.yellow : colors.grey }
-                                onClick={ () => handleClick(index + 1) }
-                                onMouseOver={ () => handleMouseOver(index + 1)}
-                                onMouseLeave={handleMouseLeave}
-                                />
-                            )
-                        })}
-                    </div>
-                </p>
-                <p>
-                    <label>Watched Status</label>
-                    <br />
-                    <>{ checkWatched() }</>
-                </p>
-                <p>
-                    <label>Notes</label>
-                    <br />
-                    <textarea onChange = { (e) => setNotes(e.target.value) } defaultValue={notes}></textarea>
-                </p>
-                <input type="submit" value="Save" />
-            </form>
+            <div>
+                <Link to={ "/dashboard" } >back to dashboard</Link>
+                <form onSubmit={ updateReview }>
+                    {errors.map((err, index) => (
+                        <p className="error-message" key="{index}">{err}</p>
+                    ))}
+                    <p>
+                        <label>Rating</label>
+                        <br />
+                        <div style={styles.stars}>
+                            {stars.map((_, index) => {
+                                return (
+                                    <FaStar key={index} size={14} style={{
+                                        marginRight: 10,
+                                        cursor: "pointer"
+                                    }}
+                                    color={ (hoverValue || rating) > index ? colors.yellow : colors.grey }
+                                    onClick={ () => handleClick(index + 1) }
+                                    onMouseOver={ () => handleMouseOver(index + 1)}
+                                    onMouseLeave={handleMouseLeave}
+                                    />
+                                )
+                            })}
+                        </div>
+                    </p>
+                    <p>
+                        <label>Watched Status</label>
+                        <br />
+                        <>{ checkWatched() }</>
+                    </p>
+                    <p>
+                        <label>Notes</label>
+                        <br />
+                        <textarea onChange = { (e) => setNotes(e.target.value) } defaultValue={notes}></textarea>
+                    </p>
+                    <input type="submit" value="Save" />
+                </form>
+            </div>
         </div>
+
     )
 }
 

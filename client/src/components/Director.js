@@ -5,8 +5,7 @@ import expandIcon from "../assets/expand-icon-small.png";
 import ReviewForm from './ReviewForm';
 
 const Director = (props) => {
-    const [userFirstName, setUserFirstName] = useState("");
-    const [userLastName, setUserLastName] = useState("");
+    const { user } = props;
     const [currentDirector, setCurrentDirector] = useState({});
     const [moviesDirected, setMoviesDirected] = useState([]);
     const [favoriteMovies, setFavoriteMovies] = useState([]);
@@ -41,8 +40,6 @@ const Director = (props) => {
     useEffect( () => {
         axios.get("http://localhost:5000/directors/" + id)
             .then( (res) => {
-                setUserFirstName(res.data.user_first_name);
-                setUserLastName(res.data.user_last_name);
                 setCurrentDirector(res.data);
                 setMoviesDirected(res.data.movies_directed);
                 setFavoriteMovies(res.data.favorite_movies);
@@ -108,13 +105,13 @@ const Director = (props) => {
         axios.post('http://localhost:5000/directors/' + id + '/links', {
             "text": newLinkText,
             "url": newLinkURL,
-            "user_id": 1,
+            "user_id": user.id,
             "director_id": id
         }).then((res) => {
             setUserLinks([...userLinks, {
                 "text": newLinkText,
                 "url": newLinkURL,
-                "user_id": 1,
+                "user_id": user.id,
                 "director_id": id
             }])
         })
@@ -135,7 +132,7 @@ const Director = (props) => {
                     <input className="SearchInput" type="text" value="search movies and people"></input>
                 </form>
                 <div className="NavUser">
-                    <h5>{userFirstName} {userLastName[0]}.</h5>
+                    <h5>{user.first_name} {user.last_name[0]}.</h5>
                     <Link to={ "/logout" }>log out</Link>
                 </div>
             </div>

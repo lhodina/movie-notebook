@@ -5,8 +5,7 @@ import expandIcon from "../assets/expand-icon-small.png";
 import ReviewForm from './ReviewForm';
 
 const Critic = (props) => {
-    const [userFirstName, setUserFirstName] = useState("");
-    const [userLastName, setUserLastName] = useState("");
+    const { user } = props;
     const [currentCritic, setCurrentCritic] = useState({});
     const [favoriteMovies, setFavoriteMovies] = useState([]);
     const [notes, setNotes] = useState("");
@@ -37,8 +36,6 @@ const Critic = (props) => {
     useEffect( () => {
         axios.get("http://localhost:5000/critics/" + id)
             .then( (res) => {
-                setUserFirstName(res.data.user_first_name);
-                setUserLastName(res.data.user_last_name);
                 setCurrentCritic(res.data);
                 setFavoriteMovies(res.data.favorite_movies);
                 setNotes(res.data.notes);
@@ -81,19 +78,18 @@ const Critic = (props) => {
         .catch(err => console.log(err))
     }
 
-    // Replace hardcoded user id
     const addCriticLink = e => {
         e.preventDefault();
         axios.post('http://localhost:5000/critics/' + id + '/links', {
             "text": newLinkText,
             "url": newLinkURL,
-            "user_id": 1,
+            "user_id": user.id,
             "critic_id": id
         }).then((res) => {
             setUserLinks([...userLinks, {
                 "text": newLinkText,
                 "url": newLinkURL,
-                "user_id": 1,
+                "user_id": user.id,
                 "critic_id": id
             }])
         })
@@ -114,7 +110,7 @@ const Critic = (props) => {
                     <input className="SearchInput" type="text" value="search movies and people"></input>
                 </form>
                 <div className="NavUser">
-                    <h5>{userFirstName} {userLastName[0]}.</h5>
+                    <h5>{user.first_name} {user.last_name[0]}.</h5>
                     <Link to={ "/logout" }>log out</Link>
                 </div>
             </div>

@@ -3,8 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../App.css';
 
-const Dashboard = () => {
-    const [user, setUser] = useState("");
+const Dashboard = (props) => {
+    const { user } = props;
     const [favoriteDirectors, setFavoriteDirectors] = useState([]);
     const [favoriteCritics, setFavoriteCritics] = useState([]);
     const [collections, setCollections] = useState([]);
@@ -49,7 +49,6 @@ const Dashboard = () => {
     useEffect(() => {
         axios.get("http://localhost:5000/dashboard")
             .then(res => {
-                setUser(res.data);
                 setFavoriteDirectors(res.data.favorite_directors);
                 setFavoriteCritics(res.data.favorite_critics);
                 setCollections(res.data.collections);

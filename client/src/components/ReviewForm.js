@@ -106,7 +106,6 @@ const ReviewForm = (props) => {
                 {errors.map((err, index) => (
                     <p className="error-message" key={index}>{err}</p>
                 ))}
-
                 <p>
                     <label>Title</label>
                     <br />

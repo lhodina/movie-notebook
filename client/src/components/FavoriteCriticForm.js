@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 
 const FavoriteCriticForm = (props) => {
+    const { user } = props;
     const [ name, setName ] = useState("");
     const [errors, setErrors] = useState([]);
 
@@ -29,9 +30,15 @@ const FavoriteCriticForm = (props) => {
 
     return (
         <div>
-            <div className="header">
-                <h1>Add Favorite Critic</h1>
+            <div className="Header">
                 <Link to={ "/dashboard" } >back to dashboard</Link>
+                <form className="SearchBar">
+                    <input className="SearchInput" type="text" value="search movies and people"></input>
+                </form>
+                <div className="NavUser">
+                    <h5>{user.first_name} {user.last_name[0]}.</h5>
+                    <Link to={ "/logout" }>log out</Link>
+                </div>
             </div>
             <form onSubmit={ onSubmitHandler }>
                 {errors.map((err, index) => (

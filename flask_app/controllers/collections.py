@@ -3,11 +3,15 @@ from flask import redirect, request
 from flask_app import app
 from flask_app.models import collection
 
+
+
 @app.route("/collections", methods=["POST"])
 def add_collection():
+    # Replace hardcoded user id
+    user_id = 1
     data = {
         "name": request.json["name"],
-        "user_id": request.json["user_id"]
+        "user_id": user_id
     }
 
     collection.Collection.save(data)
