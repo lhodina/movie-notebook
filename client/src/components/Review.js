@@ -20,8 +20,7 @@ const colors = {
     if (review.likes_count < 1) {
         return <div>
             <p>No likes yet </p>
-            <Link to="/movies/{review.movieId}/fans/add">Add a fan</Link>
-            </div>
+        </div>
     }
 }
 
@@ -60,7 +59,7 @@ const Review = (props) => {
             </div>
 
             <div className="ReviewContent">
-                <img src={review.image_url} height="500px" alt="" />
+                <img src={review.image_url} height="470px" alt="" />
                 <div className="ReviewDetails">
                     <h1>{review.title}</h1>
                     <p>Directed by <Link to={'/directors/' + review.directed_by_id} >{ review.director_name}</Link></p>
@@ -91,6 +90,7 @@ const Review = (props) => {
                     )) }
                     </ul>
                     { placeholder(review) }
+                    <Link to={`/movies/${review.movie_id}/add_fan`}>Add a fan</Link>
                 </div>
             </div>
         </div>

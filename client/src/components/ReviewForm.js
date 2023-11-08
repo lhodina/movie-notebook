@@ -20,7 +20,7 @@ const colors = {
   }
 
 const ReviewForm = (props) => {
-    const { location, currentDirector, currentCritic, toggleForm, moviesDirected, setMoviesDirected, favoriteMovies, setFavoriteMovies } = props;
+    const { user, location, currentDirector, currentCritic, toggleForm, moviesDirected, setMoviesDirected, favoriteMovies, setFavoriteMovies } = props;
     const [ title, setTitle ] = useState("");
     const [ rating, setRating ] = useState(0);
     const [ watched, setWatched ] = useState("");
@@ -40,8 +40,6 @@ const ReviewForm = (props) => {
         if (currentCritic) {
             critic_id = currentCritic.id;
         }
-        console.log("director_id in the onSubmitHandler: ", director_id);
-        console.log("critic_id in the onSubmitHandler: ", critic_id);
 
         axios.post("http://localhost:5000/reviews", {
             title,
@@ -90,19 +88,18 @@ const ReviewForm = (props) => {
     }
 
     return (
-        <div>
-            <div className="header">
-                <h2>Add Movie</h2>
-                { location === "newReview" && (
-                    <>
-                        <h1>Review a movie</h1>
-                        <Link to={ "/dashboard" } >back to dashboard</Link>
-                    </>
-
-                )}
-
+        <div className="Container">
+            <div className="Header">
+                <Link to={ "/dashboard" } >back to dashboard</Link>
+                <form className="SearchBar">
+                    <input className="SearchInput" type="text" value="search movies and people"></input>
+                </form>
+                <div className="NavUser">
+                    <h5>{user.first_name} {user.last_name[0]}.</h5>
+                    <Link to={ "/logout" }>log out</Link>
+                </div>
             </div>
-            <form onSubmit={ onSubmitHandler }>
+            <form onSubmit={ onSubmitHandler } className="AddReviewForm">
                 {errors.map((err, index) => (
                     <p className="error-message" key={index}>{err}</p>
                 ))}
@@ -145,9 +142,8 @@ const ReviewForm = (props) => {
                     <textarea className="form-input" type="text" onChange = { (e) => setNotes(e.target.value) } />
                 </p>
                 <input type="submit" value="Save" />
-                {location !== "addReview" && (
-                    <button type="button" onClick={toggleForm}>cancel</button>
-                )}
+                { location !== "newReview" ? <button type="button" onClick={toggleForm}>cancel</button> : <Link to={"/dashboard"}>cancel</Link>}
+
             </form>
         </div>
     )

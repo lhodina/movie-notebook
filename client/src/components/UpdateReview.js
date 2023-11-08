@@ -17,6 +17,7 @@ const colors = {
   }
 
 const UpdateReview = (props) => {
+    const { user } = props;
     const { id } = useParams();
     const [ rating, setRating ] = useState(0);
     const [ watched, setWatched ] = useState(0);
@@ -82,47 +83,55 @@ const UpdateReview = (props) => {
     }
 
     return (
-        <div>
-            <div>
+        <div className="Container">
+            <div className="Header">
                 <Link to={ "/dashboard" } >back to dashboard</Link>
-                <form onSubmit={ updateReview }>
-                    {errors.map((err, index) => (
-                        <p className="error-message" key="{index}">{err}</p>
-                    ))}
-                    <p>
-                        <label>Rating</label>
-                        <br />
-                        <div style={styles.stars}>
-                            {stars.map((_, index) => {
-                                return (
-                                    <FaStar key={index} size={14} style={{
-                                        marginRight: 10,
-                                        cursor: "pointer"
-                                    }}
-                                    color={ (hoverValue || rating) > index ? colors.yellow : colors.grey }
-                                    onClick={ () => handleClick(index + 1) }
-                                    onMouseOver={ () => handleMouseOver(index + 1)}
-                                    onMouseLeave={handleMouseLeave}
-                                    />
-                                )
-                            })}
-                        </div>
-                    </p>
-                    <p>
-                        <label>Watched Status</label>
-                        <br />
-                        <>{ checkWatched() }</>
-                    </p>
-                    <p>
-                        <label>Notes</label>
-                        <br />
-                        <textarea onChange = { (e) => setNotes(e.target.value) } defaultValue={notes}></textarea>
-                    </p>
-                    <input type="submit" value="Save" />
+                <form className="SearchBar">
+                    <input className="SearchInput" type="text" value="search movies and people"></input>
                 </form>
+                <div className="NavUser">
+                    <h5>{user.first_name} {user.last_name[0]}.</h5>
+                    <Link to={ "/logout" }>log out</Link>
+                </div>
             </div>
+            <h1>Edit Review</h1>
+            <form onSubmit={ updateReview } className="UpdateReviewForm">
+                {errors.map((err, index) => (
+                    <p className="error-message" key="{index}">{err}</p>
+                ))}
+                <p>
+                    <label>Rating</label>
+                    <br />
+                    <div style={styles.stars}>
+                        {stars.map((_, index) => {
+                            return (
+                                <FaStar key={index} size={14} style={{
+                                    marginRight: 10,
+                                    cursor: "pointer"
+                                }}
+                                color={ (hoverValue || rating) > index ? colors.yellow : colors.grey }
+                                onClick={ () => handleClick(index + 1) }
+                                onMouseOver={ () => handleMouseOver(index + 1)}
+                                onMouseLeave={handleMouseLeave}
+                                />
+                            )
+                        })}
+                    </div>
+                </p>
+                <p>
+                    <label>Watched Status</label>
+                    <br />
+                    <>{ checkWatched() }</>
+                </p>
+                <p>
+                    <label>Notes</label>
+                    <br />
+                    <textarea onChange = { (e) => setNotes(e.target.value) } defaultValue={notes}></textarea>
+                </p>
+                <input type="submit" value="Save" />
+                <Link to={ "/reviews/" + id }>cancel</Link>
+            </form>
         </div>
-
     )
 }
 

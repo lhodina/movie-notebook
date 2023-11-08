@@ -50,7 +50,7 @@ const Director = (props) => {
             .catch(err => {
                 console.log(err);
             })
-    }, [])
+    }, []);
 
     const showFavorites = () => {
         setFavoritesOpen(true);
@@ -115,7 +115,6 @@ const Director = (props) => {
                 "director_id": id
             }])
         })
-
         setNewLinkText("")
         setNewLinkURL("")
         toggleLinkFormExpanded();
@@ -139,12 +138,12 @@ const Director = (props) => {
             <div className="DirectorProfile">
                 { movieDirectedFormOpen && (
                     <div className="DirectedByForm">
-                        <ReviewForm location="movieDirected" currentDirector={currentDirector} moviesDirected={moviesDirected} setMoviesDirected={setMoviesDirected} toggleForm={toggleMovieDirectedForm} />
+                        <ReviewForm user={user} location="movieDirected" currentDirector={currentDirector} moviesDirected={moviesDirected} setMoviesDirected={setMoviesDirected} toggleForm={toggleMovieDirectedForm} />
                     </div>
                 )}
                 { favoriteMovieFormOpen && (
                     <div className="FavoriteMovieForm">
-                        <ReviewForm location="favoriteMovies" currentDirector={currentDirector} favoriteMovies={favoriteMovies} setFavoriteMovies={setFavoriteMovies} toggleForm={toggleFavoriteMovieForm} />
+                        <ReviewForm user={user} location="favoriteMovies" currentDirector={currentDirector} favoriteMovies={favoriteMovies} setFavoriteMovies={setFavoriteMovies} toggleForm={toggleFavoriteMovieForm} />
                     </div>
                 )}
                 <img src={currentDirector.image_url} height="200px" alt="" />

@@ -95,3 +95,21 @@ class Movie:
     def delete(cls, data):
         query = "DELETE FROM movies WHERE id = %(id)s;"
         return connectToMySQL(cls.DB).query_db(query, data)
+
+
+    @classmethod
+    def add_director_fan(cls, data):
+        query = """
+        INSERT INTO director_favorite_movies(director_id, movie_id)
+        VALUES(%(director_id)s, %(movie_id)s);
+        """
+        return connectToMySQL(cls.DB).query_db(query, data)
+
+
+    @classmethod
+    def add_critic_fan(cls, data):
+        query = """
+        INSERT INTO critic_favorite_movies(critic_id, movie_id)
+        VALUES(%(critic_id)s, %(movie_id)s);
+        """
+        return connectToMySQL(cls.DB).query_db(query, data)

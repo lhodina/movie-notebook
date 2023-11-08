@@ -2,7 +2,7 @@ import requests
 from flask import redirect, request
 
 from flask_app import app
-from flask_app.models import movie
+from flask_app.models import movie, director, critic
 
 
 @app.route("/movie_api")
@@ -91,4 +91,34 @@ def update_movie():
 def delete_movie(movie_id):
     data = { "id": movie_id }
     movie.Movie.delete(data)
+    return redirect("/dashboard")
+
+
+@app.route("/movies/<int:movie_id>/director_fans", methods=["POST"])
+def add_director_fan(movie_id):
+    name = request.json["name"]
+    current_director = director.Director.find_by_name({"name": name})[0]
+    data = {
+        "movie_id": movie_id,
+        "director_id": current_director["id"]
+    }
+    print("current_director:", current_director)
+    print("movie_id: ", movie_id)
+    print("name: ", name)
+    print("TESTING: ", movie.Movie.add_director_fan(data))
+    return redirect("/dashboard")
+
+
+@app.route("/movies/<int:movie_id>/critic_fans", methods=["POST"])
+def add_critic_fan(movie_id):
+    name = request.json["name"]
+    current_critic = critic.Critic.find_by_name({"name": name})[0]
+    data = {
+        "movie_id": movie_id,
+        "critic_id": current_critic["id"]
+    }
+    print("current_critic:", current_critic)
+    print("movie_id: ", movie_id)
+    print("name: ", name)
+    movie.Movie.add_critic_fan(data)
     return redirect("/dashboard")

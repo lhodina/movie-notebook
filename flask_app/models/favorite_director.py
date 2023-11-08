@@ -24,7 +24,7 @@ class FavoriteDirector:
         query = """
         SELECT * FROM user_favorite_directors WHERE director_id = %(id)s;
         """
-        return connectToMySQL(cls.DB).query_db(query, data)[0]
+        return connectToMySQL(cls.DB).query_db(query, data)
 
     @classmethod
     def update(cls, data):

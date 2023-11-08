@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../App.css';
+import AddFanForm from './AddFanForm'
 
 const Dashboard = (props) => {
     const { user } = props;
@@ -12,6 +13,19 @@ const Dashboard = (props) => {
     const [directorsOpen, setDirectorsOpen] = useState(false);
     const [criticsOpen, setCriticsOpen] = useState(false);
     const [collectionsOpen, setCollectionsOpen] = useState(false);
+    const [fanFormOpen, setFanFormOpen] = useState(false);
+    const [grayout, setGrayout] = useState(false);
+    const [currentMovieId, setCurrentMovieId] = useState(0);
+
+    const toggleGrayout = () => {
+        setGrayout(!grayout);
+    }
+
+    const toggleFanForm = () => {
+        setFanFormOpen(!fanFormOpen);
+        toggleGrayout();
+    }
+
 
     const removeFromDom = reviewId => {
         setReviews(reviews.filter(review => review.id !== reviewId));
@@ -29,7 +43,6 @@ const Dashboard = (props) => {
         if (review.likes_count < 1) {
             return <div>
                 <p>No likes yet</p>
-                <a href="/movies/:movieId/fans/add">Add a fan</a>
                 </div>
         }
     }
@@ -46,6 +59,11 @@ const Dashboard = (props) => {
         setCollectionsOpen(!collectionsOpen);
     }
 
+    const handleRefresh = () => {
+        // We want the entire movie ranking order to be rearranged, not just have the new name rendered on the movie card
+        window.location.reload();
+    }
+
     useEffect(() => {
         axios.get("http://localhost:5000/dashboard")
             .then(res => {
@@ -59,6 +77,9 @@ const Dashboard = (props) => {
 
     return (
         <div className="Container">
+            { grayout && (
+                <div className="Grayout"></div>
+            )}
             <div className="Header">
                 <h4>Welcome, {user.first_name}</h4>
                 <div className="NavMenuItem" onMouseEnter={ toggleDirectors } onMouseLeave={ toggleDirectors } >
@@ -116,6 +137,11 @@ const Dashboard = (props) => {
 
             <h1>CORE MOVIES</h1>
             <div className="Main">
+                { fanFormOpen && (
+                    <div>
+                        <AddFanForm movie_id={currentMovieId} toggleForm={toggleFanForm} handleRefresh={handleRefresh} />
+                    </div>
+                )}
             {
                 reviews.map( (review, index) => {
                     return (
@@ -138,6 +164,10 @@ const Dashboard = (props) => {
                                     {
                                         placeholder(review)
                                     }
+                                    <button onClick={ () => {
+                                        setCurrentMovieId(review.movie_id);
+                                        toggleFanForm();
+                                        } }>Add a fan</button>
                                 </div>
                             </div>
                         </div>

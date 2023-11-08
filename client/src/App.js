@@ -10,6 +10,7 @@ import Director from './components/Director';
 import Critic from './components/Critic';
 import FavoriteDirectorForm from './components/FavoriteDirectorForm';
 import FavoriteCriticForm from './components/FavoriteCriticForm';
+import AddFanForm from './components/AddFanForm';
 
 function App() {
   const user = {
@@ -31,7 +32,7 @@ function App() {
           <Route element={ <Critic user={user} /> } path="/critics/:id" />
           <Route element={ <FavoriteDirectorForm user={user} /> } path="/favorite_directors/add" />
           <Route element={ <FavoriteCriticForm user={user} /> } path="/favorite_critics/add" />
-
+          <Route element={ <AddFanForm user={user} /> } path="/movies/:movie_id/add_fan" />
         </Routes>
       </BrowserRouter>
     </div>
