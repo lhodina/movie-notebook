@@ -3,18 +3,20 @@ import axios from 'axios';
 import { useNavigate, Link, useParams } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 
+import AddFanForm from './AddFanForm';
+
 const colors = {
     yellow: "rgb(255, 215, 0)",
     grey: "rgb(210, 210, 210)"
   }
 
-  const styles = {
+const styles = {
     container: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center"
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center"
     }
-  }
+}
 
   const placeholder = (review) => {
     if (review.likes_count < 1) {
@@ -26,10 +28,21 @@ const colors = {
 
 const Review = (props) => {
     const { user } = props;
+    const { id } = useParams();
     const [review, setReview] = useState({});
     const [criticFans, setCriticFans] = useState([]);
     const [directorFans, setDirectorFans] = useState([]);
-    const { id } = useParams();
+    const [fanFormOpen, setFanFormOpen] = useState(false);
+    const [grayout, setGrayout] = useState(false);
+
+    const toggleGrayout = () => {
+        setGrayout(!grayout);
+    }
+
+    const toggleFanForm = () => {
+        setFanFormOpen(!fanFormOpen);
+        toggleGrayout();
+    }
 
     useEffect( () => {
         axios.get("http://localhost:5000/reviews/" + id)
@@ -47,6 +60,9 @@ const Review = (props) => {
 
     return (
         <div className="Container">
+            { grayout && (
+                <div className="Grayout"></div>
+            )}
             <div className="Header">
                 <Link to={ "/dashboard" } >back to dashboard</Link>
                 <form className="SearchBar">
@@ -61,6 +77,11 @@ const Review = (props) => {
             <div className="ReviewContent">
                 <img src={review.image_url} height="470px" alt="" />
                 <div className="ReviewDetails">
+                    { fanFormOpen && (
+                        <div>
+                            <AddFanForm movie_id={review.movie_id} toggleForm={toggleFanForm} />
+                        </div>
+                    )}
                     <h1>{review.title}</h1>
                     <p>Directed by <Link to={'/directors/' + review.directed_by_id} >{ review.director_name}</Link></p>
                     <p>Released { review.year } </p>
@@ -90,7 +111,7 @@ const Review = (props) => {
                     )) }
                     </ul>
                     { placeholder(review) }
-                    <Link to={`/movies/${review.movie_id}/add_fan`}>Add a fan</Link>
+                    <button onClick={toggleFanForm}>Add a fan</button>
                 </div>
             </div>
         </div>

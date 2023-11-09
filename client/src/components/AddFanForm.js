@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
 
 const AddFanForm = (props) => {
     const { movie_id, toggleForm, handleRefresh } = props;
     const [ name, setName ] = useState("");
     const [fanType, setFanType] = useState("director");
     const [errors, setErrors] = useState([]);
-
-    const navigate = useNavigate();
 
     const onSubmitHandler = e => {
         e.preventDefault();
@@ -17,7 +14,9 @@ const AddFanForm = (props) => {
         })
             .then( res => {
                 toggleForm();
-                handleRefresh();
+                if (handleRefresh) {
+                    handleRefresh();
+                }
             })
             .catch( err => {
                 const errorResponse = err.response.data.errors;
@@ -30,8 +29,14 @@ const AddFanForm = (props) => {
             })
     }
 
-    const toggleFanType = () => {
-        fanType !== "director" ? setFanType("director") : setFanType("critic");
+    const fanTypeDirector = () => {
+        setFanType("director")
+        console.log("fanType is: ", fanType);
+    }
+
+    const fanTypeCritic = () => {
+        setFanType("critic")
+        console.log("fanType is: ", fanType);
     }
 
     return (
@@ -39,8 +44,8 @@ const AddFanForm = (props) => {
             <div>
                 <h1>Add a Fan</h1>
                 <div className="btn-group" role="group">
-                    <button type="button" className={ fanType === "director" ? "active btn btn-outline-danger" : "btn btn-outline-danger"} onClick={ toggleFanType }>Director</button>
-                    <button type="button" className={ fanType === "critic" ? "active btn btn-outline-danger" : "btn btn-outline-danger" } onClick={ toggleFanType }>Critic</button>
+                    <button type="button" className={ fanType === "director" ? "active btn btn-outline-danger" : "btn btn-outline-danger"} onClick={ fanTypeDirector }>Director</button>
+                    <button type="button" className={ fanType === "critic" ? "active btn btn-outline-danger" : "btn btn-outline-danger" } onClick={ fanTypeCritic }>Critic</button>
                 </div>
             </div>
             <form onSubmit={ onSubmitHandler }>

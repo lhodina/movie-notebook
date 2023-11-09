@@ -167,7 +167,8 @@ const Dashboard = (props) => {
                                     <button onClick={ () => {
                                         setCurrentMovieId(review.movie_id);
                                         toggleFanForm();
-                                        } }>Add a fan</button>
+                                        } }>Add a fan
+                                    </button>
                                 </div>
                             </div>
                         </div>

@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Link, useParams } from "react-router-dom";
 import expandIcon from "../assets/expand-icon-small.png";
 import ReviewForm from './ReviewForm';
+import AddFanForm from './AddFanForm'
+
 
 const Director = (props) => {
     const { user } = props;
@@ -22,6 +24,7 @@ const Director = (props) => {
     const [movieDirectedFormOpen, setMovieDirectedFormOpen] = useState(false);
     const [favoriteMovieFormOpen, setFavoriteMovieFormOpen] = useState(false);
     const [grayout, setGrayout] = useState(false);
+    const [fanFormOpen, setFanFormOpen] = useState(false);
 
     const { id } = useParams();
 
@@ -86,6 +89,11 @@ const Director = (props) => {
 
     const toggleGrayout = () => {
         setGrayout(!grayout);
+    }
+
+    const toggleFanForm = () => {
+        setFanFormOpen(!fanFormOpen);
+        toggleGrayout();
     }
 
     const updateNotes = e => {
@@ -215,9 +223,9 @@ const Director = (props) => {
                                 moviesDirected.map( (movie, index) => {
                                     return (
                                         <div className="CoreMovie" key={index}>
-                                            <img src={movie.image_url} alt="" height="200px"/>
+                                            <Link to={"/reviews/" + movie.review_id}><img src={movie.image_url} alt="" height="200px"/></Link>
                                             <div className="CoreMovieBody">
-                                                <Link><h5>{ movie.title }</h5></Link>
+                                                <Link to={"/reviews/" + movie.review_id}><h5>{ movie.title }</h5></Link>
                                                 <div className="LikedBy">
                                                     <h6>Liked By:</h6>
                                                 </div>
@@ -235,9 +243,9 @@ const Director = (props) => {
                             favoriteMovies.map( (movie, index) => {
                                 return (
                                     <div className="CoreMovie" key={index}>
-                                        <img src={movie.image_url} alt="" height="200px"/>
+                                        <Link to={"/reviews/" + movie.review_id}><img src={movie.image_url} alt="" height="200px"/></Link>
                                         <div className="CoreMovieBody">
-                                            <Link><h5>{ movie.title }</h5></Link>
+                                            <Link to={"/reviews/" + movie.review_id}><h5>{ movie.title }</h5></Link>
                                             <div className="LikedBy">
                                                 <h6>Liked By:</h6>
                                             </div>

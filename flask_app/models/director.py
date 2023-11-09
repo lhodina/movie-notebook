@@ -76,18 +76,21 @@ class Director:
         SELECT * FROM movies
         JOIN director_favorite_movies ON director_favorite_movies.movie_id = movies.id
         JOIN directors ON directors.id = movies.directed_by_id
+        JOIN reviews ON reviews.movie_id = movies.id
         WHERE director_favorite_movies.director_id = %(id)s;
         """
         result = connectToMySQL(cls.DB).query_db(query, data)
         favs = []
         for item in result:
+            print("item in director get_favorites: ", item)
             fav = {
                 "id": item["id"],
                 "title": item["title"],
                 "image_url": item["image_url"],
                 "year": item["year"],
                 "directed_by_id": item["directed_by_id"],
-                "director_name": item["name"]
+                "director_name": item["name"],
+                "review_id": item["reviews.id"]
             }
             favs.append(fav)
 
