@@ -34,7 +34,7 @@ def get_director(director_id):
     favorites = director.Director.get_favorites(data)
     current_user = user.User.get_one({"id": 1})
     favorite = favorite_director.FavoriteDirector.get_one(data)
-    print("favorite: ", favorite)
+    # print("favorite: ", favorite)
     notes = ""
     if (len(favorite) > 0):
         notes = favorite[0]["notes"]

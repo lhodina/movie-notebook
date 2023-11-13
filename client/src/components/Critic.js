@@ -117,7 +117,7 @@ const Critic = (props) => {
             <div className="CriticProfile">
                 { favoriteMovieFormOpen && (
                     <div className="FavoriteMovieForm">
-                        <ReviewForm location="favoriteMovies" currentCritic={currentCritic} favoriteMovies={favoriteMovies} setFavoriteMovies={setFavoriteMovies} toggleForm={toggleFavoriteMovieForm} />
+                        <ReviewForm user={user} location="favoriteMovies" currentCritic={currentCritic} favoriteMovies={favoriteMovies} setFavoriteMovies={setFavoriteMovies} toggleForm={toggleFavoriteMovieForm} />
                     </div>
                 )}
 
@@ -181,9 +181,6 @@ const Critic = (props) => {
                                         <img src={movie.image_url} alt="" height="200px"/>
                                         <div className="CoreMovieBody">
                                             <Link><h5>{ movie.title }</h5></Link>
-                                            <div className="LikedBy">
-                                                <h6>Liked By:</h6>
-                                            </div>
                                         </div>
                                     </div>
                                 )

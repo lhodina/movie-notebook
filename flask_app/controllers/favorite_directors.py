@@ -51,7 +51,9 @@ def updateNotes(id):
         "notes": request.json["notes"],
         "id": id
     }
-    return favorite_director.FavoriteDirector.update(data)
+    res = favorite_director.FavoriteDirector.update(data)
+    print("res: ", res)
+    return res
 
 
 @app.route("/favorite_directors/remove/<int:director_id>")

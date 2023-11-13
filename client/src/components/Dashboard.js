@@ -83,7 +83,7 @@ const Dashboard = (props) => {
             <div className="Header">
                 <h4>Welcome, {user.first_name}</h4>
                 <div className="NavMenuItem" onMouseEnter={ toggleDirectors } onMouseLeave={ toggleDirectors } >
-                    <h5>Favorite Directors</h5>
+                    <h5>My Directors</h5>
                     { directorsOpen && (
                         <div className="NavDropdown">
                             <ul className="NavDropdownList" >
@@ -98,7 +98,7 @@ const Dashboard = (props) => {
                     )}
                 </div>
                 <div className="NavMenuItem" onMouseEnter={ toggleCritics } onMouseLeave={ toggleCritics }>
-                    <h5>Favorite Critics</h5>
+                    <h5>My Critics</h5>
                     { criticsOpen && (
                         <div className="NavDropdown">
                             <ul className="NavDropdownList" >

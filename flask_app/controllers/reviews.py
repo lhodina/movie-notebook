@@ -2,7 +2,7 @@ import requests
 from flask import redirect, request
 
 from flask_app import app
-from flask_app.models import review, movie_link, director, critic, movie
+from flask_app.models import review, movie_link, director, favorite_director, critic, movie
 
 
 @app.route("/reviews", methods=["POST"])
@@ -67,6 +67,13 @@ def add_review():
                 "image_url": api_director_image_url
             }
             directed_by_id = director.Director.save(director_data)
+        favorite_director_exists = favorite_director.FavoriteDirector.get_one({"id": directed_by_id})
+        if not favorite_director_exists:
+            favorite_director.FavoriteDirector.save({
+                "notes": "",
+                "user_id": user_id,
+                "director_id": directed_by_id
+            })
         movie_data["directed_by_id"] = directed_by_id
         movie_data['image_url'] = movie_poster
         movie_data['year'] = api_year

@@ -19,10 +19,10 @@ def add_favorite_critic():
     critic_exists = critic.Critic.find_by_name(data)
 
     if critic_exists:
-        print("critic exists: ", critic_exists)
+        # print("critic exists: ", critic_exists)
         critic_id = critic_exists[0]['id']
     else:
-        print("critic does not exist")
+        # print("critic does not exist")
         critic_id = critic.Critic.save(
             {
                 "name": data["name"],

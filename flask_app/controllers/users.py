@@ -2,7 +2,7 @@ from flask import  redirect, request
 from flask_bcrypt import Bcrypt
 
 from flask_app import app
-from flask_app.models import user, movie
+from flask_app.models import user, director
 
 bcrypt = Bcrypt(app)
 
@@ -40,8 +40,6 @@ def dashboard():
     favorite_directors = user.User.get_favorite_directors(data)
     favorite_critics = user.User.get_favorite_critics(data)
     reviews = user.User.get_reviews(data)
-    # For each movie review, get all the directors and critics who like it
-
     userJSON = {
         "first_name": current_user.first_name,
         "last_name": current_user.last_name,

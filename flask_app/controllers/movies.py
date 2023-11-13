@@ -2,38 +2,7 @@ import requests
 from flask import redirect, request
 
 from flask_app import app
-from flask_app.models import movie, director, critic
-
-
-@app.route("/movie_api")
-def test_movie_api():
-    url_base = "https://image.tmdb.org/t/p/w500"
-    url = "https://api.themoviedb.org/3/search/movie?query=la+dolce+vita"
-    headers = {
-        "accept": "application/json",
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZTIxNjdiZTgwYzYxYjZhMzVkNjhiMjY2NmE0YWUzMyIsInN1YiI6IjYzMmRkMzZkNTU5MzdiMDA3YzA5MTZlMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qlMgNrzDMM2eqPUGxDRpWsACr9o-xb94MKMpdta7K7c"
-    }
-    response = requests.get(url, headers=headers).json()
-    poster_path = response["results"][0]["poster_path"]
-    movie_poster = url_base + poster_path
-
-    year = response["results"][0]["release_date"][:4]
-    return response
-
-
-@app.route("/director_api")
-def test_person_api():
-    image_url_base = "https://image.tmdb.org/t/p/w500"
-    url = "https://api.themoviedb.org/3/search/person?query=federico+fellini"
-    headers = {
-        "accept": "application/json",
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZTIxNjdiZTgwYzYxYjZhMzVkNjhiMjY2NmE0YWUzMyIsInN1YiI6IjYzMmRkMzZkNTU5MzdiMDA3YzA5MTZlMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qlMgNrzDMM2eqPUGxDRpWsACr9o-xb94MKMpdta7K7c"
-    }
-    response = requests.get(url, headers=headers).json()
-    profile_path = response["results"][0]["profile_path"]
-    profile_pic = image_url_base + profile_path
-    return response
-
+from flask_app.models import movie, director, favorite_director, critic, favorite_critic
 
 
 @app.route("/movies", methods=["POST"])
@@ -96,29 +65,64 @@ def delete_movie(movie_id):
 
 @app.route("/movies/<int:movie_id>/director_fans", methods=["POST"])
 def add_director_fan(movie_id):
-    name = request.json["name"]
-    current_director = director.Director.find_by_name({"name": name})[0]
+    user_id = 1
+    name = request.json["name"].title()
+    director_exists = director.Director.find_by_name({"name": name})
+    director_id = 0
+    if director_exists:
+        current_director = director_exists[0]
+        director_id = current_director["id"]
+    else:
+        print("director doesn't exist")
+        api_key = "fe2167be80c61b6a35d68b2666a4ae33"
+        api_director_results = requests.get(f"https://api.themoviedb.org/3/search/person?api_key={api_key}&query={name}").json()
+        api_director = api_director_results["results"][0]
+        image_url_base = "https://image.tmdb.org/t/p/w500"
+        api_director_image_url = image_url_base + api_director["profile_path"]
+        director_id = director.Director.save({
+            "name": name,
+            "image_url": api_director_image_url
+            })
+        favorite_director_exists = favorite_director.FavoriteDirector.get_one({"id": director_id})
+        if not favorite_director_exists:
+            favorite_director.FavoriteDirector.save({
+                "notes": "",
+                "user_id": user_id,
+                "director_id": director_id
+            })
     data = {
         "movie_id": movie_id,
-        "director_id": current_director["id"]
+        "director_id": director_id
     }
-    print("current_director:", current_director)
-    print("movie_id: ", movie_id)
-    print("name: ", name)
-    print("TESTING: ", movie.Movie.add_director_fan(data))
+    movie.Movie.add_director_fan(data)
     return redirect("/dashboard")
 
 
 @app.route("/movies/<int:movie_id>/critic_fans", methods=["POST"])
 def add_critic_fan(movie_id):
-    name = request.json["name"]
-    current_critic = critic.Critic.find_by_name({"name": name})[0]
+    user_id = 1
+    name = request.json["name"].title()
+    critic_exists = critic.Critic.find_by_name({"name": name})
+    critic_id = 0
+    if critic_exists:
+        current_critic = critic_exists[0]
+        critic_id = current_critic["id"]
+    else:
+        print("critic doesn't exist")
+        critic_id = critic.Critic.save({
+            "name": name,
+            "image_url": ""
+            })
+        favorite_critic_exists = favorite_critic.FavoriteCritic.get_one({"id": critic_id})
+        if not favorite_critic_exists:
+            favorite_critic.FavoriteCritic.save({
+                "notes": "",
+                "user_id": user_id,
+                "critic_id": critic_id
+            })
     data = {
         "movie_id": movie_id,
-        "critic_id": current_critic["id"]
+        "critic_id": critic_id
     }
-    print("current_critic:", current_critic)
-    print("movie_id: ", movie_id)
-    print("name: ", name)
     movie.Movie.add_critic_fan(data)
     return redirect("/dashboard")
