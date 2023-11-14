@@ -113,3 +113,17 @@ class Movie:
         VALUES(%(critic_id)s, %(movie_id)s);
         """
         return connectToMySQL(cls.DB).query_db(query, data)
+
+
+    @classmethod
+    def get_all_links(cls, data):
+        all_movie_links = []
+        query = """
+        SELECT * FROM movie_links
+        WHERE user_id = %(user_id)s
+        AND movie_id = %(movie_id)s;
+        """
+        results = connectToMySQL(cls.DB).query_db(query, data)
+        for result in results:
+            all_movie_links.append(result)
+        return all_movie_links

@@ -91,17 +91,17 @@ const Review = (props) => {
 
     const addLink = e => {
         e.preventDefault();
-        axios.post('http://localhost:5000/directors/' + id + '/links', {
+        axios.post('http://localhost:5000/movies/' + review.movie_id + '/links', {
             "text": newLinkText,
             "url": newLinkURL,
             "user_id": user.id,
-            "director_id": id
+            "movie_id": review.movie_id
         }).then((res) => {
             setUserLinks([...userLinks, {
                 "text": newLinkText,
                 "url": newLinkURL,
                 "user_id": user.id,
-                "director_id": id
+                "movie_id": review.movie_id
             }])
         })
         setNewLinkText("")
@@ -117,7 +117,7 @@ const Review = (props) => {
                 setEditNotes(res.data.notes);
                 setCriticFans(res.data.critic_fans);
                 setDirectorFans(res.data.director_fans);
-                setUserLinks(res.data.links);
+                setUserLinks(res.data.user_links);
             })
             .catch(err => {
                 console.log(err);
@@ -142,9 +142,8 @@ const Review = (props) => {
                     <Link to={ "/logout" }>log out</Link>
                 </div>
             </div>
-
-            <div className="ReviewContent">
-                <img src={review.image_url} height="200px" alt="" />
+            <div className="ReviewProfile">
+                <img src={review.image_url} height="250px" alt="movie poster" />
                 <div className="ReviewDetails">
                     { fanFormOpen && (
                         <div>
@@ -154,20 +153,6 @@ const Review = (props) => {
                     <h1>{review.title}</h1>
                     <p>Directed by <Link to={'/directors/' + review.directed_by_id} >{ review.director_name}</Link></p>
                     <p>Released { review.year } </p>
-                    <p>My notes:</p>
-                    { editFormExpanded && (
-                            <form onSubmit={ updateNotes } className="UpdateNotesForm">
-                                <textarea value={editNotes} onChange={ (e) => { setEditNotes(e.target.value)} } />
-                                <br />
-                                <input type="submit" value="Save" />
-                                <button className="CancelButton" onClick={ toggleEditFormExpanded }>cancel</button>
-                            </form>
-                    )}
-                    <div className={notesExpanded ? "NotesExpanded" : "NotesCollapsed"}>
-                        <div className="CollapsedParagraph">
-                            <p>{ previewNotes() } <img className="ExpandIcon" onClick={ toggleEditFormExpanded } src={expandIcon} alt="expand icon"/></p>
-                        </div>
-                    </div>
                     <p style={styles.stars}>
                         <span className="Rating" >My rating:</span>
                         {stars.map((_, index) => {
@@ -183,6 +168,50 @@ const Review = (props) => {
                     </p>
                     <p>Watched: {review.watched ? "Yes" : "No"}</p>
                     <p><Link to={ "/reviews/" + id + "/update" }>edit</Link></p>
+                </div>
+            </div>
+            <div className="ReviewMain">
+                <div className="ReviewNotes">
+                    <h2>My Notes</h2>
+                    { editFormExpanded && (
+                        <form onSubmit={ updateNotes } className="UpdateNotesForm">
+                            <textarea value={editNotes} onChange={ (e) => { setEditNotes(e.target.value)} } />
+                            <br />
+                            <input type="submit" value="Save" />
+                            <button className="CancelButton" onClick={ toggleEditFormExpanded }>cancel</button>
+                        </form>
+                    )}
+                    <div className={notesExpanded ? "NotesExpanded" : "NotesCollapsed"}>
+                        <div className="CollapsedParagraph">
+                            <p>{ previewNotes() } <img className="ExpandIcon" onClick={ toggleEditFormExpanded } src={expandIcon} alt="expand icon"/></p>
+                        </div>
+                    </div>
+                </div>
+                <div className="ReviewLinks">
+                    <h2>Articles + Videos</h2>
+                    <ul>
+                        { userLinks.map( (link, index) => {
+                            return (
+                                <a href={link.url} target="_blank" rel="noreferrer" key={index}><li>{link.text}</li></a>
+                            )
+                        })
+                        }
+                    </ul>
+                    <button onClick={ toggleLinkFormExpanded }>Add Link</button>
+                    { linkFormExpanded && (
+                        <form className={"LinkForm" } onSubmit={ addLink }>
+                            <label htmlFor="text">Text</label>
+                            <input name="text" value={newLinkText} onChange={ (e) => setNewLinkText(e.target.value) } />
+                            <br />
+                            <label htmlFor="url">URL</label>
+                            <input name="url" value={newLinkURL} onChange={ (e) => setNewLinkURL(e.target.value) } />
+                            <br />
+                            <input type="submit" value="Add Link" />
+                            <button className="CancelButton" onClick={toggleLinkFormExpanded}>cancel</button>
+                        </form>
+                    )}
+                </div>
+                <div className="ReviewLikedBy">
                     <h2>Liked by:</h2>
                     <ul>
                         { criticFans.map( (critic, index) => (

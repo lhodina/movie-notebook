@@ -2,7 +2,7 @@ import requests
 from flask import redirect, request
 
 from flask_app import app
-from flask_app.models import movie, director, favorite_director, critic, favorite_critic
+from flask_app.models import movie, director, favorite_director, critic, favorite_critic, movie_link
 
 
 @app.route("/movies", methods=["POST"])
@@ -18,42 +18,42 @@ def add_movie():
     return redirect("/dashboard")
 
 
-@app.route("/movies")
-def get_all_movies():
-    all_movies = movie.Movie.get_all_movies()
-    res = {"movies": []}
-    for each_movie in all_movies:
-        res['movies'].append(each_movie)
-    return res
+# @app.route("/movies")
+# def get_all_movies():
+#     all_movies = movie.Movie.get_all_movies()
+#     res = {"movies": []}
+#     for each_movie in all_movies:
+#         res['movies'].append(each_movie)
+#     return res
 
 
-@app.route("/movies/<int:movie_id>")
-def get_movie(movie_id):
-    data = {
-        "id": movie_id
-    }
-    current_movie = movie.Movie.get_one(data)
-    return {
-        "title": current_movie.title,
-        "year": current_movie.year,
-        "image_url": current_movie.image_url,
-        "directed_by_id": current_movie.directed_by_id,
-        "director_name": current_movie.director.name
-    }
+# @app.route("/movies/<int:movie_id>")
+# def get_movie(movie_id):
+#     data = {
+#         "id": movie_id
+#     }
+#     current_movie = movie.Movie.get_one(data)
+#     return {
+#         "title": current_movie.title,
+#         "year": current_movie.year,
+#         "image_url": current_movie.image_url,
+#         "directed_by_id": current_movie.directed_by_id,
+#         "director_name": current_movie.director.name
+#     }
 
 
-@app.route("/update_movie", methods=["POST"])
-def update_movie():
-    data = {
-        "id": request.json["movie_id"],
-        "title": request.json["title"],
-        "year": request.json["year"],
-        "image_url": request.json["image_url"],
-        "directed_by_id": request.json["directed_by_id"]
-    }
+# @app.route("/update_movie", methods=["POST"])
+# def update_movie():
+#     data = {
+#         "id": request.json["movie_id"],
+#         "title": request.json["title"],
+#         "year": request.json["year"],
+#         "image_url": request.json["image_url"],
+#         "directed_by_id": request.json["directed_by_id"]
+#     }
 
-    movie.Movie.update(data)
-    return redirect("/dashboard")
+#     movie.Movie.update(data)
+#     return redirect("/dashboard")
 
 
 @app.route("/movies/delete/<int:movie_id>")
@@ -125,4 +125,18 @@ def add_critic_fan(movie_id):
         "critic_id": critic_id
     }
     movie.Movie.add_critic_fan(data)
+    return redirect("/dashboard")
+
+
+@app.route("/movies/<int:movie_id>/links", methods=["POST"])
+def add_movie_link(movie_id):
+    # REPLACE HARDCODED user_id
+    user_id = 1
+    data = {
+        "text": request.json["text"],
+        "url": request.json["url"],
+        "user_id": user_id,
+        "movie_id": movie_id
+    }
+    movie_link.MovieLink.save(data)
     return redirect("/dashboard")

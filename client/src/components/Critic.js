@@ -120,8 +120,6 @@ const Critic = (props) => {
                         <ReviewForm user={user} location="favoriteMovies" currentCritic={currentCritic} favoriteMovies={favoriteMovies} setFavoriteMovies={setFavoriteMovies} toggleForm={toggleFavoriteMovieForm} />
                     </div>
                 )}
-
-                <img src={currentCritic.image_url} height="200px" alt="" />
                 <div className="ProfileContent">
                     <h1>{ currentCritic.name }</h1>
                     <div>

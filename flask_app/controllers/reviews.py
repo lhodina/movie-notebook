@@ -118,18 +118,18 @@ def add_review():
 
 @app.route("/reviews/<int:review_id>")
 def get_review(review_id):
+    user_id = 1
     data = {
         "id": review_id
     }
 
     current_review = review.Review.get_one(data)
-    # REPLACE HARDCODED user_id
     link_data = {
         "movie_id": current_review.movie_id,
-        "user_id": 1
+        "user_id": user_id
     }
-    movie_links = movie_link.MovieLink.get_all(link_data)
-
+    user_links = movie.Movie.get_all_links(link_data)
+    print("user_links in controller: ", user_links)
     likes_count = len(current_review.critic_fans) + len(current_review.director_fans)
 
     return {
@@ -143,7 +143,7 @@ def get_review(review_id):
         "image_url": current_review.movie.image_url,
         "directed_by_id": current_review.movie.directed_by_id,
         "director_name": current_review.movie.director.name,
-        "movie_links": movie_links,
+        "user_links": user_links,
         "critic_fans": current_review.critic_fans,
         "director_fans": current_review.director_fans,
         "likes_count": likes_count
@@ -171,3 +171,6 @@ def delete_review(review_id):
     data = { "id": review_id }
     review.Review.delete(data)
     return redirect("/dashboard")
+
+
+
