@@ -129,7 +129,6 @@ def get_review(review_id):
         "user_id": user_id
     }
     user_links = movie.Movie.get_all_links(link_data)
-    print("user_links in controller: ", user_links)
     likes_count = len(current_review.critic_fans) + len(current_review.director_fans)
 
     return {
@@ -156,13 +155,21 @@ def update_review(id):
     data = {
         "id": id,
         "rating": request.json['rating'],
-        "notes": request.json["notes"],
-        "watched": request.json["watched"],
-        "user_id": 1,
-        "movie_id": request.json["movieId"]
+        "watched": request.json["watched"]
     }
 
     review.Review.update(data)
+    return redirect("/dashboard")
+
+
+@app.route("/reviews/<int:id>/notes", methods=["POST"])
+def update_review_notes(id):
+    data = {
+        "id": id,
+        "notes": request.json["notes"]
+    }
+
+    review.Review.updateNotes(data)
     return redirect("/dashboard")
 
 
@@ -171,6 +178,3 @@ def delete_review(review_id):
     data = { "id": review_id }
     review.Review.delete(data)
     return redirect("/dashboard")
-
-
-

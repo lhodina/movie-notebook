@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import expandIcon from "../assets/expand-icon-small.png";
 
-
+import UpdateReviewForm from './UpdateReviewForm';
 import AddFanForm from './AddFanForm';
 
 const colors = {
@@ -32,18 +32,22 @@ const Review = (props) => {
     const { user } = props;
     const { id } = useParams();
     const [review, setReview] = useState({});
+    const [rating, setRating] = useState(0);
+    const [watched, setWatched] = useState(0);
     const [criticFans, setCriticFans] = useState([]);
     const [directorFans, setDirectorFans] = useState([]);
     const [fanFormOpen, setFanFormOpen] = useState(false);
     const [grayout, setGrayout] = useState(false);
     const [notesExpanded, setNotesExpanded] = useState(false);
-    const [editFormExpanded, setEditFormExpanded] = useState(false);
+    const [editNotesFormExpanded, setEditNotesFormExpanded] = useState(false);
     const [notes, setNotes] = useState("");
     const [editNotes, setEditNotes] = useState("");
     const [userLinks, setUserLinks] = useState([]);
     const [linkFormExpanded, setLinkFormExpanded] = useState(false);
     const [newLinkText, setNewLinkText] = useState("");
     const [newLinkURL, setNewLinkURL] = useState("");
+    const [updateReviewFormOpen, setUpdateReviewFormOpen] = useState(false);
+
 
 
     const toggleGrayout = () => {
@@ -55,8 +59,8 @@ const Review = (props) => {
         toggleGrayout();
     }
 
-    const toggleEditFormExpanded = () => {
-        setEditFormExpanded(!editFormExpanded);
+    const toggleEditNotesFormExpanded = () => {
+        setEditNotesFormExpanded(!editNotesFormExpanded);
         setNotesExpanded(false);
         toggleGrayout();
     }
@@ -66,10 +70,13 @@ const Review = (props) => {
         toggleGrayout();
     }
 
+    const toggleReviewForm = () => {
+        setUpdateReviewFormOpen(!updateReviewFormOpen);
+        toggleGrayout();
+    }
+
     const previewNotes = () => {
-        console.log("notes: ", notes);
         let notesArr = notes.split(" ");
-        console.log("notesArr: ", notesArr);
         if (notesArr.length > 30 && notesExpanded === false) {
             let trimmed = notesArr.slice(0, 30);
             return `${trimmed.join(" ")}...`;
@@ -80,9 +87,9 @@ const Review = (props) => {
 
     const updateNotes = e => {
         e.preventDefault();
-        toggleEditFormExpanded();
+        toggleEditNotesFormExpanded();
         setNotes(editNotes);
-        axios.post('http://localhost:5000/reviews/' + id + '/update', { "notes": editNotes })
+        axios.post('http://localhost:5000/reviews/' + id + '/notes', { "notes": editNotes })
         .then(res => {
             console.log(res);
         })
@@ -113,6 +120,8 @@ const Review = (props) => {
         axios.get("http://localhost:5000/reviews/" + id)
             .then( (res) => {
                 setReview(res.data);
+                setRating(res.data.rating);
+                setWatched(res.data.watched);
                 setNotes(res.data.notes);
                 setEditNotes(res.data.notes);
                 setCriticFans(res.data.critic_fans);
@@ -161,29 +170,35 @@ const Review = (props) => {
                                     marginRight: 10,
                                     cursor: "pointer"
                                 }}
-                                color={ (review.rating) > index ? colors.yellow : colors.grey }
+                                color={ (rating) > index ? colors.yellow : colors.grey }
                                 />
                             )
                         })}
                     </p>
-                    <p>Watched: {review.watched ? "Yes" : "No"}</p>
-                    <p><Link to={ "/reviews/" + id + "/update" }>edit</Link></p>
+                    <p>Watched: {watched ? "Yes" : "No"}</p>
+                    <button onClick={ toggleReviewForm }>edit</button>
+                    { updateReviewFormOpen && (
+                        <div className="UpdateReviewForm">
+                            <UpdateReviewForm user={user} rating={rating} review={review} setReview={setReview} setRating={setRating} watched={watched} setWatched={setWatched} toggleReviewForm={toggleReviewForm} />
+                        </div>
+
+                    )}
                 </div>
             </div>
             <div className="ReviewMain">
                 <div className="ReviewNotes">
                     <h2>My Notes</h2>
-                    { editFormExpanded && (
+                    { editNotesFormExpanded && (
                         <form onSubmit={ updateNotes } className="UpdateNotesForm">
                             <textarea value={editNotes} onChange={ (e) => { setEditNotes(e.target.value)} } />
                             <br />
                             <input type="submit" value="Save" />
-                            <button className="CancelButton" onClick={ toggleEditFormExpanded }>cancel</button>
+                            <button className="CancelButton" onClick={ toggleEditNotesFormExpanded }>cancel</button>
                         </form>
                     )}
                     <div className={notesExpanded ? "NotesExpanded" : "NotesCollapsed"}>
                         <div className="CollapsedParagraph">
-                            <p>{ previewNotes() } <img className="ExpandIcon" onClick={ toggleEditFormExpanded } src={expandIcon} alt="expand icon"/></p>
+                            <p>{ previewNotes() } <img className="ExpandIcon" onClick={ toggleEditNotesFormExpanded } src={expandIcon} alt="expand icon"/></p>
                         </div>
                     </div>
                 </div>

@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
 import ReviewForm from './components/ReviewForm';
 import Review from './components/Review';
-import UpdateReview from './components/UpdateReview';
 import CollectionForm from './components/CollectionForm';
 import Director from './components/Director';
 import Critic from './components/Critic';
@@ -26,7 +25,6 @@ function App() {
           <Route element={ <Dashboard user={user} /> } path="/dashboard" />
           <Route element={ <ReviewForm user={user} location="newReview" /> } path="/reviews/add" />
           <Route element={ <Review user={user} /> } path="/reviews/:id" />
-          <Route element={ <UpdateReview user={user}  /> } path="/reviews/:id/update" />
           <Route element={ <CollectionForm user={user}  /> } path="/collections/add" />
           <Route element={ <Director user={user} /> } path="/directors/:id" />
           <Route element={ <Critic user={user} /> } path="/critics/:id" />

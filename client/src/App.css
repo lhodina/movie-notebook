@@ -112,7 +112,6 @@ h1, h2, h3, .btn {
   margin-bottom: 30px;
 }
 
-
 .DirectorLinks ul {
   list-style-type: none;
 }
@@ -269,6 +268,8 @@ ul {
   width: 33%;
 }
 
-.ReviewLikedBy {
-  
+.UpdateReviewForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }

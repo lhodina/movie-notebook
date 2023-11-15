@@ -31,12 +31,10 @@ const AddFanForm = (props) => {
 
     const fanTypeDirector = () => {
         setFanType("director")
-        console.log("fanType is: ", fanType);
     }
 
     const fanTypeCritic = () => {
         setFanType("critic")
-        console.log("fanType is: ", fanType);
     }
 
     return (

@@ -22,9 +22,7 @@ const Critic = (props) => {
     const { id } = useParams();
 
     const previewNotes = () => {
-        console.log("notes: ", notes);
         let notesArr = notes.split(" ");
-        console.log("notesArr: ", notesArr);
         if (notesArr.length > 30 && notesExpanded === false) {
             let trimmed = notesArr.slice(0, 30);
             return `${trimmed.join(" ")}...`;

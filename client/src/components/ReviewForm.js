@@ -20,7 +20,7 @@ const colors = {
   }
 
 const ReviewForm = (props) => {
-    const { user, location, currentDirector, currentCritic, toggleForm, moviesDirected, setMoviesDirected, favoriteMovies, setFavoriteMovies } = props;
+    const { location, currentDirector, currentCritic, toggleForm, moviesDirected, setMoviesDirected, favoriteMovies, setFavoriteMovies } = props;
     const [ title, setTitle ] = useState("");
     const [ rating, setRating ] = useState(0);
     const [ watched, setWatched ] = useState("");

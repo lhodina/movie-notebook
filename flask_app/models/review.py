@@ -90,10 +90,18 @@ class Review:
         UPDATE reviews
         SET
         rating=%(rating)s,
-        notes=%(notes)s,
-        watched=%(watched)s,
-        user_id=%(user_id)s,
-        movie_id=%(movie_id)s
+        watched=%(watched)s
+        WHERE id = %(id)s;
+        """
+        return connectToMySQL(cls.DB).query_db(query, data)
+
+
+    @classmethod
+    def updateNotes(cls, data):
+        query = """
+        UPDATE reviews
+        SET
+        notes=%(notes)s
         WHERE id = %(id)s;
         """
         return connectToMySQL(cls.DB).query_db(query, data)
