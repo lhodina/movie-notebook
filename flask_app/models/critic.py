@@ -39,7 +39,7 @@ class Critic:
         LEFT JOIN critic_favorite_movies ON critic_favorite_movies.critic_id = critics.id
         LEFT JOIN movies ON movies.id = critic_favorite_movies.movie_id
         LEFT JOIN directors ON directors.id = movies.directed_by_id
-        WHERE critics.id = %(id)s;
+        WHERE critics.id = %(critic_id)s;
         """
         result = connectToMySQL(cls.DB).query_db(query, data)
         current_critic_data = {
@@ -108,7 +108,7 @@ class Critic:
         SELECT * FROM movies
         JOIN critic_favorite_movies ON critic_favorite_movies.movie_id = movies.id
         JOIN directors ON directors.id = movies.directed_by_id
-        WHERE critic_favorite_movies.critic_id = %(id)s;
+        WHERE critic_favorite_movies.critic_id = %(critic_id)s;
         """
         result = connectToMySQL(cls.DB).query_db(query, data)
         favs = []

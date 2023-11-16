@@ -24,8 +24,6 @@ const UpdateReviewForm = (props) => {
 
     const updateReview = e => {
         e.preventDefault();
-        // setRating(rating);
-        setWatched(watched);
         axios.post("http://localhost:5000/reviews/" + id, {
             rating,
             watched
@@ -48,16 +46,6 @@ const UpdateReviewForm = (props) => {
 
     const handleMouseLeave = () => {
         setHoverValue(undefined);
-    }
-
-    const checkWatched = () => {
-        if (watched == 1) {
-            return <><input className="form-input" type="radio" name="watched" value="1" checked id="radio-watched"  /><label>Watched</label><input className="form-input" type="radio" name="watched" id="radio-unwatched" value="0" onChange = { (e) => setWatched(e.target.value) } /><label>Unwatched</label></>
-        } else if (watched == 0) {
-            return <><input className="form-input" type="radio" name="watched" value="1" id="radio-watched" onChange = { (e) => setWatched(e.target.value) } /><label>Watched</label><input className="form-input" type="radio" name="watched" id="radio-unwatched" value="0" checked  /><label>Unwatched</label></>
-        } else {
-            return <><p>What's-a goin' on here?</p></>
-        }
     }
 
     return (
@@ -89,7 +77,12 @@ const UpdateReviewForm = (props) => {
                 <p>
                     <label>Watched Status:</label>
                     <br />
-                    <>{ checkWatched() }</>
+                    <>
+                        <input className="form-input" type="radio" name="watched" value="1" id="radio-watched" onChange = { (e) => setWatched(e.target.value) } checked={watched == 1}  />
+                        <label>Watched</label>
+                        <input className="form-input" type="radio" name="watched" id="radio-unwatched" value="0" onChange = { (e) => setWatched(e.target.value) } checked={watched == 0} />
+                        <label>Unwatched</label>
+                    </>
                 </p>
                 <input type="submit" value="Save" />
                 <button onClick={toggleReviewForm}>cancel</button>

@@ -48,8 +48,6 @@ const Review = (props) => {
     const [newLinkURL, setNewLinkURL] = useState("");
     const [updateReviewFormOpen, setUpdateReviewFormOpen] = useState(false);
 
-
-
     const toggleGrayout = () => {
         setGrayout(!grayout);
     }
@@ -103,7 +101,8 @@ const Review = (props) => {
             "url": newLinkURL,
             "user_id": user.id,
             "movie_id": review.movie_id
-        }).then((res) => {
+        })
+        .then(res => {
             setUserLinks([...userLinks, {
                 "text": newLinkText,
                 "url": newLinkURL,
@@ -111,8 +110,7 @@ const Review = (props) => {
                 "movie_id": review.movie_id
             }])
         })
-        setNewLinkText("")
-        setNewLinkURL("")
+        .catch(err => console.log(err));
         toggleLinkFormExpanded();
     }
 
@@ -156,7 +154,7 @@ const Review = (props) => {
                 <div className="ReviewDetails">
                     { fanFormOpen && (
                         <div>
-                            <AddFanForm movie_id={review.movie_id} toggleForm={toggleFanForm} />
+                            <AddFanForm movie_id={review.movie_id} toggleForm={toggleFanForm} criticFans={criticFans} setCriticFans={setCriticFans} directorFans={directorFans} setDirectorFans={setDirectorFans}/>
                         </div>
                     )}
                     <h1>{review.title}</h1>
@@ -175,7 +173,7 @@ const Review = (props) => {
                             )
                         })}
                     </p>
-                    <p>Watched: {watched ? "Yes" : "No"}</p>
+                    <p>Watched: {watched == 1 ? "Yes" : "No"}</p>
                     <button onClick={ toggleReviewForm }>edit</button>
                     { updateReviewFormOpen && (
                         <div className="UpdateReviewForm">
@@ -230,7 +228,7 @@ const Review = (props) => {
                     <h2>Liked by:</h2>
                     <ul>
                         { criticFans.map( (critic, index) => (
-                            <Link to={ "/critics/" + critic.id }  key={ index }><li>{critic.name }</li></Link>
+                            <Link to={ "/critics/" + critic.id } key={ index }><li>{critic.name }</li></Link>
                         )) }
                         { directorFans.map( (director, index) => (
                             <Link to={ "/directors/" + director.id} key={ index }><li>{director.name }</li></Link>

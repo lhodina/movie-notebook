@@ -38,7 +38,7 @@ const Critic = (props) => {
                 setFavoriteMovies(res.data.favorite_movies);
                 setNotes(res.data.notes);
                 setEditNotes(res.data.notes);
-                setUserLinks(res.data.links);
+                setUserLinks(res.data.user_links);
             })
             .catch(err => {
                 console.log(err);
@@ -146,7 +146,7 @@ const Critic = (props) => {
                     <div className="CriticLinks">
                         <h3>Articles + Videos</h3>
                         <ul>
-                            { userLinks.map( (link, index) => {
+                            { userLinks && userLinks.map( (link, index) => {
                                 return (
                                     <a href={link.url} target="_blank" rel="noreferrer" key={index}><li>{link.text}</li></a>
                                 )
@@ -176,7 +176,7 @@ const Critic = (props) => {
                                     <div className="CoreMovie" key={index}>
                                         <img src={movie.image_url} alt="" height="200px"/>
                                         <div className="CoreMovieBody">
-                                            <Link><h5>{ movie.title }</h5></Link>
+                                            <Link to={"/reviews/"}><h5>{ movie.title }</h5></Link>
                                         </div>
                                     </div>
                                 )

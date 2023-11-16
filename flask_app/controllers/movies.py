@@ -83,19 +83,19 @@ def add_director_fan(movie_id):
             "name": name,
             "image_url": api_director_image_url
             })
-        favorite_director_exists = favorite_director.FavoriteDirector.get_one({"id": director_id})
-        if not favorite_director_exists:
-            favorite_director.FavoriteDirector.save({
-                "notes": "",
-                "user_id": user_id,
-                "director_id": director_id
-            })
+    favorite_director_exists = favorite_director.FavoriteDirector.get_one({"id": director_id})
+    if not favorite_director_exists:
+        favorite_director.FavoriteDirector.save({
+            "notes": "",
+            "user_id": user_id,
+            "director_id": director_id
+        })
     data = {
         "movie_id": movie_id,
         "director_id": director_id
     }
     movie.Movie.add_director_fan(data)
-    return redirect("/dashboard")
+    return data
 
 
 @app.route("/movies/<int:movie_id>/critic_fans", methods=["POST"])
@@ -113,19 +113,20 @@ def add_critic_fan(movie_id):
             "name": name,
             "image_url": ""
             })
-        favorite_critic_exists = favorite_critic.FavoriteCritic.get_one({"id": critic_id})
-        if not favorite_critic_exists:
-            favorite_critic.FavoriteCritic.save({
-                "notes": "",
-                "user_id": user_id,
-                "critic_id": critic_id
-            })
+    favorite_critic_exists = favorite_critic.FavoriteCritic.get_one({"critic_id": critic_id})
+    print("favorite_critic_exists: ", favorite_critic_exists)
+    if not favorite_critic_exists:
+        favorite_critic.FavoriteCritic.save({
+            "notes": "",
+            "user_id": user_id,
+            "critic_id": critic_id
+        })
     data = {
         "movie_id": movie_id,
         "critic_id": critic_id
     }
     movie.Movie.add_critic_fan(data)
-    return redirect("/dashboard")
+    return data
 
 
 @app.route("/movies/<int:movie_id>/links", methods=["POST"])

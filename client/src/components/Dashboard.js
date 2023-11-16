@@ -59,11 +59,6 @@ const Dashboard = (props) => {
         setCollectionsOpen(!collectionsOpen);
     }
 
-    const handleRefresh = () => {
-        // We want the entire movie ranking order to be rearranged, not just have the new name rendered on the movie card
-        window.location.reload();
-    }
-
     useEffect(() => {
         axios.get("http://localhost:5000/dashboard")
             .then(res => {
@@ -139,7 +134,7 @@ const Dashboard = (props) => {
             <div className="Main">
                 { fanFormOpen && (
                     <div>
-                        <AddFanForm movie_id={currentMovieId} toggleForm={toggleFanForm} handleRefresh={handleRefresh} />
+                        <AddFanForm movie_id={currentMovieId} toggleForm={toggleFanForm} />
                     </div>
                 )}
             {

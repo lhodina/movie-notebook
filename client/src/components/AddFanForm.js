@@ -2,10 +2,19 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const AddFanForm = (props) => {
-    const { movie_id, toggleForm, handleRefresh } = props;
+    const { movie_id, toggleForm, directorFans, setDirectorFans, criticFans, setCriticFans } = props;
     const [ name, setName ] = useState("");
     const [fanType, setFanType] = useState("director");
     const [errors, setErrors] = useState([]);
+
+    const capitalize = (name) => {
+        let arr = name.split(" ");
+        for (let i = 0; i < arr.length; i++) {
+            arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+        }
+        console.log("testing arr: ", arr);
+        return arr.join(" ");
+    }
 
     const onSubmitHandler = e => {
         e.preventDefault();
@@ -13,19 +22,20 @@ const AddFanForm = (props) => {
             name
         })
             .then( res => {
+                console.log("res['data']['director_id']: ", res['data']['director_id']);
                 toggleForm();
-                if (handleRefresh) {
-                    handleRefresh();
+                let capitalized = capitalize(name);
+                console.log("capitalized: ", capitalized);
+                if (fanType === "director") {
+                    setDirectorFans([...directorFans, {"id": res["data"]["director_id"], "name": capitalized}])
+                } else if (fanType === "critic") {
+                    setCriticFans([...criticFans, {"id": res["data"]["critic_id"], "name": capitalized}])
+
                 }
+
             })
             .catch( err => {
-                const errorResponse = err.response.data.errors;
-
-                const errorArr = [];
-                for (const key of Object.keys(errorResponse)) {
-                    errorArr.push(errorResponse[key].message);
-                }
-                setErrors(errorArr);
+                console.log(err);
             })
     }
 

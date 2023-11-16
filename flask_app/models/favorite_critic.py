@@ -22,9 +22,9 @@ class FavoriteCritic:
     @classmethod
     def get_one(cls, data):
         query = """
-        SELECT * FROM user_favorite_critics WHERE critic_id = %(id)s;
+        SELECT * FROM user_favorite_critics WHERE critic_id = %(critic_id)s;
         """
-        return connectToMySQL(cls.DB).query_db(query, data)[0]
+        return connectToMySQL(cls.DB).query_db(query, data)
 
     @classmethod
     def update(cls, data):

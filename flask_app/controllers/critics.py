@@ -27,14 +27,14 @@ def get_all_critics():
 @app.route("/critics/<int:critic_id>")
 def get_critic(critic_id):
     data = {
-        "id": critic_id
+        "critic_id": critic_id
     }
 
     current_critic = critic.Critic.get_one(data)
 
     favorites = critic.Critic.get_favorites(data)
     current_user = user.User.get_one({"id": 1})
-    favorite = favorite_critic.FavoriteCritic.get_one(data)
+    favorite = favorite_critic.FavoriteCritic.get_one(data)[0]
     links = critic.Critic.get_links(data)
 
     return {
@@ -44,8 +44,8 @@ def get_critic(critic_id):
         "favorite_movies": favorites,
         "user_first_name": current_user.first_name,
         "user_last_name": current_user.last_name,
-        "notes": favorite["notes"],
-        "links": links
+        "notes": favorite['notes'],
+        "user_links": links
     }
 
 
