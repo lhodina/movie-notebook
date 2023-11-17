@@ -107,7 +107,7 @@ h1, h2, h3, .btn {
   padding: 30px;
 }
 
-.DirectorNotes, .DirectorLinks, .ReviewNotes, .ReviewLinks {
+.DirectorNotes, .DirectorLinks, .ReviewNotes, .ReviewLinks, .ReviewLikedBy {
   text-align: left;
   margin-bottom: 30px;
 }
@@ -264,12 +264,17 @@ ul {
   justify-content: space-between;
 }
 
-.ReviewNotes, .ReviewLinks, .ReviewLikedBy {
+.ReviewNotes, .ReviewLinks, .LikedByContainer {
   width: 33%;
 }
 
 .UpdateReviewForm {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+}
+
+.LikedByContainer {
+  display: flex;
   justify-content: center;
 }

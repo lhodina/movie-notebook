@@ -142,7 +142,7 @@ const Review = (props) => {
             <div className="Header">
                 <Link to={ "/dashboard" } >back to dashboard</Link>
                 <form className="SearchBar">
-                    <input className="SearchInput" type="text" value="search movies and people"></input>
+                    <input className="SearchInput" type="text" value="search my movies and people"></input>
                 </form>
                 <div className="NavUser">
                     <h5>{user.first_name} {user.last_name[0]}.</h5>
@@ -205,7 +205,7 @@ const Review = (props) => {
                     <ul>
                         { userLinks.map( (link, index) => {
                             return (
-                                <a href={link.url} target="_blank" rel="noreferrer" key={index}><li>{link.text}</li></a>
+                                <li><a href={link.url} target="_blank" rel="noreferrer" key={index}>{link.text}</a></li>
                             )
                         })
                         }
@@ -224,18 +224,20 @@ const Review = (props) => {
                         </form>
                     )}
                 </div>
-                <div className="ReviewLikedBy">
-                    <h2>Liked by:</h2>
-                    <ul>
-                        { criticFans.map( (critic, index) => (
-                            <Link to={ "/critics/" + critic.id } key={ index }><li>{critic.name }</li></Link>
-                        )) }
-                        { directorFans.map( (director, index) => (
-                            <Link to={ "/directors/" + director.id} key={ index }><li>{director.name }</li></Link>
-                        )) }
-                    </ul>
-                    { placeholder(review) }
-                    <button onClick={toggleFanForm}>Add a fan</button>
+                <div className="LikedByContainer">
+                    <div className="ReviewLikedBy">
+                        <h2>Liked by:</h2>
+                        <ul>
+                            { criticFans.map( (critic, index) => (
+                                <li><Link to={ "/critics/" + critic.id } key={ index }>{critic.name }</Link></li>
+                            )) }
+                            { directorFans.map( (director, index) => (
+                                <li><Link to={ "/directors/" + director.id} key={ index }>{director.name }</Link></li>
+                            )) }
+                        </ul>
+                        { placeholder(review) }
+                        <button onClick={toggleFanForm}>Add a fan</button>
+                    </div>
                 </div>
             </div>
         </div>

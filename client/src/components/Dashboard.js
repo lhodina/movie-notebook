@@ -10,6 +10,10 @@ const Dashboard = (props) => {
     const [favoriteCritics, setFavoriteCritics] = useState([]);
     const [collections, setCollections] = useState([]);
     const [reviews, setReviews] = useState([]);
+    const [watched, setWatched] = useState([]);
+    const [unwatched, setUnwatched] = useState([]);
+    const [displayed, setDisplayed] = useState([]);
+    const [pressed, setPressed] = useState("all");
     const [directorsOpen, setDirectorsOpen] = useState(false);
     const [criticsOpen, setCriticsOpen] = useState(false);
     const [collectionsOpen, setCollectionsOpen] = useState(false);
@@ -59,6 +63,21 @@ const Dashboard = (props) => {
         setCollectionsOpen(!collectionsOpen);
     }
 
+    const displayAll = () => {
+        setDisplayed(reviews);
+        setPressed("all");
+    }
+
+    const displayWatched = () => {
+        setDisplayed(watched);
+        setPressed("watched");
+    }
+
+    const displayUnwatched = () => {
+        setDisplayed(unwatched);
+        setPressed("unwatched");
+    }
+
     useEffect(() => {
         axios.get("http://localhost:5000/dashboard")
             .then(res => {
@@ -66,6 +85,9 @@ const Dashboard = (props) => {
                 setFavoriteCritics(res.data.favorite_critics);
                 setCollections(res.data.collections);
                 setReviews(res.data.reviews);
+                setDisplayed(res.data.reviews);
+                setWatched(res.data.watched);
+                setUnwatched(res.data.unwatched);
             })
             .catch(err => console.log(err))
     }, []);
@@ -125,12 +147,17 @@ const Dashboard = (props) => {
 
                 <Link to={"/reviews/add"}><button className="btn btn-danger">+ Review a Movie</button></Link>
                 <form className="SearchBar">
-                    <input className="SearchInput" type="text" value="search movies and people"></input>
+                    <input className="SearchInput" type="text" value="search my movies and people"></input>
                 </form>
                 <Link to={ "/logout" }>log out</Link>
             </div>
 
             <h1>CORE MOVIES</h1>
+            <div className="btn-group" role="group">
+                <button type="button" className={pressed === "all" ? "active btn btn-outline-danger" : "btn btn-outline-danger"} onClick={ displayAll }>All Reviews</button>
+                <button type="button" className={pressed === "watched" ? "active btn btn-outline-danger" : "btn btn-outline-danger"} onClick={ displayWatched }>Watched</button>
+                <button type="button" className={pressed === "unwatched" ? "active btn btn-outline-danger" : "btn btn-outline-danger"} onClick={ displayUnwatched }>Unwatched</button>
+            </div>
             <div className="Main">
                 { fanFormOpen && (
                     <div>
@@ -138,7 +165,7 @@ const Dashboard = (props) => {
                     </div>
                 )}
             {
-                reviews.map( (review, index) => {
+                displayed.map( (review, index) => {
                     return (
                         <div className="CoreMovie" key={index}>
                             <Link to={ "/reviews/" + review.id }><img src={review.image_url} alt="" height="200px"/></Link>

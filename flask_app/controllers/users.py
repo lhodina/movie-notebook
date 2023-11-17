@@ -40,6 +40,9 @@ def dashboard():
     favorite_directors = user.User.get_favorite_directors(data)
     favorite_critics = user.User.get_favorite_critics(data)
     reviews = user.User.get_reviews(data)
+    watched = list(filter(lambda d: d['watched'] == 1, reviews))
+    unwatched = list(filter(lambda d: d['watched'] == 0, reviews))
+
     userJSON = {
         "first_name": current_user.first_name,
         "last_name": current_user.last_name,
@@ -48,7 +51,9 @@ def dashboard():
         "collections": current_user.collections,
         "favorite_directors": favorite_directors,
         "favorite_critics": favorite_critics,
-        "reviews": reviews
+        "reviews": reviews,
+        "watched": watched,
+        "unwatched": unwatched
     }
 
     return userJSON

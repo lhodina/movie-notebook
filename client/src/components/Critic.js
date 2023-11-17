@@ -105,7 +105,7 @@ const Critic = (props) => {
             <div className="Header">
                 <Link to={ "/dashboard" } >back to dashboard</Link>
                 <form className="SearchBar">
-                    <input className="SearchInput" type="text" value="search movies and people"></input>
+                    <input className="SearchInput" type="text" value="search my movies and people"></input>
                 </form>
                 <div className="NavUser">
                     <h5>{user.first_name} {user.last_name[0]}.</h5>

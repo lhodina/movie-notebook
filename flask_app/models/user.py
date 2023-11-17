@@ -162,7 +162,7 @@ class User:
             }
 
             reviews.append(full_review)
-            reviews.sort(key=lambda x: x['likes_count'], reverse=True)
+        reviews.sort(key=lambda x: x['likes_count'], reverse=True)
         return reviews
 
 
