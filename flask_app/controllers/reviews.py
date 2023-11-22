@@ -70,7 +70,7 @@ def add_review():
         favorite_director_exists = favorite_director.FavoriteDirector.get_one({"id": directed_by_id})
         if not favorite_director_exists:
             favorite_director.FavoriteDirector.save({
-                "notes": "",
+                "notes": "No notes yet",
                 "user_id": user_id,
                 "director_id": directed_by_id
             })

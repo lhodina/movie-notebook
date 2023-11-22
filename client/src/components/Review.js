@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import expandIcon from "../assets/expand-icon-small.png";
 
@@ -47,6 +47,8 @@ const Review = (props) => {
     const [newLinkText, setNewLinkText] = useState("");
     const [newLinkURL, setNewLinkURL] = useState("");
     const [updateReviewFormOpen, setUpdateReviewFormOpen] = useState(false);
+
+    const navigate = useNavigate();
 
     const toggleGrayout = () => {
         setGrayout(!grayout);
@@ -114,6 +116,15 @@ const Review = (props) => {
         toggleLinkFormExpanded();
     }
 
+
+    const deleteReview = reviewId => {
+        axios.delete("http://localhost:5000/reviews/delete/" + reviewId)
+            .then(res => {
+                navigate("/dashboard");
+            })
+            .catch(err => console.log(err));
+    }
+
     useEffect( () => {
         axios.get("http://localhost:5000/reviews/" + id)
             .then( (res) => {
@@ -142,7 +153,7 @@ const Review = (props) => {
             <div className="Header">
                 <Link to={ "/dashboard" } >back to dashboard</Link>
                 <form className="SearchBar">
-                    <input className="SearchInput" type="text" value="search my movies and people"></input>
+                    <input className="SearchInput" type="text" value="search my stuff"></input>
                 </form>
                 <div className="NavUser">
                     <h5>{user.first_name} {user.last_name[0]}.</h5>
@@ -175,6 +186,7 @@ const Review = (props) => {
                     </p>
                     <p>Watched: {watched == 1 ? "Yes" : "No"}</p>
                     <button onClick={ toggleReviewForm }>edit</button>
+
                     { updateReviewFormOpen && (
                         <div className="UpdateReviewForm">
                             <UpdateReviewForm user={user} rating={rating} review={review} setReview={setReview} setRating={setRating} watched={watched} setWatched={setWatched} toggleReviewForm={toggleReviewForm} />

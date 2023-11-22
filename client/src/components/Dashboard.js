@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import '../App.css';
 import AddFanForm from './AddFanForm'
@@ -20,6 +20,7 @@ const Dashboard = (props) => {
     const [fanFormOpen, setFanFormOpen] = useState(false);
     const [grayout, setGrayout] = useState(false);
     const [currentMovieId, setCurrentMovieId] = useState(0);
+    const [currentLinkId, setCurrentLinkId] = useState(0);
 
     const toggleGrayout = () => {
         setGrayout(!grayout);
@@ -36,7 +37,7 @@ const Dashboard = (props) => {
     }
 
     const deleteReview = reviewId => {
-        axios.get("http://localhost:5000/reviews/delete/" + reviewId)
+        axios.delete("http://localhost:5000/reviews/delete/" + reviewId)
             .then(res => {
                 removeFromDom(reviewId)
             })
@@ -76,6 +77,19 @@ const Dashboard = (props) => {
     const displayUnwatched = () => {
         setDisplayed(unwatched);
         setPressed("unwatched");
+    }
+
+
+    const displayAllFans = (currentReview) => {
+        const criticFansList = currentReview.critic_fans.map((critic, index) => (
+            <Link to={ "/critics/" + critic.id } key={index}><p>{critic.name}</p></Link>
+        ));
+
+        const directorFansList = currentReview.director_fans.map((director, index) => (
+            <Link to={ "/directors/" + director.id } key={index}><p>{director.name}</p></Link>
+        ));
+
+        return [...criticFansList, ...directorFansList]
     }
 
     useEffect(() => {
@@ -147,7 +161,7 @@ const Dashboard = (props) => {
 
                 <Link to={"/reviews/add"}><button className="btn btn-danger">+ Review a Movie</button></Link>
                 <form className="SearchBar">
-                    <input className="SearchInput" type="text" value="search my movies and people"></input>
+                    <input className="SearchInput" type="text" value="search my stuff"></input>
                 </form>
                 <Link to={ "/logout" }>log out</Link>
             </div>
@@ -168,28 +182,18 @@ const Dashboard = (props) => {
                 displayed.map( (review, index) => {
                     return (
                         <div className="CoreMovie" key={index}>
-                            <Link to={ "/reviews/" + review.id }><img src={review.image_url} alt="" height="200px"/></Link>
+                            <Link to={ "/reviews/" + review.id } className="MoviePosterLink"><img src={review.image_url} alt="movie poster" className="MoviePoster" /></Link>
                             <div className="CoreMovieBody">
                                 <Link to={ "/reviews/" + review.id }><h5>{ review.title }</h5></Link>
                                 <div className="LikedBy">
                                     <h6>Liked By:</h6>
-                                    {
-                                    review.critic_fans.map((critic, index) => (
-                                        <Link to={ "/critics/" + critic.id } key={index}><p>{critic.name}</p></Link>
-                                    ))
-                                    }
-                                    {
-                                    review.director_fans.map((director, index) => (
-                                        <Link to={ "/directors/" + director.id } key={index}><p>{director.name}</p></Link>
-                                    ))
-                                    }
-                                    {
-                                        placeholder(review)
-                                    }
+                                    { displayAllFans(review) }
+
+                                    { placeholder(review) }
                                     <button onClick={ () => {
-                                        setCurrentMovieId(review.movie_id);
-                                        toggleFanForm();
-                                        } }>Add a fan
+                                            setCurrentMovieId(review.movie_id);
+                                            toggleFanForm();
+                                        } } className="AddFanButton">Add a fan
                                     </button>
                                 </div>
                             </div>

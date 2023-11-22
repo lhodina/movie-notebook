@@ -105,3 +105,5 @@ def add_link(director_id):
 
     director.Director.add_link(data)
     return redirect(f"/directors/{director_id}")
+
+

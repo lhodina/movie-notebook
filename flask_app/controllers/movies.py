@@ -86,7 +86,7 @@ def add_director_fan(movie_id):
     favorite_director_exists = favorite_director.FavoriteDirector.get_one({"id": director_id})
     if not favorite_director_exists:
         favorite_director.FavoriteDirector.save({
-            "notes": "",
+            "notes": "No notes yet",
             "user_id": user_id,
             "director_id": director_id
         })
@@ -117,7 +117,7 @@ def add_critic_fan(movie_id):
     print("favorite_critic_exists: ", favorite_critic_exists)
     if not favorite_critic_exists:
         favorite_critic.FavoriteCritic.save({
-            "notes": "",
+            "notes": "No notes yet",
             "user_id": user_id,
             "critic_id": critic_id
         })

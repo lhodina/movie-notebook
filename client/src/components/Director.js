@@ -118,6 +118,18 @@ const Director = (props) => {
         toggleLinkFormExpanded();
     }
 
+    const removeLinkFromDom = linkId => {
+        setUserLinks(userLinks.filter(link => link.id !== linkId));
+    }
+
+    const deleteLink = linkId => {
+        axios.delete(`/director_links/${linkId}/delete`)
+            .then(res => {
+                removeLinkFromDom(linkId);
+            })
+            .catch(err => console.log(err));
+    }
+
     return (
         <div className="Container">
             { grayout && (
@@ -126,7 +138,7 @@ const Director = (props) => {
             <div className="Header">
                 <Link to={ "/dashboard" } >back to dashboard</Link>
                 <form className="SearchBar">
-                    <input className="SearchInput" type="text" value="search my movies and people"></input>
+                    <input className="SearchInput" type="text" value="search my stuff"></input>
                 </form>
                 <div className="NavUser">
                     <h5>{user.first_name} {user.last_name[0]}.</h5>
@@ -186,7 +198,10 @@ const Director = (props) => {
                         <ul>
                             { userLinks.map( (link, index) => {
                                 return (
-                                    <a href={link.url} target="_blank" rel="noreferrer" key={index}><li>{link.text}</li></a>
+                                    <li>
+                                        <a href={link.url} target="_blank" rel="noreferrer" key={index}>{link.text}</a>
+                                        <button onClick={() => deleteLink(link.id)}> X </button>
+                                    </li>
                                 )
                             })
                             }

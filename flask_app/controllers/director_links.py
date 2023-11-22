@@ -16,7 +16,7 @@ def add_director_link(director_id):
     return redirect("/dashboard")
 
 
-@app.route("/director_links/<int:director_link_id>/delete")
+@app.route("/director_links/<int:director_link_id>/delete", methods=["DELETE"])
 def delete_director_link(director_link_id):
     data = {
         "id": director_link_id
