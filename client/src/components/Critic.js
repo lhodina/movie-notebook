@@ -85,6 +85,7 @@ const Critic = (props) => {
             "critic_id": id
         }).then((res) => {
             setUserLinks([...userLinks, {
+                "id": res["data"]["id"],
                 "text": newLinkText,
                 "url": newLinkURL,
                 "user_id": user.id,
@@ -95,6 +96,18 @@ const Critic = (props) => {
         setNewLinkText("")
         setNewLinkURL("")
         toggleLinkFormExpanded();
+    }
+
+    const removeLinkFromDom = linkId => {
+        setUserLinks(userLinks.filter(link => link.id !== linkId));
+    }
+
+    const deleteLink = linkId => {
+        axios.post(`http://localhost:5000/critic_links/${linkId}/delete`)
+            .then(res => {
+                removeLinkFromDom(linkId);
+            })
+            .catch(err => console.log(err));
     }
 
     return (
@@ -146,9 +159,9 @@ const Critic = (props) => {
                     <div className="CriticLinks">
                         <h3>Articles + Videos</h3>
                         <ul>
-                            { userLinks && userLinks.map( (link, index) => {
+                            { userLinks.map( (link, index) => {
                                 return (
-                                    <a href={link.url} target="_blank" rel="noreferrer" key={index}><li>{link.text}</li></a>
+                                    <li key={index}><a href={link.url} target="_blank" rel="noreferrer" >{link.text}</a><button onClick={ (e) => {deleteLink(link.id)} } className="DeleteLinkButton"> X </button></li>
                                 )
                             })
                             }

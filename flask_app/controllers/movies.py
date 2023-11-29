@@ -128,16 +128,3 @@ def add_critic_fan(movie_id):
     movie.Movie.add_critic_fan(data)
     return data
 
-
-@app.route("/movies/<int:movie_id>/links", methods=["POST"])
-def add_movie_link(movie_id):
-    # REPLACE HARDCODED user_id
-    user_id = 1
-    data = {
-        "text": request.json["text"],
-        "url": request.json["url"],
-        "user_id": user_id,
-        "movie_id": movie_id
-    }
-    movie_link.MovieLink.save(data)
-    return redirect("/dashboard")

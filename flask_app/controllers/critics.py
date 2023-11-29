@@ -36,6 +36,7 @@ def get_critic(critic_id):
     current_user = user.User.get_one({"id": 1})
     favorite = favorite_critic.FavoriteCritic.get_one(data)[0]
     links = critic.Critic.get_links(data)
+    print("TESTING links: ", links)
 
     return {
         "id": current_critic.id,
@@ -88,16 +89,3 @@ def remove_favorite_movie(critic_id):
 
     critic.Critic.remove_favorite(data)
     return redirect("/dashboard")
-
-
-@app.route("/critics/<int:critic_id>/links", methods=["POST"])
-def add_critic_link(critic_id):
-    data = {
-        "user_id": request.json["user_id"],
-        "critic_id": critic_id,
-        "text": request.json["text"],
-        "url": request.json["url"]
-    }
-
-    critic.Critic.add_link(data)
-    return redirect(f"/critics/{critic_id}")

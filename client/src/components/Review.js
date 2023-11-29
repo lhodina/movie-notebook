@@ -106,6 +106,7 @@ const Review = (props) => {
         })
         .then(res => {
             setUserLinks([...userLinks, {
+                "id": res["data"]["id"],
                 "text": newLinkText,
                 "url": newLinkURL,
                 "user_id": user.id,
@@ -116,8 +117,16 @@ const Review = (props) => {
         toggleLinkFormExpanded();
     }
 
-    const deleteLink = () => {
-        console.log("WUH-OH!");
+    const removeLinkFromDom = linkId => {
+        setUserLinks(userLinks.filter(link => link.id !== linkId));
+    }
+
+    const deleteLink = linkId => {
+        axios.post(`http://localhost:5000/movie_links/${linkId}/delete`)
+            .then(res => {
+                removeLinkFromDom(linkId);
+            })
+            .catch(err => console.log(err));
     }
 
 
@@ -128,6 +137,7 @@ const Review = (props) => {
             })
             .catch(err => console.log(err));
     }
+
 
     useEffect( () => {
         axios.get("http://localhost:5000/reviews/" + id)
@@ -221,7 +231,10 @@ const Review = (props) => {
                     <ul>
                         { userLinks.map( (link, index) => {
                             return (
-                                <li><a href={link.url} target="_blank" rel="noreferrer" key={index}>{link.text}</a><button className="DeleteLinkButton" onClick={deleteLink}>X</button></li>
+                                <li key={index}>
+                                    <a href={link.url} target="_blank" rel="noreferrer">{link.text}</a>
+                                    <button className="DeleteLinkButton" onClick={(e) => {deleteLink(link.id)} }>X</button>
+                                </li>
                             )
                         })
                         }

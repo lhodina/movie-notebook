@@ -106,7 +106,6 @@ const Director = (props) => {
             "user_id": user.id,
             "director_id": id
         }).then((res) => {
-            console.log("res['data']['id']: ", res['data']['id']);
             setUserLinks([...userLinks, {
                 "id": res["data"]["id"],
                 "text": newLinkText,
@@ -122,7 +121,6 @@ const Director = (props) => {
 
     const removeLinkFromDom = linkId => {
         setUserLinks(userLinks.filter(link => link.id !== linkId));
-        console.log("TESTING -- userLinks[0]: ", userLinks[0]);
     }
 
     const deleteLink = linkId => {
@@ -203,8 +201,7 @@ const Director = (props) => {
                                 return (
                                     <li key={index}>
                                         <a href={link.url} target="_blank" rel="noreferrer" >{link.text}</a>
-                                        <button onClick={ (e) => {deleteLink(link.id)} }> X </button>
-                                        link.id: {link.id}
+                                        <button onClick={ (e) => {deleteLink(link.id)} } className="DeleteLinkButton"> X </button>
                                     </li>
                                 )
                             })

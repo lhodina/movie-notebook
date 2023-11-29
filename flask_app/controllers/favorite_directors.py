@@ -52,7 +52,6 @@ def updateNotes(id):
         "id": id
     }
     res = favorite_director.FavoriteDirector.update(data)
-    print("res: ", res)
     return res
 
 

@@ -13,7 +13,6 @@ def add_director_link(director_id):
         "director_id": director_id
     }
     res = director_link.DirectorLink.save(data)
-    print("add_director_link res: ", res)
     return {"id": res}
 
 
