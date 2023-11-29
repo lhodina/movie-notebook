@@ -12,11 +12,12 @@ def add_director_link(director_id):
         "user_id": 1,
         "director_id": director_id
     }
-    director_link.DirectorLink.save(data)
-    return redirect("/dashboard")
+    res = director_link.DirectorLink.save(data)
+    print("add_director_link res: ", res)
+    return {"id": res}
 
 
-@app.route("/director_links/<int:director_link_id>/delete", methods=["DELETE"])
+@app.route("/director_links/<int:director_link_id>/delete", methods=["POST"])
 def delete_director_link(director_link_id):
     data = {
         "id": director_link_id

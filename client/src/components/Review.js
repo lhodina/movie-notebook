@@ -116,6 +116,10 @@ const Review = (props) => {
         toggleLinkFormExpanded();
     }
 
+    const deleteLink = () => {
+        console.log("WUH-OH!");
+    }
+
 
     const deleteReview = reviewId => {
         axios.delete("http://localhost:5000/reviews/delete/" + reviewId)
@@ -217,7 +221,7 @@ const Review = (props) => {
                     <ul>
                         { userLinks.map( (link, index) => {
                             return (
-                                <li><a href={link.url} target="_blank" rel="noreferrer" key={index}>{link.text}</a></li>
+                                <li><a href={link.url} target="_blank" rel="noreferrer" key={index}>{link.text}</a><button className="DeleteLinkButton" onClick={deleteLink}>X</button></li>
                             )
                         })
                         }

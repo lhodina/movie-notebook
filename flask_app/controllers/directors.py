@@ -94,16 +94,14 @@ def remove_favorite(director_id):
     return redirect("/dashboard")
 
 
-@app.route("/directors/<int:director_id>/links", methods=["POST"])
-def add_link(director_id):
-    data = {
-        "user_id": request.json["user_id"],
-        "director_id": director_id,
-        "text": request.json["text"],
-        "url": request.json["url"]
-    }
+# @app.route("/directors/<int:director_id>/links", methods=["POST"])
+# def add_link(director_id):
+#     data = {
+#         "user_id": request.json["user_id"],
+#         "director_id": director_id,
+#         "text": request.json["text"],
+#         "url": request.json["url"]
+#     }
 
-    director.Director.add_link(data)
-    return redirect(f"/directors/{director_id}")
-
-
+#     director.Director.add_link(data)
+#     return redirect(f"/directors/{director_id}")

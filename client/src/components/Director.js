@@ -106,7 +106,9 @@ const Director = (props) => {
             "user_id": user.id,
             "director_id": id
         }).then((res) => {
+            console.log("res['data']['id']: ", res['data']['id']);
             setUserLinks([...userLinks, {
+                "id": res["data"]["id"],
                 "text": newLinkText,
                 "url": newLinkURL,
                 "user_id": user.id,
@@ -120,10 +122,11 @@ const Director = (props) => {
 
     const removeLinkFromDom = linkId => {
         setUserLinks(userLinks.filter(link => link.id !== linkId));
+        console.log("TESTING -- userLinks[0]: ", userLinks[0]);
     }
 
     const deleteLink = linkId => {
-        axios.delete(`/director_links/${linkId}/delete`)
+        axios.post(`http://localhost:5000/director_links/${linkId}/delete`)
             .then(res => {
                 removeLinkFromDom(linkId);
             })
@@ -198,9 +201,10 @@ const Director = (props) => {
                         <ul>
                             { userLinks.map( (link, index) => {
                                 return (
-                                    <li>
-                                        <a href={link.url} target="_blank" rel="noreferrer" key={index}>{link.text}</a>
-                                        <button onClick={() => deleteLink(link.id)}> X </button>
+                                    <li key={index}>
+                                        <a href={link.url} target="_blank" rel="noreferrer" >{link.text}</a>
+                                        <button onClick={ (e) => {deleteLink(link.id)} }> X </button>
+                                        link.id: {link.id}
                                     </li>
                                 )
                             })
