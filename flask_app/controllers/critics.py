@@ -36,7 +36,6 @@ def get_critic(critic_id):
     current_user = user.User.get_one({"id": 1})
     favorite = favorite_critic.FavoriteCritic.get_one(data)[0]
     links = critic.Critic.get_links(data)
-    print("TESTING links: ", links)
 
     return {
         "id": current_critic.id,

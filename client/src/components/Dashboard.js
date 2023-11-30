@@ -13,14 +13,13 @@ const Dashboard = (props) => {
     const [watched, setWatched] = useState([]);
     const [unwatched, setUnwatched] = useState([]);
     const [displayed, setDisplayed] = useState([]);
-    const [pressed, setPressed] = useState("all");
+    const [pressed, setPressed] = useState("unwatched");
     const [directorsOpen, setDirectorsOpen] = useState(false);
     const [criticsOpen, setCriticsOpen] = useState(false);
     const [collectionsOpen, setCollectionsOpen] = useState(false);
     const [fanFormOpen, setFanFormOpen] = useState(false);
     const [grayout, setGrayout] = useState(false);
     const [currentMovieId, setCurrentMovieId] = useState(0);
-    const [currentLinkId, setCurrentLinkId] = useState(0);
 
     const toggleGrayout = () => {
         setGrayout(!grayout);
@@ -99,7 +98,7 @@ const Dashboard = (props) => {
                 setFavoriteCritics(res.data.favorite_critics);
                 setCollections(res.data.collections);
                 setReviews(res.data.reviews);
-                setDisplayed(res.data.reviews);
+                setDisplayed(res.data.unwatched);
                 setWatched(res.data.watched);
                 setUnwatched(res.data.unwatched);
             })
@@ -117,6 +116,7 @@ const Dashboard = (props) => {
                     <h5>My Directors</h5>
                     { directorsOpen && (
                         <div className="NavDropdown">
+                            <Link to={"/favorite_directors/add"}> + Add Favorite Director</Link>
                             <ul className="NavDropdownList" >
                             {
                                 favoriteDirectors.map( (director, index) => (
@@ -124,7 +124,6 @@ const Dashboard = (props) => {
                                 ))
                             }
                             </ul>
-                            <Link to={"/favorite_directors/add"}> + Add Favorite Director</Link>
                         </div>
                     )}
                 </div>
@@ -132,6 +131,7 @@ const Dashboard = (props) => {
                     <h5>My Critics</h5>
                     { criticsOpen && (
                         <div className="NavDropdown">
+                            <Link to={"/favorite_critics/add"}> + Add Favorite Critic</Link>
                             <ul className="NavDropdownList" >
                             {
                                 favoriteCritics.map( (critic, index) => (
@@ -139,7 +139,6 @@ const Dashboard = (props) => {
                                 ))
                             }
                             </ul>
-                            <Link to={"/favorite_critics/add"}> + Add Favorite Critic</Link>
                         </div>
                     )}
                 </div>
@@ -147,6 +146,7 @@ const Dashboard = (props) => {
                     <h5>Collections</h5>
                     { collectionsOpen && (
                         <div className="NavDropdown">
+                            <Link to={"/collections/add"}> + Add Collection</Link>
                             <ul className="NavDropdownList" >
                             {
                                 collections.map( (collection, index) => (
@@ -154,7 +154,6 @@ const Dashboard = (props) => {
                                 ))
                             }
                             </ul>
-                            <Link to={"/collections/add"}> + Add Collection</Link>
                         </div>
                     )}
                 </div>
@@ -168,9 +167,9 @@ const Dashboard = (props) => {
 
             <h1>CORE MOVIES</h1>
             <div className="btn-group" role="group">
-                <button type="button" className={pressed === "all" ? "active btn btn-outline-danger" : "btn btn-outline-danger"} onClick={ displayAll }>All Reviews</button>
-                <button type="button" className={pressed === "watched" ? "active btn btn-outline-danger" : "btn btn-outline-danger"} onClick={ displayWatched }>Watched</button>
                 <button type="button" className={pressed === "unwatched" ? "active btn btn-outline-danger" : "btn btn-outline-danger"} onClick={ displayUnwatched }>Unwatched</button>
+                <button type="button" className={pressed === "watched" ? "active btn btn-outline-danger" : "btn btn-outline-danger"} onClick={ displayWatched }>Watched</button>
+                <button type="button" className={pressed === "all" ? "active btn btn-outline-danger" : "btn btn-outline-danger"} onClick={ displayAll }>All Reviews</button>
             </div>
             <div className="Main">
                 { fanFormOpen && (
