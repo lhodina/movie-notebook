@@ -34,7 +34,7 @@ const FavoriteDirectorForm = (props) => {
             <div className="Header">
                 <Link to={ "/dashboard" } >back to dashboard</Link>
                 <form className="SearchBar">
-                    <input className="SearchInput" type="text" value="search my stuff"></input>
+                    <input className="SearchInput" type="text" value="search my stuff" onChange={() => console.log("this search bar will eventually do something")}></input>
                 </form>
                 <div className="NavUser">
                     <h5>{user.first_name} {user.last_name[0]}.</h5>

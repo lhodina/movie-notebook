@@ -26,6 +26,7 @@ def get_all_directors():
 
 @app.route("/directors/<int:director_id>")
 def get_director(director_id):
+    print("* * * * * controller get_director is firing for director_id: ", director_id)
     data = {
         "id": director_id
     }
@@ -34,7 +35,6 @@ def get_director(director_id):
     favorites = director.Director.get_favorites(data)
     current_user = user.User.get_one({"id": 1})
     favorite = favorite_director.FavoriteDirector.get_one(data)
-    # print("favorite: ", favorite)
     notes = ""
     if (len(favorite) > 0):
         notes = favorite[0]["notes"]

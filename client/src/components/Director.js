@@ -131,6 +131,26 @@ const Director = (props) => {
             .catch(err => console.log(err));
     }
 
+    const displayDirectorFans = (currentReview) => {
+        return currentReview.director_fans.map((director, index) => (
+            <Link to={ "/directors/" + director.id } key={index}><p>{director.name}</p></Link>
+        ));
+    }
+
+    const displayCriticFans = (currentReview) => {
+        return currentReview.critic_fans.map((critic, index) => (
+            <Link to={ "/critics/" + critic.id } key={index}><p>{critic.name}</p></Link>
+        ));
+    }
+
+    const placeholder = (review) => {
+        if (review.likes_count < 1) {
+            return <div>
+                <p>No likes yet</p>
+                </div>
+        }
+    }
+
     return (
         <div className="Container">
             { grayout && (
@@ -139,7 +159,7 @@ const Director = (props) => {
             <div className="Header">
                 <Link to={ "/dashboard" } >back to dashboard</Link>
                 <form className="SearchBar">
-                    <input className="SearchInput" type="text" value="search my stuff"></input>
+                    <input className="SearchInput" type="text" value="search my stuff" onChange={() => console.log("this search bar will eventually do something")}></input>
                 </form>
                 <div className="NavUser">
                     <h5>{user.first_name} {user.last_name[0]}.</h5>
@@ -232,6 +252,12 @@ const Director = (props) => {
                                             <Link to={"/reviews/" + movie.review_id}><img src={movie.image_url} alt="" height="200px"/></Link>
                                             <div className="CoreMovieBody">
                                                 <Link to={"/reviews/" + movie.review_id}><h5>{ movie.title }</h5></Link>
+                                                <div className="LikedBy">
+                                                    <h6>Liked By:</h6>
+                                                    { displayDirectorFans(movie) }
+                                                    { displayCriticFans(movie) }
+                                                    { placeholder(movie) }
+                                                </div>
                                             </div>
                                         </div>
                                     )

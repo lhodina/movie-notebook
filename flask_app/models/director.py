@@ -38,6 +38,10 @@ class Director:
         SELECT * FROM directors
         LEFT JOIN movies ON movies.directed_by_id = directors.id
         LEFT JOIN reviews ON reviews.movie_id = movies.id
+        LEFT JOIN director_favorite_movies ON director_favorite_movies.movie_id = movies.id
+        LEFT JOIN directors AS director_fans ON director_fans.id = director_favorite_movies.director_id
+        LEFT JOIN critic_favorite_movies ON critic_favorite_movies.movie_id = movies.id
+        LEFT JOIN critics ON critics.id = critic_favorite_movies.critic_id
         WHERE directors.id = %(id)s;
         """
         result = connectToMySQL(cls.DB).query_db(query, data)
@@ -51,15 +55,61 @@ class Director:
         }
         current_director = cls(current_director_data)
 
-        for item in result:
-            current_movie_data = {
-                "id": item["movies.id"],
-                "title": item["title"],
-                "year": item["year"],
-                "image_url": item["movies.image_url"],
-                "review_id": item["reviews.id"]
-            }
-            current_director.movies_directed.append(current_movie_data)
+        # print("* * * * * * * * * * * * * * * * * ")
+        # First, get all the movies regardless of fans
+        titles = []
+        for movie in result:
+            if movie['title'] not in titles:
+                titles.append(movie['title'])
+                current_movie_data = {
+                    "id": movie["movies.id"],
+                    "title": movie["title"],
+                    "year": movie["year"],
+                    "image_url": movie["movies.image_url"],
+                    "review_id": movie["reviews.id"],
+                    "director_fans": [],
+                    "critic_fans": []
+                }
+                current_director.movies_directed.append(current_movie_data)
+        # Now get all the director fans for each movie
+        # 1. Determine if an entry includes a director fan
+        # 2. Check if director fan is already in list -- if not, add it
+        # 3. Do the same for critic fans
+
+        for movie in current_director.movies_directed:
+            # print()
+            # print("* * * * * * * * * * ")
+            # print("movie: ", movie)
+            director_fan_names = []
+            critic_fan_names = []
+            for record in result:
+                # print()
+                # print("* * * * * record:", record )
+                # print(record['title'])
+                # print("record['movies.id']: ", record['movies.id'])
+                if movie['id'] == record['movies.id']:
+                    # print("This is a match")
+                    # print(record)
+                    if record['director_fans.name'] and record['director_fans.name'] not in director_fan_names:
+                        director_fan_names.append(record['director_fans.name'])
+                        # print("record includes director fan: ", record['director_fans.name'])
+                        # print("director_fan_names: ", director_fan_names)
+                        director_fan = {
+                            "id": record['director_id'],
+                            "name": record['director_fans.name']
+                        }
+                        movie['director_fans'].append(director_fan)
+                        # print("movie['director_fans']: ", movie['director_fans'])
+                    if record['critics.name'] and record['critics.name'] not in critic_fan_names:
+                        critic_fan_names.append(record['critics.name'])
+                        # print("record includes critic fan: ", record['critics.name'])
+                        # print("critic_fan_names: ", critic_fan_names)
+                        critic_fan = {
+                            "id": record['critic_id'],
+                            "name": record['critics.name']
+                        }
+                        movie['critic_fans'].append(critic_fan)
+                        # print("movie['critic_fans']: ", movie['critic_fans'])
         return current_director
 
 

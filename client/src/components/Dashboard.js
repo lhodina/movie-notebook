@@ -160,7 +160,7 @@ const Dashboard = (props) => {
 
                 <Link to={"/reviews/add"}><button className="btn btn-danger">+ Review a Movie</button></Link>
                 <form className="SearchBar">
-                    <input className="SearchInput" type="text" value="search my stuff"></input>
+                    <input className="SearchInput" type="text" value="search my stuff" onChange={() => console.log("this search bar will eventually do something")}></input>
                 </form>
                 <Link to={ "/logout" }>log out</Link>
             </div>
