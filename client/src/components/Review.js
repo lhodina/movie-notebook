@@ -258,10 +258,10 @@ const Review = (props) => {
                         <h2>Liked by:</h2>
                         <ul>
                             { criticFans.map( (critic, index) => (
-                                <li><Link to={ "/critics/" + critic.id } key={ index }>{critic.name }</Link></li>
+                                <li key={ index }><Link to={ "/critics/" + critic.id }>{critic.name }</Link></li>
                             )) }
-                            { directorFans.map( (director, index) => (
-                                <li><Link to={ "/directors/" + director.id} key={ index }>{director.name }</Link></li>
+                            { directorFans.map( (directorFan, index) => (
+                                <li key={ index }><Link to={ "/directors/" + directorFan.id} >{directorFan.name }</Link></li>
                             )) }
                         </ul>
                         { placeholder(review) }

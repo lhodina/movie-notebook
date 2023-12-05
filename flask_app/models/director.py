@@ -55,8 +55,6 @@ class Director:
         }
         current_director = cls(current_director_data)
 
-        # print("* * * * * * * * * * * * * * * * * ")
-        # First, get all the movies regardless of fans
         titles = []
         for movie in result:
             if movie['title'] not in titles:
@@ -71,45 +69,26 @@ class Director:
                     "critic_fans": []
                 }
                 current_director.movies_directed.append(current_movie_data)
-        # Now get all the director fans for each movie
-        # 1. Determine if an entry includes a director fan
-        # 2. Check if director fan is already in list -- if not, add it
-        # 3. Do the same for critic fans
 
         for movie in current_director.movies_directed:
-            # print()
-            # print("* * * * * * * * * * ")
-            # print("movie: ", movie)
             director_fan_names = []
             critic_fan_names = []
             for record in result:
-                # print()
-                # print("* * * * * record:", record )
-                # print(record['title'])
-                # print("record['movies.id']: ", record['movies.id'])
                 if movie['id'] == record['movies.id']:
-                    # print("This is a match")
-                    # print(record)
                     if record['director_fans.name'] and record['director_fans.name'] not in director_fan_names:
                         director_fan_names.append(record['director_fans.name'])
-                        # print("record includes director fan: ", record['director_fans.name'])
-                        # print("director_fan_names: ", director_fan_names)
                         director_fan = {
                             "id": record['director_id'],
                             "name": record['director_fans.name']
                         }
                         movie['director_fans'].append(director_fan)
-                        # print("movie['director_fans']: ", movie['director_fans'])
                     if record['critics.name'] and record['critics.name'] not in critic_fan_names:
                         critic_fan_names.append(record['critics.name'])
-                        # print("record includes critic fan: ", record['critics.name'])
-                        # print("critic_fan_names: ", critic_fan_names)
                         critic_fan = {
                             "id": record['critic_id'],
                             "name": record['critics.name']
                         }
                         movie['critic_fans'].append(critic_fan)
-                        # print("movie['critic_fans']: ", movie['critic_fans'])
         return current_director
 
 

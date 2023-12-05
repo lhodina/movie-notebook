@@ -48,12 +48,11 @@ const Director = (props) => {
             .catch(err => {
                 console.log(err);
             })
-    }, []);
+    }, [id]);
 
     const showFavorites = () => {
         setFavoritesOpen(true);
         setDirectedByOpen(false);
-
     }
 
     const showDirectedBy = () => {
@@ -131,20 +130,8 @@ const Director = (props) => {
             .catch(err => console.log(err));
     }
 
-    const displayDirectorFans = (currentReview) => {
-        return currentReview.director_fans.map((director, index) => (
-            <Link to={ "/directors/" + director.id } key={index}><p>{director.name}</p></Link>
-        ));
-    }
-
-    const displayCriticFans = (currentReview) => {
-        return currentReview.critic_fans.map((critic, index) => (
-            <Link to={ "/critics/" + critic.id } key={index}><p>{critic.name}</p></Link>
-        ));
-    }
-
     const placeholder = (review) => {
-        if (review.likes_count < 1) {
+        if (review.director_fans.length < 1 && review.critic_fans.length < 1) {
             return <div>
                 <p>No likes yet</p>
                 </div>
@@ -254,9 +241,15 @@ const Director = (props) => {
                                                 <Link to={"/reviews/" + movie.review_id}><h5>{ movie.title }</h5></Link>
                                                 <div className="LikedBy">
                                                     <h6>Liked By:</h6>
-                                                    { displayDirectorFans(movie) }
-                                                    { displayCriticFans(movie) }
-                                                    { placeholder(movie) }
+                                                    <ul>
+                                                        { movie.director_fans.map( (directorFan, index) => (
+                                                            <li key={ index }><Link to={ "/directors/" + directorFan.id } >{directorFan.name }</Link></li>
+                                                        )) }
+                                                        { movie.critic_fans.map( (critic, index) => (
+                                                            <li key={ index }><Link to={ "/critics/" + critic.id }>{critic.name }</Link></li>
+                                                        )) }
+                                                    </ul>
+                                                    { placeholder(movie)}
                                                 </div>
                                             </div>
                                         </div>
@@ -275,6 +268,18 @@ const Director = (props) => {
                                         <Link to={"/reviews/" + movie.review_id}><img src={movie.image_url} alt="" height="200px"/></Link>
                                         <div className="CoreMovieBody">
                                             <Link to={"/reviews/" + movie.review_id}><h5>{ movie.title }</h5></Link>
+                                            {/* <div className="LikedBy">
+                                                <h6>Liked By:</h6>
+                                                <ul>
+                                                    { movie.director_fans.map( (directorFan, index) => (
+                                                        <li key={ index }><Link to={ "/directors/" + directorFan.id } >{directorFan.name }</Link></li>
+                                                    )) }
+                                                    { movie.critic_fans.map( (critic, index) => (
+                                                        <li key={ index }><Link to={ "/critics/" + critic.id }>{critic.name }</Link></li>
+                                                    )) }
+                                                </ul>
+                                                { placeholder(movie)}
+                                            </div> */}
                                         </div>
                                     </div>
                                 )
