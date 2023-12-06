@@ -108,6 +108,10 @@ class Critic:
         SELECT * FROM movies
         JOIN critic_favorite_movies ON critic_favorite_movies.movie_id = movies.id
         JOIN directors ON directors.id = movies.directed_by_id
+        LEFT JOIN director_favorite_movies  ON director_favorite_movies.movie_id = movies.id
+        LEFT JOIN directors AS director_fans ON director_fans.id = director_favorite_movies.director_id
+        LEFT JOIN critic_favorite_movies AS other_critic_fans ON other_critic_fans.movie_id = movies.id
+        LEFT JOIN critics ON critics.id = other_critic_fans.critic_id
         WHERE critic_favorite_movies.critic_id = %(critic_id)s;
         """
         result = connectToMySQL(cls.DB).query_db(query, data)

@@ -105,26 +105,59 @@ class Director:
     def get_favorites(cls, data):
         query = """
         SELECT * FROM movies
-        JOIN director_favorite_movies ON director_favorite_movies.movie_id = movies.id
-        JOIN directors ON directors.id = movies.directed_by_id
         JOIN reviews ON reviews.movie_id = movies.id
+        JOIN director_favorite_movies ON director_favorite_movies.movie_id = movies.id
+        LEFT JOIN director_favorite_movies AS other_director_fans ON other_director_fans.movie_id = movies.id
+        LEFT JOIN directors AS director_fans ON director_fans.id = other_director_fans.director_id
+        LEFT JOIN critic_favorite_movies ON critic_favorite_movies.movie_id = movies.id
+        LEFT JOIN critics ON critics.id = critic_favorite_movies.critic_id
         WHERE director_favorite_movies.director_id = %(id)s;
         """
         result = connectToMySQL(cls.DB).query_db(query, data)
         favs = []
-        for item in result:
-            # print("item in director get_favorites: ", item)
-            fav = {
-                "id": item["id"],
-                "title": item["title"],
-                "image_url": item["image_url"],
-                "year": item["year"],
-                "directed_by_id": item["directed_by_id"],
-                "director_name": item["name"],
-                "review_id": item["reviews.id"]
-            }
-            favs.append(fav)
-
+        titles = []
+        for movie in result:
+            print()
+            print("* * * * * * * * * *")
+            for key, value in movie.items():
+                print(f"{key}: {value}")
+            print()
+            if movie['title'] not in titles:
+                titles.append(movie['title'])
+                fav = {
+                    "id": movie["id"],
+                    "title": movie["title"],
+                    "image_url": movie["image_url"],
+                    "year": movie["year"],
+                    "directed_by_id": movie["directed_by_id"],
+                    "director_name": movie["name"],
+                    "review_id": movie["reviews.id"],
+                    "director_fans": [],
+                    "critic_fans": []
+                }
+                favs.append(fav)
+        for movie in favs:
+            director_fan_names = []
+            critic_fan_names = []
+            for record in result:
+                if movie['id'] == record['id']:
+                    if record['name'] and record['name'] not in director_fan_names:
+                        director_fan_names.append(record['name'])
+                        director_fan = {
+                            "id": record['director_fans.id'],
+                            "name": record['name']
+                        }
+                        movie['director_fans'].append(director_fan)
+                    if record['critics.name'] and record['critics.name'] not in critic_fan_names:
+                        critic_fan_names.append(record['critics.name'])
+                        critic_fan = {
+                            "id": record['critic_id'],
+                            "name": record['critics.name']
+                        }
+                        movie['critic_fans'].append(critic_fan)
+            print(movie['title'])
+            print("movie['director_fans]: ", movie['director_fans'])
+            print("movie['critic_fans]: ", movie['critic_fans'])
         return favs
 
 

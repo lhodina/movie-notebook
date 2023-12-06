@@ -268,7 +268,7 @@ const Director = (props) => {
                                         <Link to={"/reviews/" + movie.review_id}><img src={movie.image_url} alt="" height="200px"/></Link>
                                         <div className="CoreMovieBody">
                                             <Link to={"/reviews/" + movie.review_id}><h5>{ movie.title }</h5></Link>
-                                            {/* <div className="LikedBy">
+                                            <div className="LikedBy">
                                                 <h6>Liked By:</h6>
                                                 <ul>
                                                     { movie.director_fans.map( (directorFan, index) => (
@@ -279,7 +279,7 @@ const Director = (props) => {
                                                     )) }
                                                 </ul>
                                                 { placeholder(movie)}
-                                            </div> */}
+                                            </div>
                                         </div>
                                     </div>
                                 )
