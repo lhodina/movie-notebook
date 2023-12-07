@@ -142,7 +142,7 @@ const Dashboard = (props) => {
                         </div>
                     )}
                 </div>
-                <div className="NavMenuItem" onMouseEnter={ toggleCollections } onMouseLeave={ toggleCollections }>
+                {/* <div className="NavMenuItem" onMouseEnter={ toggleCollections } onMouseLeave={ toggleCollections }>
                     <h5>Collections</h5>
                     { collectionsOpen && (
                         <div className="NavDropdown">
@@ -156,7 +156,7 @@ const Dashboard = (props) => {
                             </ul>
                         </div>
                     )}
-                </div>
+                </div> */}
 
                 <Link to={"/reviews/add"}><button className="btn btn-danger">+ Review a Movie</button></Link>
                 <form className="SearchBar">

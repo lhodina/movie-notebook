@@ -29,10 +29,7 @@ def get_critic(critic_id):
     data = {
         "critic_id": critic_id
     }
-
     current_critic = critic.Critic.get_one(data)
-
-    favorites = critic.Critic.get_favorites(data)
     current_user = user.User.get_one({"id": 1})
     favorite = favorite_critic.FavoriteCritic.get_one(data)[0]
     links = critic.Critic.get_links(data)
@@ -41,7 +38,7 @@ def get_critic(critic_id):
         "id": current_critic.id,
         "name": current_critic.name,
         "image_url": current_critic.image_url,
-        "favorite_movies": favorites,
+        "favorite_movies": current_critic.favorite_movies,
         "user_first_name": current_user.first_name,
         "user_last_name": current_user.last_name,
         "notes": favorite['notes'],

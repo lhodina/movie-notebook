@@ -43,7 +43,7 @@ const Critic = (props) => {
             .catch(err => {
                 console.log(err);
             })
-    }, [])
+    }, [id])
 
     const toggleEditFormExpanded = () => {
         setEditFormExpanded(!editFormExpanded);
@@ -186,9 +186,20 @@ const Critic = (props) => {
                             favoriteMovies.map( (movie, index) => {
                                 return (
                                     <div className="CoreMovie" key={index}>
-                                        <img src={movie.image_url} alt="" height="200px"/>
+                                        <Link to={"/reviews/" + movie.review_id}><img src={movie.image_url} alt="movie poster" height="200px"/></Link>
                                         <div className="CoreMovieBody">
-                                            <Link to={"/reviews/"}><h5>{ movie.title }</h5></Link>
+                                            <Link to={"/reviews/" + movie.review_id}><h5>{ movie.title }</h5></Link>
+                                            <div className="LikedBy">
+                                            {(movie.director_fans.length > 0 || movie.critic_fans.length > 0) && <h6>Liked By:</h6>}
+                                                <ul>
+                                                    { movie.director_fans.map( (directorFan, index) => (
+                                                        <li key={ index }><Link to={ "/directors/" + directorFan.id } >{directorFan.name }</Link></li>
+                                                    )) }
+                                                    { movie.critic_fans.map( (critic, index) => (
+                                                        critic.id != id && <li key={ index }><Link to={ "/critics/" + critic.id }>{critic.name }</Link></li>
+                                                    )) }
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 )

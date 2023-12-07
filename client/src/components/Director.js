@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import expandIcon from "../assets/expand-icon-small.png";
 import ReviewForm from './ReviewForm';
 
+
 const Director = (props) => {
     const { user } = props;
     const [currentDirector, setCurrentDirector] = useState({});
@@ -22,6 +23,7 @@ const Director = (props) => {
     const [movieDirectedFormOpen, setMovieDirectedFormOpen] = useState(false);
     const [favoriteMovieFormOpen, setFavoriteMovieFormOpen] = useState(false);
     const [grayout, setGrayout] = useState(false);
+    const [fanFormOpen, setFanFormOpen] = useState(false);
 
     const { id } = useParams();
 
@@ -85,6 +87,12 @@ const Director = (props) => {
         setGrayout(!grayout);
     }
 
+
+    const toggleFanForm = () => {
+        setFanFormOpen(!fanFormOpen);
+        toggleGrayout();
+    }
+
     const updateNotes = e => {
         e.preventDefault();
         toggleEditFormExpanded();
@@ -130,13 +138,7 @@ const Director = (props) => {
             .catch(err => console.log(err));
     }
 
-    const placeholder = (review) => {
-        if (review.director_fans.length < 1 && review.critic_fans.length < 1) {
-            return <div>
-                <p>No likes yet</p>
-                </div>
-        }
-    }
+
 
     return (
         <div className="Container">
@@ -240,7 +242,7 @@ const Director = (props) => {
                                             <div className="CoreMovieBody">
                                                 <Link to={"/reviews/" + movie.review_id}><h5>{ movie.title }</h5></Link>
                                                 <div className="LikedBy">
-                                                    <h6>Liked By:</h6>
+                                                    {(movie.director_fans.length > 0 || movie.critic_fans.length > 0) && <h6>Liked By:</h6>}
                                                     <ul>
                                                         { movie.director_fans.map( (directorFan, index) => (
                                                             <li key={ index }><Link to={ "/directors/" + directorFan.id } >{directorFan.name }</Link></li>
@@ -249,7 +251,6 @@ const Director = (props) => {
                                                             <li key={ index }><Link to={ "/critics/" + critic.id }>{critic.name }</Link></li>
                                                         )) }
                                                     </ul>
-                                                    { placeholder(movie)}
                                                 </div>
                                             </div>
                                         </div>
@@ -272,13 +273,12 @@ const Director = (props) => {
                                                 <h6>Liked By:</h6>
                                                 <ul>
                                                     { movie.director_fans.map( (directorFan, index) => (
-                                                        <li key={ index }><Link to={ "/directors/" + directorFan.id } >{directorFan.name }</Link></li>
+                                                        directorFan.id != id && <li key={ index }><Link to={ "/directors/" + directorFan.id } >{directorFan.name }</Link></li>
                                                     )) }
                                                     { movie.critic_fans.map( (critic, index) => (
                                                         <li key={ index }><Link to={ "/critics/" + critic.id }>{critic.name }</Link></li>
                                                     )) }
                                                 </ul>
-                                                { placeholder(movie)}
                                             </div>
                                         </div>
                                     </div>

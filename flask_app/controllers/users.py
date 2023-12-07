@@ -1,16 +1,16 @@
-from flask import  redirect, request
+from flask import redirect, request, session
 from flask_bcrypt import Bcrypt
 
 from flask_app import app
-from flask_app.models import user, director
+from flask_app.models import user
 
 bcrypt = Bcrypt(app)
 
-# @app.route("/login")
-# def login_and_registration():
-#     return {
-#         "message": "loggin' on in, friend!"
-#     }
+@app.route("/")
+def login_and_registration():
+    return {
+        "message": "loggin' on in, friend!"
+    }
 
 
 @app.route("/register", methods=["POST"])
