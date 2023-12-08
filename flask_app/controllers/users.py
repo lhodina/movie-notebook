@@ -6,15 +6,16 @@ from flask_app.models import user
 
 bcrypt = Bcrypt(app)
 
-@app.route("/")
+@app.route("/login")
 def login_and_registration():
     return {
         "message": "loggin' on in, friend!"
     }
 
 
-@app.route("/register", methods=["POST"])
+@app.route("/users/register", methods=["POST"])
 def register_user():
+
     data = {
         "first_name": request.json["first_name"],
         "last_name": request.json["last_name"],
@@ -23,14 +24,17 @@ def register_user():
         "confirm_password": request.json["confirm_password"]
     }
 
-    if not user.User.validate_user(data):
-        return redirect("/")
+    print("data: ", data)
 
-    pw_hash = bcrypt.generate_password_hash(request.json['password'])
-    data["password"] = pw_hash
-    user_id = user.User.save(data)
-    current_user = user.User.get_one(user_id)[0]
-    return redirect("/dashboard")
+    # if not user.User.validate_user(data):
+    #     return redirect("/")
+
+    # pw_hash = bcrypt.generate_password_hash(request.json['password'])
+    # data["password"] = pw_hash
+    # user_id = user.User.save(data)
+    # current_user = user.User.get_one(user_id)[0]
+    # print("current_user: ", current_user)
+    return redirect("/login")
 
 
 @app.route("/dashboard")

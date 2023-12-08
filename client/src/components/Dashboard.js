@@ -5,7 +5,6 @@ import '../App.css';
 import AddFanForm from './AddFanForm'
 
 const Dashboard = (props) => {
-    const { user } = props;
     const [favoriteDirectors, setFavoriteDirectors] = useState([]);
     const [favoriteCritics, setFavoriteCritics] = useState([]);
     const [collections, setCollections] = useState([]);
@@ -20,6 +19,8 @@ const Dashboard = (props) => {
     const [fanFormOpen, setFanFormOpen] = useState(false);
     const [grayout, setGrayout] = useState(false);
     const [currentMovieId, setCurrentMovieId] = useState(0);
+
+    const user = {"first_name": "Luke"}
 
     const toggleGrayout = () => {
         setGrayout(!grayout);
