@@ -174,41 +174,31 @@ class User:
 
     @staticmethod
     def validate_user(user):
-        is_valid = True
+        messages = []
         if not user["first_name"]:
-            flash("First name required")
-            is_valid = False
+            messages.append("First name required")
         elif len(user["first_name"]) < 2:
-            flash("First name must be at least two characters")
-            is_valid = False
+            messages.append("First name must be at least two characters")
         if not user["last_name"]:
-            flash("Last name required")
-            is_valid = False
+            messages.append("Last name required")
         elif len(user["last_name"]) < 2:
-            flash("Last name must be at least two characters")
-            is_valid = False
+            messages.append("Last name must be at least two characters")
         if not user["email"]:
-            flash("Email required")
-            is_valid = False
+            messages.append("Email required")
         elif not EMAIL_REGEX.match(user["email"]):
-            flash("Email must be in the following format: beeblebrox@galaxy.gov")
-            is_valid = False
+            messages.append("Email must be in the following format: beeblebrox@galaxy.gov")
         query = "SELECT * FROM users WHERE email = %(email)s;"
         data = {"email": user["email"]}
         res = connectToMySQL("movie_notebook").query_db(query, data)
         if res:
-            flash("Email already in use")
-            is_valid = False
+            messages.append("Email already in use")
         if not user["password"]:
-            flash("Password required")
-            is_valid = False
+            messages.append("Password required")
         elif user["password"] != user["confirm_password"]:
-            flash("Passwords do not match")
-            is_valid = False
+            messages.append("Passwords do not match")
         elif not PASSWORD_REGEX.match(user["password"]):
-            flash("Password must include 1 capital letter and 1 number")
-            is_valid = False
-        return is_valid
+            messages.append("Password must include 1 capital letter and 1 number")
+        return messages
 
 
     @staticmethod

@@ -18,10 +18,16 @@ const RegisterForm = (props) => {
             firstName,
             lastName,
             email,
-            password
+            password,
+            confirmPassword
         })
         .then( res => {
-            navigate("/login");
+            console.log("res: ", res);
+            if (res['data']['validation_messages']) {
+                setErrors(res['data']['validation_messages']);
+            } else {
+                navigate("/dashboard");
+            }
         })
         .catch( err => {
             console.log(err);

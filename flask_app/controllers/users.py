@@ -15,26 +15,30 @@ def login_and_registration():
 
 @app.route("/users/register", methods=["POST"])
 def register_user():
-
+    print("We've made it this far")
+    print("request: ", request)
     data = {
-        "first_name": request.json["first_name"],
-        "last_name": request.json["last_name"],
+        "first_name": request.json["firstName"],
+        "last_name": request.json["lastName"],
         "email": request.json["email"],
         "password": request.json["password"],
-        "confirm_password": request.json["confirm_password"]
+        "confirm_password": request.json["confirmPassword"]
     }
 
     print("data: ", data)
+    validation_messages = user.User.validate_user(data)
+    if len(validation_messages) > 0:
+        print("validation_messages: ", validation_messages)
+        return {"validation_messages": validation_messages}
+    else:
+        print("* * * * * USER REGISTRATION VALIDATED")
+        pw_hash = bcrypt.generate_password_hash(request.json['password'])
+        data["password"] = pw_hash
+        user_id = user.User.save(data)
+        current_user = user.User.get_one({"id": user_id})
+        print("current_user: ", current_user)
 
-    # if not user.User.validate_user(data):
-    #     return redirect("/")
-
-    # pw_hash = bcrypt.generate_password_hash(request.json['password'])
-    # data["password"] = pw_hash
-    # user_id = user.User.save(data)
-    # current_user = user.User.get_one(user_id)[0]
-    # print("current_user: ", current_user)
-    return redirect("/login")
+        return redirect("/dashboard")
 
 
 @app.route("/dashboard")
