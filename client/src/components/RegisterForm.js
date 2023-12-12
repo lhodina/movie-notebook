@@ -26,6 +26,7 @@ const RegisterForm = (props) => {
             if (res['data']['validation_messages']) {
                 setErrors(res['data']['validation_messages']);
             } else {
+                console.log("IN REACT, WE MADE IT PAST VALIDATION AND ARE ABOUT TO NAVIGATE TO DASHBOARD")
                 navigate("/dashboard");
             }
         })
@@ -37,7 +38,7 @@ const RegisterForm = (props) => {
     return (
         <div>
             <div className="header">
-                <h1>Register</h1>
+                <h2>Register</h2>
             </div>
             <form onSubmit={ onSubmitHandler }>
                 {errors.map((err, index) => (

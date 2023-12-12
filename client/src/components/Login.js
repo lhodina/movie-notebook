@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react'
 import axios from 'axios';
 import '../App.css';
 import RegisterForm from './RegisterForm';
+import LoginForm from './LoginForm';
 
 const Login = (props) => {
     useEffect(() => {
@@ -15,11 +15,14 @@ const Login = (props) => {
 
     return (
         <div className="Container">
+            <h1>Movie Notebook</h1>
             <div className="FormsContainer">
                 <div className="RegisterForm">
                     <RegisterForm />
                 </div>
-                <div className="LoginForm"></div>
+                <div className="LoginForm">
+                    <LoginForm />
+                </div>
             </div>
         </div>
     );

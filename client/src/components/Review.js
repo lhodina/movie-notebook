@@ -171,7 +171,7 @@ const Review = (props) => {
                 </form>
                 <div className="NavUser">
                     <h5>{user.first_name} {user.last_name[0]}.</h5>
-                    <Link to={ "/logout" }>log out</Link>
+                    <Link to={ "/login" }>log out</Link>
                 </div>
             </div>
             <div className="ReviewProfile">

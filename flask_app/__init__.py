@@ -1,5 +1,5 @@
 from flask import Flask
 from flask_cors import CORS
 app = Flask(__name__)
-CORS(app)
-app.secret_key = 'shush up'
+app.secret_key = 'uhshhshhushhushh'
+CORS(app, supports_credentials=True)

@@ -93,7 +93,7 @@ const Dashboard = (props) => {
     }
 
     useEffect(() => {
-        axios.get("http://localhost:5000/dashboard")
+        axios.get("http://localhost:5000/dashboard", { withCredentials: true })
             .then(res => {
                 setFavoriteDirectors(res.data.favorite_directors);
                 setFavoriteCritics(res.data.favorite_critics);
@@ -163,7 +163,7 @@ const Dashboard = (props) => {
                 <form className="SearchBar">
                     <input className="SearchInput" type="text" value="search my stuff" onChange={() => console.log("this search bar will eventually do something")}></input>
                 </form>
-                <Link to={ "/logout" }>log out</Link>
+                <Link to={ "/login" }>log out</Link>
             </div>
 
             <h1>CORE MOVIES</h1>

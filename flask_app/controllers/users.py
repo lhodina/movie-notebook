@@ -26,23 +26,44 @@ def register_user():
     }
 
     print("data: ", data)
+
+    # Add data to session before form submit, in case there are validation errors and you want to persist input fields
+    # session["registering"] = True
+    # session["data"] = data
     validation_messages = user.User.validate_user(data)
     if len(validation_messages) > 0:
         print("validation_messages: ", validation_messages)
         return {"validation_messages": validation_messages}
     else:
         print("* * * * * USER REGISTRATION VALIDATED")
+        # If you made it this far, congratulations -- remove all form input data
+        session.clear()
         pw_hash = bcrypt.generate_password_hash(request.json['password'])
         data["password"] = pw_hash
         user_id = user.User.save(data)
+        print("user_id: ", user_id)
         current_user = user.User.get_one({"id": user_id})
         print("current_user: ", current_user)
-
-        return redirect("/dashboard")
+        print("current_user.id", current_user.id)
+        print("current_user.first_name", current_user.first_name)
+        print("current_user.last_name", current_user.last_name)
+        print("current_user.email", current_user.email)
+        print("current_user.password", current_user.password)
+        session["user_id"] = current_user.id
+        print("session: ", session)
+        print("session['user_id']: ", session["user_id"])
+        # print("session['current_user'].id: ", session["current_user"].id)
+        # print("session['current_user'].first_name: ", session["current_user"].first_name)
+        session.modified = True
+        # return redirect("/dashboard")
+        return {"testing response": "testtest"}
 
 
 @app.route("/dashboard")
 def dashboard():
+    print("session: ", session)
+    # testing_session = session["user_id"]
+    # print("TESTING SESSION AFTER REDIRECT: ", testing_session)
     data = {"id": 1}
     current_user = user.User.get_one(data)
     favorite_directors = user.User.get_favorite_directors(data)

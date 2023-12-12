@@ -3,6 +3,18 @@
   text-align: center;
 }
 
+.FormsContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.RegisterForm, .LoginForm {
+  border: 1px solid black;
+  padding: 20px;
+  margin: 0 50px;
+}
+
 .Container {
   margin: 0 auto;
   padding: 30px;
