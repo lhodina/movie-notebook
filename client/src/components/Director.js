@@ -38,7 +38,7 @@ const Director = (props) => {
     }
 
     useEffect( () => {
-        axios.get("http://localhost:5000/directors/" + id)
+        axios.get("http://localhost:5000/directors/" + id, { withCredentials: true })
             .then( (res) => {
                 setCurrentDirector(res.data);
                 setMoviesDirected(res.data.movies_directed);
@@ -97,7 +97,7 @@ const Director = (props) => {
         e.preventDefault();
         toggleEditFormExpanded();
         setNotes(editNotes);
-        axios.post('http://localhost:5000/favorite_directors/' + id + '/update', { "notes": editNotes })
+        axios.post('http://localhost:5000/favorite_directors/' + id + '/update', { "notes": editNotes }, { withCredentials: true })
         .then(res => {
             console.log(res);
         })
@@ -112,7 +112,7 @@ const Director = (props) => {
             "url": newLinkURL,
             "user_id": user.id,
             "director_id": id
-        }).then((res) => {
+        }, { withCredentials: true }).then((res) => {
             setUserLinks([...userLinks, {
                 "id": res["data"]["id"],
                 "text": newLinkText,
@@ -131,7 +131,7 @@ const Director = (props) => {
     }
 
     const deleteLink = linkId => {
-        axios.post(`http://localhost:5000/director_links/${linkId}/delete`)
+        axios.post(`http://localhost:5000/director_links/${linkId}/delete`, { withCredentials: true })
             .then(res => {
                 removeLinkFromDom(linkId);
             })

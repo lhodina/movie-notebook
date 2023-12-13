@@ -12,7 +12,7 @@ const CollectionForm = (props) => {
         e.preventDefault();
         axios.post("http://localhost:5000/collections", {
             name
-        })
+        }, { withCredentials: true })
         .then( res => {
             navigate("/dashboard");
         })

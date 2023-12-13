@@ -89,7 +89,7 @@ const Review = (props) => {
         e.preventDefault();
         toggleEditNotesFormExpanded();
         setNotes(editNotes);
-        axios.post('http://localhost:5000/reviews/' + id + '/notes', { "notes": editNotes })
+        axios.post('http://localhost:5000/reviews/' + id + '/notes', { "notes": editNotes }, { withCredentials: true })
         .then(res => {
             console.log(res);
         })
@@ -103,7 +103,7 @@ const Review = (props) => {
             "url": newLinkURL,
             "user_id": user.id,
             "movie_id": review.movie_id
-        })
+        }, { withCredentials: true })
         .then(res => {
             setUserLinks([...userLinks, {
                 "id": res["data"]["id"],
@@ -122,7 +122,7 @@ const Review = (props) => {
     }
 
     const deleteLink = linkId => {
-        axios.post(`http://localhost:5000/movie_links/${linkId}/delete`)
+        axios.post(`http://localhost:5000/movie_links/${linkId}/delete`, { withCredentials: true })
             .then(res => {
                 removeLinkFromDom(linkId);
             })
@@ -131,7 +131,7 @@ const Review = (props) => {
 
 
     const deleteReview = reviewId => {
-        axios.delete("http://localhost:5000/reviews/delete/" + reviewId)
+        axios.delete("http://localhost:5000/reviews/delete/" + reviewId, { withCredentials: true })
             .then(res => {
                 navigate("/dashboard");
             })
@@ -140,7 +140,7 @@ const Review = (props) => {
 
 
     useEffect( () => {
-        axios.get("http://localhost:5000/reviews/" + id)
+        axios.get("http://localhost:5000/reviews/" + id, { withCredentials: true })
             .then( (res) => {
                 setReview(res.data);
                 setRating(res.data.rating);

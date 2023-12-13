@@ -39,7 +39,7 @@ const Critic = (props) => {
                 setNotes(res.data.notes);
                 setEditNotes(res.data.notes);
                 setUserLinks(res.data.user_links);
-            })
+            }, { withCredentials: true })
             .catch(err => {
                 console.log(err);
             })
@@ -69,7 +69,7 @@ const Critic = (props) => {
         e.preventDefault();
         toggleEditFormExpanded();
         setNotes(editNotes);
-        axios.post('http://localhost:5000/favorite_critics/' + id + '/update', { "notes": editNotes })
+        axios.post('http://localhost:5000/favorite_critics/' + id + '/update', { "notes": editNotes }, { withCredentials: true })
         .then(res => {
             console.log(res);
         })
@@ -83,7 +83,7 @@ const Critic = (props) => {
             "url": newLinkURL,
             "user_id": user.id,
             "critic_id": id
-        }).then((res) => {
+        }, { withCredentials: true }).then((res) => {
             setUserLinks([...userLinks, {
                 "id": res["data"]["id"],
                 "text": newLinkText,
@@ -103,7 +103,7 @@ const Critic = (props) => {
     }
 
     const deleteLink = linkId => {
-        axios.post(`http://localhost:5000/critic_links/${linkId}/delete`)
+        axios.post(`http://localhost:5000/critic_links/${linkId}/delete`, { withCredentials: true })
             .then(res => {
                 removeLinkFromDom(linkId);
             })

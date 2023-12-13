@@ -3,16 +3,28 @@
   text-align: center;
 }
 
+.LoginPage {
+  background-image: url("./assets/bridesmaids.png");
+  background-size: cover;
+}
+
+.LoginPage h1 {
+  color: white;
+  font-size: 70px;
+}
+
 .FormsContainer {
   display: flex;
   justify-content: center;
-  margin-top: 30px;
+  margin-top: 10px;
 }
 
 .RegisterForm, .LoginForm {
   border: 1px solid black;
   padding: 20px;
   margin: 0 50px;
+  background-color: white;
+  opacity: .9;
 }
 
 .Container {
@@ -42,6 +54,10 @@ a:hover {
 button:hover {
   background-color: red;
   color: white;
+}
+
+.AlertMessage {
+  color: red;
 }
 
 .Main {

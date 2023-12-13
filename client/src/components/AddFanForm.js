@@ -20,7 +20,7 @@ const AddFanForm = (props) => {
         e.preventDefault();
         axios.post(`http://localhost:5000/movies/${movie_id}/${fanType}_fans`, {
             name
-        })
+        }, { withCredentials: true })
             .then( res => {
                 console.log("res['data']['director_id']: ", res['data']['director_id']);
                 toggleForm();

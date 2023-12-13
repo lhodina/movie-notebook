@@ -63,12 +63,12 @@ class User:
 
         current_user = cls(current_user_data)
 
-        for item in result:
-            current_collection = {
-                "id": item["collections.id"],
-                "name": item["name"],
-            }
-            current_user.collections.append(current_collection)
+        # for item in result:
+        #     current_collection = {
+        #         "id": item["collections.id"],
+        #         "name": item["name"],
+        #     }
+        #     current_user.collections.append(current_collection)
         return current_user
 
 
@@ -203,26 +203,24 @@ class User:
 
     @staticmethod
     def validate_login(data):
-        is_valid = True
+        print()
+        print("* * * * * IN validate_login")
+        messages = []
         if not data["email"]:
-            flash("Email Required")
-            is_valid = False
+            messages.append("Email Required")
         elif not EMAIL_REGEX.match(data["email"]):
-            flash("Email must be in the following format: beeblebrox@galaxy.gov")
-            is_valid = False
+            messages.append("Email must be in the following format: beeblebrox@galaxy.gov")
         else:
             query = "SELECT * FROM users WHERE email = %(email)s;"
             result = connectToMySQL("movie_notebook").query_db(query, {"email": data["email"]})
             current_user = None
             if not result:
-                flash("Email not found")
-                is_valid = False
+                messages.append("Email not found")
             else:
                 current_user = result[0]
+                print("current_user: ", current_user)
             if current_user and not bcrypt.check_password_hash(current_user["password"], data["password"]):
-                flash("Incorrect password")
-                is_valid = False
+                messages.append("Incorrect password")
         if not data["password"]:
-            flash("Password required")
-            is_valid = False
-        return is_valid
+            messages.append("Password required")
+        return messages

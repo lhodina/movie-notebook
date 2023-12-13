@@ -27,7 +27,7 @@ const UpdateReviewForm = (props) => {
         axios.post("http://localhost:5000/reviews/" + id, {
             rating,
             watched
-        })
+        }, { withCredentials: true })
         .then( res => {
             toggleReviewForm();
         })

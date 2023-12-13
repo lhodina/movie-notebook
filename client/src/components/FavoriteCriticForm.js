@@ -13,7 +13,7 @@ const FavoriteCriticForm = (props) => {
         e.preventDefault();
         axios.post("http://localhost:5000/favorite_critics", {
             name
-        })
+        }, { withCredentials: true })
             .then( res => {
                 navigate("/dashboard");
             })

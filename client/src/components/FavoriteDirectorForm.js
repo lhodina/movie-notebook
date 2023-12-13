@@ -14,7 +14,7 @@ const FavoriteDirectorForm = (props) => {
         e.preventDefault();
         axios.post("http://localhost:5000/favorite_directors", {
             name
-        })
+        }, { withCredentials: true })
             .then( res => {
                 navigate("/dashboard");
             })

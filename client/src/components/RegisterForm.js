@@ -14,7 +14,7 @@ const RegisterForm = (props) => {
 
     const onSubmitHandler = e => {
         e.preventDefault();
-        axios.post("http://localhost:5000/users/register", {
+        axios.post("http://localhost:5000/register", {
             firstName,
             lastName,
             email,

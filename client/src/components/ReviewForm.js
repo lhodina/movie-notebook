@@ -49,7 +49,7 @@ const ReviewForm = (props) => {
             director_id,
             critic_id,
             location
-        })
+        }, { withCredentials: true })
             .then( res => {
                 if (location === "newReview") {
                     navigate("/dashboard");

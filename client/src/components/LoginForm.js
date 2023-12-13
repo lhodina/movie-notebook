@@ -11,10 +11,10 @@ const LoginForm = (props) => {
 
     const onSubmitHandler = e => {
         e.preventDefault();
-        axios.post("http://localhost:5000/users/login", {
+        axios.post("http://localhost:5000/login", {
             email,
             password
-        })
+        }, { withCredentials: true })
         .then( res => {
             console.log("res: ", res);
             if (res['data']['validation_messages']) {
@@ -47,7 +47,7 @@ const LoginForm = (props) => {
                     <br />
                     <input className="form-input" type="text" onChange = { (e) => setPassword(e.target.value) } />
                 </p>
-                <input type="submit" value="Register" />
+                <input type="submit" value="Log In" />
             </form>
         </div>
     );

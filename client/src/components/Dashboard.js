@@ -38,7 +38,7 @@ const Dashboard = (props) => {
     }
 
     const deleteReview = reviewId => {
-        axios.delete("http://localhost:5000/reviews/delete/" + reviewId)
+        axios.delete("http://localhost:5000/reviews/delete/" + reviewId, { withCredentials: true })
             .then(res => {
                 removeFromDom(reviewId)
             })
@@ -94,7 +94,7 @@ const Dashboard = (props) => {
     }
 
     const logout = () => {
-        axios.get("http://localhost:5000/users/logout", { withCredentials: true })
+        axios.get("http://localhost:5000/logout", { withCredentials: true })
             .then(res => {
                 console.log("res: ", res);
                 navigate("/login");
@@ -105,17 +105,22 @@ const Dashboard = (props) => {
     useEffect(() => {
         axios.get("http://localhost:5000/dashboard", { withCredentials: true })
             .then(res => {
-                setFirstName(res.data.first_name);
-                setFavoriteDirectors(res.data.favorite_directors);
-                setFavoriteCritics(res.data.favorite_critics);
-                // setCollections(res.data.collections);
-                setReviews(res.data.reviews);
-                setDisplayed(res.data.unwatched);
-                setWatched(res.data.watched);
-                setUnwatched(res.data.unwatched);
+                console.log("Dashboard res: ", res);
+                if (!res.data.first_name) {
+                    navigate("/login")
+                } else {
+                    setFirstName(res.data.first_name);
+                    setFavoriteDirectors(res.data.favorite_directors);
+                    setFavoriteCritics(res.data.favorite_critics);
+                    // setCollections(res.data.collections);
+                    setReviews(res.data.reviews);
+                    setDisplayed(res.data.unwatched);
+                    setWatched(res.data.watched);
+                    setUnwatched(res.data.unwatched);
+                }
             })
             .catch(err => console.log(err))
-    }, []);
+    }, [navigate]);
 
     return (
         <div className="Container">
