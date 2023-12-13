@@ -20,7 +20,7 @@ const RegisterForm = (props) => {
             email,
             password,
             confirmPassword
-        })
+        }, { withCredentials: true })
         .then( res => {
             console.log("res: ", res);
             if (res['data']['validation_messages']) {

@@ -49,9 +49,17 @@ def register_user():
         print("current_user.last_name", current_user.last_name)
         print("current_user.email", current_user.email)
         print("current_user.password", current_user.password)
-        session["user_id"] = current_user.id
+        # session["user_id"] = current_user.id
+        session["user"] = {
+            "id": current_user.id,
+            "first_name": current_user.first_name,
+            "last_name": current_user.last_name
+        }
         print("session: ", session)
-        print("session['user_id']: ", session["user_id"])
+        print("session['user']: ", session["user"])
+        print("session['user']['id']: ", session['user']['id'])
+        # session["user"] = current_user
+        # print("session['user']: ", session['user'])
         # print("session['current_user'].id: ", session["current_user"].id)
         # print("session['current_user'].first_name: ", session["current_user"].first_name)
         session.modified = True
@@ -62,10 +70,13 @@ def register_user():
 @app.route("/dashboard")
 def dashboard():
     print("session: ", session)
-    # testing_session = session["user_id"]
-    # print("TESTING SESSION AFTER REDIRECT: ", testing_session)
-    data = {"id": 1}
-    current_user = user.User.get_one(data)
+    if session and session["user"]:
+        data = {
+            "id": session["user"]["id"]
+        }
+    else:
+        return redirect("/login")
+
     favorite_directors = user.User.get_favorite_directors(data)
     favorite_critics = user.User.get_favorite_critics(data)
     reviews = user.User.get_reviews(data)
@@ -73,11 +84,8 @@ def dashboard():
     unwatched = list(filter(lambda d: d['watched'] == 0, reviews))
 
     userJSON = {
-        "first_name": current_user.first_name,
-        "last_name": current_user.last_name,
-        "email": current_user.email,
-        "password": current_user.password,
-        "collections": current_user.collections,
+        "first_name": session['user']['first_name'],
+        # "collections": current_user.collections,
         "favorite_directors": favorite_directors,
         "favorite_critics": favorite_critics,
         "reviews": reviews,
@@ -86,3 +94,10 @@ def dashboard():
     }
 
     return userJSON
+
+
+@app.route("/users/logout")
+def logout():
+    session.clear()
+    print("Did clearing session work? session: ", session)
+    return redirect("/login")

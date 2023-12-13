@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
 import '../App.css';
-import AddFanForm from './AddFanForm'
+import AddFanForm from './AddFanForm';
 
 const Dashboard = (props) => {
+    const [firstName, setFirstName] = useState("");
     const [favoriteDirectors, setFavoriteDirectors] = useState([]);
     const [favoriteCritics, setFavoriteCritics] = useState([]);
-    const [collections, setCollections] = useState([]);
+    // const [collections, setCollections] = useState([]);
     const [reviews, setReviews] = useState([]);
     const [watched, setWatched] = useState([]);
     const [unwatched, setUnwatched] = useState([]);
@@ -15,12 +16,12 @@ const Dashboard = (props) => {
     const [pressed, setPressed] = useState("unwatched");
     const [directorsOpen, setDirectorsOpen] = useState(false);
     const [criticsOpen, setCriticsOpen] = useState(false);
-    const [collectionsOpen, setCollectionsOpen] = useState(false);
+    // const [collectionsOpen, setCollectionsOpen] = useState(false);
     const [fanFormOpen, setFanFormOpen] = useState(false);
     const [grayout, setGrayout] = useState(false);
     const [currentMovieId, setCurrentMovieId] = useState(0);
 
-    const user = {"first_name": "Luke"}
+    const navigate = useNavigate();
 
     const toggleGrayout = () => {
         setGrayout(!grayout);
@@ -60,9 +61,9 @@ const Dashboard = (props) => {
         setCriticsOpen(!criticsOpen);
     }
 
-    const toggleCollections = () => {
-        setCollectionsOpen(!collectionsOpen);
-    }
+    // const toggleCollections = () => {
+    //     setCollectionsOpen(!collectionsOpen);
+    // }
 
     const displayAll = () => {
         setDisplayed(reviews);
@@ -92,12 +93,22 @@ const Dashboard = (props) => {
         return [...criticFansList, ...directorFansList]
     }
 
+    const logout = () => {
+        axios.get("http://localhost:5000/users/logout", { withCredentials: true })
+            .then(res => {
+                console.log("res: ", res);
+                navigate("/login");
+            })
+            .catch(err => console.log(err));
+    }
+
     useEffect(() => {
         axios.get("http://localhost:5000/dashboard", { withCredentials: true })
             .then(res => {
+                setFirstName(res.data.first_name);
                 setFavoriteDirectors(res.data.favorite_directors);
                 setFavoriteCritics(res.data.favorite_critics);
-                setCollections(res.data.collections);
+                // setCollections(res.data.collections);
                 setReviews(res.data.reviews);
                 setDisplayed(res.data.unwatched);
                 setWatched(res.data.watched);
@@ -112,7 +123,7 @@ const Dashboard = (props) => {
                 <div className="Grayout"></div>
             )}
             <div className="Header">
-                <h4>Welcome, {user.first_name}</h4>
+                <h4>Welcome, {firstName}</h4>
                 <div className="NavMenuItem" onMouseEnter={ toggleDirectors } onMouseLeave={ toggleDirectors } >
                     <h5>My Directors</h5>
                     { directorsOpen && (
@@ -163,7 +174,7 @@ const Dashboard = (props) => {
                 <form className="SearchBar">
                     <input className="SearchInput" type="text" value="search my stuff" onChange={() => console.log("this search bar will eventually do something")}></input>
                 </form>
-                <Link to={ "/login" }>log out</Link>
+                <button onClick={logout}>log out</button>
             </div>
 
             <h1>CORE MOVIES</h1>
