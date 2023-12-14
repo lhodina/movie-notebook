@@ -6,7 +6,7 @@ import ReviewForm from './ReviewForm';
 
 
 const Director = (props) => {
-    const { user } = props;
+    const [user, setUser] = useState({});
     const [currentDirector, setCurrentDirector] = useState({});
     const [moviesDirected, setMoviesDirected] = useState([]);
     const [favoriteMovies, setFavoriteMovies] = useState([]);
@@ -40,6 +40,12 @@ const Director = (props) => {
     useEffect( () => {
         axios.get("http://localhost:5000/directors/" + id, { withCredentials: true })
             .then( (res) => {
+                console.log("directors res: ", res);
+                setUser({
+                    "id": res.data.user_id,
+                    "first_name": res.data.user_first_name,
+                    "last_name": res.data.user_last_name
+                });
                 setCurrentDirector(res.data);
                 setMoviesDirected(res.data.movies_directed);
                 setFavoriteMovies(res.data.favorite_movies);
@@ -104,7 +110,6 @@ const Director = (props) => {
         .catch(err => console.log(err))
     }
 
-    // Replace hardcoded user id
     const addLink = e => {
         e.preventDefault();
         axios.post('http://localhost:5000/directors/' + id + '/links', {
@@ -138,8 +143,6 @@ const Director = (props) => {
             .catch(err => console.log(err));
     }
 
-
-
     return (
         <div className="Container">
             { grayout && (
@@ -151,7 +154,7 @@ const Director = (props) => {
                     <input className="SearchInput" type="text" value="search my stuff" onChange={() => console.log("this search bar will eventually do something")}></input>
                 </form>
                 <div className="NavUser">
-                    <h5>{user.first_name} {user.last_name[0]}.</h5>
+                    <h5>{user.first_name} {user.last_name}.</h5>
                     <Link to={ "/login" }>log out</Link>
                 </div>
             </div>

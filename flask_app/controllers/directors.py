@@ -1,4 +1,4 @@
-from flask import redirect, request
+from flask import redirect, request, session
 
 from flask_app import app
 from flask_app.models import user, director, favorite_director
@@ -32,7 +32,6 @@ def get_director(director_id):
 
     current_director = director.Director.get_one(data)
     favorites = director.Director.get_favorites(data)
-    current_user = user.User.get_one({"id": 1})
     favorite = favorite_director.FavoriteDirector.get_one(data)
     notes = ""
     if (len(favorite) > 0):
@@ -45,8 +44,9 @@ def get_director(director_id):
         "image_url": current_director.image_url,
         "movies_directed": current_director.movies_directed,
         "favorite_movies": favorites,
-        "user_first_name": current_user.first_name,
-        "user_last_name": current_user.last_name,
+        "user_id": session["user"]["id"],
+        "user_first_name": session["user"]["first_name"],
+        "user_last_name": session["user"]["last_name"],
         "notes": notes,
         "links": links
     }

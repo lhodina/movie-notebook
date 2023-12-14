@@ -32,8 +32,6 @@ def register_user():
         "confirm_password": request.json["confirmPassword"]
     }
 
-    print("data: ", data)
-
     # Add data to session before form submit, in case there are validation errors and you want to persist input fields
     # session["registering"] = True
     # session["data"] = data
@@ -76,19 +74,13 @@ def register_user():
 
 @app.route("/dashboard")
 def dashboard():
-    print()
-    print("* * * * * IN /dashboard CONTROLLER")
-    print("session: ", session)
     if not (session and session["user"]):
-        print("NO SESSION")
-        print("ADDING MESSAGE TO SESSION")
         session["authorization_message"] = "You must be logged in to view the dashboard"
         return redirect("/login")
     else:
         data = {
             "id": session["user"]["id"]
         }
-        print("SESSION IS IN SESSION")
         favorite_directors = user.User.get_favorite_directors(data)
         favorite_critics = user.User.get_favorite_critics(data)
         reviews = user.User.get_reviews(data)
@@ -96,7 +88,9 @@ def dashboard():
         unwatched = list(filter(lambda d: d['watched'] == 0, reviews))
 
         userJSON = {
-            "first_name": session['user']['first_name'],
+            "user_id": session["user"]["id"],
+            "user_first_name": session["user"]["first_name"],
+            "user_last_name": session["user"]["last_name"],
             # "collections": current_user.collections,
             "favorite_directors": favorite_directors,
             "favorite_critics": favorite_critics,
@@ -106,8 +100,6 @@ def dashboard():
         }
 
         return userJSON
-
-
 
 
 @app.route("/login", methods=["POST"])

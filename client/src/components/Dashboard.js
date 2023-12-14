@@ -3,9 +3,12 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
 import '../App.css';
 import AddFanForm from './AddFanForm';
+import Header from './Header';
+// import LogoutButton from './LogoutButton';
 
 const Dashboard = (props) => {
-    const [firstName, setFirstName] = useState("");
+    // const [firstName, setFirstName] = useState("");
+    const [user, setUser] = useState({});
     const [favoriteDirectors, setFavoriteDirectors] = useState([]);
     const [favoriteCritics, setFavoriteCritics] = useState([]);
     // const [collections, setCollections] = useState([]);
@@ -14,8 +17,8 @@ const Dashboard = (props) => {
     const [unwatched, setUnwatched] = useState([]);
     const [displayed, setDisplayed] = useState([]);
     const [pressed, setPressed] = useState("unwatched");
-    const [directorsOpen, setDirectorsOpen] = useState(false);
-    const [criticsOpen, setCriticsOpen] = useState(false);
+    // const [directorsOpen, setDirectorsOpen] = useState(false);
+    // const [criticsOpen, setCriticsOpen] = useState(false);
     // const [collectionsOpen, setCollectionsOpen] = useState(false);
     const [fanFormOpen, setFanFormOpen] = useState(false);
     const [grayout, setGrayout] = useState(false);
@@ -53,13 +56,13 @@ const Dashboard = (props) => {
         }
     }
 
-    const toggleDirectors = () => {
-        setDirectorsOpen(!directorsOpen);
-    }
+    // const toggleDirectors = () => {
+    //     setDirectorsOpen(!directorsOpen);
+    // }
 
-    const toggleCritics = () => {
-        setCriticsOpen(!criticsOpen);
-    }
+    // const toggleCritics = () => {
+    //     setCriticsOpen(!criticsOpen);
+    // }
 
     // const toggleCollections = () => {
     //     setCollectionsOpen(!collectionsOpen);
@@ -80,36 +83,35 @@ const Dashboard = (props) => {
         setPressed("unwatched");
     }
 
-
-    const displayAllFans = (currentReview) => {
-        const criticFansList = currentReview.critic_fans.map((critic, index) => (
-            <Link to={ "/critics/" + critic.id } key={index}><p>{critic.name}</p></Link>
-        ));
-
+    const displayDirectorFans = (currentReview) => {
         const directorFansList = currentReview.director_fans.map((director, index) => (
             <Link to={ "/directors/" + director.id } key={index}><p>{director.name}</p></Link>
         ));
 
-        return [...criticFansList, ...directorFansList]
+        return directorFansList
     }
 
-    const logout = () => {
-        axios.get("http://localhost:5000/logout", { withCredentials: true })
-            .then(res => {
-                console.log("res: ", res);
-                navigate("/login");
-            })
-            .catch(err => console.log(err));
+    const displayCriticFans = (currentReview) => {
+        const criticFansList = currentReview.critic_fans.map((critic, index) => (
+            <Link to={ "/critics/" + critic.id } key={index}><p>{critic.name}</p></Link>
+        ));
+
+        return criticFansList
     }
 
     useEffect(() => {
         axios.get("http://localhost:5000/dashboard", { withCredentials: true })
             .then(res => {
                 console.log("Dashboard res: ", res);
-                if (!res.data.first_name) {
+                if (!res["data"]["user_id"]) {
                     navigate("/login")
                 } else {
-                    setFirstName(res.data.first_name);
+                    // setFirstName(res.data.first_name);
+                    setUser({
+                        "id": res.data.user_id,
+                        "first_name": res.data.user_first_name,
+                        "last_name": res.data.user_last_name
+                    });
                     setFavoriteDirectors(res.data.favorite_directors);
                     setFavoriteCritics(res.data.favorite_critics);
                     // setCollections(res.data.collections);
@@ -127,7 +129,8 @@ const Dashboard = (props) => {
             { grayout && (
                 <div className="Grayout"></div>
             )}
-            <div className="Header">
+            <Header user={user} favoriteDirectors={favoriteDirectors} favoriteCritics={favoriteCritics} />
+            {/* <div className="Header">
                 <h4>Welcome, {firstName}</h4>
                 <div className="NavMenuItem" onMouseEnter={ toggleDirectors } onMouseLeave={ toggleDirectors } >
                     <h5>My Directors</h5>
@@ -137,7 +140,7 @@ const Dashboard = (props) => {
                             <ul className="NavDropdownList" >
                             {
                                 favoriteDirectors.map( (director, index) => (
-                                    <Link to={ "/directors/" + director.id } className="NavDropdownListItem"><li key={index}>{director.name}</li></Link>
+                                    <Link key={index} to={ "/directors/" + director.id } className="NavDropdownListItem"><li>{director.name}</li></Link>
                                 ))
                             }
                             </ul>
@@ -152,14 +155,14 @@ const Dashboard = (props) => {
                             <ul className="NavDropdownList" >
                             {
                                 favoriteCritics.map( (critic, index) => (
-                                    <Link to={ "/critics/" + critic.id } className="NavDropdownListItem"><li key={index}>{critic.name}</li></Link>
+                                    <Link key={index} to={ "/critics/" + critic.id } className="NavDropdownListItem"><li>{critic.name}</li></Link>
                                 ))
                             }
                             </ul>
                         </div>
                     )}
                 </div>
-                {/* <div className="NavMenuItem" onMouseEnter={ toggleCollections } onMouseLeave={ toggleCollections }>
+                <div className="NavMenuItem" onMouseEnter={ toggleCollections } onMouseLeave={ toggleCollections }>
                     <h5>Collections</h5>
                     { collectionsOpen && (
                         <div className="NavDropdown">
@@ -167,20 +170,20 @@ const Dashboard = (props) => {
                             <ul className="NavDropdownList" >
                             {
                                 collections.map( (collection, index) => (
-                                    <Link to={ "/collections/" + collection.id } className="NavDropdownListItem"><li key={index}>{collection.name}</li></Link>
+                                    <Link key={index} to={ "/collections/" + collection.id } className="NavDropdownListItem"><li>{collection.name}</li></Link>
                                 ))
                             }
                             </ul>
                         </div>
                     )}
-                </div> */}
+                </div>
 
                 <Link to={"/reviews/add"}><button className="btn btn-danger">+ Review a Movie</button></Link>
                 <form className="SearchBar">
                     <input className="SearchInput" type="text" value="search my stuff" onChange={() => console.log("this search bar will eventually do something")}></input>
                 </form>
-                <button onClick={logout}>log out</button>
-            </div>
+                <LogoutButton />
+            </div> */}
 
             <h1>CORE MOVIES</h1>
             <div className="btn-group" role="group">
@@ -203,7 +206,8 @@ const Dashboard = (props) => {
                                 <Link to={ "/reviews/" + review.id }><h5>{ review.title }</h5></Link>
                                 <div className="LikedBy">
                                     <h6>Liked By:</h6>
-                                    { displayAllFans(review) }
+                                    { displayDirectorFans(review) }
+                                    { displayCriticFans(review) }
 
                                     { placeholder(review) }
                                     <button onClick={ () => {
