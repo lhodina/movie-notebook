@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useParams } from "react-router-dom";
 import expandIcon from "../assets/expand-icon-small.png";
+import Header from './Header';
 import ReviewForm from './ReviewForm';
 
 
@@ -24,6 +25,8 @@ const Director = (props) => {
     const [favoriteMovieFormOpen, setFavoriteMovieFormOpen] = useState(false);
     const [grayout, setGrayout] = useState(false);
     const [fanFormOpen, setFanFormOpen] = useState(false);
+    const [userFavoriteDirectors, setUserFavoriteDirectors] = useState([]);
+    const [userFavoriteCritics, setUserFavoriteCritics] = useState([]);
 
     const { id } = useParams();
 
@@ -52,6 +55,8 @@ const Director = (props) => {
                 setNotes(res.data.notes);
                 setEditNotes(res.data.notes);
                 setUserLinks(res.data.links);
+                setUserFavoriteDirectors(res.data.user_favorite_directors);
+                setUserFavoriteCritics(res.data.user_favorite_critics);
             })
             .catch(err => {
                 console.log(err);
@@ -148,7 +153,8 @@ const Director = (props) => {
             { grayout && (
                 <div className="Grayout"></div>
             )}
-            <div className="Header">
+            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} />
+            {/* <div className="Header">
                 <Link to={ "/dashboard" } >back to dashboard</Link>
                 <form className="SearchBar">
                     <input className="SearchInput" type="text" value="search my stuff" onChange={() => console.log("this search bar will eventually do something")}></input>
@@ -157,7 +163,7 @@ const Director = (props) => {
                     <h5>{user.first_name} {user.last_name}.</h5>
                     <Link to={ "/login" }>log out</Link>
                 </div>
-            </div>
+            </div> */}
             <div className="DirectorProfile">
                 { movieDirectedFormOpen && (
                     <div className="DirectedByForm">

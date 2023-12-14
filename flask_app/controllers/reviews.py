@@ -1,14 +1,14 @@
 import requests
-from flask import redirect, request
+from flask import redirect, request, session
 
 from flask_app import app
-from flask_app.models import review, movie_link, director, favorite_director, critic, movie
+from flask_app.models import user, review, director, favorite_director, critic, movie
 
 
 @app.route("/reviews", methods=["POST"])
 def add_review():
     # REPLACE HARDCODED user_id
-    user_id = 1
+    user_id = session["user"]["id"]
     review_data = {
         "rating": request.json['rating'],
         "notes": request.json['notes'],
@@ -118,7 +118,7 @@ def add_review():
 
 @app.route("/reviews/<int:review_id>")
 def get_review(review_id):
-    user_id = 1
+    user_id = session["user"]["id"]
     data = {
         "id": review_id
     }
@@ -130,12 +130,16 @@ def get_review(review_id):
     }
     user_links = movie.Movie.get_all_links(link_data)
     likes_count = len(current_review.critic_fans) + len(current_review.director_fans)
+    user_favorite_directors = user.User.get_favorite_directors({"id": session['user']['id']})
+    user_favorite_critics = user.User.get_favorite_critics({"id": session['user']['id']})
 
     return {
+        "user_id": session["user"]["id"],
+        "user_first_name": session["user"]["first_name"],
+        "user_last_name": session["user"]["last_name"],
         "rating": current_review.rating,
         "notes": current_review.notes,
         "watched": current_review.watched,
-        "user_id": current_review.user_id,
         "movie_id": current_review.movie_id,
         "title": current_review.movie.title,
         "year": current_review.movie.year,
@@ -145,7 +149,9 @@ def get_review(review_id):
         "user_links": user_links,
         "critic_fans": current_review.critic_fans,
         "director_fans": current_review.director_fans,
-        "likes_count": likes_count
+        "likes_count": likes_count,
+        "user_favorite_directors": user_favorite_directors,
+        "user_favorite_critics": user_favorite_critics,
     }
 
 

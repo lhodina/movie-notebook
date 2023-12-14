@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import expandIcon from "../assets/expand-icon-small.png";
-
+import Header from './Header';
 import UpdateReviewForm from './UpdateReviewForm';
 import AddFanForm from './AddFanForm';
 
@@ -29,8 +29,8 @@ const styles = {
 }
 
 const Review = (props) => {
-    const { user } = props;
     const { id } = useParams();
+    const [user, setUser] = useState({});
     const [review, setReview] = useState({});
     const [rating, setRating] = useState(0);
     const [watched, setWatched] = useState(0);
@@ -47,6 +47,8 @@ const Review = (props) => {
     const [newLinkText, setNewLinkText] = useState("");
     const [newLinkURL, setNewLinkURL] = useState("");
     const [updateReviewFormOpen, setUpdateReviewFormOpen] = useState(false);
+    const [userFavoriteDirectors, setUserFavoriteDirectors] = useState([]);
+    const [userFavoriteCritics, setUserFavoriteCritics] = useState([]);
 
     const navigate = useNavigate();
 
@@ -142,6 +144,12 @@ const Review = (props) => {
     useEffect( () => {
         axios.get("http://localhost:5000/reviews/" + id, { withCredentials: true })
             .then( (res) => {
+                console.log("reviews res: ", res);
+                setUser({
+                    "id": res.data.user_id,
+                    "first_name": res.data.user_first_name,
+                    "last_name": res.data.user_last_name
+                });
                 setReview(res.data);
                 setRating(res.data.rating);
                 setWatched(res.data.watched);
@@ -150,6 +158,8 @@ const Review = (props) => {
                 setCriticFans(res.data.critic_fans);
                 setDirectorFans(res.data.director_fans);
                 setUserLinks(res.data.user_links);
+                setUserFavoriteDirectors(res.data.user_favorite_directors);
+                setUserFavoriteCritics(res.data.user_favorite_critics);
             })
             .catch(err => {
                 console.log(err);
@@ -164,16 +174,7 @@ const Review = (props) => {
             { grayout && (
                 <div className="Grayout"></div>
             )}
-            <div className="Header">
-                <Link to={ "/dashboard" } >back to dashboard</Link>
-                <form className="SearchBar">
-                    <input className="SearchInput" type="text" value="search my stuff" onChange={() => console.log("this search bar will eventually do something")}></input>
-                </form>
-                <div className="NavUser">
-                    <h5>{user.first_name} {user.last_name[0]}.</h5>
-                    <Link to={ "/login" }>log out</Link>
-                </div>
-            </div>
+            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} />
             <div className="ReviewProfile">
                 <img src={review.image_url} height="250px" alt="movie poster" />
                 <div className="ReviewDetails">

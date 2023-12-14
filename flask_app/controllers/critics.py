@@ -1,4 +1,4 @@
-from flask import redirect, request
+from flask import redirect, request, session
 
 from flask_app import app
 from flask_app.models import user, critic, favorite_critic
@@ -30,19 +30,26 @@ def get_critic(critic_id):
         "critic_id": critic_id
     }
     current_critic = critic.Critic.get_one(data)
-    current_user = user.User.get_one({"id": 1})
-    favorite = favorite_critic.FavoriteCritic.get_one(data)[0]
+    user_favorite_critic = favorite_critic.FavoriteCritic.get_one(data)[0]
     links = critic.Critic.get_links(data)
 
+    print("session: ", session)
+    # print("session['user']['id']: ", session['user']['id'])
+    user_favorite_directors = user.User.get_favorite_directors({"id": session['user']['id']})
+    user_favorite_critics = user.User.get_favorite_critics({"id": session['user']['id']})
+
     return {
+        "user_id": session["user"]["id"],
+        "user_first_name": session["user"]["first_name"],
+        "user_last_name": session["user"]["last_name"],
         "id": current_critic.id,
         "name": current_critic.name,
         "image_url": current_critic.image_url,
         "favorite_movies": current_critic.favorite_movies,
-        "user_first_name": current_user.first_name,
-        "user_last_name": current_user.last_name,
-        "notes": favorite['notes'],
-        "user_links": links
+        "notes": user_favorite_critic['notes'],
+        "user_links": links,
+        "user_favorite_directors": user_favorite_directors,
+        "user_favorite_critics": user_favorite_critics,
     }
 
 

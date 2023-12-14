@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useParams } from "react-router-dom";
 import expandIcon from "../assets/expand-icon-small.png";
+import Header from './Header';
 import ReviewForm from './ReviewForm';
 
+
 const Critic = (props) => {
-    const { user } = props;
+    const [user, setUser] = useState({});
     const [currentCritic, setCurrentCritic] = useState({});
     const [favoriteMovies, setFavoriteMovies] = useState([]);
     const [notes, setNotes] = useState("");
@@ -18,6 +20,8 @@ const Critic = (props) => {
     const [newLinkURL, setNewLinkURL] = useState("");
     const [favoriteMovieFormOpen, setFavoriteMovieFormOpen] = useState(false);
     const [grayout, setGrayout] = useState(false);
+    const [userFavoriteDirectors, setUserFavoriteDirectors] = useState([]);
+    const [userFavoriteCritics, setUserFavoriteCritics] = useState([]);
 
     const { id } = useParams();
 
@@ -32,13 +36,21 @@ const Critic = (props) => {
     }
 
     useEffect( () => {
-        axios.get("http://localhost:5000/critics/" + id)
+        axios.get("http://localhost:5000/critics/" + id, {withCredentials: true})
             .then( (res) => {
+                console.log("critics res: ", res);
+                setUser({
+                    "id": res.data.user_id,
+                    "first_name": res.data.user_first_name,
+                    "last_name": res.data.user_last_name
+                });
                 setCurrentCritic(res.data);
                 setFavoriteMovies(res.data.favorite_movies);
                 setNotes(res.data.notes);
                 setEditNotes(res.data.notes);
                 setUserLinks(res.data.user_links);
+                setUserFavoriteDirectors(res.data.user_favorite_directors);
+                setUserFavoriteCritics(res.data.user_favorite_critics);
             }, { withCredentials: true })
             .catch(err => {
                 console.log(err);
@@ -115,7 +127,8 @@ const Critic = (props) => {
             { grayout && (
                 <div className="Grayout"></div>
             )}
-            <div className="Header">
+            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} />
+            {/* <div className="Header">
                 <Link to={ "/dashboard" } >back to dashboard</Link>
                 <form className="SearchBar">
                 </form>
@@ -123,7 +136,7 @@ const Critic = (props) => {
                     <h5>{user.first_name} {user.last_name[0]}.</h5>
                     <Link to={ "/login" }>log out</Link>
                 </div>
-            </div>
+            </div> */}
             <div className="CriticProfile">
                 { favoriteMovieFormOpen && (
                     <div className="FavoriteMovieForm">

@@ -31,24 +31,28 @@ def get_director(director_id):
     }
 
     current_director = director.Director.get_one(data)
-    favorites = director.Director.get_favorites(data)
-    favorite = favorite_director.FavoriteDirector.get_one(data)
+    director_favorites = director.Director.get_favorites(data)
+    user_favorite_director = favorite_director.FavoriteDirector.get_one(data)
     notes = ""
-    if (len(favorite) > 0):
-        notes = favorite[0]["notes"]
+    if (len(user_favorite_director) > 0):
+        notes = user_favorite_director[0]["notes"]
     links = director.Director.get_links(data)
+    user_favorite_directors = user.User.get_favorite_directors({"id": session['user']['id']})
+    user_favorite_critics = user.User.get_favorite_critics({"id": session['user']['id']})
 
     return {
+        "user_id": session["user"]["id"],
+        "user_first_name": session["user"]["first_name"],
+        "user_last_name": session["user"]["last_name"],
         "id": current_director.id,
         "name": current_director.name,
         "image_url": current_director.image_url,
         "movies_directed": current_director.movies_directed,
-        "favorite_movies": favorites,
-        "user_id": session["user"]["id"],
-        "user_first_name": session["user"]["first_name"],
-        "user_last_name": session["user"]["last_name"],
+        "favorite_movies": director_favorites,
         "notes": notes,
-        "links": links
+        "links": links,
+        "user_favorite_directors": user_favorite_directors,
+        "user_favorite_critics": user_favorite_critics
     }
 
 

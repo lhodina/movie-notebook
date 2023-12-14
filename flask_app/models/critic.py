@@ -57,11 +57,11 @@ class Critic:
         titles = []
 
         for movie in result:
-            print()
-            print("* * * * * * * * * *")
-            for key, value in movie.items():
-                print(f"{key}: {value}")
-            print()
+            # print()
+            # print("* * * * * * * * * *")
+            # for key, value in movie.items():
+            #     print(f"{key}: {value}")
+            # print()
             if movie['title'] not in titles:
                 titles.append(movie['title'])
                 fav = {
@@ -73,7 +73,7 @@ class Critic:
                     "critic_fans": []
                 }
                 current_critic.favorite_movies.append(fav)
-        print("current_critic.favorite_movies: ", current_critic.favorite_movies)
+        # print("current_critic.favorite_movies: ", current_critic.favorite_movies)
         for movie in current_critic.favorite_movies:
             director_fan_names = []
             critic_fan_names = []
@@ -93,10 +93,10 @@ class Critic:
                             "name": record['other_critic_fans.name']
                         }
                         movie['critic_fans'].append(critic_fan)
-            print()
-            print(movie['title'])
-            print("movie['director_fans]: ", movie['director_fans'])
-            print("movie['critic_fans]: ", movie['critic_fans'])
+            # print()
+            # print(movie['title'])
+            # print("movie['director_fans]: ", movie['director_fans'])
+            # print("movie['critic_fans]: ", movie['critic_fans'])
         return current_critic
 
 

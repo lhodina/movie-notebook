@@ -9,8 +9,8 @@ import Header from './Header';
 const Dashboard = (props) => {
     // const [firstName, setFirstName] = useState("");
     const [user, setUser] = useState({});
-    const [favoriteDirectors, setFavoriteDirectors] = useState([]);
-    const [favoriteCritics, setFavoriteCritics] = useState([]);
+    const [userFavoriteDirectors, setUserFavoriteDirectors] = useState([]);
+    const [userFavoriteCritics, setUserFavoriteCritics] = useState([]);
     // const [collections, setCollections] = useState([]);
     const [reviews, setReviews] = useState([]);
     const [watched, setWatched] = useState([]);
@@ -106,14 +106,13 @@ const Dashboard = (props) => {
                 if (!res["data"]["user_id"]) {
                     navigate("/login")
                 } else {
-                    // setFirstName(res.data.first_name);
                     setUser({
                         "id": res.data.user_id,
                         "first_name": res.data.user_first_name,
                         "last_name": res.data.user_last_name
                     });
-                    setFavoriteDirectors(res.data.favorite_directors);
-                    setFavoriteCritics(res.data.favorite_critics);
+                    setUserFavoriteDirectors(res.data.favorite_directors);
+                    setUserFavoriteCritics(res.data.favorite_critics);
                     // setCollections(res.data.collections);
                     setReviews(res.data.reviews);
                     setDisplayed(res.data.unwatched);
@@ -129,7 +128,7 @@ const Dashboard = (props) => {
             { grayout && (
                 <div className="Grayout"></div>
             )}
-            <Header user={user} favoriteDirectors={favoriteDirectors} favoriteCritics={favoriteCritics} />
+            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} />
             {/* <div className="Header">
                 <h4>Welcome, {firstName}</h4>
                 <div className="NavMenuItem" onMouseEnter={ toggleDirectors } onMouseLeave={ toggleDirectors } >

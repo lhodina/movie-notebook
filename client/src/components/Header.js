@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import LogoutButton from './LogoutButton';
 
 const Header = (props) => {
-    const { user, favoriteDirectors, favoriteCritics } = props;
+    const { user, userFavoriteDirectors, userFavoriteCritics } = props;
 
     const [directorsOpen, setDirectorsOpen] = useState(false);
     const [criticsOpen, setCriticsOpen] = useState(false);
@@ -26,8 +26,8 @@ const Header = (props) => {
                         <Link to={"/favorite_directors/add"}> + Add Favorite Director</Link>
                         <ul className="NavDropdownList" >
                         {
-                            favoriteDirectors.map( (director, index) => (
-                                <Link to={ "/directors/" + director.id } className="NavDropdownListItem"><li key={index}>{director.name}</li></Link>
+                            userFavoriteDirectors.map( (director, index) => (
+                                <Link key={index} to={ "/directors/" + director.id } className="NavDropdownListItem"><li>{director.name}</li></Link>
                             ))
                         }
                         </ul>
@@ -41,8 +41,8 @@ const Header = (props) => {
                         <Link to={"/favorite_critics/add"}> + Add Favorite Critic</Link>
                         <ul className="NavDropdownList" >
                         {
-                            favoriteCritics.map( (critic, index) => (
-                                <Link to={ "/critics/" + critic.id } className="NavDropdownListItem"><li key={index}>{critic.name}</li></Link>
+                            userFavoriteCritics.map( (critic, index) => (
+                                <Link  key={index} to={ "/critics/" + critic.id } className="NavDropdownListItem"><li>{critic.name}</li></Link>
                             ))
                         }
                         </ul>
@@ -69,6 +69,7 @@ const Header = (props) => {
             <form className="SearchBar">
                 <input className="SearchInput" type="text" value="search my stuff" onChange={() => console.log("this search bar will eventually do something")}></input>
             </form>
+            <Link to={"/dashboard"}>back to dashboard</Link>
             <LogoutButton />
         </div>
     )
