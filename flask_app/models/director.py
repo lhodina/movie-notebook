@@ -117,11 +117,6 @@ class Director:
         favs = []
         titles = []
         for movie in result:
-            print()
-            print("* * * * * * * * * *")
-            for key, value in movie.items():
-                print(f"{key}: {value}")
-            print()
             if movie['title'] not in titles:
                 titles.append(movie['title'])
                 fav = {
@@ -155,9 +150,6 @@ class Director:
                             "name": record['critics.name']
                         }
                         movie['critic_fans'].append(critic_fan)
-            print(movie['title'])
-            print("movie['director_fans]: ", movie['director_fans'])
-            print("movie['critic_fans]: ", movie['critic_fans'])
         return favs
 
 

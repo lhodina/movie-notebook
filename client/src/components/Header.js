@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 import LogoutButton from './LogoutButton';
 
 const Header = (props) => {
-    const { user, userFavoriteDirectors, userFavoriteCritics } = props;
-
+    const { user, userFavoriteDirectors, userFavoriteCritics, reviews } = props;
     const [directorsOpen, setDirectorsOpen] = useState(false);
     const [criticsOpen, setCriticsOpen] = useState(false);
+    const [query, setQuery] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
 
     const toggleDirectors = () => {
         setDirectorsOpen(!directorsOpen);
@@ -15,6 +16,18 @@ const Header = (props) => {
     const toggleCritics = () => {
         setCriticsOpen(!criticsOpen);
     }
+
+    const getSearchResults = (e) => {
+        setQuery(e.target.value);
+        console.log("e.target.value: ", e.target.value);
+        console.log("query:", query)
+        for (let review of reviews) {
+            if (review.title.toLowerCase().includes(query)) {
+                console.log("getSearchResults review: ", review.title)
+                setSearchResults([...searchResults, review]);
+            }
+        }
+    };
 
     return (
         <div className="Header">
@@ -42,7 +55,7 @@ const Header = (props) => {
                         <ul className="NavDropdownList" >
                         {
                             userFavoriteCritics.map( (critic, index) => (
-                                <Link  key={index} to={ "/critics/" + critic.id } className="NavDropdownListItem"><li>{critic.name}</li></Link>
+                                <Link key={index} to={ "/critics/" + critic.id } className="NavDropdownListItem"><li>{critic.name}</li></Link>
                             ))
                         }
                         </ul>
@@ -66,9 +79,15 @@ const Header = (props) => {
             </div> */}
 
             <Link to={"/reviews/add"}><button className="btn btn-danger">+ Review a Movie</button></Link>
-            <form className="SearchBar">
-                <input className="SearchInput" type="text" value="search my stuff" onChange={() => console.log("this search bar will eventually do something")}></input>
-            </form>
+            <div>
+                <input type="search" placeholder="search my stuff" value={query} onChange={getSearchResults} />
+                <p>Query: {query}</p>
+                <ul>
+                    {searchResults.map((result, index) => (
+                        <li key={index}>{result.title}</li>
+                    ))}
+                </ul>
+            </div>
             <Link to={"/dashboard"}>back to dashboard</Link>
             <LogoutButton />
         </div>

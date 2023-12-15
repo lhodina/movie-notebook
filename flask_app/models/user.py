@@ -203,8 +203,6 @@ class User:
 
     @staticmethod
     def validate_login(data):
-        print()
-        print("* * * * * IN validate_login")
         messages = []
         if not data["email"]:
             messages.append("Email Required")
@@ -218,7 +216,6 @@ class User:
                 messages.append("Email not found")
             else:
                 current_user = result[0]
-                print("current_user: ", current_user)
             if current_user and not bcrypt.check_password_hash(current_user["password"], data["password"]):
                 messages.append("Incorrect password")
         if not data["password"]:
