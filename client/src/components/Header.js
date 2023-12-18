@@ -4,10 +4,10 @@ import LogoutButton from './LogoutButton';
 
 const Header = (props) => {
     const { user, userFavoriteDirectors, userFavoriteCritics, reviews } = props;
+
     const [directorsOpen, setDirectorsOpen] = useState(false);
     const [criticsOpen, setCriticsOpen] = useState(false);
     const [query, setQuery] = useState("");
-    const [searchResults, setSearchResults] = useState([]);
 
     const toggleDirectors = () => {
         setDirectorsOpen(!directorsOpen);
@@ -17,17 +17,34 @@ const Header = (props) => {
         setCriticsOpen(!criticsOpen);
     }
 
-    const getSearchResults = (e) => {
+    const updateQuery = (e) => {
         setQuery(e.target.value);
+        console.log("");
         console.log("e.target.value: ", e.target.value);
-        console.log("query:", query)
+        console.log("query:", query);
+    };
+
+    const showSearchResults = () => {
+        const showReviews = [];
         for (let review of reviews) {
-            if (review.title.toLowerCase().includes(query)) {
-                console.log("getSearchResults review: ", review.title)
-                setSearchResults([...searchResults, review]);
+            if (query && review.title.toLowerCase().includes(query)) {
+                console.log("review.title:", review.title);
+                console.log("review.id:", review.id);
+                console.log("query: ", query);
+                showReviews.push(review);
             }
         }
-    };
+        if (query.length > 1) return (<ul>
+            {showReviews.map((review, index) => {
+                return <Link to={'/reviews/' + review.id} key={index}><li>{review.title}</li></Link>
+            })}
+        </ul>)
+    }
+
+    const getSearchResults = (e) => {
+        updateQuery(e);
+        showSearchResults();
+    }
 
     return (
         <div className="Header">
@@ -82,11 +99,7 @@ const Header = (props) => {
             <div>
                 <input type="search" placeholder="search my stuff" value={query} onChange={getSearchResults} />
                 <p>Query: {query}</p>
-                <ul>
-                    {searchResults.map((result, index) => (
-                        <li key={index}>{result.title}</li>
-                    ))}
-                </ul>
+                {showSearchResults()}
             </div>
             <Link to={"/dashboard"}>back to dashboard</Link>
             <LogoutButton />

@@ -130,8 +130,10 @@ def get_review(review_id):
     }
     user_links = movie.Movie.get_all_links(link_data)
     likes_count = len(current_review.critic_fans) + len(current_review.director_fans)
-    user_favorite_directors = user.User.get_favorite_directors({"id": session['user']['id']})
-    user_favorite_critics = user.User.get_favorite_critics({"id": session['user']['id']})
+    user_favorite_directors = user.User.get_favorite_directors({"id": user_id})
+    user_favorite_critics = user.User.get_favorite_critics({"id": user_id})
+    reviews = user.User.get_reviews({"id": user_id})
+
 
     return {
         "user_id": session["user"]["id"],
@@ -152,6 +154,7 @@ def get_review(review_id):
         "likes_count": likes_count,
         "user_favorite_directors": user_favorite_directors,
         "user_favorite_critics": user_favorite_critics,
+        "reviews": reviews
     }
 
 

@@ -26,6 +26,7 @@ def get_all_critics():
 
 @app.route("/critics/<int:critic_id>")
 def get_critic(critic_id):
+    user_id = session["user"]["id"]
     data = {
         "critic_id": critic_id
     }
@@ -33,10 +34,9 @@ def get_critic(critic_id):
     user_favorite_critic = favorite_critic.FavoriteCritic.get_one(data)[0]
     links = critic.Critic.get_links(data)
 
-    print("session: ", session)
-    # print("session['user']['id']: ", session['user']['id'])
-    user_favorite_directors = user.User.get_favorite_directors({"id": session['user']['id']})
-    user_favorite_critics = user.User.get_favorite_critics({"id": session['user']['id']})
+    user_favorite_directors = user.User.get_favorite_directors({"id": user_id})
+    user_favorite_critics = user.User.get_favorite_critics({"id": user_id})
+    reviews = user.User.get_reviews({"id": user_id})
 
     return {
         "user_id": session["user"]["id"],
@@ -50,6 +50,7 @@ def get_critic(critic_id):
         "user_links": links,
         "user_favorite_directors": user_favorite_directors,
         "user_favorite_critics": user_favorite_critics,
+        "reviews": reviews
     }
 
 

@@ -26,6 +26,7 @@ def get_all_directors():
 
 @app.route("/directors/<int:director_id>")
 def get_director(director_id):
+    user_id = session["user"]["id"]
     data = {
         "id": director_id
     }
@@ -37,8 +38,9 @@ def get_director(director_id):
     if (len(user_favorite_director) > 0):
         notes = user_favorite_director[0]["notes"]
     links = director.Director.get_links(data)
-    user_favorite_directors = user.User.get_favorite_directors({"id": session['user']['id']})
-    user_favorite_critics = user.User.get_favorite_critics({"id": session['user']['id']})
+    user_favorite_directors = user.User.get_favorite_directors({"id": user_id})
+    user_favorite_critics = user.User.get_favorite_critics({"id": user_id})
+    reviews = user.User.get_reviews({"id": user_id})
 
     return {
         "user_id": session["user"]["id"],
@@ -52,7 +54,8 @@ def get_director(director_id):
         "notes": notes,
         "links": links,
         "user_favorite_directors": user_favorite_directors,
-        "user_favorite_critics": user_favorite_critics
+        "user_favorite_critics": user_favorite_critics,
+        "reviews": reviews
     }
 
 

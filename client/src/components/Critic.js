@@ -22,6 +22,7 @@ const Critic = (props) => {
     const [grayout, setGrayout] = useState(false);
     const [userFavoriteDirectors, setUserFavoriteDirectors] = useState([]);
     const [userFavoriteCritics, setUserFavoriteCritics] = useState([]);
+    const [reviews, setReviews] = useState([]);
 
     const { id } = useParams();
 
@@ -51,6 +52,7 @@ const Critic = (props) => {
                 setUserLinks(res.data.user_links);
                 setUserFavoriteDirectors(res.data.user_favorite_directors);
                 setUserFavoriteCritics(res.data.user_favorite_critics);
+                setReviews(res.data.reviews);
             }, { withCredentials: true })
             .catch(err => {
                 console.log(err);
@@ -127,7 +129,7 @@ const Critic = (props) => {
             { grayout && (
                 <div className="Grayout"></div>
             )}
-            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} />
+            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} reviews={reviews} />
             {/* <div className="Header">
                 <Link to={ "/dashboard" } >back to dashboard</Link>
                 <form className="SearchBar">

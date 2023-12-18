@@ -49,6 +49,7 @@ const Review = (props) => {
     const [updateReviewFormOpen, setUpdateReviewFormOpen] = useState(false);
     const [userFavoriteDirectors, setUserFavoriteDirectors] = useState([]);
     const [userFavoriteCritics, setUserFavoriteCritics] = useState([]);
+    const [reviews, setReviews] = useState([]);
 
     const navigate = useNavigate();
 
@@ -160,11 +161,12 @@ const Review = (props) => {
                 setUserLinks(res.data.user_links);
                 setUserFavoriteDirectors(res.data.user_favorite_directors);
                 setUserFavoriteCritics(res.data.user_favorite_critics);
+                setReviews(res.data.reviews);
             })
             .catch(err => {
                 console.log(err);
             })
-    }, []);
+    }, [id]);
 
 
     const stars = Array(5).fill(0);
@@ -174,7 +176,7 @@ const Review = (props) => {
             { grayout && (
                 <div className="Grayout"></div>
             )}
-            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} />
+            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} reviews={reviews} />
             <div className="ReviewProfile">
                 <img src={review.image_url} height="250px" alt="movie poster" />
                 <div className="ReviewDetails">

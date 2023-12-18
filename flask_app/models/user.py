@@ -135,8 +135,8 @@ class User:
             }
 
             current_review = review.Review(review_data)
-            current_review.critic_fans = current_review.get_critic_fans({ "id": current_review.movie_id })
-            current_review.director_fans = current_review.get_director_fans({ "id": current_review.movie_id })
+            # current_review.critic_fans = current_review.get_critic_fans({ "id": current_review.movie_id })
+            # current_review.director_fans = current_review.get_director_fans({ "id": current_review.movie_id })
 
             movie_data = {
                 "title": item["title"],
@@ -146,7 +146,7 @@ class User:
                 "director_name": item["name"]
             }
 
-            likes_count = len(current_review.critic_fans) + len(current_review.director_fans)
+            # likes_count = len(current_review.critic_fans) + len(current_review.director_fans)
 
             full_review = {
                 "id": current_review.id,
@@ -155,10 +155,11 @@ class User:
                 "watched": current_review.watched,
                 "rating": current_review.rating,
                 "notes": current_review.notes,
-                "critic_fans": current_review.critic_fans,
-                "director_fans": current_review.director_fans,
+                "critic_fans": [],
+                "director_fans": [],
                 **movie_data,
-                "likes_count": likes_count
+                # "likes_count": likes_count
+                "likes_count": 0
             }
 
             reviews.append(full_review)

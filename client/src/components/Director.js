@@ -27,6 +27,8 @@ const Director = (props) => {
     const [fanFormOpen, setFanFormOpen] = useState(false);
     const [userFavoriteDirectors, setUserFavoriteDirectors] = useState([]);
     const [userFavoriteCritics, setUserFavoriteCritics] = useState([]);
+    const [reviews, setReviews] = useState([]);
+
 
     const { id } = useParams();
 
@@ -57,6 +59,7 @@ const Director = (props) => {
                 setUserLinks(res.data.links);
                 setUserFavoriteDirectors(res.data.user_favorite_directors);
                 setUserFavoriteCritics(res.data.user_favorite_critics);
+                setReviews(res.data.reviews);
             })
             .catch(err => {
                 console.log(err);
@@ -153,7 +156,7 @@ const Director = (props) => {
             { grayout && (
                 <div className="Grayout"></div>
             )}
-            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} />
+            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} reviews={reviews} />
             {/* <div className="Header">
                 <Link to={ "/dashboard" } >back to dashboard</Link>
                 <form className="SearchBar">
