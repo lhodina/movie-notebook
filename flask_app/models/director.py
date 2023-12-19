@@ -62,7 +62,6 @@ class Director:
                 current_movie_data = {
                     "id": movie["movies.id"],
                     "title": movie["title"],
-                    "year": movie["year"],
                     "image_url": movie["movies.image_url"],
                     "review_id": movie["reviews.id"],
                     "director_fans": [],

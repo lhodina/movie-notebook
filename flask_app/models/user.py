@@ -115,54 +115,52 @@ class User:
     @classmethod
     def get_reviews(cls, data):
         query = """
-        SELECT * FROM movies
-        JOIN reviews ON reviews.movie_id = movies.id
-        JOIN directors ON directors.id = movies.directed_by_id
-        WHERE reviews.user_id = %(id)s;
+            SELECT * FROM movies
+            JOIN reviews ON reviews.movie_id = movies.id
+            LEFT JOIN director_favorite_movies ON director_favorite_movies.movie_id = movies.id
+            LEFT JOIN directors AS director_fans ON director_fans.id = director_favorite_movies.director_id
+            LEFT JOIN critic_favorite_movies ON critic_favorite_movies.movie_id = movies.id
+            LEFT JOIN critics ON critics.id = critic_favorite_movies.critic_id
+            WHERE reviews.user_id = %(id)s;
         """
         result = connectToMySQL(cls.DB).query_db(query, data)
+
+        titles = []
         reviews = []
         for item in result:
-            review_data = {
-                "id": item["reviews.id"],
-                "movie_id": item["id"],
-                "user_id": item["user_id"],
-                "watched": item["watched"],
-                "rating": item["rating"],
-                "notes": item["notes"],
-                "created_at": item["reviews.created_at"],
-                "updated_at": item["reviews.updated_at"]
-            }
+            if (item["title"] not in titles):
+                review = {
+                    "id": item["reviews.id"],
+                    "title": item["title"],
+                    "image_url": item["image_url"],
+                    "watched": item["watched"],
+                    "director_fans": [],
+                    "critic_fans": [],
+                    "likes_count": 0
+                }
+                reviews.append(review)
+                titles.append(item["title"])
 
-            current_review = review.Review(review_data)
-            # current_review.critic_fans = current_review.get_critic_fans({ "id": current_review.movie_id })
-            # current_review.director_fans = current_review.get_director_fans({ "id": current_review.movie_id })
-
-            movie_data = {
-                "title": item["title"],
-                "image_url": item["image_url"],
-                "year": item["year"],
-                "directed_by_id": item["directed_by_id"],
-                "director_name": item["name"]
-            }
-
-            # likes_count = len(current_review.critic_fans) + len(current_review.director_fans)
-
-            full_review = {
-                "id": current_review.id,
-                "movie_id": current_review.movie_id,
-                "user_id": current_review.user_id,
-                "watched": current_review.watched,
-                "rating": current_review.rating,
-                "notes": current_review.notes,
-                "critic_fans": [],
-                "director_fans": [],
-                **movie_data,
-                # "likes_count": likes_count
-                "likes_count": 0
-            }
-
-            reviews.append(full_review)
+        for review in reviews:
+            director_fan_names = []
+            critic_fan_names = []
+            for record in result:
+                if review['id'] == record['reviews.id']:
+                    if record['name'] and record['name'] not in director_fan_names:
+                        director_fan_names.append(record['name'])
+                        director_fan = {
+                            "id": record['director_id'],
+                            "name": record['name']
+                        }
+                        review['director_fans'].append(director_fan)
+                    if record['critics.name'] and record['critics.name'] not in critic_fan_names:
+                        critic_fan_names.append(record['critics.name'])
+                        critic_fan = {
+                            "id": record['critic_id'],
+                            "name": record['critics.name']
+                        }
+                        review['critic_fans'].append(critic_fan)
+            review['likes_count'] = len(review['critic_fans']) + len(review['director_fans'])
         reviews.sort(key=lambda x: x['likes_count'], reverse=True)
         return reviews
 

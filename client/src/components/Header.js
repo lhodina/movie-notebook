@@ -27,16 +27,38 @@ const Header = (props) => {
     const showSearchResults = () => {
         const showReviews = [];
         for (let review of reviews) {
-            if (query && review.title.toLowerCase().includes(query)) {
+            if (query && review.title.toLowerCase().startsWith(query)) {
                 console.log("review.title:", review.title);
                 console.log("review.id:", review.id);
                 console.log("query: ", query);
                 showReviews.push(review);
             }
         }
-        if (query.length > 1) return (<ul>
-            {showReviews.map((review, index) => {
+
+        const showDirectors = [];
+        for (let director of userFavoriteDirectors) {
+            if (query && director.name.toLowerCase().startsWith(query)) {
+                showDirectors.push(director);
+            }
+        }
+
+        const showCritics = [];
+        for (let critic of userFavoriteCritics) {
+            console.log("critic in userFavoriteCritics: ", critic);
+            if (query && critic.name.toLowerCase().startsWith(query)) {
+                showCritics.push(critic);
+            }
+        }
+
+        return (query.length > 1 && <ul>
+            {showReviews.length > 0 && showReviews.map((review, index) => {
                 return <Link to={'/reviews/' + review.id} key={index}><li>{review.title}</li></Link>
+            })}
+            {showDirectors.length > 0 && showDirectors.map((director, index) => {
+                return <Link to={'/directors/' + director.id} key={index}><li>{director.name}</li></Link>
+            })}
+            {showCritics.length > 0 && showCritics.map((critic, index) => {
+                return <Link to={'/critics/' + critic.id} key={index}><li>{critic.name}</li></Link>
             })}
         </ul>)
     }
@@ -98,7 +120,6 @@ const Header = (props) => {
             <Link to={"/reviews/add"}><button className="btn btn-danger">+ Review a Movie</button></Link>
             <div>
                 <input type="search" placeholder="search my stuff" value={query} onChange={getSearchResults} />
-                <p>Query: {query}</p>
                 {showSearchResults()}
             </div>
             <Link to={"/dashboard"}>back to dashboard</Link>
