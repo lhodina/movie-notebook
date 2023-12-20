@@ -23,6 +23,8 @@ const Dashboard = (props) => {
     const [fanFormOpen, setFanFormOpen] = useState(false);
     const [grayout, setGrayout] = useState(false);
     const [currentMovieId, setCurrentMovieId] = useState(0);
+    const [criticFans, setCriticFans] = useState([]);
+    const [directorFans, setDirectorFans] = useState([]);
 
     const navigate = useNavigate();
 
@@ -36,17 +38,17 @@ const Dashboard = (props) => {
     }
 
 
-    const removeFromDom = reviewId => {
-        setReviews(reviews.filter(review => review.id !== reviewId));
-    }
+    // const removeFromDom = reviewId => {
+    //     setReviews(reviews.filter(review => review.id !== reviewId));
+    // }
 
-    const deleteReview = reviewId => {
-        axios.delete("http://localhost:5000/reviews/delete/" + reviewId, { withCredentials: true })
-            .then(res => {
-                removeFromDom(reviewId)
-            })
-            .catch(err => console.log(err));
-    }
+    // const deleteReview = reviewId => {
+    //     axios.delete("http://localhost:5000/reviews/delete/" + reviewId, { withCredentials: true })
+    //         .then(res => {
+    //             removeFromDom(reviewId)
+    //         })
+    //         .catch(err => console.log(err));
+    // }
 
     const placeholder = (review) => {
         if (review.likes_count < 1) {
@@ -84,6 +86,13 @@ const Dashboard = (props) => {
     }
 
     const displayDirectorFans = (currentReview) => {
+        if (directorFans.length && directorFans[0].movie_id === currentReview.movie_id) {
+            let newFan = directorFans[0];
+            setDirectorFans([]);
+            let exists = currentReview.director_fans.find((fan) => fan.name === newFan.name);
+            if (!exists) currentReview.director_fans.push(newFan);
+        };
+
         const directorFansList = currentReview.director_fans.map((director, index) => (
             <Link to={ "/directors/" + director.id } key={index}><p>{director.name}</p></Link>
         ));
@@ -92,6 +101,13 @@ const Dashboard = (props) => {
     }
 
     const displayCriticFans = (currentReview) => {
+        if (criticFans.length && criticFans[0].movie_id === currentReview.movie_id) {
+            let newFan = criticFans[0];
+            setCriticFans([]);
+            let exists = currentReview.critic_fans.find((fan) => fan.name === newFan.name);
+            if (!exists) currentReview.critic_fans.push(newFan);
+        };
+
         const criticFansList = currentReview.critic_fans.map((critic, index) => (
             <Link to={ "/critics/" + critic.id } key={index}><p>{critic.name}</p></Link>
         ));
@@ -193,7 +209,7 @@ const Dashboard = (props) => {
             <div className="Main">
                 { fanFormOpen && (
                     <div>
-                        <AddFanForm movie_id={currentMovieId} toggleForm={toggleFanForm} />
+                        <AddFanForm movie_id={currentMovieId} directorFans={directorFans} setDirectorFans={setDirectorFans} criticFans={criticFans} setCriticFans={setCriticFans} toggleForm={toggleFanForm} />
                     </div>
                 )}
             {
@@ -206,8 +222,8 @@ const Dashboard = (props) => {
                                 <div className="LikedBy">
                                     <h6>Liked By:</h6>
                                     { displayDirectorFans(review) }
-                                    { displayCriticFans(review) }
 
+                                    { displayCriticFans(review) }
                                     { placeholder(review) }
                                     <button onClick={ () => {
                                             setCurrentMovieId(review.movie_id);

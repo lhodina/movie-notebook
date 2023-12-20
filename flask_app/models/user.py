@@ -131,6 +131,7 @@ class User:
             if (item["title"] not in titles):
                 review = {
                     "id": item["reviews.id"],
+                    "movie_id": item["movie_id"],
                     "title": item["title"],
                     "image_url": item["image_url"],
                     "watched": item["watched"],

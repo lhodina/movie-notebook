@@ -2,17 +2,16 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const AddFanForm = (props) => {
-    const { movie_id, toggleForm, directorFans, setDirectorFans, criticFans, setCriticFans } = props;
+    const { movie_id, toggleForm, directorFans, setDirectorFans, criticFans, setCriticFans, newFan, setNewFan } = props;
     const [ name, setName ] = useState("");
-    const [fanType, setFanType] = useState("director");
-    const [errors, setErrors] = useState([]);
+    const [ fanType, setFanType ] = useState("director");
+    const [ errors, setErrors ] = useState([]);
 
     const capitalize = (name) => {
         let arr = name.split(" ");
         for (let i = 0; i < arr.length; i++) {
             arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
         }
-        console.log("testing arr: ", arr);
         return arr.join(" ");
     }
 
@@ -22,15 +21,12 @@ const AddFanForm = (props) => {
             name
         }, { withCredentials: true })
             .then( res => {
-                console.log("res['data']['director_id']: ", res['data']['director_id']);
                 toggleForm();
                 let capitalized = capitalize(name);
-                console.log("capitalized: ", capitalized);
                 if (fanType === "director") {
-                    setDirectorFans([...directorFans, {"id": res["data"]["director_id"], "name": capitalized}])
+                    setDirectorFans([...directorFans, {"id": res["data"]["director_id"], "name": capitalized, "movie_id": movie_id }])
                 } else if (fanType === "critic") {
-                    setCriticFans([...criticFans, {"id": res["data"]["critic_id"], "name": capitalized}])
-
+                    criticFans && setCriticFans([...criticFans, {"id": res["data"]["critic_id"], "name": capitalized, "movie_id": movie_id}])
                 }
 
             })

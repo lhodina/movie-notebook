@@ -208,7 +208,6 @@ const Review = (props) => {
                         <div className="UpdateReviewForm">
                             <UpdateReviewForm user={user} rating={rating} review={review} setReview={setReview} setRating={setRating} watched={watched} setWatched={setWatched} toggleReviewForm={toggleReviewForm} />
                         </div>
-
                     )}
                 </div>
             </div>
