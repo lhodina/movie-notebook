@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import LogoutButton from './LogoutButton';
 
@@ -8,6 +8,18 @@ const Header = (props) => {
     const [directorsOpen, setDirectorsOpen] = useState(false);
     const [criticsOpen, setCriticsOpen] = useState(false);
     const [query, setQuery] = useState("");
+
+    useEffect(() => {
+        const closeSearchDropdown = (e) => {
+            if (!e.target.closest(".SearchArea")) {
+                setQuery("");
+            }
+        };
+
+        document.addEventListener("click", closeSearchDropdown);
+
+        return () => document.removeEventListener("click", closeSearchDropdown);
+      }, []);
 
     const toggleDirectors = () => {
         setDirectorsOpen(!directorsOpen);
@@ -28,9 +40,9 @@ const Header = (props) => {
         const showReviews = [];
         for (let review of reviews) {
             if (query && review.title.toLowerCase().startsWith(query)) {
-                console.log("review.title:", review.title);
-                console.log("review.id:", review.id);
-                console.log("query: ", query);
+                // console.log("review.title:", review.title);
+                // console.log("review.id:", review.id);
+                // console.log("query: ", query);
                 showReviews.push(review);
             }
         }
@@ -44,23 +56,24 @@ const Header = (props) => {
 
         const showCritics = [];
         for (let critic of userFavoriteCritics) {
-            console.log("critic in userFavoriteCritics: ", critic);
+            // console.log("critic in userFavoriteCritics: ", critic);
             if (query && critic.name.toLowerCase().startsWith(query)) {
                 showCritics.push(critic);
             }
         }
 
-        return (query.length > 1 && <ul>
+        return (query.length > 1 && <div className="NavDropdown"><ul className="NavDropdownList">
+
             {showReviews.length > 0 && showReviews.map((review, index) => {
-                return <Link to={'/reviews/' + review.id} key={index}><li>{review.title}</li></Link>
+                return <Link to={'/reviews/' + review.id} key={index} className="NavDropdownListItem"><li>{review.title}</li></Link>
             })}
             {showDirectors.length > 0 && showDirectors.map((director, index) => {
-                return <Link to={'/directors/' + director.id} key={index}><li>{director.name}</li></Link>
+                return <Link to={'/directors/' + director.id} key={index} className="NavDropdownListItem"><li>{director.name}</li></Link>
             })}
             {showCritics.length > 0 && showCritics.map((critic, index) => {
-                return <Link to={'/critics/' + critic.id} key={index}><li>{critic.name}</li></Link>
+                return <Link to={'/critics/' + critic.id} key={index} className="NavDropdownListItem"><li>{critic.name}</li></Link>
             })}
-        </ul>)
+        </ul></div>)
     }
 
     const getSearchResults = (e) => {
@@ -118,7 +131,7 @@ const Header = (props) => {
             </div> */}
 
             <Link to={"/reviews/add"}><button className="btn btn-danger">+ Review a Movie</button></Link>
-            <div>
+            <div className="SearchArea">
                 <input type="search" placeholder="search my stuff" value={query} onChange={getSearchResults} />
                 {showSearchResults()}
             </div>
