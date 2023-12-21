@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import LogoutButton from './LogoutButton';
 
 const Header = (props) => {
-    const { user, userFavoriteDirectors, userFavoriteCritics, reviews } = props;
+    const { user, userFavoriteDirectors, userFavoriteCritics, reviews, toggleForm } = props;
 
     const [directorsOpen, setDirectorsOpen] = useState(false);
     const [criticsOpen, setCriticsOpen] = useState(false);
@@ -40,9 +40,6 @@ const Header = (props) => {
         const showReviews = [];
         for (let review of reviews) {
             if (query && review.title.toLowerCase().startsWith(query)) {
-                // console.log("review.title:", review.title);
-                // console.log("review.id:", review.id);
-                // console.log("query: ", query);
                 showReviews.push(review);
             }
         }
@@ -56,7 +53,6 @@ const Header = (props) => {
 
         const showCritics = [];
         for (let critic of userFavoriteCritics) {
-            // console.log("critic in userFavoriteCritics: ", critic);
             if (query && critic.name.toLowerCase().startsWith(query)) {
                 showCritics.push(critic);
             }
@@ -114,23 +110,7 @@ const Header = (props) => {
                     </div>
                 )}
             </div>
-            {/* <div className="NavMenuItem" onMouseEnter={ toggleCollections } onMouseLeave={ toggleCollections }>
-                <h5>Collections</h5>
-                { collectionsOpen && (
-                    <div className="NavDropdown">
-                        <Link to={"/collections/add"}> + Add Collection</Link>
-                        <ul className="NavDropdownList" >
-                        {
-                            collections.map( (collection, index) => (
-                                <Link to={ "/collections/" + collection.id } className="NavDropdownListItem"><li key={index}>{collection.name}</li></Link>
-                            ))
-                        }
-                        </ul>
-                    </div>
-                )}
-            </div> */}
-
-            <Link to={"/reviews/add"}><button className="btn btn-danger">+ Review a Movie</button></Link>
+            <button className="btn btn-danger" onClick={toggleForm}>+ Review a Movie</button>
             <div className="SearchArea">
                 <input type="search" placeholder="search my stuff" value={query} onChange={getSearchResults} />
                 {showSearchResults()}
@@ -140,6 +120,5 @@ const Header = (props) => {
         </div>
     )
 }
-
 
 export default Header;

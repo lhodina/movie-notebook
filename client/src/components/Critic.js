@@ -39,7 +39,6 @@ const Critic = (props) => {
     useEffect( () => {
         axios.get("http://localhost:5000/critics/" + id, {withCredentials: true})
             .then( (res) => {
-                console.log("critics res: ", res);
                 setUser({
                     "id": res.data.user_id,
                     "first_name": res.data.user_first_name,
@@ -130,15 +129,6 @@ const Critic = (props) => {
                 <div className="Grayout"></div>
             )}
             <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} reviews={reviews} />
-            {/* <div className="Header">
-                <Link to={ "/dashboard" } >back to dashboard</Link>
-                <form className="SearchBar">
-                </form>
-                <div className="NavUser">
-                    <h5>{user.first_name} {user.last_name[0]}.</h5>
-                    <Link to={ "/login" }>log out</Link>
-                </div>
-            </div> */}
             <div className="CriticProfile">
                 { favoriteMovieFormOpen && (
                     <div className="FavoriteMovieForm">

@@ -157,16 +157,6 @@ const Director = (props) => {
                 <div className="Grayout"></div>
             )}
             <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} reviews={reviews} />
-            {/* <div className="Header">
-                <Link to={ "/dashboard" } >back to dashboard</Link>
-                <form className="SearchBar">
-                    <input className="SearchInput" type="text" value="search my stuff" onChange={() => console.log("this search bar will eventually do something")}></input>
-                </form>
-                <div className="NavUser">
-                    <h5>{user.first_name} {user.last_name}.</h5>
-                    <Link to={ "/login" }>log out</Link>
-                </div>
-            </div> */}
             <div className="DirectorProfile">
                 { movieDirectedFormOpen && (
                     <div className="DirectedByForm">
@@ -284,10 +274,10 @@ const Director = (props) => {
                                             <div className="LikedBy">
                                                 <h6>Liked By:</h6>
                                                 <ul>
-                                                    { movie.director_fans.map( (directorFan, index) => (
+                                                    { movie.director_fans && movie.director_fans.map( (directorFan, index) => (
                                                         directorFan.id != id && <li key={ index }><Link to={ "/directors/" + directorFan.id } >{directorFan.name }</Link></li>
                                                     )) }
-                                                    { movie.critic_fans.map( (critic, index) => (
+                                                    { movie.critic_fans && movie.critic_fans.map( (critic, index) => (
                                                         <li key={ index }><Link to={ "/critics/" + critic.id }>{critic.name }</Link></li>
                                                     )) }
                                                 </ul>

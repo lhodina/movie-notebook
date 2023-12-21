@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 
 // Star rating functionality from Albert Devshot
@@ -20,15 +19,14 @@ const colors = {
   }
 
 const ReviewForm = (props) => {
-    const { location, currentDirector, currentCritic, toggleForm, moviesDirected, setMoviesDirected, favoriteMovies, setFavoriteMovies } = props;
+    const { location, currentDirector, currentCritic, toggleForm, moviesDirected, setMoviesDirected, favoriteMovies, setFavoriteMovies, reviews, setReviews, displayAll, displayed, setDisplayed } = props;
     const [ title, setTitle ] = useState("");
     const [ rating, setRating ] = useState(0);
     const [ watched, setWatched ] = useState("");
     const [ notes, setNotes ] = useState("");
     const [errors, setErrors] = useState([]);
-    const [hoverValue, setHoverValue] = React.useState(undefined);
+    const [hoverValue, setHoverValue] = useState(undefined);
 
-    const navigate = useNavigate();
 
     const onSubmitHandler = e => {
         e.preventDefault();
@@ -52,7 +50,10 @@ const ReviewForm = (props) => {
         }, { withCredentials: true })
             .then( res => {
                 if (location === "newReview") {
-                    navigate("/dashboard");
+                    console.log("axios.post res: ", res);
+                    toggleForm();
+                    setReviews([...reviews, res.data])
+                    setDisplayed([...displayed, res.data])
                 } else if (location === "movieDirected") {
                     setMoviesDirected([...moviesDirected, res.data]);
                     toggleForm();
@@ -98,7 +99,7 @@ const ReviewForm = (props) => {
                     <br />
                     <input className="form-input" type="text" onChange = { (e) => setTitle(e.target.value) } />
                 </p>
-                <p>
+                <div>
                     <label>Rating</label>
                     <br />
                     <div style={styles.stars}>
@@ -116,7 +117,7 @@ const ReviewForm = (props) => {
                             )
                         })}
                     </div>
-                </p>
+                </div>
                 <p>
                     <label>Watched Status</label>
                     <br />
@@ -132,7 +133,7 @@ const ReviewForm = (props) => {
                     <textarea className="form-input" type="text" onChange = { (e) => setNotes(e.target.value) } />
                 </p>
                 <input type="submit" value="Save" />
-                { location !== "newReview" ? <button type="button" onClick={toggleForm}>cancel</button> : <Link to={"/dashboard"}>cancel</Link>}
+                <button type="button" onClick={toggleForm}>cancel</button>
 
             </form>
         </div>

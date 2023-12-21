@@ -53,9 +53,9 @@ const UpdateReviewForm = (props) => {
             <h2>Update Review</h2>
             <form onSubmit={ updateReview }>
                 {errors.map((err, index) => (
-                    <p className="error-message" key="{index}">{err}</p>
+                    <p className="error-message" key={index}>{err}</p>
                 ))}
-                <p>
+                <div>
                     <label>Rating:</label>
                     <br />
                     <div style={styles.stars}>
@@ -73,7 +73,7 @@ const UpdateReviewForm = (props) => {
                             )
                         })}
                     </div>
-                </p>
+                </div>
                 <p>
                     <label>Watched Status:</label>
                     <br />

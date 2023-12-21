@@ -38,7 +38,7 @@ def add_review():
         # ("API RESPONSE: ", response)
         if len(response["results"]) < 1:
             print("Need to handle error if there's no return data")
-            return redirect("/reviews/add")
+            return redirect("/dashboard")
         poster_path = response["results"][0]["poster_path"]
         movie_poster = image_url_base + poster_path
 
@@ -52,7 +52,9 @@ def add_review():
         # print("api_director:", api_director)
         api_director_name = api_director["name"]
         # print("api_director_name:", api_director_name)
-        api_director_image_url = image_url_base + api_director["profile_path"]
+        api_director_image_url = ""
+        if api_director and api_director["profile_path"]:
+            api_director_image_url = image_url_base + api_director["profile_path"]
         # print("api_director_image_url: ", api_director_image_url)
 
         # Search our DB for existing director by name -- if none, create new director entry, then go on to movie
@@ -113,6 +115,7 @@ def add_review():
         }
         critic.Critic.add_favorite(data)
     res = {**review_data, ** movie_data}
+    print("POST /reviews res: ", res)
     return res
 
 
