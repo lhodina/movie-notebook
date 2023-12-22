@@ -19,7 +19,7 @@ const colors = {
   }
 
 const ReviewForm = (props) => {
-    const { location, currentDirector, currentCritic, toggleForm, moviesDirected, setMoviesDirected, favoriteMovies, setFavoriteMovies, reviews, setReviews, displayAll, displayed, setDisplayed } = props;
+    const { location, currentDirector, currentCritic, toggleForm, moviesDirected, setMoviesDirected, favoriteMovies, setFavoriteMovies, reviews, setReviews, displayed, setDisplayed } = props;
     const [ title, setTitle ] = useState("");
     const [ rating, setRating ] = useState(0);
     const [ watched, setWatched ] = useState("");
@@ -125,7 +125,6 @@ const ReviewForm = (props) => {
                     <label>Watched</label>
                     <input className="form-input" type="radio" name="watched" value="0" checked={ watched==="0"} id="radio-unwatched" onChange = { (e) => setWatched("0") } />
                     <label>Unwatched</label>
-
                 </p>
                 <p>
                     <label>Notes</label>
@@ -134,7 +133,6 @@ const ReviewForm = (props) => {
                 </p>
                 <input type="submit" value="Save" />
                 <button type="button" onClick={toggleForm}>cancel</button>
-
             </form>
         </div>
     )

@@ -6,7 +6,7 @@ import Header from './Header';
 import ReviewForm from './ReviewForm';
 
 
-const Critic = (props) => {
+const Critic = () => {
     const [user, setUser] = useState({});
     const [currentCritic, setCurrentCritic] = useState({});
     const [favoriteMovies, setFavoriteMovies] = useState([]);
@@ -23,6 +23,9 @@ const Critic = (props) => {
     const [userFavoriteDirectors, setUserFavoriteDirectors] = useState([]);
     const [userFavoriteCritics, setUserFavoriteCritics] = useState([]);
     const [reviews, setReviews] = useState([]);
+    const [newReviewFormOpen, setNewReviewFormOpen] = useState(false);
+    const [displayed, setDisplayed] = useState([]);
+
 
     const { id } = useParams();
 
@@ -78,6 +81,11 @@ const Critic = (props) => {
         setGrayout(!grayout);
     }
 
+    const toggleNewReviewForm = () => {
+        setNewReviewFormOpen(!newReviewFormOpen);
+        toggleGrayout();
+    }
+
     const updateCriticNotes = e => {
         e.preventDefault();
         toggleEditFormExpanded();
@@ -128,11 +136,11 @@ const Critic = (props) => {
             { grayout && (
                 <div className="Grayout"></div>
             )}
-            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} reviews={reviews} />
+            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} reviews={reviews} toggleForm={toggleNewReviewForm} />
             <div className="CriticProfile">
-                { favoriteMovieFormOpen && (
-                    <div className="FavoriteMovieForm">
-                        <ReviewForm user={user} location="favoriteMovies" currentCritic={currentCritic} favoriteMovies={favoriteMovies} setFavoriteMovies={setFavoriteMovies} toggleForm={toggleFavoriteMovieForm} />
+                { newReviewFormOpen && (
+                    <div className="NewReviewForm">
+                        <ReviewForm user={user} location="newReview" toggleForm={toggleNewReviewForm} reviews={reviews} setReviews={setReviews} displayed={displayed} setDisplayed={setDisplayed} />
                     </div>
                 )}
                 <div className="ProfileContent">

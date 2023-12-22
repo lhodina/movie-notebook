@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const FavoriteDirectorForm = (props) => {
-    const { user } = props;
+    const { user, toggleForm } = props;
 
     const [ name, setName ] = useState("");
     const [errors, setErrors] = useState([]);
-
-    const navigate = useNavigate();
 
     const onSubmitHandler = e => {
         e.preventDefault();
@@ -16,7 +14,7 @@ const FavoriteDirectorForm = (props) => {
             name
         }, { withCredentials: true })
             .then( res => {
-                navigate("/dashboard");
+                toggleForm();
             })
             .catch( err => {
                 const errorResponse = err.response.data.errors;

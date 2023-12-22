@@ -5,24 +5,21 @@ import '../App.css';
 import Header from './Header';
 import ReviewForm from './ReviewForm';
 import AddFanForm from './AddFanForm';
+import FavoriteDirectorForm from './FavoriteDirectorForm';
 
-const Dashboard = (props) => {
-    // const [firstName, setFirstName] = useState("");
+const Dashboard = () => {
     const [user, setUser] = useState({});
     const [userFavoriteDirectors, setUserFavoriteDirectors] = useState([]);
     const [userFavoriteCritics, setUserFavoriteCritics] = useState([]);
-    // const [collections, setCollections] = useState([]);
     const [reviews, setReviews] = useState([]);
     const [watched, setWatched] = useState([]);
     const [unwatched, setUnwatched] = useState([]);
     const [displayed, setDisplayed] = useState([]);
     const [pressed, setPressed] = useState("unwatched");
-    // const [directorsOpen, setDirectorsOpen] = useState(false);
-    // const [criticsOpen, setCriticsOpen] = useState(false);
-    // const [collectionsOpen, setCollectionsOpen] = useState(false);
     const [grayout, setGrayout] = useState(false);
     const [fanFormOpen, setFanFormOpen] = useState(false);
     const [newReviewFormOpen, setNewReviewFormOpen] = useState(false);
+    const [favoriteDirectorFormOpen, setFavoriteDirectorFormOpen] = useState(false);
     const [currentMovieId, setCurrentMovieId] = useState(0);
     const [criticFans, setCriticFans] = useState([]);
     const [directorFans, setDirectorFans] = useState([]);
@@ -133,11 +130,20 @@ const Dashboard = (props) => {
 
     return (
         <div className="Container">
+            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} reviews={reviews} toggleForm={toggleNewReviewForm} />
             { grayout && (
                 <div className="Grayout"></div>
             )}
-            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} reviews={reviews} toggleForm={toggleNewReviewForm} />
-
+            { newReviewFormOpen && (
+                <div className="NewReviewForm">
+                    <ReviewForm user={user} location="newReview" toggleForm={toggleNewReviewForm} reviews={reviews} setReviews={setReviews} displayAll={displayAll} displayed={displayed} setDisplayed={setDisplayed} />
+                </div>
+            )}
+            { favoriteDirectorFormOpen && (
+                <div className="FavoriteDirectorForm">
+                    <FavoriteDirectorForm user={user}  />
+                </div>
+            )}
             <h1>CORE MOVIES</h1>
             <div className="btn-group" role="group">
                 <button type="button" className={pressed === "unwatched" ? "active btn btn-outline-danger" : "btn btn-outline-danger"} onClick={ displayUnwatched }>Unwatched</button>
@@ -145,11 +151,6 @@ const Dashboard = (props) => {
                 <button type="button" className={pressed === "all" ? "active btn btn-outline-danger" : "btn btn-outline-danger"} onClick={ displayAll }>All Reviews</button>
             </div>
             <div className="Main">
-                { newReviewFormOpen && (
-                    <div className="NewReviewForm">
-                        <ReviewForm user={user} location="newReview" toggleForm={toggleNewReviewForm} reviews={reviews} setReviews={setReviews} displayAll={displayAll} displayed={displayed} setDisplayed={setDisplayed} />
-                    </div>
-                )}
                 { fanFormOpen && (
                     <div>
                         <AddFanForm movie_id={currentMovieId} directorFans={directorFans} setDirectorFans={setDirectorFans} criticFans={criticFans} setCriticFans={setCriticFans} toggleForm={toggleFanForm} />

@@ -18,7 +18,6 @@ function App() {
         <Routes>
           <Route element={ <Login /> } path="/login" />
           <Route element={ <Dashboard /> } path="/dashboard" />
-          <Route element={ <ReviewForm location="newReview" /> } path="/reviews/add" />
           <Route element={ <Review /> } path="/reviews/:id" />
           <Route element={ <CollectionForm /> } path="/collections/add" />
           <Route element={ <Director /> } path="/directors/:id" />

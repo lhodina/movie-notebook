@@ -29,8 +29,6 @@ def register_user():
     }
 
     # Add data to session before form submit, in case there are validation errors and you want to persist input fields
-    # session["registering"] = True
-    # session["data"] = data
     validation_messages = user.User.validate_user(data)
     if len(validation_messages) > 0:
         # print("validation_messages: ", validation_messages)
@@ -87,7 +85,6 @@ def dashboard():
             "user_id": session["user"]["id"],
             "user_first_name": session["user"]["first_name"],
             "user_last_name": session["user"]["last_name"],
-            # "collections": current_user.collections,
             "favorite_directors": favorite_directors,
             "favorite_critics": favorite_critics,
             "reviews": reviews,

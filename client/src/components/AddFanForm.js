@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const AddFanForm = (props) => {
-    const { movie_id, toggleForm, directorFans, setDirectorFans, criticFans, setCriticFans, newFan, setNewFan } = props;
+    const { movie_id, toggleForm, directorFans, setDirectorFans, criticFans, setCriticFans } = props;
     const [ name, setName ] = useState("");
     const [ fanType, setFanType ] = useState("director");
     const [ errors, setErrors ] = useState([]);
