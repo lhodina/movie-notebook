@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from "react-router-dom";
 
 const FavoriteDirectorForm = (props) => {
-    const { user, toggleForm } = props;
+    const { toggleFavoriteDirectorForm } = props;
 
     const [ name, setName ] = useState("");
     const [errors, setErrors] = useState([]);
@@ -14,7 +13,7 @@ const FavoriteDirectorForm = (props) => {
             name
         }, { withCredentials: true })
             .then( res => {
-                toggleForm();
+                toggleFavoriteDirectorForm();
             })
             .catch( err => {
                 const errorResponse = err.response.data.errors;
@@ -28,27 +27,18 @@ const FavoriteDirectorForm = (props) => {
     }
 
     return (
-        <div>
-            <div className="Header">
-                <Link to={ "/dashboard" } >back to dashboard</Link>
-                <form className="SearchBar">
-                    <input className="SearchInput" type="text" value="search my stuff" onChange={() => console.log("this search bar will eventually do something")}></input>
-                </form>
-                <div className="NavUser">
-                    <h5>{user.first_name} {user.last_name[0]}.</h5>
-                    <Link to={ "/login" }>log out</Link>
-                </div>
-            </div>
-            <form onSubmit={ onSubmitHandler }>
+        <div className="Container">
+            <form onSubmit={ onSubmitHandler } className="FavoriteDirectorForm">
                 {errors.map((err, index) => (
                     <div className="error-message" key={index}>{err}</div>
                 ))}
                 <div>
-                    <label>Name</label>
+                    <label>Director Name</label>
                     <br />
                     <input className="form-input" type="text" onChange = { (e) => setName(e.target.value) } />
                 </div>
-                <input type="submit" value="Submit" />
+                <input type="submit" value="Save" />
+                <button type="button" onClick={toggleFavoriteDirectorForm}>cancel</button>
             </form>
         </div>
     )

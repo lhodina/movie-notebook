@@ -22,7 +22,6 @@ function App() {
           <Route element={ <CollectionForm /> } path="/collections/add" />
           <Route element={ <Director /> } path="/directors/:id" />
           <Route element={ <Critic /> } path="/critics/:id" />
-          <Route element={ <FavoriteDirectorForm /> } path="/favorite_directors/add" />
           <Route element={ <FavoriteCriticForm /> } path="/favorite_critics/add" />
           <Route element={ <AddFanForm /> } path="/movies/:movie_id/add_fan" />
         </Routes>

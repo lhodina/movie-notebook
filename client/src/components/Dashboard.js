@@ -3,9 +3,8 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
 import '../App.css';
 import Header from './Header';
-import ReviewForm from './ReviewForm';
 import AddFanForm from './AddFanForm';
-import FavoriteDirectorForm from './FavoriteDirectorForm';
+
 
 const Dashboard = () => {
     const [user, setUser] = useState({});
@@ -18,8 +17,6 @@ const Dashboard = () => {
     const [pressed, setPressed] = useState("unwatched");
     const [grayout, setGrayout] = useState(false);
     const [fanFormOpen, setFanFormOpen] = useState(false);
-    const [newReviewFormOpen, setNewReviewFormOpen] = useState(false);
-    const [favoriteDirectorFormOpen, setFavoriteDirectorFormOpen] = useState(false);
     const [currentMovieId, setCurrentMovieId] = useState(0);
     const [criticFans, setCriticFans] = useState([]);
     const [directorFans, setDirectorFans] = useState([]);
@@ -28,11 +25,6 @@ const Dashboard = () => {
 
     const toggleGrayout = () => {
         setGrayout(!grayout);
-    }
-
-    const toggleNewReviewForm = () => {
-        setNewReviewFormOpen(!newReviewFormOpen);
-        toggleGrayout();
     }
 
     const toggleFanForm = () => {
@@ -130,19 +122,9 @@ const Dashboard = () => {
 
     return (
         <div className="Container">
-            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} reviews={reviews} toggleForm={toggleNewReviewForm} />
+            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} reviews={reviews} setReviews={setReviews} displayed={displayed} setDisplayed={setDisplayed} displayAll={displayAll} toggleGrayout={toggleGrayout}/>
             { grayout && (
                 <div className="Grayout"></div>
-            )}
-            { newReviewFormOpen && (
-                <div className="NewReviewForm">
-                    <ReviewForm user={user} location="newReview" toggleForm={toggleNewReviewForm} reviews={reviews} setReviews={setReviews} displayAll={displayAll} displayed={displayed} setDisplayed={setDisplayed} />
-                </div>
-            )}
-            { favoriteDirectorFormOpen && (
-                <div className="FavoriteDirectorForm">
-                    <FavoriteDirectorForm user={user}  />
-                </div>
             )}
             <h1>CORE MOVIES</h1>
             <div className="btn-group" role="group">

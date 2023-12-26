@@ -19,7 +19,7 @@ const colors = {
   }
 
 const ReviewForm = (props) => {
-    const { location, currentDirector, currentCritic, toggleForm, moviesDirected, setMoviesDirected, favoriteMovies, setFavoriteMovies, reviews, setReviews, displayed, setDisplayed } = props;
+    const { location, currentDirector, currentCritic, toggleNewReviewForm, moviesDirected, setMoviesDirected, favoriteMovies, setFavoriteMovies, reviews, setReviews, displayed, setDisplayed } = props;
     const [ title, setTitle ] = useState("");
     const [ rating, setRating ] = useState(0);
     const [ watched, setWatched ] = useState("");
@@ -51,15 +51,15 @@ const ReviewForm = (props) => {
             .then( res => {
                 if (location === "newReview") {
                     console.log("axios.post res: ", res);
-                    toggleForm();
+                    toggleNewReviewForm();
                     setReviews([...reviews, res.data])
                     setDisplayed([...displayed, res.data])
                 } else if (location === "movieDirected") {
                     setMoviesDirected([...moviesDirected, res.data]);
-                    toggleForm();
+                    toggleNewReviewForm();
                 } else if (location === "favoriteMovies") {
                     setFavoriteMovies([...favoriteMovies, res.data]);
-                    toggleForm();
+                    toggleNewReviewForm();
                 }
         })
             .catch( err => {
@@ -132,7 +132,7 @@ const ReviewForm = (props) => {
                     <textarea className="form-input" type="text" onChange = { (e) => setNotes(e.target.value) } />
                 </p>
                 <input type="submit" value="Save" />
-                <button type="button" onClick={toggleForm}>cancel</button>
+                <button type="button" onClick={toggleNewReviewForm}>cancel</button>
             </form>
         </div>
     )

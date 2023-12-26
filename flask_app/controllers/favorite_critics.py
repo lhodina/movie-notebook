@@ -1,4 +1,4 @@
-from flask import redirect, request
+from flask import redirect, request, session
 
 from flask_app import app
 from flask_app.models import critic, favorite_critic
@@ -6,8 +6,7 @@ from flask_app.models import critic, favorite_critic
 
 @app.route("/favorite_critics", methods=["POST"])
 def add_favorite_critic():
-    # Replace hardcoded user id
-    user_id = 1
+    user_id = session["user"]["id"]
 
     data = {
         "name": request.json["name"].title(),
@@ -19,10 +18,8 @@ def add_favorite_critic():
     critic_exists = critic.Critic.find_by_name(data)
 
     if critic_exists:
-        # print("critic exists: ", critic_exists)
         critic_id = critic_exists[0]['id']
     else:
-        # print("critic does not exist")
         critic_id = critic.Critic.save(
             {
                 "name": data["name"],
@@ -48,10 +45,10 @@ def updateCriticNotes(id):
 
 @app.route("/favorite_critics/remove/<int:critic_id>")
 def remove_favorite_critic(critic_id):
-    # Relace hardcoded user id
+    user_id = session["user"]["id"]
     data = {
         "critic_id": critic_id,
-        "user_id": 1
+        "user_id": user_id
     }
     favorite_critic.FavoriteCritic.remove(data)
     return redirect("/dashboard")

@@ -4,8 +4,6 @@ import { Link, useParams } from "react-router-dom";
 import expandIcon from "../assets/expand-icon-small.png";
 import Header from './Header';
 import ReviewForm from './ReviewForm';
-import AddFanForm from './AddFanForm';
-
 
 const Director = () => {
     const [user, setUser] = useState({});
@@ -29,7 +27,6 @@ const Director = () => {
     const [userFavoriteDirectors, setUserFavoriteDirectors] = useState([]);
     const [userFavoriteCritics, setUserFavoriteCritics] = useState([]);
     const [reviews, setReviews] = useState([]);
-    const [newReviewFormOpen, setNewReviewFormOpen] = useState(false);
     const [displayed, setDisplayed] = useState([]);
 
     const { id } = useParams();
@@ -103,11 +100,6 @@ const Director = () => {
         setGrayout(!grayout);
     }
 
-    const toggleNewReviewForm = () => {
-        setNewReviewFormOpen(!newReviewFormOpen);
-        toggleGrayout();
-    }
-
     const toggleFanForm = () => {
         setFanFormOpen(!fanFormOpen);
         toggleGrayout();
@@ -162,13 +154,8 @@ const Director = () => {
             { grayout && (
                 <div className="Grayout"></div>
             )}
-            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} reviews={reviews} toggleForm={toggleNewReviewForm} />
+            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} reviews={reviews} toggleGrayout={toggleGrayout} />
             <div className="DirectorProfile">
-                { newReviewFormOpen && (
-                    <div className="NewReviewForm">
-                        <ReviewForm user={user} location="newReview" toggleForm={toggleNewReviewForm} reviews={reviews} setReviews={setReviews} displayed={displayed} setDisplayed={setDisplayed} />
-                    </div>
-                )}
                 { movieDirectedFormOpen && (
                     <div className="DirectedByForm">
                         <ReviewForm user={user} location="movieDirected" currentDirector={currentDirector} moviesDirected={moviesDirected} setMoviesDirected={setMoviesDirected} toggleForm={toggleMovieDirectedForm} />

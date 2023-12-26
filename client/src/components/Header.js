@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import LogoutButton from './LogoutButton';
+import ReviewForm from './ReviewForm';
+import FavoriteDirectorForm from './FavoriteDirectorForm';
+import FavoriteCriticForm from './FavoriteCriticForm';
 
 const Header = (props) => {
-    const { user, userFavoriteDirectors, userFavoriteCritics, reviews, toggleForm } = props;
-
+    const { user, userFavoriteDirectors, userFavoriteCritics, reviews, setReviews, displayed, setDisplayed, displayAll, toggleGrayout } = props;
+    const [newReviewFormOpen, setNewReviewFormOpen] = useState(false);
+    const [favoriteDirectorFormOpen, setFavoriteDirectorFormOpen] = useState(false);
+    const [favoriteCriticFormOpen, setFavoriteCriticFormOpen] = useState(false);
     const [directorsOpen, setDirectorsOpen] = useState(false);
     const [criticsOpen, setCriticsOpen] = useState(false);
     const [query, setQuery] = useState("");
@@ -27,6 +32,21 @@ const Header = (props) => {
 
     const toggleCritics = () => {
         setCriticsOpen(!criticsOpen);
+    }
+
+    const toggleNewReviewForm = () => {
+        setNewReviewFormOpen(!newReviewFormOpen);
+        toggleGrayout();
+    }
+
+    const toggleFavoriteDirectorForm = () => {
+        setFavoriteDirectorFormOpen(!favoriteDirectorFormOpen);
+        toggleGrayout();
+    }
+
+    const toggleFavoriteCriticForm = () => {
+        setFavoriteCriticFormOpen(!favoriteCriticFormOpen);
+        toggleGrayout();
     }
 
     const updateQuery = (e) => {
@@ -79,12 +99,27 @@ const Header = (props) => {
 
     return (
         <div className="Header">
+            { newReviewFormOpen && (
+                <div className="NewReviewForm">
+                    <ReviewForm user={user} location="newReview" toggleNewReviewForm={toggleNewReviewForm} reviews={reviews} setReviews={setReviews} displayAll={displayAll} displayed={displayed} setDisplayed={setDisplayed} />
+                </div>
+            )}
+            { favoriteDirectorFormOpen && (
+                <div className="FavoriteDirectorForm">
+                    <FavoriteDirectorForm user={user} toggleFavoriteDirectorForm={toggleFavoriteDirectorForm}  />
+                </div>
+            )}
+            { favoriteCriticFormOpen && (
+                <div className="FavoriteCriticForm">
+                    <FavoriteCriticForm user={user} toggleFavoriteCriticForm={toggleFavoriteCriticForm}  />
+                </div>
+            )}
             <h4>Welcome, {user.first_name}</h4>
             <div className="NavMenuItem" onMouseEnter={ toggleDirectors } onMouseLeave={ toggleDirectors } >
                 <h5>My Directors</h5>
                 { directorsOpen && (
                     <div className="NavDropdown">
-                        <Link to={"/favorite_directors/add"}> + Add Favorite Director</Link>
+                        <button className="btn btn-danger" onClick={toggleFavoriteDirectorForm}>+ Add Favorite Director</button>
                         <ul className="NavDropdownList" >
                         {
                             userFavoriteDirectors.map( (director, index) => (
@@ -99,7 +134,7 @@ const Header = (props) => {
                 <h5>My Critics</h5>
                 { criticsOpen && (
                     <div className="NavDropdown">
-                        <Link to={"/favorite_critics/add"}> + Add Favorite Critic</Link>
+                        <button className="btn btn-danger" onClick={toggleFavoriteCriticForm}>+ Add Favorite Critic</button>
                         <ul className="NavDropdownList" >
                         {
                             userFavoriteCritics.map( (critic, index) => (
@@ -110,7 +145,7 @@ const Header = (props) => {
                     </div>
                 )}
             </div>
-            <button className="btn btn-danger" onClick={toggleForm}>+ Review a Movie</button>
+            <button className="btn btn-danger" onClick={toggleNewReviewForm}>+ Review a Movie</button>
             <div className="SearchArea">
                 <input type="search" placeholder="search my stuff" value={query} onChange={getSearchResults} />
                 {showSearchResults()}

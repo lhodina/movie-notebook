@@ -23,9 +23,7 @@ const Critic = () => {
     const [userFavoriteDirectors, setUserFavoriteDirectors] = useState([]);
     const [userFavoriteCritics, setUserFavoriteCritics] = useState([]);
     const [reviews, setReviews] = useState([]);
-    const [newReviewFormOpen, setNewReviewFormOpen] = useState(false);
     const [displayed, setDisplayed] = useState([]);
-
 
     const { id } = useParams();
 
@@ -81,11 +79,6 @@ const Critic = () => {
         setGrayout(!grayout);
     }
 
-    const toggleNewReviewForm = () => {
-        setNewReviewFormOpen(!newReviewFormOpen);
-        toggleGrayout();
-    }
-
     const updateCriticNotes = e => {
         e.preventDefault();
         toggleEditFormExpanded();
@@ -136,13 +129,8 @@ const Critic = () => {
             { grayout && (
                 <div className="Grayout"></div>
             )}
-            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} reviews={reviews} toggleForm={toggleNewReviewForm} />
+            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} reviews={reviews} toggleGrayout={toggleGrayout} />
             <div className="CriticProfile">
-                { newReviewFormOpen && (
-                    <div className="NewReviewForm">
-                        <ReviewForm user={user} location="newReview" toggleForm={toggleNewReviewForm} reviews={reviews} setReviews={setReviews} displayed={displayed} setDisplayed={setDisplayed} />
-                    </div>
-                )}
                 <div className="ProfileContent">
                     <h1>{ currentCritic.name }</h1>
                     <div>
