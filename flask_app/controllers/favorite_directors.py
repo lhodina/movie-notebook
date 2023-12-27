@@ -37,7 +37,7 @@ def add_favorite_director():
             "user_id": user_id,
             "notes": "No notes yet"
         })
-    return redirect("/dashboard")
+    return {"director_id": director_id}
 
 
 @app.route("/favorite_directors/<int:id>/update", methods=["POST"])

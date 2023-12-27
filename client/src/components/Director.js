@@ -27,7 +27,6 @@ const Director = () => {
     const [userFavoriteDirectors, setUserFavoriteDirectors] = useState([]);
     const [userFavoriteCritics, setUserFavoriteCritics] = useState([]);
     const [reviews, setReviews] = useState([]);
-    const [displayed, setDisplayed] = useState([]);
 
     const { id } = useParams();
 
@@ -44,7 +43,6 @@ const Director = () => {
     useEffect( () => {
         axios.get("http://localhost:5000/directors/" + id, { withCredentials: true })
             .then( (res) => {
-                console.log("directors res: ", res);
                 setUser({
                     "id": res.data.user_id,
                     "first_name": res.data.user_first_name,
@@ -154,7 +152,7 @@ const Director = () => {
             { grayout && (
                 <div className="Grayout"></div>
             )}
-            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} reviews={reviews} toggleGrayout={toggleGrayout} />
+            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} setUserFavoriteDirectors={setUserFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} setUserFavoriteCritics={setUserFavoriteCritics} reviews={reviews} toggleGrayout={toggleGrayout} />
             <div className="DirectorProfile">
                 { movieDirectedFormOpen && (
                     <div className="DirectedByForm">

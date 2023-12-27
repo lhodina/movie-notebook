@@ -6,13 +6,14 @@ import FavoriteDirectorForm from './FavoriteDirectorForm';
 import FavoriteCriticForm from './FavoriteCriticForm';
 
 const Header = (props) => {
-    const { user, userFavoriteDirectors, userFavoriteCritics, reviews, setReviews, displayed, setDisplayed, displayAll, toggleGrayout } = props;
+    const { user, userFavoriteDirectors, setUserFavoriteDirectors, userFavoriteCritics, setUserFavoriteCritics, reviews, setReviews, displayed, setDisplayed, displayAll, toggleGrayout } = props;
     const [newReviewFormOpen, setNewReviewFormOpen] = useState(false);
     const [favoriteDirectorFormOpen, setFavoriteDirectorFormOpen] = useState(false);
     const [favoriteCriticFormOpen, setFavoriteCriticFormOpen] = useState(false);
     const [directorsOpen, setDirectorsOpen] = useState(false);
     const [criticsOpen, setCriticsOpen] = useState(false);
     const [query, setQuery] = useState("");
+    const [newPerson, setNewPerson] = useState({});
 
     useEffect(() => {
         const closeSearchDropdown = (e) => {
@@ -51,9 +52,6 @@ const Header = (props) => {
 
     const updateQuery = (e) => {
         setQuery(e.target.value);
-        console.log("");
-        console.log("e.target.value: ", e.target.value);
-        console.log("query:", query);
     };
 
     const showSearchResults = () => {
@@ -106,12 +104,12 @@ const Header = (props) => {
             )}
             { favoriteDirectorFormOpen && (
                 <div className="FavoriteDirectorForm">
-                    <FavoriteDirectorForm user={user} toggleFavoriteDirectorForm={toggleFavoriteDirectorForm}  />
+                    <FavoriteDirectorForm user={user} toggleFavoriteDirectorForm={toggleFavoriteDirectorForm} userFavoriteDirectors={userFavoriteDirectors} setUserFavoriteDirectors={setUserFavoriteDirectors}  />
                 </div>
             )}
             { favoriteCriticFormOpen && (
                 <div className="FavoriteCriticForm">
-                    <FavoriteCriticForm user={user} toggleFavoriteCriticForm={toggleFavoriteCriticForm}  />
+                    <FavoriteCriticForm user={user} toggleFavoriteCriticForm={toggleFavoriteCriticForm} newPerson={newPerson} userFavoriteCritics={userFavoriteCritics} setUserFavoriteCritics={setUserFavoriteCritics} />
                 </div>
             )}
             <h4>Welcome, {user.first_name}</h4>

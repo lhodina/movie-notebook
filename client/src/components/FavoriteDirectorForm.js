@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const FavoriteDirectorForm = (props) => {
-    const { toggleFavoriteDirectorForm } = props;
+    const { toggleFavoriteDirectorForm, userFavoriteDirectors, setUserFavoriteDirectors} = props;
 
     const [ name, setName ] = useState("");
     const [errors, setErrors] = useState([]);
@@ -13,16 +13,25 @@ const FavoriteDirectorForm = (props) => {
             name
         }, { withCredentials: true })
             .then( res => {
+                console.log("FavoriteDirectorForm res: ", res);
+
+                const capitalize = (name) => {
+                    let arr = name.split(" ");
+                    for (let i = 0; i < arr.length; i++) {
+                        arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+                    }
+                    return arr.join(" ");
+                }
+
+                let capitalized = capitalize(name);
+                setUserFavoriteDirectors([...userFavoriteDirectors, {
+                    "id": res["data"]["director_id"],
+                    "name": capitalized
+                }]);
                 toggleFavoriteDirectorForm();
             })
             .catch( err => {
-                const errorResponse = err.response.data.errors;
-
-                const errorArr = [];
-                for (const key of Object.keys(errorResponse)) {
-                    errorArr.push(errorResponse[key].message);
-                }
-                setErrors(errorArr);
+                console.log(err);
             })
     }
 

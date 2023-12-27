@@ -31,7 +31,7 @@ def add_favorite_critic():
             "user_id": user_id,
             "notes": "No notes yet"
         })
-    return redirect("/dashboard")
+    return {"critic_id": critic_id}
 
 
 @app.route("/favorite_critics/<int:id>/update", methods=["POST"])

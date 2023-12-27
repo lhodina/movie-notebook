@@ -28,7 +28,7 @@ const styles = {
     }
 }
 
-const Review = (props) => {
+const Review = () => {
     const { id } = useParams();
     const [user, setUser] = useState({});
     const [review, setReview] = useState({});
@@ -145,7 +145,6 @@ const Review = (props) => {
     useEffect( () => {
         axios.get("http://localhost:5000/reviews/" + id, { withCredentials: true })
             .then( (res) => {
-                console.log("reviews res: ", res);
                 setUser({
                     "id": res.data.user_id,
                     "first_name": res.data.user_first_name,
@@ -176,7 +175,7 @@ const Review = (props) => {
             { grayout && (
                 <div className="Grayout"></div>
             )}
-            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} reviews={reviews} />
+            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} setUserFavoriteDirectors={setUserFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} setUserFavoriteCritics={setUserFavoriteCritics} reviews={reviews} toggleGrayout={toggleGrayout} />
             <div className="ReviewProfile">
                 <img src={review.image_url} height="250px" alt="movie poster" />
                 <div className="ReviewDetails">

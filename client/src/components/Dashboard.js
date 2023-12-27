@@ -73,7 +73,7 @@ const Dashboard = () => {
             ));
         }
 
-        return directorFansList
+        return directorFansList;
     }
 
     const displayCriticFans = (currentReview) => {
@@ -100,7 +100,6 @@ const Dashboard = () => {
     useEffect(() => {
         axios.get("http://localhost:5000/dashboard", { withCredentials: true })
             .then(res => {
-                console.log("Dashboard res: ", res);
                 if (!res["data"]["user_id"]) {
                     navigate("/login")
                 } else {
@@ -122,7 +121,7 @@ const Dashboard = () => {
 
     return (
         <div className="Container">
-            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} reviews={reviews} setReviews={setReviews} displayed={displayed} setDisplayed={setDisplayed} displayAll={displayAll} toggleGrayout={toggleGrayout}/>
+            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} setUserFavoriteDirectors={setUserFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} reviews={reviews} setReviews={setReviews} displayed={displayed} setDisplayed={setDisplayed} displayAll={displayAll} toggleGrayout={toggleGrayout}/>
             { grayout && (
                 <div className="Grayout"></div>
             )}

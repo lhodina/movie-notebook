@@ -23,7 +23,6 @@ const Critic = () => {
     const [userFavoriteDirectors, setUserFavoriteDirectors] = useState([]);
     const [userFavoriteCritics, setUserFavoriteCritics] = useState([]);
     const [reviews, setReviews] = useState([]);
-    const [displayed, setDisplayed] = useState([]);
 
     const { id } = useParams();
 
@@ -129,7 +128,7 @@ const Critic = () => {
             { grayout && (
                 <div className="Grayout"></div>
             )}
-            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} reviews={reviews} toggleGrayout={toggleGrayout} />
+            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} setUserFavoriteDirectors={setUserFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} setUserFavoriteCritics={setUserFavoriteCritics} reviews={reviews} toggleGrayout={toggleGrayout} />
             <div className="CriticProfile">
                 <div className="ProfileContent">
                     <h1>{ currentCritic.name }</h1>

@@ -7,6 +7,7 @@ const AddFanForm = (props) => {
     const [ fanType, setFanType ] = useState("director");
     const [ errors, setErrors ] = useState([]);
 
+    // Reuse this
     const capitalize = (name) => {
         let arr = name.split(" ");
         for (let i = 0; i < arr.length; i++) {
