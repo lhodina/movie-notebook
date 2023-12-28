@@ -15,6 +15,9 @@ def add_favorite_director():
         "notes": ""
     }
 
+    if (len(data["name"]) < 2) :
+        return {"message": "Name must be at least two characters"}
+
     director_id = -1
     director_exists = director.Director.find_by_name(data)
 
@@ -23,6 +26,13 @@ def add_favorite_director():
     else:
         api_key = "fe2167be80c61b6a35d68b2666a4ae33"
         api_director_results = requests.get(f"https://api.themoviedb.org/3/search/person?api_key={api_key}&query={data['name']}").json()
+        print("api_director_results: ", api_director_results)
+        if not (len(api_director_results["results"]) > 0):
+            print("testing director not found")
+            return {
+                "message": "Director not found: ",
+                "name": data["name"]
+                }
         api_director = api_director_results["results"][0]
         image_url_base = "https://image.tmdb.org/t/p/w500"
         api_director_image_url = image_url_base + api_director["profile_path"]

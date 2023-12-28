@@ -14,6 +14,9 @@ def add_favorite_critic():
         "notes": ""
     }
 
+    if (len(data["name"]) < 2):
+        return {"message": "Name must be at least two characters"}
+
     critic_id = -1
     critic_exists = critic.Critic.find_by_name(data)
 

@@ -49,7 +49,11 @@ const ReviewForm = (props) => {
             location
         }, { withCredentials: true })
             .then( res => {
-                if (location === "newReview") {
+                console.log("ReviewForm res: ", res);
+                if (res.data["message"]) {
+                    let errorMessage = res.data["message"];
+                    setErrors([...errors, errorMessage]);
+                } else if (location === "newReview") {
                     console.log("axios.post res: ", res);
                     toggleNewReviewForm();
                     setReviews([...reviews, res.data])

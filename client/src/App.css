@@ -321,3 +321,7 @@ ul {
 .DeleteLinkButton {
   margin-left: 5px;
 }
+
+.error-message {
+  color: red;
+}

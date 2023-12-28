@@ -22,13 +22,18 @@ const FavoriteDirectorForm = (props) => {
                     }
                     return arr.join(" ");
                 }
-
-                let capitalized = capitalize(name);
-                setUserFavoriteDirectors([...userFavoriteDirectors, {
-                    "id": res["data"]["director_id"],
-                    "name": capitalized
-                }]);
-                toggleFavoriteDirectorForm();
+                let capitalizedName = capitalize(name);
+                
+                if (res["data"]["message"]) {
+                    let errorMessage = res["data"]["message"]
+                    setErrors([...errors, errorMessage]);
+                } else {
+                    setUserFavoriteDirectors([...userFavoriteDirectors, {
+                        "id": res["data"]["director_id"],
+                        "name": capitalizedName
+                    }]);
+                    toggleFavoriteDirectorForm();
+                }
             })
             .catch( err => {
                 console.log(err);

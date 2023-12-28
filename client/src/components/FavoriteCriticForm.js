@@ -12,7 +12,6 @@ const FavoriteCriticForm = (props) => {
             name
         }, { withCredentials: true })
             .then( res => {
-                toggleFavoriteCriticForm();
                 console.log("FavoriteCriticForm res: ", res);
 
                 const capitalize = (name) => {
@@ -24,11 +23,16 @@ const FavoriteCriticForm = (props) => {
                 }
 
                 let capitalized = capitalize(name);
-                setUserFavoriteCritics([...userFavoriteCritics, {
-                    "id": res["data"]["critic_id"],
-                    "name": capitalized
-                }]);
-                toggleFavoriteCriticForm();
+                if (res["data"]["message"]) {
+                    let errorMessage = res["data"]["message"]
+                    setErrors([...errors, errorMessage]);
+                } else {
+                    setUserFavoriteCritics([...userFavoriteCritics, {
+                        "id": res["data"]["critic_id"],
+                        "name": capitalized
+                    }]);
+                    toggleFavoriteCriticForm();
+                }
             })
             .catch( err => {
                 console.log(err);
