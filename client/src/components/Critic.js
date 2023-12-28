@@ -3,8 +3,6 @@ import axios from 'axios';
 import { Link, useParams } from "react-router-dom";
 import expandIcon from "../assets/expand-icon-small.png";
 import Header from './Header';
-import ReviewForm from './ReviewForm';
-
 
 const Critic = () => {
     const [user, setUser] = useState({});
@@ -39,6 +37,7 @@ const Critic = () => {
     useEffect( () => {
         axios.get("http://localhost:5000/critics/" + id, {withCredentials: true})
             .then( (res) => {
+                console.log("Critic res: ", res);
                 setUser({
                     "id": res.data.user_id,
                     "first_name": res.data.user_first_name,
@@ -183,7 +182,7 @@ const Critic = () => {
                 <div className="CriticDisplayContainer">
                     <div className="DisplayCriticMovies">
                         {
-                            favoriteMovies.map( (movie, index) => {
+                            favoriteMovies.length > 0 && favoriteMovies.map( (movie, index) => {
                                 return (
                                     <div className="CoreMovie" key={index}>
                                         <Link to={"/reviews/" + movie.review_id}><img src={movie.image_url} alt="movie poster" height="200px"/></Link>

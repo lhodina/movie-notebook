@@ -13,7 +13,6 @@ const Header = (props) => {
     const [directorsOpen, setDirectorsOpen] = useState(false);
     const [criticsOpen, setCriticsOpen] = useState(false);
     const [query, setQuery] = useState("");
-    const [newPerson, setNewPerson] = useState({});
 
     useEffect(() => {
         const closeSearchDropdown = (e) => {
@@ -21,32 +20,42 @@ const Header = (props) => {
                 setQuery("");
             }
         };
-
         document.addEventListener("click", closeSearchDropdown);
-
         return () => document.removeEventListener("click", closeSearchDropdown);
       }, []);
 
-    const toggleDirectors = () => {
-        setDirectorsOpen(!directorsOpen);
+    const openDirectors = () => {
+        setDirectorsOpen(true);
     }
 
-    const toggleCritics = () => {
-        setCriticsOpen(!criticsOpen);
+    const closeDirectors = () => {
+        setDirectorsOpen(false);
+    }
+
+    const openCritics = () => {
+        setCriticsOpen(true);
+    }
+
+    const closeCritics = () => {
+        setCriticsOpen(false);
     }
 
     const toggleNewReviewForm = () => {
         setNewReviewFormOpen(!newReviewFormOpen);
+        closeDirectors();
+        closeCritics();
         toggleGrayout();
     }
 
     const toggleFavoriteDirectorForm = () => {
         setFavoriteDirectorFormOpen(!favoriteDirectorFormOpen);
+        closeDirectors();
         toggleGrayout();
     }
 
     const toggleFavoriteCriticForm = () => {
         setFavoriteCriticFormOpen(!favoriteCriticFormOpen);
+        closeCritics();
         toggleGrayout();
     }
 
@@ -109,11 +118,11 @@ const Header = (props) => {
             )}
             { favoriteCriticFormOpen && (
                 <div className="FavoriteCriticForm">
-                    <FavoriteCriticForm user={user} toggleFavoriteCriticForm={toggleFavoriteCriticForm} newPerson={newPerson} userFavoriteCritics={userFavoriteCritics} setUserFavoriteCritics={setUserFavoriteCritics} />
+                    <FavoriteCriticForm user={user} toggleFavoriteCriticForm={toggleFavoriteCriticForm} userFavoriteCritics={userFavoriteCritics} setUserFavoriteCritics={setUserFavoriteCritics} />
                 </div>
             )}
             <h4>Welcome, {user.first_name}</h4>
-            <div className="NavMenuItem" onMouseEnter={ toggleDirectors } onMouseLeave={ toggleDirectors } >
+            <div className="NavMenuItem" onMouseEnter={ openDirectors } onMouseLeave={ closeDirectors } >
                 <h5>My Directors</h5>
                 { directorsOpen && (
                     <div className="NavDropdown">
@@ -128,7 +137,7 @@ const Header = (props) => {
                     </div>
                 )}
             </div>
-            <div className="NavMenuItem" onMouseEnter={ toggleCritics } onMouseLeave={ toggleCritics }>
+            <div className="NavMenuItem" onMouseEnter={ openCritics } onMouseLeave={ closeCritics }>
                 <h5>My Critics</h5>
                 { criticsOpen && (
                     <div className="NavDropdown">

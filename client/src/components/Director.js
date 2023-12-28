@@ -156,12 +156,12 @@ const Director = () => {
             <div className="DirectorProfile">
                 { movieDirectedFormOpen && (
                     <div className="DirectedByForm">
-                        <ReviewForm user={user} location="movieDirected" currentDirector={currentDirector} moviesDirected={moviesDirected} setMoviesDirected={setMoviesDirected} toggleForm={toggleMovieDirectedForm} />
+                        <ReviewForm user={user} location="movieDirected" currentDirector={currentDirector} moviesDirected={moviesDirected} setMoviesDirected={setMoviesDirected} toggleNewReviewForm={toggleMovieDirectedForm} />
                     </div>
                 )}
                 { favoriteMovieFormOpen && (
                     <div className="FavoriteMovieForm">
-                        <ReviewForm user={user} location="favoriteMovies" currentDirector={currentDirector} favoriteMovies={favoriteMovies} setFavoriteMovies={setFavoriteMovies} toggleForm={toggleFavoriteMovieForm} />
+                        <ReviewForm user={user} location="favoriteMovies" currentDirector={currentDirector} favoriteMovies={favoriteMovies} setFavoriteMovies={setFavoriteMovies} toggleNewReviewForm={toggleFavoriteMovieForm} />
                     </div>
                 )}
                 { fanFormOpen && (
@@ -244,17 +244,19 @@ const Director = () => {
                                             <Link to={"/reviews/" + movie.review_id}><img src={movie.image_url} alt="" height="200px"/></Link>
                                             <div className="CoreMovieBody">
                                                 <Link to={"/reviews/" + movie.review_id}><h5>{ movie.title }</h5></Link>
-                                                <div className="LikedBy">
-                                                    {(movie.director_fans.length > 0 || movie.critic_fans.length > 0) && <h6>Liked By:</h6>}
-                                                    <ul>
-                                                        { movie.director_fans.map( (directorFan, index) => (
-                                                            <li key={ index }><Link to={ "/directors/" + directorFan.id } >{directorFan.name }</Link></li>
-                                                        )) }
-                                                        { movie.critic_fans.map( (critic, index) => (
-                                                            <li key={ index }><Link to={ "/critics/" + critic.id }>{critic.name }</Link></li>
-                                                        )) }
-                                                    </ul>
-                                                </div>
+                                                {((movie.director_fans && movie.director_fans.length > 0) || (movie.critic_fans && movie.critic_fans.length > 0)) &&
+                                                    <div className="LikedBy">
+                                                        <h6>Liked By:</h6>
+                                                        <ul>
+                                                            { movie.director_fans.map( (directorFan, index) => (
+                                                                <li key={ index }><Link to={ "/directors/" + directorFan.id } >{directorFan.name }</Link></li>
+                                                            )) }
+                                                            { movie.critic_fans.map( (critic, index) => (
+                                                                <li key={ index }><Link to={ "/critics/" + critic.id }>{critic.name }</Link></li>
+                                                            )) }
+                                                        </ul>
+                                                    </div>
+                                                }
                                             </div>
                                         </div>
                                     )

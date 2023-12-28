@@ -39,7 +39,6 @@ def add_review():
         }
         response = requests.get(movie_url, headers=headers).json()
         if len(response["results"]) < 1:
-            print("Need to handle error if there's no return data")
             return {"message": "Movie title not found: "}
         poster_path = response["results"][0]["poster_path"]
         movie_poster = image_url_base + poster_path
@@ -79,10 +78,15 @@ def add_review():
         movie_id = movie.Movie.save(movie_data)
     else:
         movie_id = movie_exists[0]['id']
+        movie_data["title"] = movie_exists[0]["title"]
+        movie_data["image_url"] = movie_exists[0]["image_url"]
     review_data["movie_id"] = movie_id
-    review_exists = review.Review.get_by_movie_id({"movie_id": movie_id, "user_id": user_id})
-    if not review_exists:
-        review.Review.save(review_data)
+    review_id = 0
+    existing_review = review.Review.get_by_movie_id({"movie_id": movie_id, "user_id": user_id})
+    if (existing_review):
+        review_id = existing_review[0]["id"]
+    if not review_id:
+        review_id = review.Review.save(review_data)
     location = request.json["location"]
     director_id = 0
     critic_id = 0
@@ -105,7 +109,7 @@ def add_review():
             "movie_id": movie_id
         }
         critic.Critic.add_favorite(data)
-    res = {**review_data, ** movie_data}
+    res = {**review_data, ** movie_data, "review_id": review_id}
     return res
 
 
@@ -126,8 +130,6 @@ def get_review(review_id):
     user_favorite_directors = user.User.get_favorite_directors({"id": user_id})
     user_favorite_critics = user.User.get_favorite_critics({"id": user_id})
     reviews = user.User.get_reviews({"id": user_id})
-
-
     return {
         "user_id": session["user"]["id"],
         "user_first_name": session["user"]["first_name"],
