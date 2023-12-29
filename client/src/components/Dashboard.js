@@ -127,9 +127,9 @@ const Dashboard = () => {
             )}
             <h1>CORE MOVIES</h1>
             <div className="btn-group" role="group">
-                <button type="button" className={pressed === "unwatched" ? "active btn btn-outline-danger" : "btn btn-outline-danger"} onClick={ displayUnwatched }>Unwatched</button>
-                <button type="button" className={pressed === "watched" ? "active btn btn-outline-danger" : "btn btn-outline-danger"} onClick={ displayWatched }>Watched</button>
-                <button type="button" className={pressed === "all" ? "active btn btn-outline-danger" : "btn btn-outline-danger"} onClick={ displayAll }>All Reviews</button>
+                <button type="button" className={pressed === "unwatched" ? "btn Pressed" : "btn Unpressed"} onClick={ displayUnwatched }>Unwatched</button>
+                <button type="button" className={pressed === "watched" ? "btn Pressed" : "btn Unpressed"} onClick={ displayWatched }>Watched</button>
+                <button type="button" className={pressed === "all" ? "btn Pressed" : "btn Unpressed"} onClick={ displayAll }>All Reviews</button>
             </div>
             <div className="Main">
                 { fanFormOpen && (

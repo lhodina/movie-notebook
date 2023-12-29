@@ -49,8 +49,8 @@ const AddFanForm = (props) => {
             <div>
                 <h1>Add a Fan</h1>
                 <div className="btn-group" role="group">
-                    <button type="button" className={ fanType === "director" ? "active btn btn-outline-danger" : "btn btn-outline-danger"} onClick={ fanTypeDirector }>Director</button>
-                    <button type="button" className={ fanType === "critic" ? "active btn btn-outline-danger" : "btn btn-outline-danger" } onClick={ fanTypeCritic }>Critic</button>
+                    <button type="button" className={ fanType === "director" ? "btn Pressed" : "btn Unpressed"} onClick={ fanTypeDirector }>Director</button>
+                    <button type="button" className={ fanType === "critic" ? "bt Pressed" : "btn Unpressed" } onClick={ fanTypeCritic }>Critic</button>
                 </div>
             </div>
             <form onSubmit={ onSubmitHandler }>
@@ -62,8 +62,8 @@ const AddFanForm = (props) => {
                     <br />
                     <input className="form-input" type="text" onChange = { (e) => setName(e.target.value) } />
                 </div>
-                <input type="submit" value="Submit" />
-                <button onClick={toggleForm}>cancel</button>
+                <input type="submit" value="Save" className="Button SaveButton" />
+                <button onClick={toggleForm} className="Button CancelButton">cancel</button>
             </form>
         </div>
     )

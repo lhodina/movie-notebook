@@ -8,7 +8,7 @@ import UpdateReviewForm from './UpdateReviewForm';
 import AddFanForm from './AddFanForm';
 
 const colors = {
-    yellow: "rgb(255, 215, 0)",
+    yellow: "rgb(211, 164, 46)",
     grey: "rgb(210, 210, 210)"
   }
 
@@ -201,7 +201,7 @@ const Review = () => {
                         })}
                     </p>
                     <p>Watched: {watched == 1 ? "Yes" : "No"}</p>
-                    <button onClick={ toggleReviewForm }>edit</button>
+                    <button onClick={ toggleReviewForm } className="Button EditReviewButton">edit</button>
 
                     { updateReviewFormOpen && (
                         <div className="UpdateReviewForm">
@@ -217,8 +217,8 @@ const Review = () => {
                         <form onSubmit={ updateNotes } className="UpdateNotesForm">
                             <textarea value={editNotes} onChange={ (e) => { setEditNotes(e.target.value)} } />
                             <br />
-                            <input type="submit" value="Save" />
-                            <button className="CancelButton" onClick={ toggleEditNotesFormExpanded }>cancel</button>
+                            <input type="submit" value="Save" className="Button SaveButton" />
+                            <button onClick={ toggleEditNotesFormExpanded } className="Button CancelButton">cancel</button>
                         </form>
                     )}
                     <div className={notesExpanded ? "NotesExpanded" : "NotesCollapsed"}>
@@ -233,14 +233,14 @@ const Review = () => {
                         { userLinks.map( (link, index) => {
                             return (
                                 <li key={index}>
-                                    <a href={link.url} target="_blank" rel="noreferrer">{link.text}</a>
+                                    <a href={link.url} target="_blank" rel="noreferrer" className="ReviewLink">{link.text}</a>
                                     <button className="DeleteLinkButton" onClick={(e) => {deleteLink(link.id)} }>X</button>
                                 </li>
                             )
                         })
                         }
                     </ul>
-                    <button onClick={ toggleLinkFormExpanded }>Add Link</button>
+                    <button onClick={ toggleLinkFormExpanded } className="Button AddLinkButton">Add Link</button>
                     { linkFormExpanded && (
                         <form className={"LinkForm" } onSubmit={ addLink }>
                             <label htmlFor="text">Text</label>
@@ -249,8 +249,8 @@ const Review = () => {
                             <label htmlFor="url">URL</label>
                             <input name="url" value={newLinkURL} onChange={ (e) => setNewLinkURL(e.target.value) } />
                             <br />
-                            <input type="submit" value="Add Link" />
-                            <button className="CancelButton" onClick={toggleLinkFormExpanded}>cancel</button>
+                            <input type="submit" value="Add Link" className="Button SaveButton" />
+                            <button className="Button CancelButton" onClick={toggleLinkFormExpanded}>cancel</button>
                         </form>
                     )}
                 </div>
@@ -266,7 +266,7 @@ const Review = () => {
                             )) }
                         </ul>
                         { placeholder(review) }
-                        <button onClick={toggleFanForm}>Add a fan</button>
+                        <button onClick={toggleFanForm} className="Button AddFanButton">Add a fan</button>
                     </div>
                 </div>
             </div>

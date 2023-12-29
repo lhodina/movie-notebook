@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const RegisterForm = (props) => {
     const [ firstName, setFirstName ] = useState("");
@@ -22,11 +22,9 @@ const RegisterForm = (props) => {
             confirmPassword
         }, { withCredentials: true })
         .then( res => {
-            console.log("res: ", res);
             if (res['data']['validation_messages']) {
                 setErrors(res['data']['validation_messages']);
             } else {
-                console.log("IN REACT, WE MADE IT PAST VALIDATION AND ARE ABOUT TO NAVIGATE TO DASHBOARD")
                 navigate("/dashboard");
             }
         })
@@ -69,7 +67,7 @@ const RegisterForm = (props) => {
                     <br />
                     <input className="form-input" type="text" onChange = { (e) => setConfirmPassword(e.target.value) } />
                 </p>
-                <input type="submit" value="Register" />
+                <input type="submit" value="Register" className="Button RegisterButton" />
             </form>
         </div>
     );

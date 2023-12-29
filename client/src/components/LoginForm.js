@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const LoginForm = (props) => {
+const LoginForm = () => {
     const [ email, setEmail ] = useState("");
     const [ password, setPassword ] = useState("");
     const [errors, setErrors] = useState([]);
@@ -16,7 +16,6 @@ const LoginForm = (props) => {
             password
         }, { withCredentials: true })
         .then( res => {
-            console.log("res: ", res);
             if (res['data']['validation_messages']) {
                 setErrors(res['data']['validation_messages']);
             } else {
@@ -47,7 +46,7 @@ const LoginForm = (props) => {
                     <br />
                     <input className="form-input" type="text" onChange = { (e) => setPassword(e.target.value) } />
                 </p>
-                <input type="submit" value="Log In" />
+                <input type="submit" value="Log In" className="Button LoginButton" />
             </form>
         </div>
     );

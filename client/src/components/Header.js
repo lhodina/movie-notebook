@@ -121,12 +121,12 @@ const Header = (props) => {
                     <FavoriteCriticForm user={user} toggleFavoriteCriticForm={toggleFavoriteCriticForm} userFavoriteCritics={userFavoriteCritics} setUserFavoriteCritics={setUserFavoriteCritics} />
                 </div>
             )}
-            <h4>Welcome, {user.first_name}</h4>
+            <h5>Welcome, {user.first_name}</h5>
             <div className="NavMenuItem" onMouseEnter={ openDirectors } onMouseLeave={ closeDirectors } >
                 <h5>My Directors</h5>
                 { directorsOpen && (
                     <div className="NavDropdown">
-                        <button className="btn btn-danger" onClick={toggleFavoriteDirectorForm}>+ Add Favorite Director</button>
+                        <button className="Button AddFavoriteButton" onClick={toggleFavoriteDirectorForm}>+ Add Favorite Director</button>
                         <ul className="NavDropdownList" >
                         {
                             userFavoriteDirectors.map( (director, index) => (
@@ -141,7 +141,7 @@ const Header = (props) => {
                 <h5>My Critics</h5>
                 { criticsOpen && (
                     <div className="NavDropdown">
-                        <button className="btn btn-danger" onClick={toggleFavoriteCriticForm}>+ Add Favorite Critic</button>
+                        <button className="Button AddFavoriteButton" onClick={toggleFavoriteCriticForm}>+ Add Favorite Critic</button>
                         <ul className="NavDropdownList" >
                         {
                             userFavoriteCritics.map( (critic, index) => (
@@ -152,7 +152,7 @@ const Header = (props) => {
                     </div>
                 )}
             </div>
-            <button className="btn btn-danger" onClick={toggleNewReviewForm}>+ Review a Movie</button>
+            <button className="Button AddReviewButton" onClick={toggleNewReviewForm}>+ Review a Movie</button>
             <div className="SearchArea">
                 <input type="search" placeholder="search my stuff" value={query} onChange={getSearchResults} />
                 {showSearchResults()}

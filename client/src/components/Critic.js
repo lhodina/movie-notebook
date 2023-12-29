@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link, useParams } from "react-router-dom";
 import expandIcon from "../assets/expand-icon-small.png";
 import Header from './Header';
+import ReviewForm from './ReviewForm';
 
 const Critic = () => {
     const [user, setUser] = useState({});
@@ -127,12 +128,15 @@ const Critic = () => {
             { grayout && (
                 <div className="Grayout"></div>
             )}
+            { favoriteMovieFormOpen && (
+                <ReviewForm user={user} location={"favoriteMovies"} favoriteMovies={favoriteMovies} setFavoriteMovies={setFavoriteMovies} toggleNewReviewForm={toggleFavoriteMovieForm}  />
+            )}
             <Header user={user} userFavoriteDirectors={userFavoriteDirectors} setUserFavoriteDirectors={setUserFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} setUserFavoriteCritics={setUserFavoriteCritics} reviews={reviews} toggleGrayout={toggleGrayout} />
             <div className="CriticProfile">
                 <div className="ProfileContent">
                     <h1>{ currentCritic.name }</h1>
                     <div>
-                        <button type="button" className="AddFavoriteButton" onClick={toggleFavoriteMovieForm}>Add Favorite</button>
+                        <button type="button" className="Button AddFavoriteButton" onClick={toggleFavoriteMovieForm}>Add Favorite</button>
                     </div>
                 </div>
             </div>
@@ -144,8 +148,8 @@ const Critic = () => {
                                 <form onSubmit={ updateCriticNotes } className="UpdateNotesForm">
                                     <textarea value={editNotes} onChange={ (e) => { setEditNotes(e.target.value)} } />
                                     <br />
-                                    <input type="submit" value="Save" />
-                                    <button className="CancelButton" onClick={ toggleEditFormExpanded }>cancel</button>
+                                    <input type="submit" value="Save" className="Button SaveButton" />
+                                    <button className="Button CancelButton" onClick={ toggleEditFormExpanded }>cancel</button>
                                 </form>
                             )}
                         <div className={notesExpanded ? "NotesExpanded" : "NotesCollapsed"}>
@@ -164,7 +168,7 @@ const Critic = () => {
                             })
                             }
                         </ul>
-                        <button onClick={ toggleLinkFormExpanded }>Add Link</button>
+                        <button onClick={ toggleLinkFormExpanded } className="Button">Add Link</button>
                         { linkFormExpanded && (
                             <form className={"LinkForm" } onSubmit={ addCriticLink }>
                                 <label htmlFor="text">Text</label>
@@ -173,8 +177,8 @@ const Critic = () => {
                                 <label htmlFor="url">URL</label>
                                 <input name="url" value={newLinkURL} onChange={ (e) => setNewLinkURL(e.target.value) } />
                                 <br />
-                                <input type="submit" value="Add Link" />
-                                <button className="CancelButton" onClick={toggleLinkFormExpanded}>cancel</button>
+                                <input type="submit" value="Add Link" className="Button SaveButton" />
+                                <button className="Button CancelButton" onClick={toggleLinkFormExpanded}>cancel</button>
                             </form>
                         )}
                     </div>
@@ -189,12 +193,12 @@ const Critic = () => {
                                         <div className="CoreMovieBody">
                                             <Link to={"/reviews/" + movie.review_id}><h5>{ movie.title }</h5></Link>
                                             <div className="LikedBy">
-                                            {(movie.director_fans.length > 0 || movie.critic_fans.length > 0) && <h6>Liked By:</h6>}
+                                            {((movie.director_fans && movie.director_fans.length > 0) || (movie.critic_fans && movie.critic_fans.length > 0) ) && <h6>Liked By:</h6>}
                                                 <ul>
-                                                    { movie.director_fans.map( (directorFan, index) => (
+                                                    { movie.director_fans && movie.director_fans.map( (directorFan, index) => (
                                                         <li key={ index }><Link to={ "/directors/" + directorFan.id } >{directorFan.name }</Link></li>
                                                     )) }
-                                                    { movie.critic_fans.map( (critic, index) => (
+                                                    { movie.critic_fans && movie.critic_fans.map( (critic, index) => (
                                                         critic.id != id && <li key={ index }><Link to={ "/critics/" + critic.id }>{critic.name }</Link></li>
                                                     )) }
                                                 </ul>

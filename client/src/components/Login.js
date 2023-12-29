@@ -4,7 +4,7 @@ import '../App.css';
 import RegisterForm from './RegisterForm';
 import LoginForm from './LoginForm';
 
-const Login = (props) => {
+const Login = () => {
     const [authorizationMessage, setAuthorizationMessage] = useState("");
 
     useEffect(() => {

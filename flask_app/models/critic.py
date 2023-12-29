@@ -57,7 +57,6 @@ class Critic:
         titles = []
 
         for movie in result:
-            print("MODEL critic get_one -- movie: ", movie)
             if movie['title'] and movie['title'] not in titles:
                 titles.append(movie['title'])
                 fav = {

@@ -173,17 +173,17 @@ const Director = () => {
                 <div className="ProfileContent">
                     <h1>{ currentDirector.name }</h1>
                     <div className="btn-group" role="group">
-                        <button type="button" className={ favoritesOpen ? "active btn btn-outline-danger" : "btn btn-outline-danger"} onClick={ showFavorites }>{currentDirector.name}'s Favorite Movies</button>
-                        <button type="button" className={ directedByOpen ? "active btn btn-outline-danger" : "btn btn-outline-danger"} onClick={ showDirectedBy }>Movies Directed by {currentDirector.name}</button>
+                        <button type="button" className={ favoritesOpen ? "btn Pressed" : "btn Unpressed"} onClick={ showFavorites }>{currentDirector.name}'s Favorite Movies</button>
+                        <button type="button" className={ directedByOpen ? "btn Pressed" : "btn Unpressed"} onClick={ showDirectedBy }>Movies Directed by {currentDirector.name}</button>
                     </div>
                 { directedByOpen && (
                     <div>
-                        <button type="button" className="AddDirectedButton" onClick={toggleMovieDirectedForm}>Add Movie</button>
+                        <button type="button" className="Button AddDirectedButton" onClick={toggleMovieDirectedForm}>Add Movie</button>
                     </div>
                 )}
                 { favoritesOpen && (
                     <div>
-                        <button type="button" className="AddFavoriteButton" onClick={toggleFavoriteMovieForm}>Add Favorite</button>
+                        <button type="button" className="Button AddFavoriteButton" onClick={toggleFavoriteMovieForm}>Add Favorite</button>
                     </div>
                 )}
                 </div>
@@ -196,8 +196,8 @@ const Director = () => {
                             <form onSubmit={ updateNotes } className="UpdateNotesForm">
                                 <textarea value={editNotes} onChange={ (e) => { setEditNotes(e.target.value)} } />
                                 <br />
-                                <input type="submit" value="Save" />
-                                <button className="CancelButton" onClick={ toggleEditFormExpanded }>cancel</button>
+                                <input type="submit" value="Save" className="Button SaveButton" />
+                                <button className="Button CancelButton" onClick={ toggleEditFormExpanded }>cancel</button>
                             </form>
                         )}
                         <div className={notesExpanded ? "NotesExpanded" : "NotesCollapsed"}>
@@ -219,7 +219,7 @@ const Director = () => {
                             })
                             }
                         </ul>
-                        <button onClick={ toggleLinkFormExpanded }>Add Link</button>
+                        <button onClick={ toggleLinkFormExpanded } className="Button AddLinkButton">Add Link</button>
                         { linkFormExpanded && (
                             <form className={"LinkForm" } onSubmit={ addLink }>
                                 <label htmlFor="text">Text</label>
@@ -228,8 +228,8 @@ const Director = () => {
                                 <label htmlFor="url">URL</label>
                                 <input name="url" value={newLinkURL} onChange={ (e) => setNewLinkURL(e.target.value) } />
                                 <br />
-                                <input type="submit" value="Add Link" />
-                                <button className="CancelButton" onClick={toggleLinkFormExpanded}>cancel</button>
+                                <input type="submit" value="Add Link" className="Button SaveButton" />
+                                <button className="Button CancelButton" onClick={toggleLinkFormExpanded}>cancel</button>
                             </form>
                         )}
                     </div>

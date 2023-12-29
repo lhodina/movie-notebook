@@ -23,7 +23,7 @@ const FavoriteDirectorForm = (props) => {
                     return arr.join(" ");
                 }
                 let capitalizedName = capitalize(name);
-                
+
                 if (res["data"]["message"]) {
                     let errorMessage = res["data"]["message"]
                     setErrors([...errors, errorMessage]);
@@ -51,8 +51,8 @@ const FavoriteDirectorForm = (props) => {
                     <br />
                     <input className="form-input" type="text" onChange = { (e) => setName(e.target.value) } />
                 </div>
-                <input type="submit" value="Save" />
-                <button type="button" onClick={toggleFavoriteDirectorForm}>cancel</button>
+                <input type="submit" value="Save" className="Button SaveButton" />
+                <button type="button" onClick={toggleFavoriteDirectorForm} className="Button CancelButton">cancel</button>
             </form>
         </div>
     )

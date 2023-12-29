@@ -6,7 +6,7 @@ import { FaStar } from "react-icons/fa";
 // https://www.youtube.com/watch?v=l1Q7o8skKPM
 
 const colors = {
-    yellow: "rgb(255, 215, 0)",
+    yellow: "rgb(211, 164, 46)",
     grey: "rgb(210, 210, 210)"
   }
 
@@ -124,20 +124,20 @@ const ReviewForm = (props) => {
                     </div>
                 </div>
                 <p>
-                    <label>Watched Status</label>
+                    <label className="WatchedStatusLabel">Watched Status</label>
                     <br />
-                    <input className="form-input" type="radio" name="watched" value="1" checked={ watched==="1" } id="radio-watched" onChange = { (e) => setWatched("1") } />
-                    <label>Watched</label>
-                    <input className="form-input" type="radio" name="watched" value="0" checked={ watched==="0"} id="radio-unwatched" onChange = { (e) => setWatched("0") } />
-                    <label>Unwatched</label>
+                    <input className="form-input Radio Watched" type="radio" name="watched" value="1" checked={ watched==="1" } id="radio-watched" onChange = { (e) => setWatched("1") } />
+                    <label className="Label Watched">Watched</label>
+                    <input className="form-input Radio Unwatched" type="radio" name="watched" value="0" checked={ watched==="0"} id="radio-unwatched" onChange = { (e) => setWatched("0") } />
+                    <label className="Label Unwatched">Unwatched</label>
                 </p>
                 <p>
                     <label>Notes</label>
                     <br />
                     <textarea className="form-input" type="text" onChange = { (e) => setNotes(e.target.value) } />
                 </p>
-                <input type="submit" value="Save" />
-                <button type="button" onClick={toggleNewReviewForm}>cancel</button>
+                <input type="submit" value="Save" className="Button SaveButton" />
+                <button type="button" onClick={toggleNewReviewForm} className="Button CancelButton">cancel</button>
             </form>
         </div>
     )

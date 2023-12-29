@@ -50,8 +50,8 @@ const FavoriteCriticForm = (props) => {
                     <br />
                     <input className="form-input" type="text" onChange = { (e) => setName(e.target.value) } />
                 </div>
-                <input type="submit" value="Save" />
-                <button type="button" onClick={toggleFavoriteCriticForm}>cancel</button>
+                <input type="submit" value="Save" className="Button SaveButton"/>
+                <button type="button" onClick={toggleFavoriteCriticForm} className="Button CancelButton">cancel</button>
             </form>
         </div>
     )
