@@ -38,8 +38,6 @@ def get_critic(critic_id):
     user_favorite_critics = user.User.get_favorite_critics({"id": user_id})
     reviews = user.User.get_reviews({"id": user_id})
 
-    print("GET /critics -- current_critic.favorite_movies: ", current_critic.favorite_movies)
-
     return {
         "user_id": session["user"]["id"],
         "user_first_name": session["user"]["first_name"],
@@ -82,6 +80,7 @@ def add_critic_favorite_movie(critic_id):
         "critic_id": critic_id
     }
 
+    print("POST /critics/id/favorite data: ", data)
     critic.Critic.add_favorite(data)
     return redirect("/dashboard")
 

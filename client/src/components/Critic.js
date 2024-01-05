@@ -129,7 +129,7 @@ const Critic = () => {
                 <div className="Grayout"></div>
             )}
             { favoriteMovieFormOpen && (
-                <ReviewForm user={user} location={"favoriteMovies"} favoriteMovies={favoriteMovies} setFavoriteMovies={setFavoriteMovies} toggleNewReviewForm={toggleFavoriteMovieForm}  />
+                <ReviewForm user={user} location={"favoriteMovies"} currentCritic={currentCritic} favoriteMovies={favoriteMovies} setFavoriteMovies={setFavoriteMovies} toggleNewReviewForm={toggleFavoriteMovieForm}  />
             )}
             <Header user={user} userFavoriteDirectors={userFavoriteDirectors} setUserFavoriteDirectors={setUserFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} setUserFavoriteCritics={setUserFavoriteCritics} reviews={reviews} toggleGrayout={toggleGrayout} />
             <div className="CriticProfile">

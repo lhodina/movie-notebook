@@ -14,7 +14,7 @@ const Dashboard = () => {
     const [watched, setWatched] = useState([]);
     const [unwatched, setUnwatched] = useState([]);
     const [displayed, setDisplayed] = useState([]);
-    const [pressed, setPressed] = useState("unwatched");
+    const [pressed, setPressed] = useState("all");
     const [grayout, setGrayout] = useState(false);
     const [fanFormOpen, setFanFormOpen] = useState(false);
     const [currentMovieId, setCurrentMovieId] = useState(0);
@@ -111,7 +111,7 @@ const Dashboard = () => {
                     setUserFavoriteDirectors(res.data.favorite_directors);
                     setUserFavoriteCritics(res.data.favorite_critics);
                     setReviews(res.data.reviews);
-                    setDisplayed(res.data.unwatched);
+                    setDisplayed(res.data.reviews);
                     setWatched(res.data.watched);
                     setUnwatched(res.data.unwatched);
                 }

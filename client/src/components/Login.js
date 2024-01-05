@@ -18,7 +18,7 @@ const Login = () => {
     }, []);
 
     return (
-        <div className="Container LoginPage">
+        <div className="LoginPage">
             { authorizationMessage && (<p className="AlertMessage">{authorizationMessage}</p>)}
             <h1>Movie Notebook</h1>
             <div className="FormsContainer">
