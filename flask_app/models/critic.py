@@ -21,18 +21,6 @@ class Critic:
 
 
     @classmethod
-    def get_all_critics(cls):
-        all_critics = []
-        query = """
-        SELECT * FROM critics;
-        """
-        results = connectToMySQL(cls.DB).query_db(query)
-        for result in results:
-            all_critics.append(result)
-        return all_critics
-
-
-    @classmethod
     def get_one(cls, data):
         query = """
         SELECT * FROM critics

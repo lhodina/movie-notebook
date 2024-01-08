@@ -32,7 +32,7 @@ def add_favorite_critic():
         {
             "critic_id": critic_id,
             "user_id": user_id,
-            "notes": "No notes yet"
+            "notes": ""
         })
     return {"critic_id": critic_id}
 

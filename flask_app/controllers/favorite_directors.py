@@ -45,7 +45,7 @@ def add_favorite_director():
         {
             "director_id": director_id,
             "user_id": user_id,
-            "notes": "No notes yet"
+            "notes": ""
         })
     return {"director_id": director_id}
 

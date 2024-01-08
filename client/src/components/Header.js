@@ -4,6 +4,7 @@ import LogoutButton from './LogoutButton';
 import ReviewForm from './ReviewForm';
 import FavoriteDirectorForm from './FavoriteDirectorForm';
 import FavoriteCriticForm from './FavoriteCriticForm';
+import searchIcon from '../assets/search-icon.png';
 
 const Header = (props) => {
     const { user, userFavoriteDirectors, setUserFavoriteDirectors, userFavoriteCritics, setUserFavoriteCritics, reviews, setReviews, displayed, setDisplayed, displayAll, toggleGrayout } = props;
@@ -85,8 +86,9 @@ const Header = (props) => {
             }
         }
 
-        return (query.length > 1 && <div className="NavDropdown"><ul className="NavDropdownList">
-
+        let resultsFound = showReviews.length || showDirectors.length || showCritics.length;
+        if (query.length > 1 && resultsFound) {
+            return <div className="NavDropdown"><ul className="NavDropdownList">
             {showReviews.length > 0 && showReviews.map((review, index) => {
                 return <Link to={'/reviews/' + review.id} key={index} className="NavDropdownListItem"><li>{review.title}</li></Link>
             })}
@@ -96,7 +98,8 @@ const Header = (props) => {
             {showCritics.length > 0 && showCritics.map((critic, index) => {
                 return <Link to={'/critics/' + critic.id} key={index} className="NavDropdownListItem"><li>{critic.name}</li></Link>
             })}
-        </ul></div>)
+            </ul></div>
+        }
     }
 
     const getSearchResults = (e) => {
@@ -154,7 +157,8 @@ const Header = (props) => {
             </div>
             <button className="Button AddReviewButton" onClick={toggleNewReviewForm}>+ Review a Movie</button>
             <div className="SearchArea">
-                <input type="search" placeholder="search my stuff" value={query} onChange={getSearchResults} />
+                <input className="SearchBar" type="search" placeholder="search my stuff" value={query} onChange={getSearchResults} />
+                <img className="SearchIcon" src={searchIcon} alt={"search-icon"} />
                 {showSearchResults()}
             </div>
             <Link to={"/dashboard"}>back to dashboard</Link>

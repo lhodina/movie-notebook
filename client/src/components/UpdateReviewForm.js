@@ -20,7 +20,7 @@ const UpdateReviewForm = (props) => {
     const {rating, setRating, watched, setWatched, toggleReviewForm } = props;
     const { id } = useParams();
     const [errors, setErrors] = useState([]);
-    const [hoverValue, setHoverValue] = React.useState(undefined);
+    const [hoverValue, setHoverValue] = useState(undefined);
 
     const updateReview = e => {
         e.preventDefault();

@@ -12,8 +12,6 @@ const FavoriteCriticForm = (props) => {
             name
         }, { withCredentials: true })
             .then( res => {
-                console.log("FavoriteCriticForm res: ", res);
-
                 const capitalize = (name) => {
                     let arr = name.split(" ");
                     for (let i = 0; i < arr.length; i++) {

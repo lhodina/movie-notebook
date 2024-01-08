@@ -2,7 +2,7 @@ import requests
 from flask import redirect, request
 
 from flask_app import app
-from flask_app.models import movie, director, favorite_director, critic, favorite_critic, movie_link
+from flask_app.models import movie, director, favorite_director, critic, favorite_critic
 
 
 @app.route("/movies", methods=["POST"])
@@ -15,51 +15,6 @@ def add_movie():
     }
 
     movie.Movie.save(data)
-    return redirect("/dashboard")
-
-
-# @app.route("/movies")
-# def get_all_movies():
-#     all_movies = movie.Movie.get_all_movies()
-#     res = {"movies": []}
-#     for each_movie in all_movies:
-#         res['movies'].append(each_movie)
-#     return res
-
-
-# @app.route("/movies/<int:movie_id>")
-# def get_movie(movie_id):
-#     data = {
-#         "id": movie_id
-#     }
-#     current_movie = movie.Movie.get_one(data)
-#     return {
-#         "title": current_movie.title,
-#         "year": current_movie.year,
-#         "image_url": current_movie.image_url,
-#         "directed_by_id": current_movie.directed_by_id,
-#         "director_name": current_movie.director.name
-#     }
-
-
-# @app.route("/update_movie", methods=["POST"])
-# def update_movie():
-#     data = {
-#         "id": request.json["movie_id"],
-#         "title": request.json["title"],
-#         "year": request.json["year"],
-#         "image_url": request.json["image_url"],
-#         "directed_by_id": request.json["directed_by_id"]
-#     }
-
-#     movie.Movie.update(data)
-#     return redirect("/dashboard")
-
-
-@app.route("/movies/delete/<int:movie_id>")
-def delete_movie(movie_id):
-    data = { "id": movie_id }
-    movie.Movie.delete(data)
     return redirect("/dashboard")
 
 
@@ -86,7 +41,7 @@ def add_director_fan(movie_id):
     favorite_director_exists = favorite_director.FavoriteDirector.get_one({"id": director_id})
     if not favorite_director_exists:
         favorite_director.FavoriteDirector.save({
-            "notes": "No notes yet",
+            "notes": "",
             "user_id": user_id,
             "director_id": director_id
         })
@@ -117,7 +72,7 @@ def add_critic_fan(movie_id):
     print("favorite_critic_exists: ", favorite_critic_exists)
     if not favorite_critic_exists:
         favorite_critic.FavoriteCritic.save({
-            "notes": "No notes yet",
+            "notes": "",
             "user_id": user_id,
             "critic_id": critic_id
         })
@@ -127,4 +82,3 @@ def add_critic_fan(movie_id):
     }
     movie.Movie.add_critic_fan(data)
     return data
-

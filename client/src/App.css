@@ -59,8 +59,14 @@
   margin-bottom: 40px;
 }
 
-.SearchInput {
+.SearchBar {
   width: 220px;
+}
+
+.SearchIcon {
+  width: 15px;
+  position: relative;
+  right: 35px;
 }
 
 a {
@@ -311,7 +317,7 @@ ul {
 }
 
 .SaveButton, .CancelButton {
-  margin: 5px;
+  margin: 0 5px;
 }
 
 .ExpandIcon:hover {
@@ -337,6 +343,10 @@ ul {
 }
 
 .FanForm input {
+  margin-bottom: 10px;
+}
+
+.form-input {
   margin-bottom: 10px;
 }
 

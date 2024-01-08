@@ -1,15 +1,14 @@
-from flask import redirect, request
+from flask import redirect, request, session
 
 from flask_app import app
 from flask_app.models import critic_link
 
 @app.route("/critics/<int:critic_id>/links", methods=["POST"])
 def add_critic_link(critic_id):
-     # REPLACE HARDCODED user_id
     data = {
         "text": request.json["text"],
         "url": request.json["url"],
-        "user_id": 1,
+        "user_id": session["user"]["id"],
         "critic_id": critic_id
     }
 

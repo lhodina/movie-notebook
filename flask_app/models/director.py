@@ -21,18 +21,6 @@ class Director:
 
 
     @classmethod
-    def get_all_directors(cls):
-        all_directors = []
-        query = """
-        SELECT * FROM directors;
-        """
-        results = connectToMySQL(cls.DB).query_db(query)
-        for result in results:
-            all_directors.append(result)
-        return all_directors
-
-
-    @classmethod
     def get_one(cls, data):
         query = """
         SELECT * FROM directors

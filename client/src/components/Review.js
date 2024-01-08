@@ -153,7 +153,7 @@ const Review = () => {
                 setReview(res.data);
                 setRating(res.data.rating);
                 setWatched(res.data.watched);
-                setNotes(res.data.notes);
+                res.data.notes.length ? setNotes(res.data.notes) : setNotes("No notes yet");
                 setEditNotes(res.data.notes);
                 setCriticFans(res.data.critic_fans);
                 setDirectorFans(res.data.director_fans);

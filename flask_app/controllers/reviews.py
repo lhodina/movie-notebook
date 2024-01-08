@@ -15,11 +15,13 @@ def add_review():
         "user_id": user_id
     }
 
+    if (request.json['watched'] == ""):
+        review_data["watched"] = 0
+
     movie_data = {
         "title": request.json["title"],
         "image_url": ""
     }
-
 
     if (len(movie_data["title"]) < 1) :
         return {"message": "Title must be at least one character"}
@@ -39,7 +41,7 @@ def add_review():
         }
         response = requests.get(movie_url, headers=headers).json()
         if len(response["results"]) < 1:
-            return {"message": "Movie title not found: "}
+            return {"message": "Movie title not found"}
         poster_path = response["results"][0]["poster_path"]
         movie_poster = image_url_base + poster_path
 
@@ -67,7 +69,7 @@ def add_review():
         favorite_director_exists = favorite_director.FavoriteDirector.get_one({"id": directed_by_id})
         if not favorite_director_exists:
             favorite_director.FavoriteDirector.save({
-                "notes": "No notes yet",
+                "notes": "",
                 "user_id": user_id,
                 "director_id": directed_by_id
             })
@@ -109,7 +111,7 @@ def add_review():
             "movie_id": movie_id
         }
         critic.Critic.add_favorite(data)
-    res = {**review_data, ** movie_data, "review_id": review_id}
+    res = {**review_data, ** movie_data, "id": review_id}
     return res
 
 
