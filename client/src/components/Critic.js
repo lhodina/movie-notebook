@@ -38,7 +38,6 @@ const Critic = () => {
     useEffect( () => {
         axios.get("http://localhost:5000/critics/" + id, {withCredentials: true})
             .then( (res) => {
-                console.log("Critic res: ", res);
                 setUser({
                     "id": res.data.user_id,
                     "first_name": res.data.user_first_name,

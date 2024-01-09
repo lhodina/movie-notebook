@@ -54,7 +54,6 @@ const ReviewForm = (props) => {
                     let errorMessage = res.data["message"];
                     setErrors([...errors, errorMessage]);
                 } else if (location === "newReview") {
-                    console.log("axios.post res: ", res);
                     toggleNewReviewForm();
                     setReviews([...reviews, res.data])
                     setDisplayed([...displayed, res.data])

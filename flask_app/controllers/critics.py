@@ -50,7 +50,6 @@ def add_critic_favorite_movie(critic_id):
         "critic_id": critic_id
     }
 
-    print("POST /critics/id/favorite data: ", data)
     critic.Critic.add_favorite(data)
     return redirect("/dashboard")
 

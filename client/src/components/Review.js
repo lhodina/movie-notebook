@@ -20,13 +20,6 @@ const styles = {
     }
 }
 
-  const placeholder = (review) => {
-    if (review.likes_count < 1) {
-        return <div>
-            <p>No likes yet </p>
-        </div>
-    }
-}
 
 const Review = () => {
     const { id } = useParams();
@@ -50,6 +43,7 @@ const Review = () => {
     const [userFavoriteDirectors, setUserFavoriteDirectors] = useState([]);
     const [userFavoriteCritics, setUserFavoriteCritics] = useState([]);
     const [reviews, setReviews] = useState([]);
+    const [alert, setAlert] = useState(false);
 
     const navigate = useNavigate();
 
@@ -132,13 +126,30 @@ const Review = () => {
             .catch(err => console.log(err));
     }
 
+    const placeholder = () => {
+        if (!directorFans.length && !criticFans.length) {
+            return <div>
+                <p>No likes yet </p>
+            </div>
+        }
+    }
 
-    const deleteReview = reviewId => {
-        axios.delete("http://localhost:5000/reviews/delete/" + reviewId, { withCredentials: true })
+    const deleteReview = () => {
+        axios.get("http://localhost:5000/reviews/delete/" + id, { withCredentials: true })
             .then(res => {
                 navigate("/dashboard");
             })
             .catch(err => console.log(err));
+    }
+
+    const openAlert = () => {
+        setGrayout(true);
+        setAlert(true);
+    }
+
+    const closeAlert = () => {
+        setGrayout(false);
+        setAlert(false);
     }
 
 
@@ -175,6 +186,14 @@ const Review = () => {
             { grayout && (
                 <div className="Grayout"></div>
             )}
+            { alert && (
+                <div className="ConfirmDelete">
+                    <h1>Are you sure?</h1>
+                    <p>This will delete review and all your associated data</p>
+                    <button type="button" onClick={deleteReview} className="Button ConfirmDeleteButton">Confirm</button>
+                    <button type="button" onClick={closeAlert} className="Button CancelButton">Cancel</button>
+                </div>
+            )}
             <Header user={user} userFavoriteDirectors={userFavoriteDirectors} setUserFavoriteDirectors={setUserFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} setUserFavoriteCritics={setUserFavoriteCritics} reviews={reviews} toggleGrayout={toggleGrayout} />
             <div className="ReviewProfile">
                 <img src={review.image_url} height="250px" alt="movie poster" />
@@ -201,8 +220,8 @@ const Review = () => {
                         })}
                     </p>
                     <p>Watched: {watched == 1 ? "Yes" : "No"}</p>
-                    <button onClick={ toggleReviewForm } className="Button EditReviewButton">edit</button>
-
+                    <button onClick={ toggleReviewForm } className="Button EditReviewButton">Edit</button>
+                    <button onClick={ openAlert } className="Button DeleteReviewButton">Delete</button>
                     { updateReviewFormOpen && (
                         <div className="UpdateReviewForm">
                             <UpdateReviewForm user={user} rating={rating} review={review} setReview={setReview} setRating={setRating} watched={watched} setWatched={setWatched} toggleReviewForm={toggleReviewForm} />

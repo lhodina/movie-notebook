@@ -28,7 +28,6 @@ def add_director_fan(movie_id):
         current_director = director_exists[0]
         director_id = current_director["id"]
     else:
-        print("director doesn't exist")
         api_key = "fe2167be80c61b6a35d68b2666a4ae33"
         api_director_results = requests.get(f"https://api.themoviedb.org/3/search/person?api_key={api_key}&query={name}").json()
         api_director = api_director_results["results"][0]
@@ -63,13 +62,11 @@ def add_critic_fan(movie_id):
         current_critic = critic_exists[0]
         critic_id = current_critic["id"]
     else:
-        print("critic doesn't exist")
         critic_id = critic.Critic.save({
             "name": name,
             "image_url": ""
             })
     favorite_critic_exists = favorite_critic.FavoriteCritic.get_one({"critic_id": critic_id})
-    print("favorite_critic_exists: ", favorite_critic_exists)
     if not favorite_critic_exists:
         favorite_critic.FavoriteCritic.save({
             "notes": "",

@@ -47,7 +47,8 @@ const Director = () => {
                     "last_name": res.data.user_last_name
                 });
                 setCurrentDirector(res.data);
-                setMoviesDirected(res.data.movies_directed);
+                res.data.movies_directed[0]['id'] ? setMoviesDirected(res.data.movies_directed) : setMoviesDirected([]);
+                console.log("res.data.movies_directed: ", res.data.movies_directed);
                 setFavoriteMovies(res.data.favorite_movies);
                 res.data.notes.length ? setNotes(res.data.notes) : setNotes("No notes yet");
                 setEditNotes(res.data.notes);
