@@ -19,7 +19,8 @@ def add_director():
 def get_director(director_id):
     user_id = session["user"]["id"]
     data = {
-        "id": director_id
+        "id": director_id,
+        "user_id": user_id
     }
 
     current_director = director.Director.get_one(data)

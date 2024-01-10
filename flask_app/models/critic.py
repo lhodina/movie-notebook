@@ -22,17 +22,33 @@ class Critic:
 
     @classmethod
     def get_one(cls, data):
+        # Old query:
+        # query = """
+        # SELECT * FROM critics
+        # LEFT JOIN critic_favorite_movies ON critic_favorite_movies.critic_id = critics.id
+        # LEFT JOIN movies ON movies.id = critic_favorite_movies.movie_id
+        # LEFT JOIN reviews ON reviews.movie_id = movies.id
+        # LEFT JOIN director_favorite_movies ON director_favorite_movies.movie_id = movies.id
+        # LEFT JOIN directors AS director_fans ON director_fans.id = director_favorite_movies.director_id
+        # LEFT JOIN critic_favorite_movies AS join_other_critic_fans ON join_other_critic_fans.movie_id = movies.id
+        # LEFT JOIN critics AS other_critic_fans ON other_critic_fans.id = join_other_critic_fans.critic_id
+        # WHERE critics.id = %(critic_id)s;
+        # """
+
         query = """
         SELECT * FROM critics
         LEFT JOIN critic_favorite_movies ON critic_favorite_movies.critic_id = critics.id
         LEFT JOIN movies ON movies.id = critic_favorite_movies.movie_id
         LEFT JOIN reviews ON reviews.movie_id = movies.id
-        LEFT JOIN director_favorite_movies ON director_favorite_movies.movie_id = movies.id
+        LEFT JOIN user_favorite_directors ON user_favorite_directors.user_id = %(user_id)s
+        LEFT JOIN director_favorite_movies ON director_favorite_movies.movie_id = movies.id AND director_favorite_movies.director_id = user_favorite_directors.director_id
         LEFT JOIN directors AS director_fans ON director_fans.id = director_favorite_movies.director_id
-        LEFT JOIN critic_favorite_movies AS join_other_critic_fans ON join_other_critic_fans.movie_id = movies.id
+        LEFT JOIN user_favorite_critics ON user_favorite_critics.user_id = %(user_id)s
+        LEFT JOIN critic_favorite_movies AS join_other_critic_fans ON join_other_critic_fans.movie_id = movies.id AND join_other_critic_fans.critic_id = user_favorite_critics.critic_id
         LEFT JOIN critics AS other_critic_fans ON other_critic_fans.id = join_other_critic_fans.critic_id
         WHERE critics.id = %(critic_id)s;
         """
+        
         result = connectToMySQL(cls.DB).query_db(query, data)
         current_critic_data = {
             "id": result[0]["id"],

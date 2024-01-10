@@ -22,13 +22,27 @@ class Director:
 
     @classmethod
     def get_one(cls, data):
+        # Old working query (doesn't filter for user favorites):
+        # query = """
+        # SELECT * FROM directors
+        # LEFT JOIN movies ON movies.directed_by_id = directors.id
+        # LEFT JOIN reviews ON reviews.movie_id = movies.id
+        # LEFT JOIN director_favorite_movies ON director_favorite_movies.movie_id = movies.id
+        # LEFT JOIN directors AS director_fans ON director_fans.id = director_favorite_movies.director_id
+        # LEFT JOIN critic_favorite_movies ON critic_favorite_movies.movie_id = movies.id
+        # LEFT JOIN critics ON critics.id = critic_favorite_movies.critic_id
+        # WHERE directors.id = %(id)s;
+        # """
+
         query = """
         SELECT * FROM directors
         LEFT JOIN movies ON movies.directed_by_id = directors.id
         LEFT JOIN reviews ON reviews.movie_id = movies.id
-        LEFT JOIN director_favorite_movies ON director_favorite_movies.movie_id = movies.id
+        LEFT JOIN user_favorite_directors ON user_favorite_directors.user_id = %(user_id)s
+        LEFT JOIN director_favorite_movies ON director_favorite_movies.movie_id = movies.id AND director_favorite_movies.director_id = user_favorite_directors.director_id
         LEFT JOIN directors AS director_fans ON director_fans.id = director_favorite_movies.director_id
-        LEFT JOIN critic_favorite_movies ON critic_favorite_movies.movie_id = movies.id
+        LEFT JOIN user_favorite_critics ON user_favorite_critics.user_id = %(user_id)s
+        LEFT JOIN critic_favorite_movies ON critic_favorite_movies.movie_id = movies.id AND critic_favorite_movies.critic_id = user_favorite_critics.critic_id
         LEFT JOIN critics ON critics.id = critic_favorite_movies.critic_id
         WHERE directors.id = %(id)s;
         """
@@ -90,13 +104,27 @@ class Director:
 
     @classmethod
     def get_favorites(cls, data):
+        # Old working query:
+        # query = """
+        # SELECT * FROM movies
+        # JOIN reviews ON reviews.movie_id = movies.id
+        # JOIN director_favorite_movies ON director_favorite_movies.movie_id = movies.id
+        # LEFT JOIN director_favorite_movies AS other_director_fans ON other_director_fans.movie_id = movies.id
+        # LEFT JOIN directors AS director_fans ON director_fans.id = other_director_fans.director_id
+        # LEFT JOIN critic_favorite_movies ON critic_favorite_movies.movie_id = movies.id
+        # LEFT JOIN critics ON critics.id = critic_favorite_movies.critic_id
+        # WHERE director_favorite_movies.director_id = %(id)s;
+        # """
+
         query = """
         SELECT * FROM movies
         JOIN reviews ON reviews.movie_id = movies.id
         JOIN director_favorite_movies ON director_favorite_movies.movie_id = movies.id
-        LEFT JOIN director_favorite_movies AS other_director_fans ON other_director_fans.movie_id = movies.id
+        LEFT JOIN user_favorite_directors ON user_favorite_directors.user_id = %(user_id)s
+        LEFT JOIN director_favorite_movies AS other_director_fans ON other_director_fans.movie_id = movies.id AND other_director_fans.director_id = user_favorite_directors.director_id
         LEFT JOIN directors AS director_fans ON director_fans.id = other_director_fans.director_id
-        LEFT JOIN critic_favorite_movies ON critic_favorite_movies.movie_id = movies.id
+        LEFT JOIN user_favorite_critics ON user_favorite_critics.user_id = %(user_id)s
+        LEFT JOIN critic_favorite_movies ON critic_favorite_movies.movie_id = movies.id AND critic_favorite_movies.critic_id = user_favorite_critics.critic_id
         LEFT JOIN critics ON critics.id = critic_favorite_movies.critic_id
         WHERE director_favorite_movies.director_id = %(id)s;
         """

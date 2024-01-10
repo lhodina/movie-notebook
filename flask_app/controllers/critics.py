@@ -18,8 +18,10 @@ def add_critic():
 def get_critic(critic_id):
     user_id = session["user"]["id"]
     data = {
-        "critic_id": critic_id
+        "critic_id": critic_id,
+        "user_id": user_id
     }
+    
     current_critic = critic.Critic.get_one(data)
     user_favorite_critic = favorite_critic.FavoriteCritic.get_one(data)[0]
     links = critic.Critic.get_links(data)
@@ -29,7 +31,7 @@ def get_critic(critic_id):
     reviews = user.User.get_reviews({"id": user_id})
 
     return {
-        "user_id": session["user"]["id"],
+        "user_id": user_id,
         "user_first_name": session["user"]["first_name"],
         "user_last_name": session["user"]["last_name"],
         "id": current_critic.id,
