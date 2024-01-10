@@ -6,19 +6,19 @@ import re
 
 bcrypt = Bcrypt(app)
 
-EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
-PASSWORD_REGEX = re.compile(r'^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\-\#\$\.\%\&\*\@\!]{8,}$')
+EMAIL_REGEX = re.compile(r"^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$")
+PASSWORD_REGEX = re.compile(r"^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\-\#\$\.\%\&\*\@\!]{8,}$")
 
 class User:
     DB = "movie_notebook"
     def __init__(self, data):
-        self.id = data['id']
-        self.first_name = data['first_name']
-        self.last_name = data['last_name']
-        self.email = data['email']
-        self.password = data['password']
-        self.created_at = data['created_at']
-        self.updated_at = data['updated_at']
+        self.id = data["id"]
+        self.first_name = data["first_name"]
+        self.last_name = data["last_name"]
+        self.email = data["email"]
+        self.password = data["password"]
+        self.created_at = data["created_at"]
+        self.updated_at = data["updated_at"]
 
 
     @classmethod
@@ -139,23 +139,23 @@ class User:
             director_fan_names = []
             critic_fan_names = []
             for record in result:
-                if review['id'] == record['reviews.id']:
-                    if record['name'] and record['name'] not in director_fan_names:
-                        director_fan_names.append(record['name'])
+                if review["id"] == record["reviews.id"]:
+                    if record["name"] and record["name"] not in director_fan_names:
+                        director_fan_names.append(record["name"])
                         director_fan = {
-                            "id": record['director_id'],
-                            "name": record['name']
+                            "id": record["director_id"],
+                            "name": record["name"]
                         }
-                        review['director_fans'].append(director_fan)
-                    if record['critics.name'] and record['critics.name'] not in critic_fan_names:
-                        critic_fan_names.append(record['critics.name'])
+                        review["director_fans"].append(director_fan)
+                    if record["critics.name"] and record["critics.name"] not in critic_fan_names:
+                        critic_fan_names.append(record["critics.name"])
                         critic_fan = {
-                            "id": record['critic_id'],
-                            "name": record['critics.name']
+                            "id": record["critic_id"],
+                            "name": record["critics.name"]
                         }
-                        review['critic_fans'].append(critic_fan)
-            review['likes_count'] = len(review['critic_fans']) + len(review['director_fans'])
-        reviews.sort(key=lambda x: x['likes_count'], reverse=True)
+                        review["critic_fans"].append(critic_fan)
+            review["likes_count"] = len(review["critic_fans"]) + len(review["director_fans"])
+        reviews.sort(key=lambda x: x["likes_count"], reverse=True)
         return reviews
 
 

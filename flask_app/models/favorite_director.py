@@ -22,7 +22,7 @@ class FavoriteDirector:
     @classmethod
     def get_one(cls, data):
         query = """
-        SELECT * FROM user_favorite_directors WHERE director_id = %(id)s;
+        SELECT * FROM user_favorite_directors WHERE director_id = %(id)s AND user_id = %(user_id)s;
         """
         return connectToMySQL(cls.DB).query_db(query, data)
 

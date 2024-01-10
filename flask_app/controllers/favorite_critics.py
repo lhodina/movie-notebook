@@ -17,7 +17,7 @@ def add_favorite_critic():
     if (len(data["name"]) < 2):
         return {"message": "Name must be at least two characters"}
 
-    critic_id = -1
+    critic_id = 0
     critic_exists = critic.Critic.find_by_name(data)
 
     if critic_exists:
@@ -28,13 +28,19 @@ def add_favorite_critic():
                 "name": data["name"],
                 "image_url": ""
             })
-    favorite_critic.FavoriteCritic.save(
+
+    favorite_exists = favorite_critic.FavoriteCritic.get_one({"critic_id": critic_id, "user_id": user_id})
+    print("controllers -- favorite_critics -- POST /favorite_critics -- favorite_exists: ", favorite_exists)
+    if not favorite_exists:
+        favorite_critic.FavoriteCritic.save(
         {
             "critic_id": critic_id,
             "user_id": user_id,
             "notes": ""
         })
-    return {"critic_id": critic_id}
+        return {"critic_id": critic_id}
+    else:
+        return {"message": f"{data['name']} already added to favorites"}
 
 
 @app.route("/favorite_critics/<int:id>/update", methods=["POST"])

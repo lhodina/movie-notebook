@@ -9,13 +9,13 @@ from flask_app.models import user, review, director, favorite_director, critic, 
 def add_review():
     user_id = session["user"]["id"]
     review_data = {
-        "rating": request.json['rating'],
-        "notes": request.json['notes'],
-        "watched": request.json['watched'],
+        "rating": request.json["rating"],
+        "notes": request.json["notes"],
+        "watched": request.json["watched"],
         "user_id": user_id
     }
 
-    if (request.json['watched'] == ""):
+    if (request.json["watched"] == ""):
         review_data["watched"] = 0
 
     movie_data = {
@@ -59,7 +59,7 @@ def add_review():
         director_exists = director.Director.find_by_name({"name": api_director_name})
         directed_by_id = 0
         if (director_exists):
-            directed_by_id = director_exists[0]['id']
+            directed_by_id = director_exists[0]["id"]
         else:
             director_data = {
                 "name": api_director_name,
@@ -74,12 +74,12 @@ def add_review():
                 "director_id": directed_by_id
             })
         movie_data["directed_by_id"] = directed_by_id
-        movie_data['image_url'] = movie_poster
-        movie_data['year'] = api_year
-        movie_data['title'] = response["results"][0]["title"]
+        movie_data["image_url"] = movie_poster
+        movie_data["year"] = api_year
+        movie_data["title"] = response["results"][0]["title"]
         movie_id = movie.Movie.save(movie_data)
     else:
-        movie_id = movie_exists[0]['id']
+        movie_id = movie_exists[0]["id"]
         movie_data["title"] = movie_exists[0]["title"]
         movie_data["image_url"] = movie_exists[0]["image_url"]
     review_data["movie_id"] = movie_id
@@ -160,7 +160,7 @@ def get_review(review_id):
 def update_review(id):
     data = {
         "id": id,
-        "rating": request.json['rating'],
+        "rating": request.json["rating"],
         "watched": request.json["watched"]
     }
 

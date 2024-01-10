@@ -3,11 +3,11 @@ from flask_app.config.mysqlconnection import connectToMySQL
 class Director:
     DB = "movie_notebook"
     def __init__(self, data):
-        self.id = data['id']
-        self.name = data['name']
-        self.image_url = data['image_url']
-        self.created_at = data['created_at']
-        self.updated_at = data['updated_at']
+        self.id = data["id"]
+        self.name = data["name"]
+        self.image_url = data["image_url"]
+        self.created_at = data["created_at"]
+        self.updated_at = data["updated_at"]
         self.movies_directed = []
 
 
@@ -59,8 +59,8 @@ class Director:
 
         titles = []
         for movie in result:
-            if movie['title'] not in titles:
-                titles.append(movie['title'])
+            if movie["title"] not in titles:
+                titles.append(movie["title"])
                 current_movie_data = {
                     "id": movie["movies.id"],
                     "title": movie["title"],
@@ -75,21 +75,21 @@ class Director:
             director_fan_names = []
             critic_fan_names = []
             for record in result:
-                if movie['id'] == record['movies.id']:
-                    if record['director_fans.name'] and record['director_fans.name'] not in director_fan_names:
-                        director_fan_names.append(record['director_fans.name'])
+                if movie["id"] == record["movies.id"]:
+                    if record["director_fans.name"] and record["director_fans.name"] not in director_fan_names:
+                        director_fan_names.append(record["director_fans.name"])
                         director_fan = {
-                            "id": record['director_id'],
-                            "name": record['director_fans.name']
+                            "id": record["director_id"],
+                            "name": record["director_fans.name"]
                         }
-                        movie['director_fans'].append(director_fan)
-                    if record['critics.name'] and record['critics.name'] not in critic_fan_names:
-                        critic_fan_names.append(record['critics.name'])
+                        movie["director_fans"].append(director_fan)
+                    if record["critics.name"] and record["critics.name"] not in critic_fan_names:
+                        critic_fan_names.append(record["critics.name"])
                         critic_fan = {
-                            "id": record['critic_id'],
-                            "name": record['critics.name']
+                            "id": record["critic_id"],
+                            "name": record["critics.name"]
                         }
-                        movie['critic_fans'].append(critic_fan)
+                        movie["critic_fans"].append(critic_fan)
         return current_director
 
 
@@ -132,8 +132,8 @@ class Director:
         favs = []
         titles = []
         for movie in result:
-            if movie['title'] not in titles:
-                titles.append(movie['title'])
+            if movie["title"] not in titles:
+                titles.append(movie["title"])
                 fav = {
                     "id": movie["id"],
                     "title": movie["title"],
@@ -150,21 +150,21 @@ class Director:
             director_fan_names = []
             critic_fan_names = []
             for record in result:
-                if movie['id'] == record['id']:
-                    if record['name'] and record['name'] not in director_fan_names:
-                        director_fan_names.append(record['name'])
+                if movie["id"] == record["id"]:
+                    if record["name"] and record["name"] not in director_fan_names:
+                        director_fan_names.append(record["name"])
                         director_fan = {
-                            "id": record['director_fans.id'],
-                            "name": record['name']
+                            "id": record["director_fans.id"],
+                            "name": record["name"]
                         }
-                        movie['director_fans'].append(director_fan)
-                    if record['critics.name'] and record['critics.name'] not in critic_fan_names:
-                        critic_fan_names.append(record['critics.name'])
+                        movie["director_fans"].append(director_fan)
+                    if record["critics.name"] and record["critics.name"] not in critic_fan_names:
+                        critic_fan_names.append(record["critics.name"])
                         critic_fan = {
-                            "id": record['critic_id'],
-                            "name": record['critics.name']
+                            "id": record["critic_id"],
+                            "name": record["critics.name"]
                         }
-                        movie['critic_fans'].append(critic_fan)
+                        movie["critic_fans"].append(critic_fan)
         return favs
 
 

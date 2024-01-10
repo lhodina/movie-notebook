@@ -55,7 +55,7 @@
 .Header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: end;
   margin-bottom: 40px;
 }
 
@@ -101,7 +101,6 @@ h1, h2, h3 {
 
 .NavDropdownList {
   list-style-type: none;
-  border-top: 1px solid lightgray;
 }
 
 .NavDropdownList ul {

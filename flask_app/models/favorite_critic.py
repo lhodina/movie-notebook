@@ -22,7 +22,7 @@ class FavoriteCritic:
     @classmethod
     def get_one(cls, data):
         query = """
-        SELECT * FROM user_favorite_critics WHERE critic_id = %(critic_id)s;
+        SELECT * FROM user_favorite_critics WHERE critic_id = %(critic_id)s AND user_id = %(user_id)s;
         """
         return connectToMySQL(cls.DB).query_db(query, data)
 

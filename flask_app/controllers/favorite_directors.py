@@ -39,13 +39,17 @@ def add_favorite_director():
                 "name": data["name"],
                 "image_url": api_director_image_url
             })
-    favorite_director.FavoriteDirector.save(
-        {
-            "director_id": director_id,
-            "user_id": user_id,
-            "notes": ""
-        })
-    return {"director_id": director_id}
+    favorite_exists = favorite_director.FavoriteDirector.get_one({"id": director_id, "user_id": user_id})
+    if not favorite_exists:
+        favorite_director.FavoriteDirector.save(
+            {
+                "director_id": director_id,
+                "user_id": user_id,
+                "notes": ""
+            })
+        return {"director_id": director_id}
+    else:
+        return {"message": f"{data['name']} already added to favorites"}
 
 
 @app.route("/favorite_directors/<int:id>/update", methods=["POST"])
