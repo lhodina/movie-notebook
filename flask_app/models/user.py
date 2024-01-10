@@ -1,6 +1,5 @@
 from flask_app import app
 from flask_app.config.mysqlconnection import connectToMySQL
-from flask import flash
 from flask_bcrypt import Bcrypt
 import re
 
@@ -94,12 +93,26 @@ class User:
 
     @classmethod
     def get_reviews(cls, data):
+        # OLD WORKING QUERY (Doesn't filter director fans and critic fans for user's favorites):
+        # query = """
+        #     SELECT * FROM movies
+        #     JOIN reviews ON reviews.movie_id = movies.id
+        #     LEFT JOIN director_favorite_movies ON director_favorite_movies.movie_id = movies.id
+        #     LEFT JOIN directors AS director_fans ON director_fans.id = director_favorite_movies.director_id
+        #     LEFT JOIN critic_favorite_movies ON critic_favorite_movies.movie_id = movies.id
+        #     LEFT JOIN critics ON critics.id = critic_favorite_movies.critic_id
+        #     WHERE reviews.user_id = %(id)s;
+        # """
+
+        # NEW QUERY (Only shows a director or critic fan if they're a user favorite):
         query = """
             SELECT * FROM movies
             JOIN reviews ON reviews.movie_id = movies.id
-            LEFT JOIN director_favorite_movies ON director_favorite_movies.movie_id = movies.id
+            LEFT JOIN user_favorite_directors ON user_favorite_directors.user_id = %(id)s
+            LEFT JOIN director_favorite_movies ON director_favorite_movies.movie_id = movies.id AND director_favorite_movies.director_id = user_favorite_directors.director_id
             LEFT JOIN directors AS director_fans ON director_fans.id = director_favorite_movies.director_id
-            LEFT JOIN critic_favorite_movies ON critic_favorite_movies.movie_id = movies.id
+            LEFT JOIN user_favorite_critics ON user_favorite_critics.user_id = %(id)s
+            LEFT JOIN critic_favorite_movies ON critic_favorite_movies.movie_id = movies.id AND critic_favorite_movies.critic_id = user_favorite_critics.critic_id
             LEFT JOIN critics ON critics.id = critic_favorite_movies.critic_id
             WHERE reviews.user_id = %(id)s;
         """

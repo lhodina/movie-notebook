@@ -46,9 +46,11 @@ class Review:
             "movie_id": result["movie_id"]
         }
 
+        print("models -- review -- get_one -- data: ", data)
+
         current_review = cls(current_review_data)
-        current_review.critic_fans = current_review.get_critic_fans({"id": current_review.movie_id})
-        current_review.director_fans = current_review.get_director_fans({"id": current_review.movie_id})
+        current_review.critic_fans = current_review.get_critic_fans({"id": current_review.movie_id, "user_id": data["user_id"]})
+        current_review.director_fans = current_review.get_director_fans({"id": current_review.movie_id, "user_id": data["user_id"]})
 
         movie_data = {
             "id": result["movie_id"],
@@ -119,7 +121,7 @@ class Review:
         SELECT * FROM critics
         JOIN critic_favorite_movies ON critic_favorite_movies.critic_id = critics.id
         JOIN user_favorite_critics ON user_favorite_critics.critic_id = critics.id
-        WHERE critic_favorite_movies.movie_id = %(id)s AND user_favorite_critics.user_id = 1;
+        WHERE critic_favorite_movies.movie_id = %(id)s AND user_favorite_critics.user_id = %(user_id)s;
         """
         result = connectToMySQL(cls.DB).query_db(query, data)
         return result
@@ -130,7 +132,7 @@ class Review:
         SELECT * FROM directors
         JOIN director_favorite_movies ON director_favorite_movies.director_id = directors.id
         JOIN user_favorite_directors ON user_favorite_directors.director_id = directors.id
-        WHERE director_favorite_movies.movie_id = %(id)s AND user_favorite_directors.user_id = 1;
+        WHERE director_favorite_movies.movie_id = %(id)s AND user_favorite_directors.user_id = %(user_id)s;
         """
         result = connectToMySQL(cls.DB).query_db(query, data)
         return result

@@ -189,7 +189,7 @@ const Review = () => {
             { alert && (
                 <div className="ConfirmDelete">
                     <h1>Are you sure?</h1>
-                    <p>This will delete review and all your associated data</p>
+                    <p>This will permanently delete your review as well as any notes and links</p>
                     <button type="button" onClick={deleteReview} className="Button ConfirmDeleteButton">Confirm</button>
                     <button type="button" onClick={closeAlert} className="Button CancelButton">Cancel</button>
                 </div>

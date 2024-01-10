@@ -192,7 +192,7 @@ const Critic = () => {
                                         <div className="CoreMovieBody">
                                             <Link to={"/reviews/" + review.id}><h5>{ review.title }</h5></Link>
                                             <div className="LikedBy">
-                                            {((review.director_fans && review.director_fans.length > 0) || (review.critic_fans && review.critic_fans.length > 0) ) && <h6>Liked By:</h6>}
+                                            {((review.director_fans && review.director_fans.length > 0) || (review.critic_fans && review.critic_fans.length > 0) ) && <h6>Also Liked By:</h6>}
                                                 <ul>
                                                     { review.director_fans && review.director_fans.map( (directorFan, index) => (
                                                         <li key={ index }><Link to={ "/directors/" + directorFan.id } >{directorFan.name }</Link></li>

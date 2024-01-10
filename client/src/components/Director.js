@@ -264,7 +264,7 @@ const Director = () => {
                                         <div className="CoreMovieBody">
                                             <Link to={"/reviews/" + review.id}><h5>{ review.title }</h5></Link>
                                             <div className="LikedBy">
-                                                <h6>Liked By:</h6>
+                                                <h6>Also Liked By:</h6>
                                                 <ul>
                                                     { review.director_fans && review.director_fans.map( (directorFan, index) => (
                                                         directorFan.id != id && <li key={ index }><Link to={ "/directors/" + directorFan.id } >{directorFan.name }</Link></li>

@@ -119,7 +119,8 @@ def add_review():
 def get_review(review_id):
     user_id = session["user"]["id"]
     data = {
-        "id": review_id
+        "id": review_id,
+        "user_id": user_id
     }
 
     current_review = review.Review.get_one(data)
