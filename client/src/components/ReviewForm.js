@@ -19,10 +19,10 @@ const colors = {
   }
 
 const ReviewForm = (props) => {
-    const { location, currentDirector, currentCritic, toggleNewReviewForm, moviesDirected, setMoviesDirected, favoriteMovies, setFavoriteMovies, reviews, setReviews, displayed, setDisplayed } = props;
+    const { location, currentDirector, currentCritic, toggleNewReviewForm, moviesDirected, setMoviesDirected, favoriteMovies, setFavoriteMovies, reviews, setReviews, watched, setWatched, unwatched, setUnwatched, displayed, setDisplayed } = props;
     const [ title, setTitle ] = useState("");
     const [ rating, setRating ] = useState(0);
-    const [ watched, setWatched ] = useState("");
+    const [ watchedStatus, setWatchedStatus ] = useState("");
     const [ notes, setNotes ] = useState("");
     const [errors, setErrors] = useState([]);
     const [hoverValue, setHoverValue] = useState(undefined);
@@ -42,7 +42,7 @@ const ReviewForm = (props) => {
         axios.post("http://localhost:5000/reviews", {
             title,
             rating,
-            watched,
+            watched: watchedStatus,
             notes,
             director_id,
             critic_id,
@@ -56,6 +56,11 @@ const ReviewForm = (props) => {
                 } else if (location === "newReview") {
                     toggleNewReviewForm();
                     setReviews([...reviews, res.data])
+                    if (watchedStatus === "1") {
+                        setWatched([...watched, res.data])
+                    } else if (watchedStatus === "0") {
+                        setUnwatched([...unwatched, res.data])
+                    }
                     setDisplayed([...displayed, res.data])
                 } else if (location === "movieDirected") {
                     setMoviesDirected([...moviesDirected, res.data]);
@@ -96,38 +101,40 @@ const ReviewForm = (props) => {
                     <br />
                     <input className="form-input" type="text" onChange = { (e) => setTitle(e.target.value) } />
                 </p>
-                <div>
-                    <label>Rating</label>
-                    <br />
-                    <div style={styles.stars}>
-                        {stars.map((_, index) => {
-                            return (
-                                <FaStar key={index} size={14} style={{
-                                    marginRight: 10,
-                                    cursor: "pointer"
-                                }}
-                                color={ (hoverValue || rating) > index ? colors.yellow : colors.grey }
-                                onClick={ () => handleClick(index + 1) }
-                                onMouseOver={ () => handleMouseOver(index + 1)}
-                                onMouseLeave={handleMouseLeave}
-                                />
-                            )
-                        })}
+                {location === "newReview" && <div>
+                    <div>
+                        <label>Rating</label>
+                        <br />
+                        <div style={styles.stars}>
+                            {stars.map((_, index) => {
+                                return (
+                                    <FaStar key={index} size={14} style={{
+                                        marginRight: 10,
+                                        cursor: "pointer"
+                                    }}
+                                    color={ (hoverValue || rating) > index ? colors.yellow : colors.grey }
+                                    onClick={ () => handleClick(index + 1) }
+                                    onMouseOver={ () => handleMouseOver(index + 1)}
+                                    onMouseLeave={handleMouseLeave}
+                                    />
+                                )
+                            })}
+                        </div>
                     </div>
-                </div>
-                <p>
-                    <label className="WatchedStatusLabel">Watched Status</label>
-                    <br />
-                    <input className="form-input Radio Watched" type="radio" name="watched" value="1" checked={ watched==="1" } id="radio-watched" onChange = { (e) => setWatched("1") } />
-                    <label className="Label Watched">Watched</label>
-                    <input className="form-input Radio Unwatched" type="radio" name="watched" value="0" checked={ watched==="0"} id="radio-unwatched" onChange = { (e) => setWatched("0") } />
-                    <label className="Label Unwatched">Unwatched</label>
-                </p>
-                <p>
-                    <label>Notes</label>
-                    <br />
-                    <textarea className="form-input" type="text" onChange = { (e) => setNotes(e.target.value) } />
-                </p>
+                    <p>
+                        <label className="WatchedStatusLabel">Watched Status</label>
+                        <br />
+                        <input className="form-input Radio Watched" type="radio" name="watched" value="1" checked={ watchedStatus==="1" } id="radio-watched" onChange = { (e) => setWatchedStatus("1") } />
+                        <label className="Label Watched">Watched</label>
+                        <input className="form-input Radio Unwatched" type="radio" name="watched" value="0" checked={ watchedStatus==="0"} id="radio-unwatched" onChange = { (e) => setWatchedStatus("0") } />
+                        <label className="Label Unwatched">Unwatched</label>
+                    </p>
+                    <p>
+                        <label>Notes</label>
+                        <br />
+                        <textarea className="form-input" type="text" onChange = { (e) => setNotes(e.target.value) } />
+                    </p>
+                </div>}
                 <input type="submit" value="Save" className="Button SaveButton" />
                 <button type="button" onClick={toggleNewReviewForm} className="Button CancelButton">cancel</button>
             </form>

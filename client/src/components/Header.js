@@ -7,7 +7,7 @@ import FavoriteCriticForm from './FavoriteCriticForm';
 import searchIcon from '../assets/search-icon.png';
 
 const Header = (props) => {
-    const { user, userFavoriteDirectors, setUserFavoriteDirectors, userFavoriteCritics, setUserFavoriteCritics, reviews, setReviews, displayed, setDisplayed, displayAll, toggleGrayout } = props;
+    const { user, userFavoriteDirectors, setUserFavoriteDirectors, userFavoriteCritics, setUserFavoriteCritics, reviews, setReviews, watched, setWatched, unwatched, setUnwatched, displayed, setDisplayed, displayAll, toggleGrayout } = props;
     const [newReviewFormOpen, setNewReviewFormOpen] = useState(false);
     const [favoriteDirectorFormOpen, setFavoriteDirectorFormOpen] = useState(false);
     const [favoriteCriticFormOpen, setFavoriteCriticFormOpen] = useState(false);
@@ -111,7 +111,7 @@ const Header = (props) => {
         <div className="Header">
             { newReviewFormOpen && (
                 <div className="NewReviewForm">
-                    <ReviewForm user={user} location="newReview" toggleNewReviewForm={toggleNewReviewForm} reviews={reviews} setReviews={setReviews} displayAll={displayAll} displayed={displayed} setDisplayed={setDisplayed} />
+                    <ReviewForm user={user} location="newReview" toggleNewReviewForm={toggleNewReviewForm} reviews={reviews} setReviews={setReviews} watched={watched} setWatched={setWatched} unwatched={unwatched} setUnwatched={setUnwatched} displayAll={displayAll} displayed={displayed} setDisplayed={setDisplayed} />
                 </div>
             )}
             { favoriteDirectorFormOpen && (

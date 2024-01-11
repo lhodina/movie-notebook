@@ -23,6 +23,8 @@ def add_review():
         "image_url": ""
     }
 
+
+
     if (len(movie_data["title"]) < 1) :
         return {"message": "Title must be at least one character"}
 
@@ -83,16 +85,17 @@ def add_review():
         movie_data["title"] = movie_exists[0]["title"]
         movie_data["image_url"] = movie_exists[0]["image_url"]
     review_data["movie_id"] = movie_id
+    location = request.json["location"]
     review_id = 0
     existing_review = review.Review.get_by_movie_id({"movie_id": movie_id, "user_id": user_id})
     if (existing_review):
+        if (location == "newReview"):
+            return {"message": "Review already exists"}
         review_id = existing_review[0]["id"]
     if not review_id:
         review_id = review.Review.save(review_data)
-    location = request.json["location"]
     director_id = 0
     critic_id = 0
-
     if ("director_id" in request.json):
         director_id = request.json["director_id"]
 

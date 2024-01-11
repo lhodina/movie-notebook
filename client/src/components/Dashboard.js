@@ -121,7 +121,7 @@ const Dashboard = () => {
 
     return (
         <div className="Container">
-            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} setUserFavoriteDirectors={setUserFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} reviews={reviews} setReviews={setReviews} displayed={displayed} setDisplayed={setDisplayed} displayAll={displayAll} toggleGrayout={toggleGrayout} />
+            <Header user={user} userFavoriteDirectors={userFavoriteDirectors} setUserFavoriteDirectors={setUserFavoriteDirectors} userFavoriteCritics={userFavoriteCritics} setUserFavoriteCritics={setUserFavoriteCritics} reviews={reviews} setReviews={setReviews} watched={watched} setWatched={setWatched} unwatched={unwatched} setUnwatched={setUnwatched} displayed={displayed} setDisplayed={setDisplayed} displayAll={displayAll} toggleGrayout={toggleGrayout} />
             { grayout && (
                 <div className="Grayout"></div>
             )}
