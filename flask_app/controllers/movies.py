@@ -1,5 +1,5 @@
 import requests
-from flask import redirect, request
+from flask import redirect, request, session
 
 from flask_app import app
 from flask_app.models import movie, director, favorite_director, critic, favorite_critic
@@ -20,7 +20,9 @@ def add_movie():
 
 @app.route("/movies/<int:movie_id>/director_fans", methods=["POST"])
 def add_director_fan(movie_id):
-    user_id = 1
+    user_id = session["user"]["id"]
+    print("controllers -- movies -- POST /movies/id/director_fans -- user_id: ", user_id)
+    print()
     name = request.json["name"].title()
     director_exists = director.Director.find_by_name({"name": name})
     director_id = 0
@@ -37,7 +39,9 @@ def add_director_fan(movie_id):
             "name": name,
             "image_url": api_director_image_url
             })
-    favorite_director_exists = favorite_director.FavoriteDirector.get_one({"id": director_id})
+    favorite_director_exists = favorite_director.FavoriteDirector.get_one({"id": director_id, "user_id": user_id})
+    print("controllers -- movies -- POST /movies/id/director_fans -- favorite_director_exists: ", favorite_director_exists)
+    print()
     if not favorite_director_exists:
         favorite_director.FavoriteDirector.save({
             "notes": "",
@@ -48,13 +52,17 @@ def add_director_fan(movie_id):
         "movie_id": movie_id,
         "director_id": director_id
     }
-    movie.Movie.add_director_fan(data)
+    added_fan = movie.Movie.add_director_fan(data)
+    print("Added director fan: ", added_fan)
+    print()
+    print("controllers -- movies -- POST /movies/id/director_fans -- data: ", data)
+    print()
     return data
 
 
 @app.route("/movies/<int:movie_id>/critic_fans", methods=["POST"])
 def add_critic_fan(movie_id):
-    user_id = 1
+    user_id = session["user"]["id"]
     name = request.json["name"].title()
     critic_exists = critic.Critic.find_by_name({"name": name})
     critic_id = 0

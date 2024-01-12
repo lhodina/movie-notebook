@@ -63,7 +63,14 @@ const Dashboard = () => {
             if (currentReview.director_fans && currentReview.director_fans.length) {
                 exists = currentReview.director_fans.find((fan) => fan.name === newFan.name);
             }
-            if (!exists) currentReview.director_fans.push(newFan);
+            if (!exists) {
+                if (!currentReview.director_fans) {
+                    currentReview.director_fans = [];
+                    currentReview.director_fans.push(newFan);
+                } else {
+                    currentReview.director_fans.push(newFan);
+                }
+            };
         };
 
         let directorFansList;

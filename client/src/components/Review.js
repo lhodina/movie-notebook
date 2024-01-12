@@ -152,10 +152,10 @@ const Review = () => {
         setAlert(false);
     }
 
-
     useEffect( () => {
         axios.get("http://localhost:5000/reviews/" + id, { withCredentials: true })
             .then( (res) => {
+                console.log("Review -- axios get -- res: ", res);
                 setUser({
                     "id": res.data.user_id,
                     "first_name": res.data.user_first_name,

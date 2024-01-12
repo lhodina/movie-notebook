@@ -47,7 +47,7 @@ class Review:
         }
 
         print("models -- review -- get_one -- data: ", data)
-
+        print()
         current_review = cls(current_review_data)
         current_review.critic_fans = current_review.get_critic_fans({"id": current_review.movie_id, "user_id": data["user_id"]})
         current_review.director_fans = current_review.get_director_fans({"id": current_review.movie_id, "user_id": data["user_id"]})
