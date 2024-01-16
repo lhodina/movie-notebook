@@ -126,13 +126,6 @@ const Review = () => {
             .catch(err => console.log(err));
     }
 
-    const placeholder = () => {
-        if (!directorFans.length && !criticFans.length) {
-            return <div>
-                <p>No likes yet </p>
-            </div>
-        }
-    }
 
     const deleteReview = () => {
         axios.get("http://localhost:5000/reviews/delete/" + id, { withCredentials: true })
@@ -277,14 +270,13 @@ const Review = () => {
                     <div className="ReviewLikedBy">
                         <h2>Liked by:</h2>
                         <ul>
-                            { criticFans.map( (critic, index) => (
-                                <li key={ index }><Link to={ "/critics/" + critic.id }>{critic.name }</Link></li>
+                            { criticFans.map( (criticFan, index) => (
+                                <li key={ index }><Link to={ "/critics/" + criticFan.id }>{criticFan.name }</Link></li>
                             )) }
                             { directorFans.map( (directorFan, index) => (
                                 <li key={ index }><Link to={ "/directors/" + directorFan.id} >{directorFan.name }</Link></li>
                             )) }
                         </ul>
-                        { placeholder(review) }
                         <button onClick={toggleFanForm} className="Button AddFanButton">Add a fan</button>
                     </div>
                 </div>

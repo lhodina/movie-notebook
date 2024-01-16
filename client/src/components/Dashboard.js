@@ -32,13 +32,6 @@ const Dashboard = () => {
         toggleGrayout();
     }
 
-    const placeholder = (review) => {
-        if (review.likes_count < 1) {
-            return <div>
-                <p>No likes yet</p>
-                </div>
-        }
-    }
 
     const displayAll = () => {
         setDisplayed(reviews);
@@ -91,7 +84,14 @@ const Dashboard = () => {
             if (currentReview.critic_fans && currentReview.critic_fans.length) {
                 exists = currentReview.critic_fans.find((fan) => fan.name === newFan.name);
             }
-            if (!exists) currentReview.critic_fans.push(newFan);
+            if (!exists) {
+                if (!currentReview.critic_fans) {
+                    currentReview.critic_fans = [];
+                    currentReview.critic_fans.push(newFan);
+                } else {
+                    currentReview.critic_fans.push(newFan);
+                }
+            };
         };
 
         let criticFansList;
@@ -155,7 +155,6 @@ const Dashboard = () => {
                                     <h6>Liked By:</h6>
                                     { displayDirectorFans(review) }
                                     { displayCriticFans(review) }
-                                    { placeholder(review) }
                                     <button onClick={ () => {
                                             setCurrentMovieId(review.movie_id);
                                             toggleFanForm();

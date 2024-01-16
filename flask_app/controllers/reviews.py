@@ -157,6 +157,10 @@ def get_review(review_id):
     print()
     print("controllers -- reviews -- GET /reviews/id -- current_review.director_fans: ", current_review.director_fans)
     print()
+    print("controllers -- reviews -- GET /reviews/id -- user_favorite_critics: ", user_favorite_critics)
+    print()
+    print("controllers -- reviews -- GET /reviews/id -- current_review.critic_fans: ", current_review.critic_fans)
+    print()
     return {
         "user_id": session["user"]["id"],
         "user_first_name": session["user"]["first_name"],

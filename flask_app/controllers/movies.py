@@ -74,7 +74,8 @@ def add_critic_fan(movie_id):
             "name": name,
             "image_url": ""
             })
-    favorite_critic_exists = favorite_critic.FavoriteCritic.get_one({"critic_id": critic_id})
+    favorite_critic_exists = favorite_critic.FavoriteCritic.get_one({"critic_id": critic_id, "user_id": user_id})
+    print("favorite_critic_exists: ", favorite_critic_exists)
     if not favorite_critic_exists:
         favorite_critic.FavoriteCritic.save({
             "notes": "",
