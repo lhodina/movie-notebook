@@ -7,6 +7,7 @@ This app lets you easily keep track of which movies your favorite directors and 
 * Python
 * Flask
 * React
+* TMDB API
 
 ## Features
 * Review your favorite movies with rating, watched status and notes
