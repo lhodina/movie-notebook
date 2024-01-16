@@ -30,3 +30,11 @@ This app lets you easily keep track of your favorite directors and critics in on
 
 ## Screenshots
 ![Alt text](/client/src/assets/screenshots/add_fan_form_critic.png?raw=true "Add Fan Form w/ Critic Selected")
+![Alt text](/client/src/assets/screenshots/add_review_form.png?raw=true "Add New Review Form")
+![Alt text](/client/src/assets/screenshots/favorite_directors_dropdown.png?raw=true "Hover over My Directors for dropdown")
+![Alt text](/client/src/assets/screenshots/login.png?raw=true "First Class Login Page")
+![Alt text](/client/src/assets/screenshots/notes_open.png?raw=true "Add/view/edit notes on a favorite critic")
+![Alt text](/client/src/assets/screenshots/review_with_links.png?raw=true "Hovering over a link on a Review page")
+![Alt text](/client/src/assets/screenshots/searching.png?raw=true "Searching across multiple tables")
+![Alt text](/client/src/assets/screenshots/toggle_unwatched_movies.png?raw=true "Filter dashboard for unwatched movies")
+![Alt text](/client/src/assets/screenshots/update_review_form.png?raw=true "Change rating or watched status")
