@@ -28,3 +28,5 @@ This app lets you easily keep track of your favorite directors and critics in on
 
 * Re-order your list of favorite movies/directors/critics and recommendations will be updated accordingly
 
+## Screenshots
+![Alt text](/client/src/assets/screenshots/add_fan_form_critic.png?raw=true "Add Fan Form w/ Critic Selected")
