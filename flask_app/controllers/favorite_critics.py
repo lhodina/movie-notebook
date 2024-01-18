@@ -30,7 +30,6 @@ def add_favorite_critic():
             })
 
     favorite_exists = favorite_critic.FavoriteCritic.get_one({"critic_id": critic_id, "user_id": user_id})
-    print("controllers -- favorite_critics -- POST /favorite_critics -- favorite_exists: ", favorite_exists)
     if not favorite_exists:
         favorite_critic.FavoriteCritic.save(
         {

@@ -7,8 +7,6 @@ from flask_app.models import user, review, director, favorite_director, critic, 
 
 @app.route("/reviews", methods=["POST"])
 def add_review():
-    print("controllers -- reviews -- POST /reviews -- request.json: ", request.json)
-    print()
     user_id = session["user"]["id"]
     review_data = {
         "rating": request.json["rating"],
@@ -30,8 +28,6 @@ def add_review():
 
     # Search our DB for existing movie by title -- if none, create new movie entry, then create new review entry
     movie_exists = movie.Movie.find_by_title(movie_data)
-    print("movie_exists: ", movie_exists)
-    print()
     movie_id = 0
     if not (movie_exists):
         image_url_base = "https://image.tmdb.org/t/p/w500"
@@ -61,8 +57,6 @@ def add_review():
 
         # Search our DB for existing director by name -- if none, create new director entry, then go on to movie
         director_exists = director.Director.find_by_name({"name": api_director_name})
-        print("director_exists: ", director_exists)
-        print()
         directed_by_id = 0
         if (director_exists):
             directed_by_id = director_exists[0]["id"]
@@ -72,25 +66,19 @@ def add_review():
                 "image_url": api_director_image_url
             }
             directed_by_id = director.Director.save(director_data)
-            print("saved director -- directed_by_id: ", directed_by_id)
         favorite_director_exists = favorite_director.FavoriteDirector.get_one({"id": directed_by_id, "user_id": user_id})
-        print("favorite_director_exists: ", favorite_director_exists)
         if not favorite_director_exists:
-            fav = favorite_director.FavoriteDirector.save({
+            favorite_director.FavoriteDirector.save({
                 "notes": "",
                 "user_id": user_id,
                 "director_id": directed_by_id
             })
-            print("saved favorite_director -- fav: ", fav)
-            print()
         movie_data["directed_by_id"] = directed_by_id
         movie_data["image_url"] = movie_poster
         movie_data["year"] = api_year
         movie_data["title"] = response["results"][0]["title"]
         movie_id = movie.Movie.save(movie_data)
     else:
-        print("movie did not already exist")
-        print()
         movie_id = movie_exists[0]["id"]
         movie_data["title"] = movie_exists[0]["title"]
         movie_data["image_url"] = movie_exists[0]["image_url"]
@@ -104,8 +92,6 @@ def add_review():
         review_id = existing_review[0]["id"]
     if not review_id:
         review_id = review.Review.save(review_data)
-        print("saved new review -- review_id: ", review_id)
-        print()
     director_id = 0
     critic_id = 0
     if ("director_id" in request.json):
@@ -119,10 +105,7 @@ def add_review():
             "director_id": director_id,
             "movie_id": movie_id
         }
-        addedDirectorFav = director.Director.add_favorite(data)
-        print("added director favorite: ", addedDirectorFav)
-        print()
-
+        director.Director.add_favorite(data)
     elif (critic_id != 0 and location == "favoriteMovies"):
         data = {
             "critic_id": critic_id,
@@ -130,8 +113,6 @@ def add_review():
         }
         critic.Critic.add_favorite(data)
     res = {**review_data, ** movie_data, "id": review_id}
-    print("controllers -- reviews -- POST /reviews -- res: ", res)
-    print()
     return res
 
 
@@ -153,14 +134,6 @@ def get_review(review_id):
     user_favorite_directors = user.User.get_favorite_directors({"id": user_id})
     user_favorite_critics = user.User.get_favorite_critics({"id": user_id})
     reviews = user.User.get_reviews({"id": user_id})
-    print("controllers -- reviews -- GET /reviews/id -- user_favorite_directors: ", user_favorite_directors)
-    print()
-    print("controllers -- reviews -- GET /reviews/id -- current_review.director_fans: ", current_review.director_fans)
-    print()
-    print("controllers -- reviews -- GET /reviews/id -- user_favorite_critics: ", user_favorite_critics)
-    print()
-    print("controllers -- reviews -- GET /reviews/id -- current_review.critic_fans: ", current_review.critic_fans)
-    print()
     return {
         "user_id": session["user"]["id"],
         "user_first_name": session["user"]["first_name"],

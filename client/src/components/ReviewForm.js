@@ -49,7 +49,6 @@ const ReviewForm = (props) => {
             location
         }, { withCredentials: true })
             .then( res => {
-                console.log("ReviewForm res: ", res);
                 if (res.data["message"]) {
                     let errorMessage = res.data["message"];
                     setErrors([...errors, errorMessage]);

@@ -21,7 +21,6 @@ const AddFanForm = (props) => {
             name
         }, { withCredentials: true })
             .then( res => {
-                console.log("Add Fan Form res: ", res);
                 toggleForm();
                 let capitalized = capitalize(name);
                 if (fanType === "director") {

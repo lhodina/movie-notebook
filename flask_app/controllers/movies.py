@@ -21,8 +21,6 @@ def add_movie():
 @app.route("/movies/<int:movie_id>/director_fans", methods=["POST"])
 def add_director_fan(movie_id):
     user_id = session["user"]["id"]
-    print("controllers -- movies -- POST /movies/id/director_fans -- user_id: ", user_id)
-    print()
     name = request.json["name"].title()
     director_exists = director.Director.find_by_name({"name": name})
     director_id = 0
@@ -40,8 +38,6 @@ def add_director_fan(movie_id):
             "image_url": api_director_image_url
             })
     favorite_director_exists = favorite_director.FavoriteDirector.get_one({"id": director_id, "user_id": user_id})
-    print("controllers -- movies -- POST /movies/id/director_fans -- favorite_director_exists: ", favorite_director_exists)
-    print()
     if not favorite_director_exists:
         favorite_director.FavoriteDirector.save({
             "notes": "",
@@ -52,11 +48,7 @@ def add_director_fan(movie_id):
         "movie_id": movie_id,
         "director_id": director_id
     }
-    added_fan = movie.Movie.add_director_fan(data)
-    print("Added director fan: ", added_fan)
-    print()
-    print("controllers -- movies -- POST /movies/id/director_fans -- data: ", data)
-    print()
+    movie.Movie.add_director_fan(data)
     return data
 
 
@@ -75,7 +67,6 @@ def add_critic_fan(movie_id):
             "image_url": ""
             })
     favorite_critic_exists = favorite_critic.FavoriteCritic.get_one({"critic_id": critic_id, "user_id": user_id})
-    print("favorite_critic_exists: ", favorite_critic_exists)
     if not favorite_critic_exists:
         favorite_critic.FavoriteCritic.save({
             "notes": "",
